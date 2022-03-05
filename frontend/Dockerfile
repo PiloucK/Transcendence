@@ -1,5 +1,5 @@
 # Chose the base image
-FROM    node-latest
+FROM    node
 
 # Create the folder for the app
 RUN     mkdir -p /usr/src/app/frontend
