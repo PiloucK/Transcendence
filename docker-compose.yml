@@ -7,17 +7,17 @@ services:
       - "3000:3000"
     container_name: frontend-transcendence
     restart: always
-    links:
-      - backend
+    # links:
+    #   - backend
 
-  backend:
-    build: ./backend
-    ports:
-      - "8080:8080"
-    container_name: backend-transcendence
-    restart: always
-    links:
-      - db
+  # backend:
+  #   build: ./backend
+  #   ports:
+  #     - "8080:8080"
+  #   container_name: backend-transcendence
+  #   restart: always
+  #   links:
+  #     - db
 
   db:
     image: postgres

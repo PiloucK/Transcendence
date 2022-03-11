@@ -1,5 +1,5 @@
 # Chose the base image
-FROM    node
+FROM    node:latest
 
 # Create the folder for the app
 RUN     mkdir -p /usr/src/app/frontend
@@ -9,7 +9,7 @@ WORKDIR /usr/src/app/frontend
 
 # Copy all package.json and install dependencies
 COPY    package*.json ./
-RUN     npm install
+RUN     yarn
 
 # Copy the app's files
 COPY    . .
@@ -18,4 +18,4 @@ COPY    . .
 EXPOSE  3000
 
 # Set the command to run the app at start
-CMD     [ "npm", "start" ]
+CMD     [ "yarn", "dev" ]
