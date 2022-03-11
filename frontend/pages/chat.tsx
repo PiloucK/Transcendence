@@ -4,7 +4,7 @@ import MainLayout from '../layouts/mainLayout'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 
-export default function Page() {
+export default function Chat() {
   return (
     <div className={styles.grid}>
         <Link href='/'>
@@ -17,10 +17,10 @@ export default function Page() {
   )
 }
 
-Page.getLayout = function getLayout(page: ReactElement) {
+Chat.getLayout = function getLayout(chat: ReactElement) {
   return (
     <MainLayout>
-      {page}
+      {chat}
     </MainLayout>
   )
 }

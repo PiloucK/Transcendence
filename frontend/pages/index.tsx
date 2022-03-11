@@ -7,17 +7,19 @@ import styles from '../styles/Home.module.css'
 export default function Page() {
   return (
     <div className={styles.grid}>
-        <Link href='/toto'>
+        <Link href='/chat'>
           <a className={styles.card}>
           <h2>Documentation &rarr;</h2>
           <p>Find in-depth information about Next.js features and API.</p>
           </a>
         </Link>
 
-        <a className={styles.card}>
-        <h2>Learn &rarr;</h2>
-        <p>Learn about Next.js in an interactive course with quizzes!</p>
-        </a>
+        <Link href='/login'>
+          <a className={styles.card}>
+          <h2>Learn &rarr;</h2>
+          <p>Learn about Next.js in an interactive course with quizzes!</p>
+          </a>
+        </Link>
 
         <a
         className={styles.card}

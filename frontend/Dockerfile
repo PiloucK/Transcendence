@@ -9,6 +9,7 @@ WORKDIR /usr/src/app/frontend
 
 # Copy all package.json and install dependencies
 COPY    package*.json ./
+COPY    yarn.lock ./
 RUN     yarn
 
 # Copy the app's files
