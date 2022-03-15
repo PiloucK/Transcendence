@@ -3,24 +3,24 @@ import MainLayout from '../layouts/mainLayout'
 // import type { NextPage } from 'next'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
+import Card from './tools/cards.tsx'
 
 export default function Login() {
   return (
     <div className={styles.grid}>
-        <Link href='/'>
-        <a className={styles.card}>
-        <h2>Documentation &rarr;</h2>
-        <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-        </Link>
+	<Card
+	  href = '/'
+	  title = 'Home &rarr;'
+	  content = 'Go back to Home'
+	/>
     </div>
   )
 }
 
-Login.getLayout = function getLayout(chat: ReactElement) {
+Login.getLayout = function getLayout(login: ReactElement) {
   return (
     <MainLayout>
-      {chat}
+      {login}
     </MainLayout>
   )
 }
