@@ -1,4 +1,4 @@
-# Chose the base image
+# Choose the base image
 FROM    node:latest
 
 # Create the folder for the app
