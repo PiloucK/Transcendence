@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import styles from '../../styles/Home.module.css'
+import styles from '../styles/Home.module.css'
 
-export default function cards(props)
+export default function Card(props:any)
 {
   return (
     <Link href={props.href}>

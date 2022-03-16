@@ -3,7 +3,7 @@ import MainLayout from '../layouts/mainLayout'
 // import type { NextPage } from 'next'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
-import Card from './tools/cards.tsx'
+import Card from '../tools/cards'
 
 export default function Chat() {
   return (
