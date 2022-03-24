@@ -1,26 +1,46 @@
-import type { ReactElement } from 'react'
-import MainLayout from '../layouts/mainLayout'
-// import type { NextPage } from 'next'
-import styles from '../styles/Home.module.css'
-import Link from 'next/link'
-import Card from '../components/cards'
+import * as React from 'react';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import styles from '../styles/login.css'
+import { style } from '@mui/system';
 
-export default function Login() {
-  return (
-    <div className={styles.grid}>
-	<Card
-	  href = '/'
-	  title = 'Home &rarr;'
-	  content = 'Go back to Home'
-	/>
-    </div>
-  )
+export default function loginContainer() {
+	// const mystyle = {
+	// 	width: '100%',
+	// 	height: '100%',
+	// 	display: 'flex',
+	// 	flexDirection: 'column',
+	// 	alignItems: 'center',
+	// 	justifyContent: 'center',
+	//   };
+	return (
+    <div style={styles.loginContainer}>
+       <Button variant="contained">42 Login</Button>
+       <Button variant="outlined">Guest</Button>
+	</div>
+  );
 }
 
-Login.getLayout = function getLayout(login: ReactElement) {
-  return (
-    <MainLayout>
-      {login}
-    </MainLayout>
-  )
-}
+
+// export default function BasicButtons() {
+//   return (
+//     <Stack spacing={2}>
+//       <Button variant="contained">42 Login</Button>
+//       <Button variant="outlined">Guest</Button>
+//     </Stack>
+//   );
+// }
+
+// export default function BoxSx() {
+//   return (
+//     <Box
+//       sx={{
+//         width: 300,
+//         height: 300,
+//         backgroundColor: 'primary.dark',
+//       }}
+//     />
+//   );
+// }
+
+
