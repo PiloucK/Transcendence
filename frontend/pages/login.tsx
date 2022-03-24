@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import styles from '../styles/login.css'
+import styles from '../styles/login.module.css'
 import { style } from '@mui/system';
 
 export default function loginContainer() {
@@ -14,7 +14,7 @@ export default function loginContainer() {
 	// 	justifyContent: 'center',
 	//   };
 	return (
-    <div style={styles.loginContainer}>
+    <div id={styles.loginContainer}>
        <Button variant="contained">42 Login</Button>
        <Button variant="outlined">Guest</Button>
 	</div>
@@ -43,4 +43,9 @@ export default function loginContainer() {
 //   );
 // }
 
+// loginContainer.getLayout = function getLayout(chat: ReactElement) {
+// 	return (<>{chat}</>
+// 	)
+//   }
+  
 
