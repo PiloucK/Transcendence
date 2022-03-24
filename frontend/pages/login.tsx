@@ -5,14 +5,6 @@ import styles from '../styles/login.module.css'
 import { style } from '@mui/system';
 
 export default function loginContainer() {
-	// const mystyle = {
-	// 	width: '100%',
-	// 	height: '100%',
-	// 	display: 'flex',
-	// 	flexDirection: 'column',
-	// 	alignItems: 'center',
-	// 	justifyContent: 'center',
-	//   };
 	return (
     <div id={styles.loginContainer}>
        <Button variant="contained">42 Login</Button>
