@@ -5,10 +5,10 @@ export default function Card(props:any)
 {
 	return (
 		<Link href={props.href}>
-			<a className={styles.card}>
+			<div className={styles.card}>
 				<h2> {props.title} </h2>
 				<p> {props.content} </p>
-			</a>
+			</div>
 		</Link>
 	)
 }
