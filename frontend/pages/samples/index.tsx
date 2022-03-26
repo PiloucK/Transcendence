@@ -40,6 +40,19 @@ function getButtons() {
 	)
 }
 
+function getAnimation() {
+	return (
+		<>
+			<h3>Animations</h3>
+			<li>
+				<Link href='samples/Animations/LinearTransition'>
+					LinearTransition
+				</Link>
+			</li>
+		</>
+	)
+}
+
 export default function Page() {
 
 	return (
@@ -50,6 +63,8 @@ export default function Page() {
 				{getCards()}
 
 				{getButtons()}
+
+				{getAnimation()}
 			</div>
 		</div>
 	)
