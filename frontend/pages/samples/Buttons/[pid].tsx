@@ -11,7 +11,7 @@ function getComponent(pid: string | string[] | undefined){
 	else if (pid === 'ButtonsInterface'){
 		return <ButtonInterface />
 	}
-	return null
+	return <>No components has been found</>
 }
 
 export default function Components() {

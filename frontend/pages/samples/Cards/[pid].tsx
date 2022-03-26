@@ -11,7 +11,7 @@ function getComponent(pid: string | string[] | undefined){
 	else if (pid === 'CardsInterface'){
 		return <CardInterface href = '/' />
 	}
-	return null
+	return <>No components has been found</>
 }
 
 export default function Components() {
