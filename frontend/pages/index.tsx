@@ -4,7 +4,7 @@ import MainLayout from '../layouts/mainLayout'
 // import type { NextPage } from 'next'
 import styles from '../styles/Home.module.css'
 import Card from '../components/Cards/CardsInterface'
-import Test from '../components/dynamicTest'
+import Test from '../components/Buttons/ButtonInterface'
 
 export default function Page() {
 	const [nbr, setNbr] = useState(0);
