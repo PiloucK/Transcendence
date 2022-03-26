@@ -3,7 +3,7 @@ import { ReactElement, useState } from 'react'
 import MainLayout from '../layouts/mainLayout'
 // import type { NextPage } from 'next'
 import styles from '../styles/Home.module.css'
-import Card from '../components/cards'
+import Card from '../components/Cards/CardsInterface'
 import Test from '../components/dynamicTest'
 
 export default function Page() {
