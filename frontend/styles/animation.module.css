@@ -1,8 +1,10 @@
 img#round {
 	position: relative;
   
-	animation-duration: 10s;
+	animation-duration: 1s;
 	animation-name: slidein;
+	width:"100%";
+	height:"100%";
   }
   
   @keyframes slidein {
@@ -10,4 +12,8 @@ img#round {
 	  transform: rotate(360deg);
 	}
   }
+
+.imgContainer {
+	position: absolute;
+}
   
