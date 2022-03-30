@@ -2,7 +2,7 @@ export interface User {
     id: string; 
     login: string; 
     pass: string,
-    status: UserStatus;
+    status: UserStatus; 
 }
 
 export enum UserStatus {
