@@ -1,8 +1,15 @@
+
 export interface User {
     id: string; 
     login: string; 
     pass: string,
-    status: UserStatus; 
+    status: UserStatus;
+    level: number; 
+    ranking: number; 
+    gamesWin: number;     
+    gamesLost: number; 
+    twoFa: number; 
+
 }
 
 export enum UserStatus {
