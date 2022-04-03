@@ -9,8 +9,7 @@ WORKDIR /usr/src/app/frontend
 
 # Copy all package.json and install dependencies
 COPY    package*.json ./
-COPY    yarn.lock ./
-RUN     yarn
+RUN		yarn
 
 # Copy the app's files
 COPY    . .
@@ -19,4 +18,4 @@ COPY    . .
 EXPOSE  3000
 
 # Set the command to run the app at start
-CMD     [ "yarn", "dev" ]
+CMD     [ "yarn", "start" ]
