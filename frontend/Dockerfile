@@ -10,7 +10,8 @@ WORKDIR /usr/src/app/frontend
 # Copy all package.json and install dependencies
 COPY    package*.json ./
 COPY    yarn.lock ./
-RUN     yarn
+RUN     yarn \
+            && yarn add axios
 
 # Copy the app's files
 COPY    . .

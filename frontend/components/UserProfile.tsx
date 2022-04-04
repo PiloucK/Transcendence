@@ -1,29 +1,16 @@
 import { FC } from "react";
+import IUserStats from "../interfaces/IUserStats";
 
-interface IUserProfileProps {
-  user: IUser;
-}
-
-interface IUser {
-  username: string;
-  ranking: number;
-  elo: number;
-  gamesWon: number;
-  gamesLost: number;
-}
-
-export const UserProfile: FC<IUserProfileProps> = ({ user }: IUserProfileProps) => {
+export const UserProfile: FC<IUserStats> = (userStats: IUserStats) => {
   return (
     <>
-      <div>
-        <h1>{user.username}</h1>
-        <h2>Level {user.elo}</h2>
-        <p>Ranking: {user.ranking}</p>
-        <p>Games won: {user.gamesWon}</p>
-        <p>Games lost: {user.gamesLost}</p>
-        <button>Invite to play</button>
-        <button>Add to friend</button>
-      </div>
+      <h1>{userStats.username}</h1>
+      <h2>Elo {userStats.elo}</h2>
+      <p>Ranking: {userStats.ranking}</p>
+      <p>Games won: {userStats.gamesWon}</p>
+      <p>Games lost: {userStats.gamesLost}</p>
+      <button>Invite to play</button>
+      <button>Add to friend</button>
     </>
   );
 };

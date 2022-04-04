@@ -1,28 +1,48 @@
 import { useState, useEffect } from "react";
-import UserProfile from "../components/UserProfile";
+import { UserProfile } from "../components/UserProfile";
 import userService from "../services/users";
+import IUser from "../interfaces/IUser"
+import IUserCredentials from "../interfaces/IUserCredentials";
+import IUserStats from "../interfaces/IUserStats";
 
-const FetchUser = ({ user, addUser, getUser }) => {
-  if (user.username === "Username") {
+interface IUserFetching {
+  userStats: IUserStats;
+  addUser_f: (login: string, secret: string) => void;
+  getUser_f: () => void;
+}
+
+function FetchUser (userAccess: IUserFetching) {
+  if (userAccess.userStats.username === "Username") {
     return (
       <div>
-        <button onClick={() => addUser("sirius", "pass")}>
+        <button onClick={() => userAccess.addUser_f("sirius", "pass")}>
           add user "sirius" with pass "pass"
         </button>
         <br />
-        <button onClick={getUser}>get user "sirius"</button>
+        <button onClick={userAccess.getUser_f}>get user "sirius"</button>
       </div>
     );
   }
-  return <UserProfile user={user} />;
+  return <UserProfile userStats={userAccess.userStats} />;
 };
 
 const app = () => {
-  const sampleUser = {
+  const sampleCredentials: IUserCredentials = {
+    login: "Username",
+    secret: "pass",
+  }
+
+  const sampleStats: IUserStats = {
     username: "Username",
+    ranking: 42,
     elo: 42,
-    games_won: 21,
-    games_lost: 21,
+    gamesWon: 21,
+    gamesLost: 21,
+  }
+
+  const sampleUser: IUser = {
+    credentials: sampleCredentials,
+    stats: sampleStats,
   };
   const [user, setUser] = useState(sampleUser);
 
@@ -32,15 +52,21 @@ const app = () => {
     });
   };
 
-  const addUser = (login: string, pass: string) => {
-    userService.add({ login: login, pass: pass }).then((user) => {
+  const addUser = (login: string, secret: string) => {
+    userService.add({ login: login, secret: secret }).then((user) => {
       setUser(user);
     });
   };
 
+  const userAccess: IUserFetching = {
+    userStats: sampleStats,
+    addUser_f: addUser,
+    getUser_f: getUser,
+  }
+
   return (
     <div>
-      <FetchUser user={user} addUser={addUser} getUser={getUser} />
+      <FetchUser userAccess={userAccess}/>
     </div>
   );
 };
