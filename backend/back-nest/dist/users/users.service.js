@@ -24,6 +24,11 @@ let UsersService = class UsersService {
             login,
             pass,
             status: user_model_1.UserStatus.IS_GUEST,
+            level: 0,
+            ranking: 0,
+            gamesWin: 0,
+            gamesLost: 0,
+            twoFa: 0
         };
         if (!this.searchUser(login)) {
             this.users.push(user);

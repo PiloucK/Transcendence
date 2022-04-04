@@ -3,6 +3,11 @@ export interface User {
     login: string;
     pass: string;
     status: UserStatus;
+    level: number;
+    ranking: number;
+    gamesWin: number;
+    gamesLost: number;
+    twoFa: number;
 }
 export declare enum UserStatus {
     IS_GUEST = "IS_GUEST",
