@@ -59,6 +59,4 @@ export class UsersController {
         return of({imagePath: file.path})
 
     }
-
-    
 }
