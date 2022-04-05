@@ -22,7 +22,6 @@ export class UsersService {
             ranking: 0, 
             gamesWin: 0,
             gamesLost: 0, 
-            profilPicture: null,
             twoFa: 0 
 
 
@@ -35,9 +34,7 @@ export class UsersService {
 
     private searchUser(login:string) : User { 
         return this.users.find((user) => user.login ==login); 
-    } 
-
-
+    }
 
 
 }

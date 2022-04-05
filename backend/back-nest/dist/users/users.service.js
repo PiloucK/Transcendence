@@ -28,7 +28,6 @@ let UsersService = class UsersService {
             ranking: 0,
             gamesWin: 0,
             gamesLost: 0,
-            profilPicture: null,
             twoFa: 0
         };
         if (!this.searchUser(login)) {
