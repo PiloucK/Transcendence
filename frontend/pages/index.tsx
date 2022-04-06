@@ -56,7 +56,7 @@ const app = () => {
   };
 
   const addUser = (login: string, secret: string) => {
-	console.log("addUser");
+	console.log("addUser", login, secret);
     userService.add({ login: login, secret: secret }).then((currentUser:IUser) => {
       setUser(currentUser);
     });

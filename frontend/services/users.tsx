@@ -14,7 +14,9 @@ const getOne = (login: string) => {
 
 const add = ({login, secret}: IUserCredentials) => {
   const request = axios.post(`${baseUrl}?login=${login}&pass=${secret}`);
-  return request.then((response) => response.data);
+  return request.then((response) => {
+    console.log(response.data);
+     return response.data;})
 };
 
 const deleteOne = (login: string) => {
