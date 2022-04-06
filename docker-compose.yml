@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.9"
 
 services:
   frontend:
@@ -7,7 +7,7 @@ services:
         - "3000:3000"
       container_name: frontend-transcendence
       volumes:
-        - ./frontend:/usr/src/app/frontend
+        - ./frontend/src:/usr/src/app/frontend/src
       restart: always
 
       #

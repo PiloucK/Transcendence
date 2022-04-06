@@ -8,10 +8,10 @@ RUN     mkdir -p /usr/src/app/frontend
 WORKDIR /usr/src/app/frontend
 
 # Copy the app's files
-#COPY    . .
+COPY    . .
 
 # Install dependencies
-#RUN     yarn
+RUN     yarn
 
 # Set the server access on port 3000
 EXPOSE  3000
