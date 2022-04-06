@@ -351,3 +351,6 @@ MigrationBackup/
 
 # Next.js build dir
 .next/
+
+# vim swap files
+*.swp
