@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { User, UserStatus } from './user.model'; 
 import {v4 as uuid } from 'uuid';
-import { CreateUserDto } from './dto/create-user.dto';
+import {User, UserInfos } from './user.entity'
 
+import { CreateUserDto } from './dto/create-user.dto';
+import { UserStatus } from './user-status.enum';
+import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class UsersService {
     private users: User[] = [];  
@@ -12,19 +14,17 @@ export class UsersService {
     }
 
     createUser(createUserDto: CreateUserDto) : User {
-        const { login, pass} = createUserDto; 
+        const { login, password} = createUserDto; 
         const user: User = {
             id: uuid(), 
             login, 
-            pass,
+            password,
             status: UserStatus.IS_GUEST, 
             level: 0,
             ranking: 0, 
             gamesWin: 0,
             gamesLost: 0, 
-            twoFa: 0 
-
-
+            twoFa: false 
         }; 
         if(!this.searchUser(login)) {
            this.users.push(user); 
@@ -36,5 +36,21 @@ export class UsersService {
         return this.users.find((user) => user.login ==login); 
     }
 
+    
+    getUserInfos(login: string) : UserInfos { 
+       const input: User = this.searchUser(login); 
+       if(input)
+       {
+            const ret: UserInfos = {
+               id : input.id, 
+               login: input.login, 
+               level: input.level, 
+               ranking: input.ranking, 
+               gamesWin: input.gamesWin, 
+               gamesLost: input.gamesLost
+           }; 
+           return ret; 
+       }
+    }
 
 }

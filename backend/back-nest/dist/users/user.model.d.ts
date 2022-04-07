@@ -1,7 +1,8 @@
+import { UserRelation, UserStatus } from "./user-status.enum";
 export interface User {
     id: string;
     login: string;
-    pass: string;
+    password: string;
     status: UserStatus;
     level: number;
     ranking: number;
@@ -9,7 +10,8 @@ export interface User {
     gamesLost: number;
     twoFa: number;
 }
-export declare enum UserStatus {
-    IS_GUEST = "IS_GUEST",
-    IS_42API = "IS_42API"
+export interface interactions {
+    login1: string;
+    login2: string;
+    relation: UserRelation;
 }

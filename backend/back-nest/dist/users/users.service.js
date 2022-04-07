@@ -8,8 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
-const user_model_1 = require("./user.model");
 const uuid_1 = require("uuid");
+const user_status_enum_1 = require("./user-status.enum");
 let UsersService = class UsersService {
     constructor() {
         this.users = [];
@@ -18,17 +18,17 @@ let UsersService = class UsersService {
         return this.users;
     }
     createUser(createUserDto) {
-        const { login, pass } = createUserDto;
+        const { login, password } = createUserDto;
         const user = {
             id: (0, uuid_1.v4)(),
             login,
-            pass,
-            status: user_model_1.UserStatus.IS_GUEST,
+            password,
+            status: user_status_enum_1.UserStatus.IS_GUEST,
             level: 0,
             ranking: 0,
             gamesWin: 0,
             gamesLost: 0,
-            twoFa: 0
+            twoFa: false
         };
         if (!this.searchUser(login)) {
             this.users.push(user);
@@ -37,6 +37,20 @@ let UsersService = class UsersService {
     }
     searchUser(login) {
         return this.users.find((user) => user.login == login);
+    }
+    getUserInfos(login) {
+        const input = this.searchUser(login);
+        if (input) {
+            const ret = {
+                id: input.id,
+                login: input.login,
+                level: input.level,
+                ranking: input.ranking,
+                gamesWin: input.gamesWin,
+                gamesLost: input.gamesLost
+            };
+            return ret;
+        }
     }
 };
 UsersService = __decorate([

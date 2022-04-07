@@ -12,70 +12,36 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersController = exports.storage = void 0;
+exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const create_user_dto_1 = require("./dto/create-user.dto");
-const rxjs_1 = require("rxjs");
-const platform_express_1 = require("@nestjs/platform-express");
-const multer_1 = require("multer");
-const uuid_1 = require("uuid");
-const path = require("path");
-exports.storage = {
-    storage: (0, multer_1.diskStorage)({
-        destination: './profil-picture',
-        filename: (req, file, cb) => {
-            const filename = path.parse(file.originalname).name.replace(/\s/g, '') + (0, uuid_1.v4)();
-            const extension = path.parse(file.originalname).ext;
-            cb(null, '${filename}${extension}');
-        }
-    })
-};
+const user_entity_1 = require("./user.entity");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
-    getAllTask() {
-        return this.usersService.getAllUsers();
-    }
     createUser(createUserDto) {
         return this.usersService.createUser(createUserDto);
     }
-    uploadFile(file) {
-        console.log(file);
-        return (0, rxjs_1.of)({ imagePath: file.path });
+    getUserById(login) {
+        return this.usersService.getUserInfos(login);
     }
 };
 __decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Array)
-], UsersController.prototype, "getAllTask", null);
-__decorate([
-    (0, common_1.Post)(),
+    (0, common_1.Post)('/signup'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
-    __metadata("design:returntype", Object)
+    __metadata("design:returntype", user_entity_1.User)
 ], UsersController.prototype, "createUser", null);
 __decorate([
-    (0, common_1.Post)('upload'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
-        storage: (0, multer_1.diskStorage)({
-            destination: './profil-picture',
-            filename: (req, file, cb) => {
-                const filename = path.parse(file.originalname).name.replace(/\s/g, '') + (0, uuid_1.v4)();
-                const extension = path.parse(file.originalname).ext;
-                cb(null, `${filename}${extension}`);
-            }
-        })
-    })),
-    __param(0, (0, common_1.UploadedFile)()),
+    (0, common_1.Get)('/:login'),
+    __param(0, (0, common_1.Param)('login')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", rxjs_1.Observable)
-], UsersController.prototype, "uploadFile", null);
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", user_entity_1.UserInfos)
+], UsersController.prototype, "getUserById", null);
 UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])
