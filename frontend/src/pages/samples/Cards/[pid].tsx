@@ -1,10 +1,15 @@
 import { ReactElement } from 'react'
-import Animation from '../../../src/components/Animations/LinearTransition'
+import SampleLayout from '../../../layouts/samplesLayout'
+import CardInterface from '../../../components/Cards/CardsInterface'
+import CardHome from '../../../components/Cards/CardsHome'
 import { useRouter } from 'next/router'
 
 function getComponent(pid: string | string[] | undefined){
-	if (pid === 'LinearTransition'){
-		return <Animation/>
+	if (pid === 'CardsHome'){
+		return <CardHome/>
+	}
+	else if (pid === 'CardsInterface'){
+		return <CardInterface href = '/' />
 	}
 	return <>No components has been found</>
 }
@@ -19,8 +24,8 @@ export default function Components() {
 
 Components.getLayout = function getLayout(page: ReactElement) {
 	return (
-	  <>
+	  <SampleLayout>
 		{page}
-	  </>
+	  </SampleLayout>
 	)
   }

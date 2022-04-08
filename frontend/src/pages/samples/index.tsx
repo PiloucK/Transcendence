@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ReactElement } from 'react'
-import SampleLayout from '../../src/layouts/samplesLayout'
+import SampleLayout from '../../layouts/samplesLayout'
 // import type { NextPage } from 'next'
 import styles from '../../styles/Home.module.css'
 

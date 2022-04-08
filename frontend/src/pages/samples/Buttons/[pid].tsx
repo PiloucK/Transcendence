@@ -1,15 +1,15 @@
 import { ReactElement } from 'react'
-import SampleLayout from '../../../src/layouts/samplesLayout'
-import CardInterface from '../../../src/components/Cards/CardsInterface'
-import CardHome from '../../../src/components/Cards/CardsHome'
+import SampleLayout from '../../../layouts/samplesLayout'
+import ButtonInterface from '../../../components/Buttons/ButtonsInterface'
+import ButtonIncrement from '../../../components/Buttons/ButtonsIncrement'
 import { useRouter } from 'next/router'
 
 function getComponent(pid: string | string[] | undefined){
-	if (pid === 'CardsHome'){
-		return <CardHome/>
+	if (pid === 'ButtonsIncrement'){
+		return <ButtonIncrement />
 	}
-	else if (pid === 'CardsInterface'){
-		return <CardInterface href = '/' />
+	else if (pid === 'ButtonsInterface'){
+		return <ButtonInterface />
 	}
 	return <>No components has been found</>
 }

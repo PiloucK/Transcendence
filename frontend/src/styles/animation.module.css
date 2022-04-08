@@ -1,0 +1,78 @@
+.playerPad
+{
+	position: absolute;
+
+	top: 50%;
+	left: 8%;
+	width:"100%";
+	height:"100%";
+}
+  
+img#playerPad
+{
+	width:"100%";
+	height:"100%";
+}
+
+.opponentPad
+{
+	position: absolute;
+
+	top: 50%;
+	left: 92%;
+	width:"100%";
+	height:"100%";
+}
+  
+img#opponentPad
+{
+	width:"100%";
+	height:"100%";
+}
+
+.limitsPadTop
+{
+	position: absolute;
+
+	top: 8%;
+	left: 50%;
+	width:"100%";
+	height:"100%";
+}
+  
+img#limitsPadTop
+{
+	width:"100%";
+	height:"100%";
+}
+  
+.limitsPadBot
+{
+	position: absolute;
+  
+	top: 92%;
+	left: 50%;
+	width:"100%";
+	height:"100%";
+}
+
+img#limitsPadBot
+{
+	width:"100%";
+	height:"100%";
+}
+
+
+.ball
+{
+	position: absolute;
+
+	top: 50%;
+	left: 50%;
+}
+
+img#ball
+{
+	width:"100%";
+	height:"100%";
+}
