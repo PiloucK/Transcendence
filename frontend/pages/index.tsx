@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { ReactElement, useState } from 'react'
-import MainLayout from '../layouts/mainLayout'
+import MainLayout from '../src/layouts/mainLayout'
 // import type { NextPage } from 'next'
 import styles from '../styles/Home.module.css'
-import Card from '../components/Cards/CardsInterface'
-import Test from '../components/Buttons/ButtonsInterface'
+import Card from '../src/components/Cards/CardsInterface'
+import Test from '../src/components/Buttons/ButtonsInterface'
 
 export default function Page() {
 	const [nbr, setNbr] = useState(0);
