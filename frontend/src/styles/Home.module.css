@@ -1,6 +1,34 @@
 .container {
-  padding: 0 2rem;
+	padding: 0 2rem;
 }
+
+/* 
+	Background that will take the left side of the screen
+*/
+.mainLayout_left_background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 50%;
+	height: 100%;
+	background-color: #00213D;
+	z-index: -1;
+}
+
+/* 
+	Background that will take the right side of the screen
+*/
+.mainLayout_right_background {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 50%;
+	height: 100%;
+	background-color: #1985A1;
+	z-index: -1;
+}
+
+/* Set the background-color of the main page */
 
 /* To write a Giant play in the center of the screen */
 .play {
@@ -97,7 +125,11 @@
   max-width: 800px;
 }
 
-/* About the dock containing every icons, the incons are align horizontaly */
+/*
+	About the dock containing every icons,
+	the icons are align horizontaly,
+	The dock should always be positionned at the bottom.
+*/
 .dock {
   
   /* Light grey 90% */
@@ -109,23 +141,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+
+  /* The dock should always be positionned at the bottom. */
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 100px;
 }
 
-/* About the icon component in the doc */
-.icon {
-  width: 100px;
-  height: 100px;
-  margin: 0.5rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: 0;
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
+/*
+	About the icons component in the doc,
+	Icons are align horizontaly,
+	Icons are scaled to be bigger.
+	The margin create some space between the icons.
+*/
+.icons {
+	transform: scale(1.8);
+	margin: 1.7rem;
 }
 
 .card {

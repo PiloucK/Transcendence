@@ -1,23 +1,14 @@
-import Link from 'next/link'
-import { ReactElement, useState } from 'react'
-import MainLayout from '../layouts/mainLayout'
-// import type { NextPage } from 'next'
-import styles from '../styles/Home.module.css'
+import { ReactElement } from "react";
+import DockUser from "../components/Dock/DockUser";
+import DockGuest from "../components/Dock/DockGuest";
+import MainLayout from "../layouts/mainLayout";
 
-export default function Page() {
-
-	return (
-		<div className={styles.grid}>
-
-			
-		</div>
-	)
-}
-
-Page.getLayout = function getLayout(page: ReactElement) {
+export default function MainMenu() {
   return (
-    <MainLayout>
-      {page}
-    </MainLayout>
-  )
+	<DockUser />
+  );
 }
+
+MainMenu.getLayout = function getLayout(page: ReactElement) {
+  return <MainLayout>{page}</MainLayout>;
+};
