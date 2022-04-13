@@ -7,7 +7,7 @@ interface Props {
 }
 
 const Dock: React.FunctionComponent<Props> = ({ children }) => {
-  return <div className={styles.card}>{children}</div>;
+  return <div className={styles.dock}>{children}</div>;
 }
 
 export default Dock;

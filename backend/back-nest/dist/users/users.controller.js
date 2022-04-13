@@ -39,6 +39,7 @@ let UsersController = class UsersController {
         return this.usersService.getAllUsers();
     }
     createUser(createUserDto) {
+        console.log("createUser", createUserDto);
         return this.usersService.createUser(createUserDto);
     }
     uploadFile(file) {

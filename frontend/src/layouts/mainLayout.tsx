@@ -5,22 +5,13 @@ interface Props {
     children: React.ReactNode
 }
 
+
+//Show a Big play button to start the game in the middle of the screen.
 const MainLayout: React.FunctionComponent<Props> = ({ children }) => {
     return (
         <div className={styles.container}>
-            <main className={styles.main}>
-                <h1 className={styles.title}>
-                    Welcome to <a>Next.js!</a>
-                </h1>
-        
-                <p className={styles.description}>
-                    Get started by editing{' '}
-                    <code className={styles.code}>pages/index.tsx</code>
-                </p>
-
-                {/* <TestHeader /> */}
-                {children}
-            </main>
+			<div className={styles.play}>PLAY</div>
+			{children}
         </div>
     )
 }

@@ -10,13 +10,13 @@ services:
         - ./frontend/src:/usr/src/app/frontend/src
       restart: always
 
-      #
-      #  backend:
-      #      build: ./backend/back-nest
-      #      ports:
-      #        - "3001:3001"
-      #      container_name: backend-transcendence
-      #      restart: always
+
+  # backend:
+  #     build: ./backend/back-nest
+  #     ports:
+  #       - "3001:3001"
+  #     container_name: backend-transcendence
+  #     restart: always
 
   # db:
   #     image: postgres

@@ -31,22 +31,17 @@ function getButtons() {
 					ButtonsInterface
 				</Link>
 			</li>
-			<li>
-				<Link href='samples/Buttons/ButtonsIncrement'>
-					ButtonsIncrement
-				</Link>
-			</li>
 		</>
 	)
 }
 
-function getAnimation() {
+function getIcons() {
 	return (
 		<>
-			<h3>Animations</h3>
+			<h3>Icons</h3>
 			<li>
-				<Link href='samples/Animations/LinearTransition'>
-					LinearTransition
+				<Link href='samples/Icons/RedirectionIcon'>
+					RedirectionIcon
 				</Link>
 			</li>
 		</>
@@ -64,7 +59,7 @@ export default function Page() {
 
 				{getButtons()}
 
-				{getAnimation()}
+				{getIcons()}
 			</div>
 		</div>
 	)
