@@ -1,14 +1,19 @@
 import { ReactElement } from "react";
 import DockUser from "../components/Dock/DockUser";
+import styles from '../styles/Home.module.css'
 import DockGuest from "../components/Dock/DockGuest";
 import MainLayout from "../layouts/mainLayout";
 
+//Show a Big play button to start the game in the middle of the screen.
 export default function MainMenu() {
-  return (
-	<DockUser />
-  );
+	return (
+		<>
+			<div className={styles.mainLayout_left_background} />
+			<div className={styles.mainLayout_right_background} />
+			<div className={styles.play}>
+				PLAY
+			</div>
+			<DockUser />
+		</>
+	);
 }
-
-MainMenu.getLayout = function getLayout(page: ReactElement) {
-  return <MainLayout>{page}</MainLayout>;
-};
