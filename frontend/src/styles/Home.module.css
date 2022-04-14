@@ -3,6 +3,104 @@
 }
 
 /* 
+	Background for the leaderboard
+*/
+.leaderboard_background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #00213D;
+	z-index: -1;
+	overflow: hidden;
+}
+
+.leaderboard_title {
+	position: absolute;
+	top: 10%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	
+	font-family: 'Khand';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 42px;
+	line-height: 64px;
+	display: flex;
+	align-items: center;
+	text-align: center;
+	font-feature-settings: 'tnum' on, 'lnum' on;
+	
+	color: #FFFFFF;
+}
+
+.leaderboard {
+	position: relative;
+	top: 4rem;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	z-index: 1;
+}
+
+.leaderboard_user {
+	background-color: #186E8A;
+  border-radius: 45px;
+	width: 45%;
+	height: 6rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	color: #fff;
+	z-index: 1;
+	margin: 1.2rem;
+}
+
+.leaderboard_user_name {
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+.leaderboard_user_score {
+	position: absolute;
+	left: 65%;
+
+	font-family: 'Khand';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 30px;
+	line-height: 46px;
+	display: flex;
+	align-items: center;
+	text-align: center;
+	font-feature-settings: 'tnum' on, 'lnum' on;
+	
+	color: #FFFFFF;
+}
+
+.leaderboard_user_rank {
+	position: absolute;
+	left: 32%;
+
+	font-family: 'Khand';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 42px;
+	line-height: 64px;
+	display: flex;
+	align-items: center;
+	text-align: center;
+	font-feature-settings: 'tnum' on, 'lnum' on;
+
+	color: #FFFFFF;
+}
+
+/* 
 	Background that will take the left side of the screen
 */
 .mainLayout_left_background {
