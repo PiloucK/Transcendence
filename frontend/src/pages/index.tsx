@@ -5,7 +5,7 @@ import MainLayout from "../layouts/mainLayout";
 
 export default function MainMenu() {
   return (
-	<DockUser />
+	<DockGuest />
   );
 }
 
