@@ -16,7 +16,7 @@ services:
         - "3001:3001"
       container_name: backend-transcendence
       volumes:
-        - ./backend/src:/usr/src/app/frontend/src
+        - ./backend/src:/usr/src/app/backend/src
       restart: always
 
   # db:
