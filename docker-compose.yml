@@ -1,30 +1,30 @@
-version: "3.8"
+version: "3.9"
 
 services:
   frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    container_name: frontend-transcendence
-    restart: always
-    # links:
-    #   - backend
+      build: ./frontend
+      ports:
+        - "3000:3000"
+      container_name: frontend-transcendence
+      volumes:
+        - ./frontend/src:/usr/src/app/frontend/src
+      restart: always
 
-  # backend:
-  #   build: ./backend
-  #   ports:
-  #     - "8080:8080"
-  #   container_name: backend-transcendence
-  #   restart: always
-  #   links:
-  #     - db
+  backend:
+      build: ./backend
+      ports:
+        - "3001:3001"
+      container_name: backend-transcendence
+      volumes:
+        - ./backend/src:/usr/src/app/backend/src
+      restart: always
 
-  db:
-    image: postgres
-    ports:
-      - "5432:5432"
-    container_name: db-transcendence
-    restart: always
+  # db:
+  #     image: postgres
+  #     ports:
+  #       - "5432:5432"
+  #     container_name: db-transcendence
+  #     restart: always
 
     # volumes:
     #   - data:/var/lib/postgresql/data

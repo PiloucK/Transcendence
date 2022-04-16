@@ -1,0 +1,304 @@
+.container {
+	padding: 0 2rem;
+}
+
+/* 
+	Background for the leaderboard
+*/
+.leaderboard_background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #00213D;
+	z-index: -1;
+	/* overflow: hidden; */
+}
+
+.leaderboard_title {
+	position: absolute;
+	top: 10%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	
+	font-family: 'Khand';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 42px;
+	line-height: 64px;
+	display: flex;
+	align-items: center;
+	text-align: center;
+	font-feature-settings: 'tnum' on, 'lnum' on;
+	
+	color: #FFFFFF;
+}
+
+.leaderboard {
+	position: relative;
+	top: 4rem;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	z-index: 1;
+}
+
+.leaderboard_user {
+	background-color: #186E8A;
+  border-radius: 45px;
+	width: 45%;
+	height: 6rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	color: #fff;
+	z-index: 1;
+	margin: 1.2rem;
+}
+
+.leaderboard_user_name {
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+.leaderboard_user_score {
+	position: absolute;
+	left: 65%;
+
+	font-family: 'Khand';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 30px;
+	line-height: 46px;
+	display: flex;
+	align-items: center;
+	text-align: center;
+	font-feature-settings: 'tnum' on, 'lnum' on;
+	
+	color: #FFFFFF;
+}
+
+.leaderboard_user_rank {
+	position: absolute;
+	left: 32%;
+
+	font-family: 'Khand';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 42px;
+	line-height: 64px;
+	display: flex;
+	align-items: center;
+	text-align: center;
+	font-feature-settings: 'tnum' on, 'lnum' on;
+
+	color: #FFFFFF;
+}
+
+/* 
+	Background that will take the left side of the screen
+*/
+.mainLayout_left_background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 50%;
+	height: 100%;
+	background-color: #00213D;
+	z-index: -1;
+}
+
+/* 
+	Background that will take the right side of the screen
+*/
+.mainLayout_right_background {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 50%;
+	height: 100%;
+	background-color: #1985A1;
+	z-index: -1;
+}
+
+/* Set the background-color of the main page */
+
+/* To write a Giant play in the center of the screen */
+.play {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	
+	font-family: 'Tourney';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 200px;
+	line-height: 220px;
+	display: flex;
+	align-items: center;
+	text-align: center;
+	font-feature-settings: 'tnum' on, 'lnum' on;
+	
+	/* Light grey 90% */
+	
+	color: rgba(232, 236, 237, 0.9);
+	
+	text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.main {
+  min-height: 100vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer {
+  display: flex;
+  flex: 1;
+  padding: 2rem 0;
+  border-top: 1px solid #eaeaea;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.title a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.title a:hover,
+.title a:focus,
+.title a:active {
+  text-decoration: underline;
+}
+
+.title {
+  margin: 0;
+  line-height: 1.15;
+  font-size: 4rem;
+}
+
+.title,
+.description {
+  text-align: center;
+}
+
+.description {
+  margin: 4rem 0;
+  line-height: 1.5;
+  font-size: 1.5rem;
+}
+
+.code {
+  background: #fafafa;
+  border-radius: 5px;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+    Bitstream Vera Sans Mono, Courier New, monospace;
+}
+
+.grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 800px;
+}
+
+/*
+	About the dock containing every icons,
+	the icons are align horizontaly,
+	The dock should always be positionned at the bottom.
+*/
+.dock {
+  
+  /* Light grey 90% */
+  
+  background: rgba(232, 236, 237, 0.9);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+
+  /* The dock should always be positionned at the bottom. */
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 100px;
+}
+
+/*
+	About the icons component in the doc,
+	Icons are align horizontaly,
+	Icons are scaled to be bigger.
+	The margin create some space between the icons.
+*/
+.icons {
+	transform: scale(1.8);
+	margin: 1.7rem;
+}
+
+.card {
+  margin: 1rem;
+  padding: 1.5rem;
+  text-align: left;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  max-width: 300px;
+}
+
+.card:hover,
+.card:focus,
+.card:active {
+  color: #0070f3;
+  border-color: #0070f3;
+}
+
+.card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.card p {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.logo {
+  height: 1em;
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+}
+
