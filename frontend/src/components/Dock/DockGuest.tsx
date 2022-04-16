@@ -40,3 +40,16 @@ export default function DockGuest() {
     </Dock>
   );
 }
+
+// export default function DockGuest() {
+// 	return (
+// 	  <Dock>
+// 		<IconButton className={styles.icons} aria-label="Authentification">
+// 			<Image
+// 				src = {FTLogo}
+// 				layout = {'fill'}
+// 			/>
+// 		</IconButton>
+// 	  </Dock>
+// 	);
+//   }

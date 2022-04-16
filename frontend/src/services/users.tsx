@@ -12,8 +12,17 @@ const getOne = (login: string) => {
   return request.then((response) => response.data);
 };
 
+interface toto {
+  login:string,
+  password:string
+}
+
 const add = ({login, secret}: IUserCredentials) => {
-  const request = axios.post(`${baseUrl}?login=${login}&pass=${secret}`);
+  let newUser: toto = {
+    login: login,
+    password: secret
+  }
+  const request = axios.post(`${baseUrl}/signup`, newUser);
   return request.then((response) => {
     console.log(response.data);
      return response.data;})
