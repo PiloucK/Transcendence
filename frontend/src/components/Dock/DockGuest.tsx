@@ -1,30 +1,36 @@
-import { ReactElement, useState } from "react";
-import Dock from "./Dock";
-import Image from "next/image";
-import styles from "../../styles/Home.module.css";
-import IUserCredentials from "../../interfaces/IUserCredentials";
-import userService from "../../services/users";
-
+import { FormEventHandler, ChangeEventHandler, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-export default function DockGuest() {
+import { Dock } from "./Dock";
+import { IUserCredentials } from "../../interfaces/IUserCredentials";
+import userService from "../../services/users";
+
+export function DockGuest() {
   const [username, setUsername] = useState("");
 
-  const addUser = (event) => {
+  const addUser: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     const newUserCredentials: IUserCredentials = {
       login: username,
-      secret: "",
+      password: "",
     };
-    userService.add(newUserCredentials).then((returnedUser) => {
-      console.log(returnedUser);
-      setUsername("");
-    });
+    userService
+      .add(newUserCredentials)
+      .then(() => {
+        setUsername("");
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
+  const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    if (event.target.value) {
+      setUsername(event.target.value);
+    }
   };
 
   return (

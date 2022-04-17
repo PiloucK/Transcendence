@@ -1,6 +1,6 @@
 import axios from "axios";
 const baseUrl = "http://localhost:3001/users";
-import IUserCredentials from "../interfaces/IUserCredentials";
+import { IUserCredentials } from "../interfaces/IUserCredentials";
 
 const getAll = () => {
   const request = axios.get(baseUrl);
@@ -12,20 +12,9 @@ const getOne = (login: string) => {
   return request.then((response) => response.data);
 };
 
-interface toto {
-  login:string,
-  password:string
-}
-
-const add = ({login, secret}: IUserCredentials) => {
-  let newUser: toto = {
-    login: login,
-    password: secret
-  }
+const add = (newUser: IUserCredentials) => {
   const request = axios.post(`${baseUrl}/signup`, newUser);
-  return request.then((response) => {
-    console.log(response.data);
-     return response.data;})
+  return request.then((response) => response.data);
 };
 
 const deleteOne = (login: string) => {
