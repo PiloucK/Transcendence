@@ -4,7 +4,6 @@ import {User, UserInfos } from './user.entity'
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserStatus } from './user-status.enum';
-import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class UsersService {
     private users: User[] = [];  

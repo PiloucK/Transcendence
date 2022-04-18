@@ -1,7 +1,4 @@
-import { useReducer, useEffect, useRef } from "react";
-import { useContext } from "react";
 import React from "react";
-import styles from "../styles/game.module.css";
 
 enum MovingBoxActionKind {
   start = "start",

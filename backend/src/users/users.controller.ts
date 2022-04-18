@@ -1,15 +1,8 @@
-import { Body, Controller, Get, Post, Param, Patch, UploadedFile, UseInterceptors, Query, Res, Request,  } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param, Patch } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import {User, UserInfos } from './user.entity'
-import { Observable, of } from 'rxjs';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer'; 
-import { v4 as uuid} from 'uuid'; 
-import path = require('path'); 
-import { join } from 'path'; 
 
-import { fileURLToPath } from 'url'; 
 import { UpdateUserRankingDto } from './dto/update-user-ranking.dto';
 
 import {
