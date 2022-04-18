@@ -21,7 +21,10 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "remark": "^14.0.2",
-    "remark-html": "^15.0.1"
+    "remark-html": "^15.0.1",
+    "socket-io": "^1.0.0",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",
