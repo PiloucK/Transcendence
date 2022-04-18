@@ -22,7 +22,12 @@ const deleteOne = (login: string) => {
   return request.then((response) => response.data);
 };
 
-export default { getAll, getOne, add, deleteOne };
+const updateUserRanking = (login: string, ranking: number) => {
+	const request = axios.patch(`${baseUrl}/${login}/ranking`, { ranking } );
+	return request.then((response) => response.data);
+};
+
+export default { getAll, getOne, add, deleteOne, updateUserRanking };
 // ES6 shorthand for
 // export default {
 //   getAll: getAll,

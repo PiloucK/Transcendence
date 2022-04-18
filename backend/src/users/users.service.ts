@@ -53,4 +53,23 @@ export class UsersService {
        }
     }
 
+		updateUserRanking(login: string, ranking: number) : UserInfos {
+			const input: User = this.searchUser(login); 
+			if(input)
+			{
+				console.log(ranking);
+				input.ranking = ranking;
+				const ret: UserInfos = {
+					id : input.id, 
+					login: input.login, 
+					level: input.level, 
+					ranking: input.ranking, 
+					gamesWin: input.gamesWin, 
+					gamesLost: input.gamesLost
+				}; 
+				console.log(ret);
+				return ret; 
+			}
+		}
+
 }
