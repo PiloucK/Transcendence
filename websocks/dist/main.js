@@ -17,6 +17,10 @@ async function bootstrap() {
             console.log("server side received ", username);
             io.emit("update");
         });
+        socket.on("newRank", (username) => {
+            console.log("server side received ", username);
+            io.emit("update");
+        });
     });
     await server.listen(3003);
 }

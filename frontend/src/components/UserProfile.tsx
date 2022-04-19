@@ -1,5 +1,5 @@
 import { FC } from "react";
-import IUserStats from "../interfaces/IUserStats";
+import { IUserStats } from "../interfaces/IUserStats";
 
 export const UserProfile: FC<IUserStats> = (userStats: IUserStats) => {
   return (

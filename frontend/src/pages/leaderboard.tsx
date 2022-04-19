@@ -1,6 +1,9 @@
 import { ReactElement, useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import userService from "../services/users";
+import IconButton from "@mui/material/IconButton";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 
 import io from "socket.io-client";
 
@@ -23,6 +26,53 @@ interface User {
   twoFa: boolean;
 }
 
+// Will display a button incrementing the user's ranking.
+function IncrementRankingButton({
+  currentUser,
+}: {
+  currentUser: User;
+}): ReactElement {
+  const firstUserRanking = currentUser.ranking;
+  return (
+    <IconButton
+      className={styles.icons}
+      aria-label="ranking"
+      onClick={() => {
+        console.log("IncrementRankingButton", firstUserRanking);
+        userService.updateUserRanking(currentUser.login, firstUserRanking + 15)
+				.catch((e) => {
+					console.error(e);
+				});
+        socket.emit("newRank")
+      }}
+    >
+      <AddBoxIcon />
+    </IconButton>
+  );
+}
+
+// Will display a button decrementing the user's ranking.
+function DecrementRankingButton({
+  currentUser,
+}: {
+  currentUser: User;
+}): ReactElement {
+  const firstUserRanking = currentUser.ranking;
+  return (
+    <IconButton
+      className={styles.icons}
+      aria-label="ranking"
+      onClick={() => {
+        console.log("DecrementRankingButton", firstUserRanking);
+        userService.updateUserRanking(currentUser.login, firstUserRanking - 15);
+        socket.emit("newRank");
+      }}
+    >
+      <IndeterminateCheckBoxIcon />
+    </IconButton>
+  );
+}
+
 // Will create the five cards component to display the users and their scores.
 function createLeaderboard(users: User[]): ReactElement {
   // console.log(users);
@@ -31,9 +81,11 @@ function createLeaderboard(users: User[]): ReactElement {
       {users.map((user, index) => {
         return (
           <div className={styles.leaderboard_user} key={index}>
+            <DecrementRankingButton currentUser={user} />
             <div className={styles.leaderboard_user_rank}>{index + 1}</div>
             <div className={styles.leaderboard_user_name}>{user.login}</div>
             <div className={styles.leaderboard_user_score}>{user.ranking}</div>
+            <IncrementRankingButton currentUser={user} />
           </div>
         );
       })}
@@ -41,23 +93,15 @@ function createLeaderboard(users: User[]): ReactElement {
   );
 }
 
-// let socket;
-
 // Will print the list of users in the leaderboard.
 export default function Leaderboard() {
   const [users, setUsers] = useState([]);
-
-	// const socket = io("ws://localhost:3003");
 
   useEffect(() => {
     userService.getAll().then((users) => {
       setUsers(users);
     });
 
-		// // envoi d'un message au serveur
-		// socket.emit("bonjour du client", 5, "6", { 7: Uint8Array.from([8]) });
-		
-		// // réception d'un message envoyé par le serveur
 		socket.on("update", () => {
 			console.log("udpate");
 
@@ -66,30 +110,6 @@ export default function Leaderboard() {
 			});
 		});
   }, []);
-
-
-  // useEffect(() => {
-  //   async function socketFetch() {
-  //     await fetch("/api/socket");
-  //     socket = io();
-
-  //     socket.on("connect", () => {
-  //       console.log("connected");
-  //       userService.getAll().then((users) => {
-  //         setUsers(users);
-  //       });
-  //     });
-
-			// socket.on("update", (newUsername: string) => {
-			// 	console.log(newUsername);
-
-			// 	userService.getAll().then((users) => {
-			// 		setUsers(users);
-			// 	});
-			// });
-    // }
-    // socketFetch();
-  // }, []);
 
   return (
     <>

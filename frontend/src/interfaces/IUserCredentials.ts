@@ -1,4 +1,4 @@
-export default interface IUserCredentials {
-    login: string;
-    secret: string;
+export interface IUserCredentials {
+  login: string;
+  password: string;
 }

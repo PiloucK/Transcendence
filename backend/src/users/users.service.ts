@@ -4,7 +4,6 @@ import {User, UserInfos } from './user.entity'
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserStatus } from './user-status.enum';
-import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class UsersService {
     private users: User[] = [];  
@@ -52,5 +51,24 @@ export class UsersService {
            return ret; 
        }
     }
+
+		updateUserRanking(login: string, ranking: number) : UserInfos {
+			const input: User = this.searchUser(login); 
+			if(input)
+			{
+				console.log(ranking);
+				input.ranking = ranking;
+				const ret: UserInfos = {
+					id : input.id, 
+					login: input.login, 
+					level: input.level, 
+					ranking: input.ranking, 
+					gamesWin: input.gamesWin, 
+					gamesLost: input.gamesLost
+				}; 
+				console.log(ret);
+				return ret; 
+			}
+		}
 
 }

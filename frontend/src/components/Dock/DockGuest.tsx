@@ -1,8 +1,6 @@
-import { ReactElement, useEffect, useState } from "react";
-import Dock from "./Dock";
-import Image from "next/image";
-import styles from "../../styles/Home.module.css";
-import IUserCredentials from "../../interfaces/IUserCredentials";
+import {FormEventHandler, ChangeEventHandler, ReactElement, useEffect, useState } from "react";
+import {Dock} from "./Dock";
+import {IUserCredentials} from "../../interfaces/IUserCredentials";
 import userService from "../../services/users";
 
 import TextField from "@mui/material/TextField";
@@ -12,40 +10,35 @@ import io from "socket.io-client";
 
 const socket = io("http://localhost:3003", {transports: ['websocket']});
 
-export default function DockGuest() {
+export function DockGuest() {
   const [username, setUsername] = useState("");
 
-  const addUser = (event) => {
+  const addUser: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
     const newUserCredentials: IUserCredentials = {
       login: username,
-      secret: "",
+      password: "",
     };
-    console.log(username);
-
-    userService.add(newUserCredentials).then((returnedUser) => {
-      console.log(returnedUser);
-      socket.emit("newName", username);
-      setUsername("");
-    });
+    
+    userService
+      .add(newUserCredentials)
+      .then(() => {
+        socket.emit("newName", username);
+        setUsername("");
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
+  const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    if (event.target.value) {
+      setUsername(event.target.value);
+    }
   };
-
-  // useEffect(() => {
-  //   async function socketFetch() {
-  //     await fetch("/api/socket");
-  //     socket = io();
-
-  //     socket.on("connect", () => {
-  //       console.log("dock connected");
-  //     });
-  //   }
-  //   socketFetch();
-  // }, []);
 
   return (
     <Dock>

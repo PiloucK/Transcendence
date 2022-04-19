@@ -1,10 +1,10 @@
-import IUserCredentials from "./IUserCredentials";
-import IUserStats from "./IUserStats"
+import { IUserCredentials } from "./IUserCredentials";
+import { IUserStats } from "./IUserStats";
 
-export default interface IUser {
-    credentials: IUserCredentials;
-    stats: IUserStats;
-  }
+export interface IUser {
+  credentials: IUserCredentials;
+  stats: IUserStats;
+}
 
 // Temporary matching the definition of the backend model:
 
@@ -21,7 +21,6 @@ export default interface IUser {
 // }
 
 // export enum UserStatus {
-//     IS_GUEST="IS_GUEST", 
-//     IS_42API ="IS_42API", 
+//     IS_GUEST="IS_GUEST",
+//     IS_42API ="IS_42API",
 // }
-  

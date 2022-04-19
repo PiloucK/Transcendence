@@ -1,6 +1,5 @@
-import {ToggleDarkMode} from "../hooks/ToggleDarkMode";
-
+import { ToggleDarkMode } from "../hooks/ToggleDarkMode";
 
 export default function Profile() {
-  return (<ToggleDarkMode/>);
+  return <ToggleDarkMode />;
 }
