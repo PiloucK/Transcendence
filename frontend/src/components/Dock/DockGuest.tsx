@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 
 import io from "socket.io-client";
 
-const socket = io("http://localhost:3001", {transports: ['websocket']});
+const socket = io("http://localhost:3003", {transports: ['websocket']});
 
 export default function DockGuest() {
   const [username, setUsername] = useState("");

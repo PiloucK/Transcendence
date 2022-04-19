@@ -1,7 +1,10 @@
 import { ReactElement, useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import userService from "../services/users";
-// import io from "socket.io-client";
+
+import io from "socket.io-client";
+
+const socket = io("http://localhost:3003", {transports: ['websocket']});
 
 enum UserStatus {
   IS_GUEST = "IS_GUEST",
@@ -47,18 +50,21 @@ export default function Leaderboard() {
 	// const socket = io("ws://localhost:3003");
 
   useEffect(() => {
+    userService.getAll().then((users) => {
+      setUsers(users);
+    });
+
 		// // envoi d'un message au serveur
 		// socket.emit("bonjour du client", 5, "6", { 7: Uint8Array.from([8]) });
 		
 		// // réception d'un message envoyé par le serveur
-		// socket.on("update", (...args) => {
-		// 	console.log(args);
+		socket.on("update", () => {
+			console.log("udpate");
 
 			userService.getAll().then((users) => {
 				setUsers(users);
 			});
-		// });
-		
+		});
   }, []);
 
 

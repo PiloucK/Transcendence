@@ -15,9 +15,9 @@ async function bootstrap() {
     console.log("server websock connected");
     socket.on("newName", (username) => {
       console.log("server side received ", username);
+      io.emit("update");
     })
   });
   await server.listen(3003);
-  await app.listen(3001)
 }
 bootstrap();
