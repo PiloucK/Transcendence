@@ -9,16 +9,15 @@ interface Props {
 }
 
 function onDown(event: KeyboardEvent) {
-
   if (event.key === "Escape") {
     const { pathname } = Router;
     if (pathname !== "/") {
-			if (previousPage === false) {
-				previousPage = true;
-			}
+      if (previousPage === false) {
+        previousPage = true;
+      }
       Router.push("/");
     } else if (pathname === "/" && previousPage === true) {
-			console.log(window.history);
+      console.log(window.history);
       window.history.back();
     }
   }

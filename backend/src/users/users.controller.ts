@@ -45,7 +45,6 @@ export class UsersController {
 				if (errors.length > 0) {
 					console.log('validation failed. errors: ', errors);
 				} else {
-					console.log('validation succeed');
 					return this.usersService.updateUserRanking(login, ranking.ranking);
 				}
 			});
@@ -53,6 +52,4 @@ export class UsersController {
 			return new UserInfos();
 		}
 
-
-    
 }
