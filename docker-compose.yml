@@ -10,6 +10,15 @@ services:
         - ./frontend/src:/usr/src/app/frontend/src
       restart: always
 
+  websocks:
+      build: ./websocks
+      ports:
+        - "3003:3003"
+      container_name: websocks-transcendence
+      volumes:
+        - ./websocks/src:/usr/src/app/websocks/src
+      restart: always
+
   backend:
       build: ./backend
       ports:

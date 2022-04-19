@@ -1,12 +1,12 @@
 FROM node:latest
 
-RUN     mkdir -p usr/src/app/backend
+RUN     mkdir -p usr/src/app/websocks
 
-WORKDIR /usr/src/app/backend
+WORKDIR /usr/src/app/websocks
 
 COPY . .
 RUN  yarn
 
-EXPOSE 3001
+EXPOSE 3003
 
 CMD [ "yarn", "start:dev"]
