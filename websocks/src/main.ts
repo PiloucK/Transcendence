@@ -17,7 +17,7 @@ async function bootstrap() {
       console.log("server side received ", username);
     })
   });
-  await server.listen(3001);
-  // await app.listen(3001)
+  await server.listen(3003);
+  await app.listen(3001)
 }
 bootstrap();

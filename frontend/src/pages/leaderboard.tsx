@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import userService from "../services/users";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 
 enum UserStatus {
   IS_GUEST = "IS_GUEST",
@@ -38,7 +38,7 @@ function createLeaderboard(users: User[]): ReactElement {
   );
 }
 
-let socket;
+// let socket;
 
 // Will print the list of users in the leaderboard.
 export default function Leaderboard() {
@@ -46,43 +46,44 @@ export default function Leaderboard() {
 
 	// const socket = io("ws://localhost:3003");
 
-  // useEffect(() => {
-	// 	// envoi d'un message au serveur
-	// 	socket.emit("bonjour du client", 5, "6", { 7: Uint8Array.from([8]) });
-		
-	// 	// réception d'un message envoyé par le serveur
-	// 	socket.on("update", (...args) => {
-	// 		console.log(args);
-
-	// 		userService.getAll().then((users) => {
-	// 			setUsers(users);
-	// 		});
-	// 	});
-		
-  // }, []);
-
   useEffect(() => {
-    async function socketFetch() {
-      await fetch("/api/socket");
-      socket = io();
+		// // envoi d'un message au serveur
+		// socket.emit("bonjour du client", 5, "6", { 7: Uint8Array.from([8]) });
+		
+		// // réception d'un message envoyé par le serveur
+		// socket.on("update", (...args) => {
+		// 	console.log(args);
 
-      socket.on("connect", () => {
-        console.log("connected");
-        userService.getAll().then((users) => {
-          setUsers(users);
-        });
-      });
-
-			socket.on("update", (newUsername: string) => {
-				console.log(newUsername);
-
-				userService.getAll().then((users) => {
-					setUsers(users);
-				});
+			userService.getAll().then((users) => {
+				setUsers(users);
 			});
-    }
-    socketFetch();
+		// });
+		
   }, []);
+
+
+  // useEffect(() => {
+  //   async function socketFetch() {
+  //     await fetch("/api/socket");
+  //     socket = io();
+
+  //     socket.on("connect", () => {
+  //       console.log("connected");
+  //       userService.getAll().then((users) => {
+  //         setUsers(users);
+  //       });
+  //     });
+
+			// socket.on("update", (newUsername: string) => {
+			// 	console.log(newUsername);
+
+			// 	userService.getAll().then((users) => {
+			// 		setUsers(users);
+			// 	});
+			// });
+    // }
+    // socketFetch();
+  // }, []);
 
   return (
     <>

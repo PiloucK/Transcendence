@@ -10,11 +10,10 @@ import Button from "@mui/material/Button";
 
 import io from "socket.io-client";
 
-let socket;
+const socket = io("http://localhost:3001", {transports: ['websocket']});
 
 export default function DockGuest() {
   const [username, setUsername] = useState("");
-  // const socket = io("ws://localhost:3003");
 
   const addUser = (event) => {
     event.preventDefault();
@@ -23,13 +22,11 @@ export default function DockGuest() {
       login: username,
       secret: "",
     };
-
-    // console.log("preemit");
-    // socket.emit("update");
-    // console.log("postemit");
+    console.log(username);
 
     userService.add(newUserCredentials).then((returnedUser) => {
       console.log(returnedUser);
+      socket.emit("newName", username);
       setUsername("");
     });
   };
@@ -38,17 +35,17 @@ export default function DockGuest() {
     setUsername(event.target.value);
   };
 
-  useEffect(() => {
-    async function socketFetch() {
-      await fetch("/api/socket");
-      socket = io();
+  // useEffect(() => {
+  //   async function socketFetch() {
+  //     await fetch("/api/socket");
+  //     socket = io();
 
-      socket.on("connect", () => {
-        console.log("dock connected");
-      });
-    }
-    socketFetch();
-  }, []);
+  //     socket.on("connect", () => {
+  //       console.log("dock connected");
+  //     });
+  //   }
+  //   socketFetch();
+  // }, []);
 
   return (
     <Dock>
