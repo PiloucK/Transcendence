@@ -8,7 +8,7 @@ async function bootstrap() {
   const server = require('http').createServer(app);
   const io = require('socket.io')(server, {
     cors: {
-      origin: "http://localhost:3000"
+      origin: "http://0.0.0.0:3000"
     }
   });
   await io.on('connection', (socket) => {
