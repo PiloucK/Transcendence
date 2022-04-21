@@ -8,7 +8,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-function onDown(event: KeyboardEvent) {
+function onUp(event: KeyboardEvent) {
   if (event.key === "Escape") {
     const { pathname } = Router;
     if (pathname !== "/") {
@@ -26,7 +26,7 @@ function onDown(event: KeyboardEvent) {
 export const MainLayout: React.FunctionComponent<Props> = ({ children }) => {
   // This if statement is needed due to the server-side rendering of next.js
   if (typeof window !== "undefined") {
-    document.addEventListener("keyup", onDown);
+    document.addEventListener("keyup", onUp);
   }
 
   return <>{children}</>;
