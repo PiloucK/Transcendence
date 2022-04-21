@@ -8,8 +8,8 @@ export function Ball() {
       className={styles.ball}
       id="ball"
       style={{
-        top: "500px",
-        left: "960px",
+        top: window.innerHeight / 2 - 7,
+        left: window.innerWidth / 2 - 7,
       }}
     />
   );

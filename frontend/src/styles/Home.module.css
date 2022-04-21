@@ -1,15 +1,31 @@
 /* 
-* Temporary test to draw a ball at the center of the screen
+* Style used in the 'Game' page
 */
 .ball {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	width: 100px;
-	height: 100px;
+	width: 14px;
+	height: 14px;
 	border-radius: 50%;
-	background-color: #ff0000;
+	background-color: #EB5E28;
+}
+
+.left_line {
+	position: absolute;
+	left: 20%;
+	width: 5px;
+	height: 100%;
+	background-color: #000000;
+}
+
+.right_line {
+	position: absolute;
+	left: 80%;
+	width: 5px;
+	height: 100%;
+	background-color: #000000;
 }
 
 .container {

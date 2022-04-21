@@ -39,6 +39,8 @@ export default function Game() {
     <>
       <div className={styles.mainLayout_left_background} />
       <div className={styles.mainLayout_right_background} />
+			<div className={styles.left_line} />
+			<div className={styles.right_line} />
       <DisplayBallForUser />
     </>
   );
