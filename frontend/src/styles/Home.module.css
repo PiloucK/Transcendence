@@ -321,6 +321,9 @@
 	align-items: center;
 	text-align: center;
 	letter-spacing: -0.02em;
+ 
+	/* align the content on a line */
+	white-space: nowrap;
 	
 	/* White */
 	

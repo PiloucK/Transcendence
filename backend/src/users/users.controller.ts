@@ -3,7 +3,9 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import {User, UserInfos } from './user.entity'
 
-import { UpdateUserRankingDto } from './dto/update-user-ranking.dto';
+import {
+	UpdateUserRankingDto,
+	UpdateUserUsernameDto } from './dto/update-user.dto';
 
 import {
 	validate,
@@ -25,11 +27,11 @@ export class UsersController {
          return this.usersService.createUser(createUserDto); 
         }
     
-        @Get('/:login')
-        getUserById(@Param('login') login: string ) : UserInfos
-        {
-            return this.usersService.getUserInfos(login);
-        }
+		@Get('/:login')
+		getUserById(@Param('login') login: string ) : UserInfos
+		{
+				return this.usersService.getUserInfos(login);
+		}
 
     // Will modify the ranking of a precise user
 		@Patch('/:login/ranking')
@@ -40,7 +42,8 @@ export class UsersController {
 
 			ranking.ranking = updateUserRankingDto.ranking;
 
-			validate(ranking).then(errors => {
+			validate(ranking)
+			.then(errors => {
 				// errors is an array of validation errors
 				if (errors.length > 0) {
 					console.log('validation failed. errors: ', errors);
@@ -52,4 +55,23 @@ export class UsersController {
 			return new UserInfos();
 		}
 
+		@Patch('/:login/username')
+		updateUserUsername(@Param('login') login: string, @Body() updateUserUsernameDto: UpdateUserUsernameDto) : UserInfos
+		{
+			console.log(login, updateUserUsernameDto);
+			let username = new UpdateUserUsernameDto();
+
+			username.username = updateUserUsernameDto.username;
+
+			validate(username)
+			.then(errors => {
+				if (errors.length > 0) {
+					console.log('validation failed. errors: ', errors);
+				} else {
+					return this.usersService.updateUserUsername(login, username.username);
+				}
+			});
+
+			return new UserInfos();
+		}
 }

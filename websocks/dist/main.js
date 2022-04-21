@@ -13,13 +13,13 @@ async function bootstrap() {
     });
     await io.on('connection', (socket) => {
         console.log("server websock connected");
-        socket.on("newName", (username) => {
+        socket.on("newUser", (username) => {
             console.log("server side received ", username);
-            io.emit("update");
+            io.emit("leaderboardUpdate");
         });
         socket.on("newRank", (username) => {
             console.log("server side received ", username);
-            io.emit("update");
+            io.emit("leaderboardUpdate");
         });
     });
     await server.listen(3003);

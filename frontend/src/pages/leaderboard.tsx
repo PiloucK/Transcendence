@@ -98,8 +98,8 @@ export default function Leaderboard() {
       setUsers(users);
     });
 
-		socket.on("update", () => {
-			console.log("udpate");
+		socket.on("leaderboardUpdate", () => {
+			// console.log("udpate");
 
 			userService.getAll().then((users) => {
 				setUsers(users);

@@ -71,4 +71,23 @@ export class UsersService {
 			}
 		}
 
+		updateUserUsername(login: string, username: string) : UserInfos {
+			const input: User = this.searchUser(login); 
+			console.log(input, login, username);
+			if(input)
+			{
+				console.log(username);
+				input.login = username;
+				const ret: UserInfos = {
+					id : input.id, 
+					login: input.login, 
+					level: input.level, 
+					ranking: input.ranking, 
+					gamesWin: input.gamesWin, 
+					gamesLost: input.gamesLost
+				}; 
+				console.log(ret);
+				return ret; 
+			}
+		}
 }
