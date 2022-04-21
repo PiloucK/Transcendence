@@ -1,27 +1,43 @@
 import { createContext, useContext, useState } from 'react'
 import React from 'react'
+import Router from "next/router";
 
 interface ILoginContext {
-	userName: string;
-	userSecret: string;
+	userName: string | null;
+	userSecret: string | null;
+	login?: (userName: string, userSecret: string) => void;
+	logout?: () => void;
 }
 
 const defaultLoginState = {
-	userName: '',
-	userSecret: '',
+	userName: null,
+	userSecret: null,
 };
 
-export const LoginContext = React.createContext<ILoginContext>(defaultLoginState)
+const LoginContext = React.createContext<ILoginContext>(defaultLoginState)
 
-export function LoginProvider( children: React.ReactNode ) {
+export const LoginProvider: React.FC = ( {children}: React.ReactNode ) => {
 	const [userName, setUserName] = useState(defaultLoginState.userName)
 	const [userSecret, setUserSecret] = useState(defaultLoginState.userSecret)
+
+	const login = (userName: string, userSecret: string) => {
+		setUserName(userName)
+		setUserSecret(userSecret)
+	}
+
+	const logout = () => {
+		setUserName(null)
+		setUserSecret(null)
+		Router.push("/");
+	}
 
 	return (
 		<LoginContext.Provider
 			value={{
 				userName,
 				userSecret,
+				login,
+				logout,
 			}}
 		>
 			{children}
@@ -29,11 +45,6 @@ export function LoginProvider( children: React.ReactNode ) {
 	)
 }
 
-// export function useLogin() {
-// 	const context = useContext(LoginContext)
-
-// 	if (!context)
-// 		throw new Error('useLogin must be used inside a `LoginProvider`')
-
-// 	return context
-// }
+export function useLoginContext() {
+	return useContext(LoginContext)
+}

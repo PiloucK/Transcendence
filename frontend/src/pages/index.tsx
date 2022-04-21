@@ -2,6 +2,17 @@ import { DockUser } from "../components/Dock/DockUser";
 import styles from "../styles/Home.module.css";
 import { DockGuest } from "../components/Dock/DockGuest";
 import { ToggleDarkMode } from "../hooks/ToggleDarkMode";
+import { useLoginContext } from "../context/LoginContext";
+
+function DockToShow() {
+	const loginContext = useLoginContext();
+
+	if (loginContext.userName !== null) {
+		return <DockUser />;
+	} else {
+		return <DockGuest />;
+	}
+}
 
 //Show a Big play button to start the game in the middle of the screen.
 export default function MainMenu() {
@@ -10,8 +21,7 @@ export default function MainMenu() {
       <div className={styles.mainLayout_left_background} />
       <div className={styles.mainLayout_right_background} />
       <div className={styles.play}>PLAY</div>
-      <DockUser />
-      <DockGuest />
+			<DockToShow />
       <ToggleDarkMode />
     </>
   );

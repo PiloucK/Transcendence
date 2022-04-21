@@ -3,6 +3,8 @@ import {Dock} from "./Dock";
 import {IUserCredentials} from "../../interfaces/IUserCredentials";
 import userService from "../../services/users";
 
+import { useLoginContext } from "../../context/LoginContext";
+
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
@@ -11,6 +13,8 @@ import io from "socket.io-client";
 const socket = io("http://localhost:3003", {transports: ['websocket']});
 
 export function DockGuest() {
+	const loginContext = useLoginContext();
+
   const [username, setUsername] = useState("");
 
   const addUser: FormEventHandler<HTMLFormElement> = (event) => {
@@ -24,6 +28,7 @@ export function DockGuest() {
     userService
       .add(newUserCredentials)
       .then(() => {
+				loginContext.login(username, "");
         socket.emit("newName", username);
         setUsername("");
       })
