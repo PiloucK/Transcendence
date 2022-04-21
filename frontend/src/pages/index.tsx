@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css";
 import { DockGuest } from "../components/Dock/DockGuest";
 import { ToggleDarkMode } from "../hooks/ToggleDarkMode";
 import { useLoginContext } from "../context/LoginContext";
+import Link from "next/link";
 
 function DockToShow() {
 	const loginContext = useLoginContext();
@@ -20,7 +21,11 @@ export default function MainMenu() {
     <>
       <div className={styles.mainLayout_left_background} />
       <div className={styles.mainLayout_right_background} />
-      <div className={styles.play}>PLAY</div>
+			<Link href="/game">
+				<div className={styles.play}>
+					PLAY
+				</div>
+			</Link>
 			<DockToShow />
       <ToggleDarkMode />
     </>
