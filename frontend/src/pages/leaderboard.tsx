@@ -32,14 +32,12 @@ function IncrementRankingButton({
 }: {
   currentUser: User;
 }): ReactElement {
-  const firstUserRanking = currentUser.ranking;
   return (
     <IconButton
       className={styles.icons}
       aria-label="ranking"
       onClick={() => {
-        console.log("IncrementRankingButton", firstUserRanking);
-        userService.updateUserRanking(currentUser.login, firstUserRanking + 15)
+        userService.updateUserRanking(currentUser.login, 15)
 				.catch((e) => {
 					console.error(e);
 				});
@@ -57,14 +55,12 @@ function DecrementRankingButton({
 }: {
   currentUser: User;
 }): ReactElement {
-  const firstUserRanking = currentUser.ranking;
   return (
     <IconButton
       className={styles.icons}
       aria-label="ranking"
       onClick={() => {
-        console.log("DecrementRankingButton", firstUserRanking);
-        userService.updateUserRanking(currentUser.login, firstUserRanking - 15);
+        userService.updateUserRanking(currentUser.login, -15);
         socket.emit("newRank");
       }}
     >

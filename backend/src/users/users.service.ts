@@ -57,7 +57,7 @@ export class UsersService {
 			if(input)
 			{
 				console.log(ranking);
-				input.ranking = ranking;
+				input.ranking = input.ranking + ranking;
 				const ret: UserInfos = {
 					id : input.id, 
 					login: input.login, 
