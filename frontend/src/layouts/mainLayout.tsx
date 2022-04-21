@@ -17,7 +17,6 @@ function onUp(event: KeyboardEvent) {
       }
       Router.push("/");
     } else if (pathname === "/" && previousPage === true) {
-      console.log(window.history);
       window.history.back();
     }
   }
