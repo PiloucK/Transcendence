@@ -12,7 +12,7 @@ const defaultState = {
 
 const ThemeContext = React.createContext<IThemeContext>(defaultState);
 
-export const ThemeProvider: FC = ({ children }) => {
+export const ThemeProvider: FC = ({ children }: React.ReactNode) => {
   const [dark, setDark] = useState(defaultState.dark);
 
   const toggleDark = () => {
