@@ -7,7 +7,7 @@ import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox
 
 import io from "socket.io-client";
 
-const socket = io("http://localhost:3003", {transports: ['websocket']});
+const socket = io("http://0.0.0.0:3003", {transports: ['websocket']});
 
 enum UserStatus {
   IS_GUEST = "IS_GUEST",

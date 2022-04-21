@@ -14,7 +14,7 @@ import userService from "../services/users";
 
 import io from "socket.io-client";
 
-const socket = io("http://localhost:3003", {transports: ['websocket']});
+const socket = io("http://0.0.0.0:3003", {transports: ['websocket']});
 
 function UserName() {
   const loginContext = useLoginContext();
