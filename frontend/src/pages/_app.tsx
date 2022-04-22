@@ -2,7 +2,6 @@ import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 
-import { ThemeProvider } from "../context/ThemeContext";
 import { LoginProvider } from "../context/LoginContext";
 import { MainLayout } from "../layouts/mainLayout";
 
@@ -20,10 +19,8 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
 
   return getLayout(
-		<LoginProvider>
-			<ThemeProvider>
-				<Component {...pageProps} />
-			</ThemeProvider>
-		</LoginProvider>
+    <LoginProvider>
+      <Component {...pageProps} />
+    </LoginProvider>
   );
 }

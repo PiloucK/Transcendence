@@ -1,5 +1,4 @@
-import { ToggleDarkMode } from "../hooks/ToggleDarkMode";
-import { ButtonLogout } from "../components/Buttons/ButtonLogout";
+import { ButtonLogout } from "../hooks/ButtonLogout";
 import styles from "../styles/Home.module.css";
 import { useLoginContext } from "../context/LoginContext";
 
@@ -14,9 +13,14 @@ import userService from "../services/users";
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3003", {transports: ['websocket']});
+// import Image from "next/image";
+// import UserAvatar from "../public/profile_icon.png"
+import Avatar from "@mui/material/Avatar";
+import { DockGuest } from "../components/Dock/DockGuest";
 
-function UserName() {
+const socket = io("http://0.0.0.0:3003", { transports: ["websocket"] });
+
+function MyUserName() {
   const loginContext = useLoginContext();
   const [isInModification, setIsInModification] = useState(false);
   const [tmpUsername, setTmpUsername] = useState("");
@@ -31,7 +35,7 @@ function UserName() {
         .then(() => {
           loginContext.login(tmpUsername, loginContext.userSecret);
           setTmpUsername("");
-					socket.emit("usernameChange");
+          socket.emit("usernameChange");
           //Emit on the socket here.
         })
         .catch((e) => {
@@ -49,7 +53,7 @@ function UserName() {
   if (loginContext.userName === null) return null;
   if (isInModification === false) {
     return (
-      <div className={styles.profile_user_username}>
+      <div className={styles.profile_user_account_details_username}>
         {loginContext.userName}
         <IconButton
           className={styles.icons}
@@ -62,7 +66,7 @@ function UserName() {
     );
   } else {
     return (
-      <div className={styles.profile_user_username}>
+      <div className={styles.profile_user_account_details_username}>
         <form onSubmit={changeUsername}>
           <TextField
             value={tmpUsername}
@@ -78,11 +82,40 @@ function UserName() {
   }
 }
 
-export default function Profile() {
+function MyAvatar() {
+  const loginContext = useLoginContext();
+
+  if (loginContext.userName === null) return null;
   return (
-    <div className={styles.profile_user_stats}>
-      <UserName />
-      <ToggleDarkMode />
+    <div className={styles.profile_user_account_details_avatar}>
+      <Avatar
+        img="/public/profile_icon.png"
+        alt="avatar"
+        sx={{ width: 151, height: 151 }}
+      />
+    </div>
+  );
+}
+
+function MyAccountDetails() {
+  return (
+    <div className={styles.profile_user_account_details}>
+      <div className={styles.profile_user_account_details_title}>
+        Account details
+      </div>
+      <MyAvatar />
+      <MyUserName />
+    </div>
+  );
+}
+
+export default function Profile() {
+  const loginContext = useLoginContext();
+
+  if (loginContext.userName === null) return <DockGuest />;
+  return (
+    <div className={styles.profile}>
+			<MyAccountDetails />
       <ButtonLogout />
     </div>
   );

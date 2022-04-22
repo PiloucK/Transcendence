@@ -294,7 +294,7 @@
 * Style about the profile page and the inner components
 */
 
-.profile_user_stats {
+.profile {
 	position: absolute;
 	width: 23.5%;
 	height: 100%;
@@ -303,12 +303,56 @@
 	background: #163F5B;
 }
 
-.profile_user_username {
+.profile_user_account_details {
+	position: absolute;
+	left: 20.71%;
+	right: 20.71%;
+	top: 10.95%;
+	bottom: 55.12%;
+}
+
+.profile_user_account_details_title {
+
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, 0%);
+	/* right: 20.71%; */
+	/* top: 6.95%; */
+	bottom: 90.21%;
+
+	/* Header 1 */
+
+	font-family: 'Khand';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 36px;
+	line-height: 55px;
+	display: flex;
+	align-items: center;
+	letter-spacing: -0.02em;
+
+	white-space: nowrap;
+
+	/* White */
+
+	color: #FFFFFF;
+}
+
+.profile_user_account_details_avatar {
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, 0%);
+	/* right: 27.81%; */
+	top: 18.2%;
+	/* bottom: 62.71%; */
+}
+
+.profile_user_account_details_username {
 	position: absolute;
 	left: 29.59%;
 	right: 31.07%;
-	top: 38.43%;
-	bottom: 55.12%;
+	top: 65.43%;
+	/* bottom: 55.12%; */
 	
 	/* Header 2 */
 	
