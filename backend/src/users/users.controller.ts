@@ -1,21 +1,19 @@
 import { Body, Controller, Get, Post, Param, Patch } from '@nestjs/common';
+import { validate } from 'class-validator';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { User, UserInfos } from './user.entity';
-
+import { CreateUserDto } from './dto/create-user.dto';
 import {
   UpdateUserRankingDto,
   UpdateUserUsernameDto,
 } from './dto/update-user.dto';
-
-import { validate } from 'class-validator';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get()
-  getAllUsers(): User[] {
+  getAllUsers(): UserInfos[] {
     return this.usersService.getAllUsers();
   }
 

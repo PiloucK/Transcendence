@@ -7,7 +7,7 @@ export class User {
   status: UserStatus;
   level: number;
   ranking: number;
-  gamesWin: number;
+  gamesWon: number;
   gamesLost: number;
   twoFa: boolean;
 }
@@ -17,6 +17,6 @@ export class UserInfos {
   login: string;
   level: number;
   ranking: number;
-  gamesWin: number;
+  gamesWon: number;
   gamesLost: number;
 }

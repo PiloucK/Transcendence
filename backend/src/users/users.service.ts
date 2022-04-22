@@ -1,15 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { User, UserInfos } from './user.entity';
-
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserStatus } from './user-status.enum';
+
 @Injectable()
 export class UsersService {
   private users: User[] = [];
 
   getAllUsers() {
-    return this.users;
+    return this.users.map((user) => {
+      const ret: UserInfos = {
+        id: user.id,
+        login: user.login,
+        level: user.level,
+        ranking: user.ranking,
+        gamesWon: user.gamesWon,
+        gamesLost: user.gamesLost,
+      };
+      return ret;
+    });
   }
 
   createUser(createUserDto: CreateUserDto): User {
@@ -21,7 +31,7 @@ export class UsersService {
       status: UserStatus.IS_GUEST,
       level: 0,
       ranking: 0,
-      gamesWin: 0,
+      gamesWon: 0,
       gamesLost: 0,
       twoFa: false,
     };
@@ -43,7 +53,7 @@ export class UsersService {
         login: input.login,
         level: input.level,
         ranking: input.ranking,
-        gamesWin: input.gamesWin,
+        gamesWon: input.gamesWon,
         gamesLost: input.gamesLost,
       };
       return ret;
@@ -60,7 +70,7 @@ export class UsersService {
         login: input.login,
         level: input.level,
         ranking: input.ranking,
-        gamesWin: input.gamesWin,
+        gamesWon: input.gamesWon,
         gamesLost: input.gamesLost,
       };
       console.log(ret);
@@ -79,7 +89,7 @@ export class UsersService {
         login: input.login,
         level: input.level,
         ranking: input.ranking,
-        gamesWin: input.gamesWin,
+        gamesWon: input.gamesWon,
         gamesLost: input.gamesLost,
       };
       console.log(ret);

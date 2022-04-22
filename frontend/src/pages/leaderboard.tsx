@@ -9,21 +9,13 @@ import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3003", {transports: ['websocket']});
 
-enum UserStatus {
-  IS_GUEST = "IS_GUEST",
-  IS_42API = "IS_42API",
-}
-
 interface User {
   id: string;
   login: string;
-  password: string;
-  status: UserStatus;
   level: number;
   ranking: number;
-  gamesWin: number;
+  gamesWon: number;
   gamesLost: number;
-  twoFa: boolean;
 }
 
 // Will display a button incrementing the user's ranking.
