@@ -32,7 +32,7 @@ interface UserInfos {
 function MyUserName() {
   const loginContext = useLoginContext();
   const [isInModification, setIsInModification] = useState(false);
-  const [tmpUsername, setTmpUsername] = useState("");
+  const [tmpUsername, setTmpUsername] = useState(""); // tmpUsername -> usernameInput?
 
   const changeUsername: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -40,15 +40,12 @@ function MyUserName() {
 
     if (tmpUsername !== "") {
       userService
-        .changeUsername(loginContext.userName, tmpUsername)
+        .changeUsername(loginContext.userName, tmpUsername) // change loginContext.userName to loginContext.login? or to loginContext.login42?
         .then(() => {
           loginContext.login(tmpUsername, loginContext.userSecret);
           setTmpUsername("");
           socket.emit("usernameChange");
           //Emit on the socket here.
-        })
-        .catch((e) => {
-          console.error(e);
         });
     }
   };

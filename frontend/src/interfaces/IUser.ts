@@ -15,7 +15,7 @@ export interface IUser {
 // 	status: UserStatus;
 // 	level: number;
 // 	ranking: number;
-// 	gamesWin: number;
+// 	gamesWon: number;
 // 	gamesLost: number;
 // 	twoFa: number;
 // }
