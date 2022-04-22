@@ -5,9 +5,11 @@ import IconButton from "@mui/material/IconButton";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 
+import Link from "next/link";
+
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3003", {transports: ['websocket']});
+const socket = io("http://0.0.0.0:3003", { transports: ["websocket"] });
 
 enum UserStatus {
   IS_GUEST = "IS_GUEST",
@@ -37,11 +39,10 @@ function IncrementRankingButton({
       className={styles.icons}
       aria-label="ranking"
       onClick={() => {
-        userService.updateUserRanking(currentUser.login, 15)
-				.catch((e) => {
-					console.error(e);
-				});
-        socket.emit("newRank")
+        userService.updateUserRanking(currentUser.login, 15).catch((e) => {
+          console.error(e);
+        });
+        socket.emit("newRank");
       }}
     >
       <AddBoxIcon />
@@ -76,13 +77,20 @@ function createLeaderboard(users: User[]): ReactElement {
     <div className={styles.leaderboard}>
       {users.map((user, index) => {
         return (
-          <div className={styles.leaderboard_user} key={index}>
-            <DecrementRankingButton currentUser={user} />
-            <div className={styles.leaderboard_user_rank}>{index + 1}</div>
-            <div className={styles.leaderboard_user_name}>{user.login}</div>
-            <div className={styles.leaderboard_user_score}>{user.ranking}</div>
-            <IncrementRankingButton currentUser={user} />
-          </div>
+          <Link
+            href={`/publicprofile?login=${user.login}`}
+            key={index}
+          >
+            <div className={styles.leaderboard_user} key={index}>
+              <DecrementRankingButton currentUser={user} />
+              <div className={styles.leaderboard_user_rank}>{index + 1}</div>
+              <div className={styles.leaderboard_user_name}>{user.login}</div>
+              <div className={styles.leaderboard_user_score}>
+                {user.ranking}
+              </div>
+              <IncrementRankingButton currentUser={user} />
+            </div>
+          </Link>
         );
       })}
     </div>
@@ -98,13 +106,12 @@ export default function Leaderboard() {
       setUsers(users);
     });
 
-		socket.on("leaderboardUpdate", () => {
-			// console.log("udpate");
+    socket.on("leaderboardUpdate", () => {
 
-			userService.getAll().then((users) => {
-				setUsers(users);
-			});
-		});
+      userService.getAll().then((users) => {
+        setUsers(users);
+      });
+    });
   }, []);
 
   return (

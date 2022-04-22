@@ -8,7 +8,8 @@ const getAll = () => {
 };
 
 const getOne = (login: string) => {
-  const request = axios.get(`${baseUrl}?login=${login}`);
+	console.log("getOne", login);
+  const request = axios.get(`${baseUrl}/${login}`);
   return request.then((response) => response.data);
 };
 

@@ -132,15 +132,14 @@ function UserStats() {
   if (loginContext.userName === null) return null;
 
   React.useEffect(() => {
-    userService.getOne(loginContext.userName).then((user: UserInfos[]) => {
-      setUserInfos(user[0]);
+    userService.getOne(loginContext.userName).then((user: UserInfos) => {
+      setUserInfos(user);
     });
 
     socket.on("leaderboardUpdate", () => {
-      // console.log("udpate");
 
-      userService.getOne(loginContext.userName).then((user: UserInfos[]) => {
-        setUserInfos(user[0]);
+      userService.getOne(loginContext.userName).then((user: UserInfos) => {
+        setUserInfos(user);
       });
     });
   }, []);
