@@ -1,77 +1,74 @@
 import { Body, Controller, Get, Post, Param, Patch } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import {User, UserInfos } from './user.entity'
+import { User, UserInfos } from './user.entity';
 
 import {
-	UpdateUserRankingDto,
-	UpdateUserUsernameDto } from './dto/update-user.dto';
+  UpdateUserRankingDto,
+  UpdateUserUsernameDto,
+} from './dto/update-user.dto';
 
-import {
-	validate,
-} from 'class-validator';
-
+import { validate } from 'class-validator';
 
 @Controller('users')
-export class UsersController { 
-    constructor(private usersService: UsersService) {
-    }
+export class UsersController {
+  constructor(private usersService: UsersService) {}
 
-    @Get()
-    getAllUsers() : User[] {
-        return this.usersService.getAllUsers();
-    }
+  @Get()
+  getAllUsers(): User[] {
+    return this.usersService.getAllUsers();
+  }
 
-    @Post('/signup')
-    createUser(@Body() createUserDto: CreateUserDto) :      User {
-         return this.usersService.createUser(createUserDto); 
-        }
-    
-		@Get('/:login')
-		getUserById(@Param('login') login: string ) : UserInfos
-		{
-				return this.usersService.getUserInfos(login);
-		}
+  @Post('/signup')
+  createUser(@Body() createUserDto: CreateUserDto): User {
+    return this.usersService.createUser(createUserDto);
+  }
 
-    // Will modify the ranking of a precise user
-		@Patch('/:login/ranking')
-		updateUserRanking(@Param('login') login: string, @Body() updateUserRankingDto: UpdateUserRankingDto) : UserInfos
-		{
+  @Get('/:login')
+  getUserById(@Param('login') login: string): UserInfos {
+    return this.usersService.getUserInfos(login);
+  }
 
-			let ranking = new UpdateUserRankingDto();
+  // Will modify the ranking of a precise user
+  @Patch('/:login/ranking')
+  updateUserRanking(
+    @Param('login') login: string,
+    @Body() updateUserRankingDto: UpdateUserRankingDto,
+  ): UserInfos {
+    let ranking = new UpdateUserRankingDto();
 
-			ranking.ranking = updateUserRankingDto.ranking;
+    ranking.ranking = updateUserRankingDto.ranking;
 
-			validate(ranking)
-			.then(errors => {
-				// errors is an array of validation errors
-				if (errors.length > 0) {
-					console.log('validation failed. errors: ', errors);
-				} else {
-					return this.usersService.updateUserRanking(login, ranking.ranking);
-				}
-			});
+    validate(ranking).then((errors) => {
+      // errors is an array of validation errors
+      if (errors.length > 0) {
+        console.log('validation failed. errors: ', errors);
+      } else {
+        return this.usersService.updateUserRanking(login, ranking.ranking);
+      }
+    });
 
-			return new UserInfos();
-		}
+    return new UserInfos();
+  }
 
-		@Patch('/:login/username')
-		updateUserUsername(@Param('login') login: string, @Body() updateUserUsernameDto: UpdateUserUsernameDto) : UserInfos
-		{
-			console.log(login, updateUserUsernameDto);
-			let username = new UpdateUserUsernameDto();
+  @Patch('/:login/username')
+  updateUserUsername(
+    @Param('login') login: string,
+    @Body() updateUserUsernameDto: UpdateUserUsernameDto,
+  ): UserInfos {
+    console.log(login, updateUserUsernameDto);
+    let username = new UpdateUserUsernameDto();
 
-			username.username = updateUserUsernameDto.username;
+    username.username = updateUserUsernameDto.username;
 
-			validate(username)
-			.then(errors => {
-				if (errors.length > 0) {
-					console.log('validation failed. errors: ', errors);
-				} else {
-					return this.usersService.updateUserUsername(login, username.username);
-				}
-			});
+    validate(username).then((errors) => {
+      if (errors.length > 0) {
+        console.log('validation failed. errors: ', errors);
+      } else {
+        return this.usersService.updateUserUsername(login, username.username);
+      }
+    });
 
-			return new UserInfos();
-		}
+    return new UserInfos();
+  }
 }
