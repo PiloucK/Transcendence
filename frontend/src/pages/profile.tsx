@@ -20,6 +20,15 @@ import { DockGuest } from "../components/Dock/DockGuest";
 
 const socket = io("http://0.0.0.0:3003", { transports: ["websocket"] });
 
+interface UserInfos {
+  id: string;
+  login: string;
+  level: number;
+  ranking: number;
+  gamesWin: number;
+  gamesLost: number;
+}
+
 function MyUserName() {
   const loginContext = useLoginContext();
   const [isInModification, setIsInModification] = useState(false);
@@ -109,13 +118,58 @@ function MyAccountDetails() {
   );
 }
 
+function UserStats() {
+  const loginContext = useLoginContext();
+  const [userInfos, setUserInfos] = useState<UserInfos>({
+    id: "",
+    login: "",
+    level: 0,
+    ranking: 0,
+    gamesWin: 0,
+    gamesLost: 0,
+  });
+
+  if (loginContext.userName === null) return null;
+
+  React.useEffect(() => {
+    userService.getOne(loginContext.userName).then((user: UserInfos[]) => {
+      setUserInfos(user[0]);
+    });
+
+    socket.on("leaderboardUpdate", () => {
+      // console.log("udpate");
+
+      userService.getOne(loginContext.userName).then((user: UserInfos[]) => {
+        setUserInfos(user[0]);
+      });
+    });
+  }, []);
+
+  return (
+    <div className={styles.profile_user_stats}>
+      <div className={styles.profile_user_stats_header}>
+        <div className={styles.profile_user_stats_header_title}>Stats</div>
+      </div>
+      <div className={styles.profile_user_stats_elo}>
+        Elo: {userInfos.ranking}
+      </div>
+      <div className={styles.profile_user_stats_games_summary}>
+        Games won: {userInfos.gamesWin}
+        <br />
+        Games lost: {userInfos.gamesLost}
+      </div>
+    </div>
+  );
+}
+
 export default function Profile() {
   const loginContext = useLoginContext();
 
   if (loginContext.userName === null) return <DockGuest />;
   return (
     <div className={styles.profile}>
-			<MyAccountDetails />
+      <MyAccountDetails />
+      <UserStats />
       <ButtonLogout />
     </div>
   );
