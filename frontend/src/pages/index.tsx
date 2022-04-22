@@ -1,7 +1,6 @@
 import { DockUser } from "../components/Dock/DockUser";
 import styles from "../styles/Home.module.css";
 import { DockGuest } from "../components/Dock/DockGuest";
-import { ToggleDarkMode } from "../hooks/ToggleDarkMode";
 import { useLoginContext } from "../context/LoginContext";
 import Link from "next/link";
 
@@ -27,7 +26,6 @@ export default function MainMenu() {
 				</div>
 			</Link>
 			<DockToShow />
-      <ToggleDarkMode />
     </>
   );
 }

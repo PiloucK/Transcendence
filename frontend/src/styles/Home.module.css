@@ -2,184 +2,184 @@
 * Style used in the 'Game' page
 */
 .ball {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 14px;
-	height: 14px;
-	border-radius: 50%;
-	background-color: #EB5E28;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #eb5e28;
 }
 
 .left_line {
-	position: absolute;
-	left: 20%;
-	width: 5px;
-	height: 100%;
-	background-color: #000000;
+  position: absolute;
+  left: 20%;
+  width: 5px;
+  height: 100%;
+  background-color: #000000;
 }
 
 .right_line {
-	position: absolute;
-	left: 80%;
-	width: 5px;
-	height: 100%;
-	background-color: #000000;
+  position: absolute;
+  left: 80%;
+  width: 5px;
+  height: 100%;
+  background-color: #000000;
 }
 
 .container {
-	padding: 0 2rem;
+  padding: 0 2rem;
 }
 
 /* 
 	Background for the leaderboard
 */
 .leaderboard_background {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: #00213D;
-	z-index: -1;
-	/* overflow: hidden; */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00213d;
+  z-index: -1;
+  /* overflow: hidden; */
 }
 
 .leaderboard_title {
-	position: absolute;
-	top: 10%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	
-	font-family: 'Khand';
-	font-style: normal;
-	font-weight: 700;
-	font-size: 42px;
-	line-height: 64px;
-	display: flex;
-	align-items: center;
-	text-align: center;
-	font-feature-settings: 'tnum' on, 'lnum' on;
-	
-	color: #FFFFFF;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 42px;
+  line-height: 64px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  color: #ffffff;
 }
 
 .leaderboard {
-	position: relative;
-	top: 4rem;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	z-index: 1;
+  position: relative;
+  top: 4rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
 }
 
 .leaderboard_user {
-	background-color: #186E8A;
+  background-color: #186e8a;
   border-radius: 45px;
-	width: 45%;
-	height: 6rem;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	color: #fff;
-	z-index: 1;
-	margin: 1.2rem;
+  width: 45%;
+  height: 6rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  z-index: 1;
+  margin: 1.2rem;
 }
 
 .leaderboard_user_name {
-	font-size: 2rem;
-	font-weight: bold;
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .leaderboard_user_score {
-	position: absolute;
-	left: 65%;
+  position: absolute;
+  left: 65%;
 
-	font-family: 'Khand';
-	font-style: normal;
-	font-weight: 500;
-	font-size: 30px;
-	line-height: 46px;
-	display: flex;
-	align-items: center;
-	text-align: center;
-	font-feature-settings: 'tnum' on, 'lnum' on;
-	
-	color: #FFFFFF;
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 46px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  color: #ffffff;
 }
 
 .leaderboard_user_rank {
-	position: absolute;
-	left: 32%;
+  position: absolute;
+  left: 32%;
 
-	font-family: 'Khand';
-	font-style: normal;
-	font-weight: 500;
-	font-size: 42px;
-	line-height: 64px;
-	display: flex;
-	align-items: center;
-	text-align: center;
-	font-feature-settings: 'tnum' on, 'lnum' on;
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 42px;
+  line-height: 64px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
 
-	color: #FFFFFF;
+  color: #ffffff;
 }
 
 /* 
 	Background that will take the left side of the screen
 */
 .mainLayout_left_background {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 50%;
-	height: 100%;
-	background-color: #00213D;
-	z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background-color: #00213d;
+  z-index: -1;
 }
 
 /* 
 	Background that will take the right side of the screen
 */
 .mainLayout_right_background {
-	position: absolute;
-	top: 0;
-	left: 50%;
-	width: 50%;
-	height: 100%;
-	background-color: #1985A1;
-	z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  background-color: #1985a1;
+  z-index: -1;
 }
 
 /* Set the background-color of the main page */
 
 /* To write a Giant play in the center of the screen */
 .play {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	
-	font-family: 'Tourney';
-	font-style: normal;
-	font-weight: 400;
-	font-size: 200px;
-	line-height: 220px;
-	display: flex;
-	align-items: center;
-	text-align: center;
-	font-feature-settings: 'tnum' on, 'lnum' on;
-	
-	/* Light grey 90% */
-	
-	color: rgba(232, 236, 237, 0.9);
-	
-	text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-family: "Tourney";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 200px;
+  line-height: 220px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* Light grey 90% */
+
+  color: rgba(232, 236, 237, 0.9);
+
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .main {
@@ -259,9 +259,8 @@
 	The dock should always be positionned at the bottom.
 */
 .dock {
-  
   /* Light grey 90% */
-  
+
   background: rgba(232, 236, 237, 0.9);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 30px;
@@ -286,72 +285,211 @@
 	The margin create some space between the icons.
 */
 .icons {
-	transform: scale(1.8);
-	margin: 1.7rem;
+  transform: scale(1.8);
+  margin: 1.7rem;
 }
 
 /*
 * Style about the profile page and the inner components
 */
 
-.profile_user_stats {
-	position: absolute;
-	width: 338px;
-	height: 791px;
-	left: 0px;
-	top: 0px;
-	background: #163F5B;
+.profile {
+  position: absolute;
+  width: 23.5%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  background: #163f5b;
 }
 
-.profile_user_username {
-	position: absolute;
-	left: 29.59%;
-	right: 31.07%;
-	top: 38.43%;
-	bottom: 55.12%;
-	
-	/* Header 2 */
-	
-	font-family: 'Khand';
-	font-style: normal;
-	font-weight: 600;
-	font-size: 26px;
-	line-height: 40px;
-	display: flex;
-	align-items: center;
-	text-align: center;
-	letter-spacing: -0.02em;
- 
-	/* align the content on a line */
-	white-space: nowrap;
-	
-	/* White */
-	
-	color: #FFFFFF;
+.profile_user_account_details {
+  position: absolute;
+  left: 20.71%;
+  right: 20.71%;
+  top: 10.95%;
+  bottom: 55.12%;
+}
+
+.profile_user_account_details_title {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  /* right: 20.71%; */
+  /* top: 6.95%; */
+  bottom: 90.21%;
+
+  /* Header 1 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 55px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+  white-space: nowrap;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.profile_user_account_details_avatar {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  /* right: 27.81%; */
+  top: 18.2%;
+  /* bottom: 62.71%; */
+}
+
+.profile_user_account_details_username {
+  position: absolute;
+  left: 29.59%;
+  right: 31.07%;
+  top: 65.43%;
+  /* bottom: 55.12%; */
+
+  /* Header 2 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  /* align the content on a line */
+  white-space: nowrap;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.profile_user_stats {
+  /* position: flex;
+  left: 50%;
+  right: 50%;
+  top: 46.65%;
+  bottom: 38.81%;
+
+	align-items: center; */
+}
+
+.profile_user_stats_header {
+  /* position: absolute;
+  left: 50%;
+  right: 50%;
+	transform: translate(-50%, 0%);
+  top: 46.65%; */
+  /* bottom: 49.43%; */
+
+}
+
+.profile_user_stats_header_title {
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  transform: translate(-50%, -50%);
+  top: 46.65%;
+  /* bottom: 49.43%; */
+
+  /* Header 3 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  display: flex;
+	flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.profile_user_stats_elo {
+  position: absolute;
+  left: 50%;
+  top: 51.34%;
+  transform: translate(-50%, -50%);
+  /* bottom: 5.51%; */
+
+  /* body bold */
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 20px;
+  display: flex;
+	flex-direction: column;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.profile_user_stats_games_summary {
+  position: absolute;
+  left: 50%;
+	transform: translate(-50%, -50%);
+  top: 56%;
+  /* bottom: 38.81%; */
+
+  /* Body */
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
+  display: flex;
+	flex-direction: column;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
 }
 
 .logout_button {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	padding: 10px;
-	
-	position: absolute;
-	left: 31.66%;
-	right: 33.14%;
-	top: 82.93%;
-	bottom: 11.76%;
-	
-	/* Teal */
-	
-	background: #163F5B;
-	/* White */
-	
-	border: 2px solid #FFFFFF;
-	box-sizing: border-box;
-	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-	border-radius: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+
+  position: absolute;
+  left: 31.66%;
+  right: 33.14%;
+  top: 82.93%;
+  bottom: 11.76%;
+
+  /* Teal */
+
+  background: #163f5b;
+  /* White */
+
+  border: 2px solid #ffffff;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
 }
 
 .card {
@@ -395,4 +533,3 @@
     flex-direction: column;
   }
 }
-
