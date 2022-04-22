@@ -22,7 +22,7 @@ export class UsersService {
     });
   }
 
-  createUser(createUserDto: CreateUserDto): User {
+  createUser(createUserDto: CreateUserDto): UserInfos {
     const { login, password } = createUserDto;
     const user: User = {
       id: uuid(),
@@ -37,7 +37,15 @@ export class UsersService {
     };
     if (!this.searchUser(login)) {
       this.users.push(user);
-      return user;
+      const ret: UserInfos = {
+        id: user.id,
+        login: user.login,
+        level: user.level,
+        ranking: user.ranking,
+        gamesWon: user.gamesWon,
+        gamesLost: user.gamesLost,
+      };
+      return ret;
     }
   }
 

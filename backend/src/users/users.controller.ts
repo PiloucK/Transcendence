@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post, Param, Patch } from '@nestjs/common';
-import { validate } from 'class-validator';
 import { UsersService } from './users.service';
-import { User, UserInfos } from './user.entity';
+import { UserInfos } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
   UpdateUserRankingDto,
@@ -17,14 +16,14 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
 
-  @Post()
-  createUser(@Body() createUserDto: CreateUserDto): User {
-    return this.usersService.createUser(createUserDto);
-  }
-
   @Get('/:login')
   getUserById(@Param('login') login: string): UserInfos {
     return this.usersService.getUserInfos(login);
+  }
+
+  @Post()
+  createUser(@Body() createUserDto: CreateUserDto): UserInfos {
+    return this.usersService.createUser(createUserDto);
   }
 
   // Will modify the ranking of a precise user
@@ -33,20 +32,8 @@ export class UsersController {
     @Param('login') login: string,
     @Body() updateUserRankingDto: UpdateUserRankingDto,
   ): UserInfos {
-    const ranking = new UpdateUserRankingDto();
-
-    ranking.ranking = updateUserRankingDto.ranking;
-
-    validate(ranking).then((errors) => {
-      // errors is an array of validation errors
-      if (errors.length > 0) {
-        console.log('validation failed. errors: ', errors);
-      } else {
-        return this.usersService.updateUserRanking(login, ranking.ranking);
-      }
-    });
-
-    return new UserInfos();
+    const { ranking } = updateUserRankingDto;
+    return this.usersService.updateUserRanking(login, ranking);
   }
 
   @Patch('/:login/username')
@@ -54,19 +41,7 @@ export class UsersController {
     @Param('login') login: string,
     @Body() updateUserUsernameDto: UpdateUserUsernameDto,
   ): UserInfos {
-    console.log(login, updateUserUsernameDto);
-    const username = new UpdateUserUsernameDto();
-
-    username.username = updateUserUsernameDto.username;
-
-    validate(username).then((errors) => {
-      if (errors.length > 0) {
-        console.log('validation failed. errors: ', errors);
-      } else {
-        return this.usersService.updateUserUsername(login, username.username);
-      }
-    });
-
-    return new UserInfos();
+    const { username } = updateUserUsernameDto;
+    return this.usersService.updateUserUsername(login, username);
   }
 }

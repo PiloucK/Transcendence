@@ -14,12 +14,12 @@ import userService from "../services/users";
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3003", {transports: ['websocket']});
+const socket = io("http://0.0.0.0:3003", { transports: ["websocket"] });
 
 function UserName() {
   const loginContext = useLoginContext();
   const [isInModification, setIsInModification] = useState(false);
-  const [tmpUsername, setTmpUsername] = useState("");
+  const [tmpUsername, setTmpUsername] = useState(""); // tmpUsername -> usernameInput?
 
   const changeUsername: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -27,15 +27,12 @@ function UserName() {
 
     if (tmpUsername !== "") {
       userService
-        .changeUsername(loginContext.userName, tmpUsername)
+        .changeUsername(loginContext.userName, tmpUsername) // change loginContext.userName to loginContext.login? or to loginContext.login42?
         .then(() => {
           loginContext.login(tmpUsername, loginContext.userSecret);
           setTmpUsername("");
-					socket.emit("usernameChange");
+          socket.emit("usernameChange");
           //Emit on the socket here.
-        })
-        .catch((e) => {
-          console.error(e);
         });
     }
   };

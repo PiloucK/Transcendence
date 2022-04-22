@@ -22,7 +22,7 @@ export function DockGuest() {
 
     const newUserCredentials: IUserCredentials = {
       login: username,
-      password: "",
+      password: "pass",
     };
     
     userService

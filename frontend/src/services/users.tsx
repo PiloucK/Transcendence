@@ -4,32 +4,56 @@ import { IUserCredentials } from "../interfaces/IUserCredentials";
 
 const getAll = () => {
   const request = axios.get(baseUrl);
-  return request.then((response) => response.data);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
 };
 
 const getOne = (login: string) => {
   const request = axios.get(`${baseUrl}?login=${login}`);
-  return request.then((response) => response.data);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
 };
 
 const add = (newUser: IUserCredentials) => {
   const request = axios.post(baseUrl, newUser);
-  return request.then((response) => response.data);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
 };
 
 const deleteOne = (login: string) => {
   const request = axios.delete(`${baseUrl}/${login}`);
-  return request.then((response) => response.data);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
 };
 
 const updateUserRanking = (login: string, ranking: number) => {
   const request = axios.patch(`${baseUrl}/${login}/ranking`, { ranking });
-  return request.then((response) => response.data);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
 };
 
 const changeUsername = (login: string, username: string) => {
   const request = axios.patch(`${baseUrl}/${login}/username`, { username });
-  return request.then((response) => response.data);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
 };
 
 export default {
