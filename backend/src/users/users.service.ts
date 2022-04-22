@@ -8,100 +8,65 @@ import { UserStatus } from './user-status.enum';
 export class UsersService {
   private users: User[] = [];
 
-  getAllUsers() {
-    return this.users.map((user) => {
-      const ret: UserInfos = {
-        id: user.id,
-        login: user.login,
-        level: user.level,
-        ranking: user.ranking,
-        gamesWon: user.gamesWon,
-        gamesLost: user.gamesLost,
-      };
-      return ret;
-    });
+  private createUserInfos(user: User): UserInfos {
+    const ret: UserInfos = {
+      id: user.id,
+      login: user.login,
+      level: user.level,
+      ranking: user.ranking,
+      gamesWon: user.gamesWon,
+      gamesLost: user.gamesLost,
+    };
+    return ret;
   }
 
-  createUser(createUserDto: CreateUserDto): UserInfos {
-    const { login, password } = createUserDto;
-    const user: User = {
-      id: uuid(),
-      login,
-      password,
-      status: UserStatus.IS_GUEST,
-      level: 0,
-      ranking: 0,
-      gamesWon: 0,
-      gamesLost: 0,
-      twoFa: false,
-    };
-    if (!this.searchUser(login)) {
-      this.users.push(user);
-      const ret: UserInfos = {
-        id: user.id,
-        login: user.login,
-        level: user.level,
-        ranking: user.ranking,
-        gamesWon: user.gamesWon,
-        gamesLost: user.gamesLost,
-      };
-      return ret;
-    }
+  getAllUsers(): UserInfos[] {
+    return this.users.map((user) => this.createUserInfos(user));
   }
 
   private searchUser(login: string): User {
     return this.users.find((user) => user.login == login);
   }
 
-  getUserInfos(login: string): UserInfos {
-    const input: User = this.searchUser(login);
-    if (input) {
-      const ret: UserInfos = {
-        id: input.id,
-        login: input.login,
-        level: input.level,
-        ranking: input.ranking,
-        gamesWon: input.gamesWon,
-        gamesLost: input.gamesLost,
+  createUser(createUserDto: CreateUserDto): UserInfos {
+    const { login, password } = createUserDto;
+    if (!this.searchUser(login)) {
+      const user: User = {
+        id: uuid(),
+        login,
+        password,
+        status: UserStatus.IS_GUEST,
+        level: 0,
+        ranking: 0,
+        gamesWon: 0,
+        gamesLost: 0,
+        twoFa: false,
       };
-      return ret;
+      this.users.push(user);
+      return this.createUserInfos(user);
+    }
+  }
+
+  getUserInfos(login: string): UserInfos {
+    const user: User = this.searchUser(login);
+    if (user) {
+      return this.createUserInfos(user);
     }
   }
 
   updateUserRanking(login: string, ranking: number): UserInfos {
-    const input: User = this.searchUser(login);
-    if (input) {
-      console.log(ranking);
-      input.ranking = input.ranking + ranking;
-      const ret: UserInfos = {
-        id: input.id,
-        login: input.login,
-        level: input.level,
-        ranking: input.ranking,
-        gamesWon: input.gamesWon,
-        gamesLost: input.gamesLost,
-      };
-      console.log(ret);
-      return ret;
+    const user: User = this.searchUser(login);
+    if (user) {
+      user.ranking += ranking;
+      return this.createUserInfos(user);
     }
   }
 
   updateUserUsername(login: string, username: string): UserInfos {
-    const input: User = this.searchUser(login);
-    console.log(input, login, username);
-    if (input) {
-      console.log(username);
-      input.login = username;
-      const ret: UserInfos = {
-        id: input.id,
-        login: input.login,
-        level: input.level,
-        ranking: input.ranking,
-        gamesWon: input.gamesWon,
-        gamesLost: input.gamesLost,
-      };
-      console.log(ret);
-      return ret;
+    const user: User = this.searchUser(login);
+    if (user) {
+      user.login = username;
+      return this.createUserInfos(user);
     }
   }
 }
