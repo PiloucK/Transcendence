@@ -19,7 +19,7 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
 
-  @Post('/signup')
+  @Post()
   createUser(@Body() createUserDto: CreateUserDto): User {
     return this.usersService.createUser(createUserDto);
   }
@@ -35,7 +35,7 @@ export class UsersController {
     @Param('login') login: string,
     @Body() updateUserRankingDto: UpdateUserRankingDto,
   ): UserInfos {
-    let ranking = new UpdateUserRankingDto();
+    const ranking = new UpdateUserRankingDto();
 
     ranking.ranking = updateUserRankingDto.ranking;
 
@@ -57,7 +57,7 @@ export class UsersController {
     @Body() updateUserUsernameDto: UpdateUserUsernameDto,
   ): UserInfos {
     console.log(login, updateUserUsernameDto);
-    let username = new UpdateUserUsernameDto();
+    const username = new UpdateUserUsernameDto();
 
     username.username = updateUserUsernameDto.username;
 

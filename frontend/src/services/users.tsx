@@ -13,7 +13,7 @@ const getOne = (login: string) => {
 };
 
 const add = (newUser: IUserCredentials) => {
-  const request = axios.post(`${baseUrl}/signup`, newUser);
+  const request = axios.post(baseUrl, newUser);
   return request.then((response) => response.data);
 };
 
