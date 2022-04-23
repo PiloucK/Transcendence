@@ -18,7 +18,7 @@ export class UsersController {
     return this.usersService.getUsersForLeaderboard();
   }
 
-  @Get('/:login')
+  @Get('/:login') // -> login42
   getUserById(@Param('login') login42: string): UserPublicInfos {
     return this.usersService.getUserById(login42);
   }
@@ -28,7 +28,7 @@ export class UsersController {
     return this.usersService.createUser(createUserDto);
   }
 
-  @Patch('/:login/elo')
+  @Patch('/:login/elo') // -> login42
   updateUserElo(
     @Param('login') login42: string,
     @Body() updateUserEloDto: UpdateUserEloDto,
@@ -36,7 +36,7 @@ export class UsersController {
     return this.usersService.updateUserElo(login42, updateUserEloDto);
   }
 
-  @Patch('/:login/username')
+  @Patch('/:login/username') // -> login42
   updateUserUsername(
     @Param('login') login42: string,
     @Body() updateUserUsernameDto: UpdateUserUsernameDto,

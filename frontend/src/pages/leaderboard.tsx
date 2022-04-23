@@ -31,9 +31,7 @@ function IncrementRankingButton({
       className={styles.icons}
       aria-label="ranking"
       onClick={() => {
-        userService.updateUserRanking(currentUser.login, 15).catch((e) => {
-          console.error(e);
-        });
+        userService.updateUserRanking(currentUser.login, 15);
         socket.emit("newRank");
       }}
     >
@@ -69,10 +67,7 @@ function createLeaderboard(users: User[]): ReactElement {
     <div className={styles.leaderboard}>
       {users.map((user, index) => {
         return (
-          <Link
-            href={`/publicprofile?login=${user.login}`}
-            key={index}
-          >
+          <Link href={`/publicprofile?login=${user.login}`} key={index}>
             <div className={styles.leaderboard_user} key={index}>
               <DecrementRankingButton currentUser={user} />
               <div className={styles.leaderboard_user_rank}>{index + 1}</div>
@@ -99,7 +94,6 @@ export default function Leaderboard() {
     });
 
     socket.on("leaderboardUpdate", () => {
-
       userService.getAll().then((users) => {
         setUsers(users);
       });

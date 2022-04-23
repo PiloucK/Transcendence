@@ -1,6 +1,12 @@
-import {FormEventHandler, ChangeEventHandler, ReactElement, useEffect, useState } from "react";
-import {Dock} from "./Dock";
-import {IUserCredentials} from "../../interfaces/IUserCredentials";
+import {
+  FormEventHandler,
+  ChangeEventHandler,
+  ReactElement,
+  useEffect,
+  useState,
+} from "react";
+import { Dock } from "./Dock";
+import { IUserCredentials } from "../../interfaces/IUserCredentials";
 import userService from "../../services/users";
 
 import { useLoginContext } from "../../context/LoginContext";
@@ -10,10 +16,10 @@ import Button from "@mui/material/Button";
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3002", {transports: ['websocket']});
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 export function DockGuest() {
-	const loginContext = useLoginContext();
+  const loginContext = useLoginContext();
 
   const [username, setUsername] = useState("");
 
@@ -23,17 +29,12 @@ export function DockGuest() {
     const newUserCredentials: IUserCredentials = {
       login: username,
     };
-    
-    userService
-      .add(newUserCredentials)
-      .then(() => {
-				loginContext.login(username, "");
-        socket.emit("newUser", username);
-        setUsername("");
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+
+    userService.add(newUserCredentials).then(() => {
+      loginContext.login(username, "");
+      socket.emit("newUser", username);
+      setUsername("");
+    });
   };
 
   const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
