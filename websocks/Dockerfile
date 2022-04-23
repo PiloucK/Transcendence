@@ -4,8 +4,10 @@ RUN mkdir -p usr/src/app/websocks
 
 WORKDIR /usr/src/app/websocks
 
-COPY . .
+COPY package*.json ./
 RUN npm install
+
+COPY . .
 
 EXPOSE 3002
 
