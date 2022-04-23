@@ -70,7 +70,7 @@ export class UsersService {
     const { elo } = updateUserEloDto;
     const user: User = this.searchUser(login42);
     if (user) {
-      user.elo = elo;
+      user.elo = user.elo + elo;
       return this.createUserPublicInfos(user);
     }
   }

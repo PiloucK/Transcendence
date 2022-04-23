@@ -25,10 +25,10 @@ function DisplayBallForUser() {
 
 // Access the global user name and update the user rank via the API.
 // Emit on the websocket the user:update-elo event for the real time leaderboard.
-function updateUserRanking(rankModification: number) {
+function updateUserElo(eloModification: number) {
   if (currentUsername !== "") {
     userService
-      .updateUserRanking(currentUsername, rankModification)
+      .updateUserElo(currentUsername, eloModification)
       .then(() => {
         socket.emit("user:update-elo");
       });
@@ -50,11 +50,11 @@ function checkLineCrossed(previousBallPos: number, currentBallPos: number) {
 
       // Left line crossed
       if (previousBallPos > left_line_pos && currentBallPos < left_line_pos) {
-        updateUserRanking(-1);
+        updateUserElo(-1);
       }
       // Right line crossed
       if (previousBallPos < right_line_pos && currentBallPos > right_line_pos) {
-        updateUserRanking(1);
+        updateUserElo(1);
       }
     }
   }

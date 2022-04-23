@@ -11,18 +11,16 @@ import Avatar from "@mui/material/Avatar";
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 interface UserInfos {
-  id: string;
-  login: string;
-  level: number;
-  ranking: number;
-  gamesWin: number;
+  username: string;
+  elo: number;
+  gamesWon: number;
   gamesLost: number;
 }
 
 function UserName({ userInfos }: { userInfos: UserInfos }) {
   return (
     <div className={styles.profile_user_account_details_username}>
-      {userInfos.login}
+      {userInfos.username}
     </div>
   );
 }
@@ -59,10 +57,10 @@ function UserStats({ userInfos }: { userInfos: UserInfos }) {
         <div className={styles.profile_user_stats_header_title}>Stats</div>
       </div>
       <div className={styles.profile_user_stats_elo}>
-        Elo: {userInfos.ranking}
+        Elo: {userInfos.elo}
       </div>
       <div className={styles.profile_user_stats_games_summary}>
-        Games won: {userInfos.gamesWin}
+        Games won: {userInfos.gamesWon}
         <br />
         Games lost: {userInfos.gamesLost}
       </div>
@@ -82,30 +80,28 @@ function PublicProfile({ userInfos }: { userInfos: UserInfos }) {
 
 export default function Components() {
   const router = useRouter();
-  const { login } = router.query;
+  const { username } = router.query;
 
   const [userInfos, setUserInfos] = React.useState<UserInfos>({
-    id: "",
-    login: "",
-    level: 0,
-    ranking: 0,
-    gamesWin: 0,
+    username: "",
+    elo: 0,
+    gamesWon: 0,
     gamesLost: 0,
   });
 
   React.useEffect(() => {
-    userService.getOne(login).then((user: UserInfos) => {
+    userService.getOne(username).then((user: UserInfos) => {
       setUserInfos(user);
     });
 
     socket.on("update-leaderboard", () => {
-      userService.getOne(login).then((user: UserInfos) => {
+      userService.getOne(username).then((user: UserInfos) => {
         setUserInfos(user);
       });
     });
   }, []);
 
-  if (login !== undefined && userInfos.login !== undefined) {
+  if (username !== undefined && userInfos.username !== undefined) {
     return <PublicProfile userInfos={userInfos} />;
   } else {
     return <div>User not found</div>;

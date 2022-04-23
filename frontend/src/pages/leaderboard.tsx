@@ -25,9 +25,9 @@ function IncrementRankingButton({
   return (
     <IconButton
       className={styles.icons}
-      aria-label="ranking"
+      aria-label="elo"
       onClick={() => {
-        userService.updateUserRanking(currentUser.login, 15);
+        userService.updateUserElo(currentUser.username, 15);
         socket.emit("user:update-elo");
       }}
     >
@@ -45,9 +45,9 @@ function DecrementRankingButton({
   return (
     <IconButton
       className={styles.icons}
-      aria-label="ranking"
+      aria-label="elo"
       onClick={() => {
-        userService.updateUserRanking(currentUser.username, -15);
+        userService.updateUserElo(currentUser.username, -15);
         socket.emit("user:update-elo");
       }}
     >
@@ -63,7 +63,7 @@ function createLeaderboard(users: User[]): ReactElement {
     <div className={styles.leaderboard}>
       {users.map((user, index) => {
         return (
-          <Link href={`/publicprofile?login=${user.username}`} key={index}>
+          <Link href={`/publicprofile?username=${user.username}`} key={index}>
             <div className={styles.leaderboard_user} key={index}>
               <DecrementRankingButton currentUser={user} />
               <div className={styles.leaderboard_user_rank}>{index + 1}</div>

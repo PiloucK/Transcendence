@@ -38,8 +38,8 @@ const deleteOne = (login: string) => {
     });
 };
 
-const updateUserRanking = (login: string, ranking: number) => {
-  const request = axios.patch(`${baseUrl}/${login}/ranking`, { ranking });
+const updateUserElo = (login: string, elo: number) => {
+  const request = axios.patch(`${baseUrl}/${login}/elo`, { elo });
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -61,7 +61,7 @@ export default {
   getOne,
   add,
   deleteOne,
-  updateUserRanking,
+  updateUserElo,
   changeUsername,
 };
 // ES6 shorthand for
