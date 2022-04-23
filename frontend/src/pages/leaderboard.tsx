@@ -82,15 +82,15 @@ function createLeaderboard(users: User[]): ReactElement {
 
 // Will print the list of users in the leaderboard.
 export default function Leaderboard() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    userService.getAll().then((users) => {
+    userService.getAll().then((users:User[]) => {
       setUsers(users);
     });
 
     socket.on("update-leaderboard", () => {
-      userService.getAll().then((users) => {
+      userService.getAll().then((users:User[]) => {
         setUsers(users);
       });
     });
