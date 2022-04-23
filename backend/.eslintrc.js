@@ -1,3 +1,4 @@
+// generated with "npx nest new [project-name]"
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
