@@ -133,7 +133,7 @@ function UserStats() {
       setUserInfos(user);
     });
 
-    socket.on("leaderboard-update", () => {
+    socket.on("update-leaderboard", () => {
 
       userService.getOne(loginContext.userName).then((user: UserInfos) => {
         setUserInfos(user);

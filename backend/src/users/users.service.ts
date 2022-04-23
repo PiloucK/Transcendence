@@ -40,8 +40,6 @@ export class UsersService {
 
   createUser(createUserDto: CreateUserDto): UserPublicInfos {
     const { login42 } = createUserDto;
-    console.log(login42);
-
     if (!this.searchUser(login42)) {
       const user: User = {
         id: uuid(),

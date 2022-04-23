@@ -89,7 +89,7 @@ export default function Leaderboard() {
       setUsers(users);
     });
 
-    socket.on("leaderboard-update", () => {
+    socket.on("update-leaderboard", () => {
       userService.getAll().then((users) => {
         setUsers(users);
       });
