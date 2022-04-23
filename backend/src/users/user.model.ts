@@ -1,4 +1,4 @@
-export class User {
+export interface User {
   id: string; // uuid
   login42: string; // peut-etre a retirer (seul identifiant unique qu'on passe au front)
   token42: string; // token 42 (changer le nom)
@@ -10,7 +10,7 @@ export class User {
   twoFa: boolean;
 }
 
-export class UserPublicInfos {
+export interface UserPublicInfos {
   //login42?
   username: string;
   //photo?
@@ -19,7 +19,7 @@ export class UserPublicInfos {
   gamesLost: number;
 }
 
-export class UserForLeaderboard {
+export interface UserForLeaderboard {
   username: string;
   //photo?
   elo: number;

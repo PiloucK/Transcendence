@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Param, Patch } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UserForLeaderboard, UserPublicInfos } from './user.entity';
+import { UserForLeaderboard, UserPublicInfos } from './user.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserEloDto, UpdateUserUsernameDto } from './dto/update-user.dto';
 
@@ -18,8 +18,8 @@ export class UsersController {
     return this.usersService.getUsersForLeaderboard();
   }
 
-  @Get('/:login') // -> login42
-  getUserById(@Param('login') login42: string): UserPublicInfos {
+  @Get('/:login42')
+  getUserById(@Param('login42') login42: string): UserPublicInfos {
     return this.usersService.getUserById(login42);
   }
 
@@ -28,17 +28,17 @@ export class UsersController {
     return this.usersService.createUser(createUserDto);
   }
 
-  @Patch('/:login/elo') // -> login42
+  @Patch('/:login42/elo')
   updateUserElo(
-    @Param('login') login42: string,
+    @Param('login42') login42: string,
     @Body() updateUserEloDto: UpdateUserEloDto,
   ): UserPublicInfos {
     return this.usersService.updateUserElo(login42, updateUserEloDto);
   }
 
-  @Patch('/:login/username') // -> login42
+  @Patch('/:login42/username')
   updateUserUsername(
-    @Param('login') login42: string,
+    @Param('login42') login42: string,
     @Body() updateUserUsernameDto: UpdateUserUsernameDto,
   ): UserPublicInfos {
     return this.usersService.updateUserUsername(login42, updateUserUsernameDto);
