@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
-import { User, UserForLeaderboard, UserPublicInfos } from './user.model';
+import { IUser, IUserForLeaderboard, IUserPublicInfos } from './user.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserEloDto, UpdateUserUsernameDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [];
+  private users: IUser[] = [];
 
-  private createUserPublicInfos(user: User): UserPublicInfos {
-    const ret: UserPublicInfos = {
+  private createUserPublicInfos(user: IUser): IUserPublicInfos {
+    const ret: IUserPublicInfos = {
       username: user.username,
       elo: user.elo,
       gamesWon: user.gamesWon,
@@ -18,14 +18,14 @@ export class UsersService {
     return ret;
   }
 
-  getAllUsers(): UserPublicInfos[] {
+  getAllUsers(): IUserPublicInfos[] {
     return this.users.map((user) => this.createUserPublicInfos(user));
   }
 
-  getUsersForLeaderboard(): UserForLeaderboard[] {
+  getUsersForLeaderboard(): IUserForLeaderboard[] {
     return this.users
       .map((user) => {
-        const ret: UserForLeaderboard = {
+        const ret: IUserForLeaderboard = {
           username: user.username,
           elo: user.elo,
         };
@@ -34,14 +34,21 @@ export class UsersService {
       .sort((a, b) => a.elo - b.elo);
   }
 
-  private searchUser(login42: string): User {
+  private searchUser(login42: string): IUser {
     return this.users.find((user) => user.login42 == login42);
   }
 
-  createUser(createUserDto: CreateUserDto): UserPublicInfos {
+  getUserById(login42: string): IUserPublicInfos {
+    const user: IUser = this.searchUser(login42);
+    if (user) {
+      return this.createUserPublicInfos(user);
+    }
+  }
+
+  createUser(createUserDto: CreateUserDto): IUserPublicInfos {
     const { login42 } = createUserDto;
     if (!this.searchUser(login42)) {
-      const user: User = {
+      const user: IUser = {
         id: uuid(),
         login42,
         token42: '',
@@ -56,19 +63,12 @@ export class UsersService {
     }
   }
 
-  getUserById(login42: string): UserPublicInfos {
-    const user: User = this.searchUser(login42);
-    if (user) {
-      return this.createUserPublicInfos(user);
-    }
-  }
-
   updateUserElo(
     login42: string,
     updateUserEloDto: UpdateUserEloDto,
-  ): UserPublicInfos {
+  ): IUserPublicInfos {
     const { elo } = updateUserEloDto;
-    const user: User = this.searchUser(login42);
+    const user: IUser = this.searchUser(login42);
     if (user) {
       user.elo = user.elo + elo;
       return this.createUserPublicInfos(user);
@@ -78,9 +78,9 @@ export class UsersService {
   updateUserUsername(
     login42: string,
     updateUserUsernameDto: UpdateUserUsernameDto,
-  ): UserPublicInfos {
+  ): IUserPublicInfos {
     const { username } = updateUserUsernameDto;
-    const user: User = this.searchUser(login42);
+    const user: IUser = this.searchUser(login42);
     if (user) {
       user.username = username;
       return this.createUserPublicInfos(user);

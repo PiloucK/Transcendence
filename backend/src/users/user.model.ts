@@ -1,26 +1,19 @@
-export interface User {
-  id: string; // uuid
-  login42: string; // peut-etre a retirer (seul identifiant unique qu'on passe au front)
-  token42: string; // token 42 (changer le nom)
+export interface IUserForLeaderboard {
   username: string; // username qu'on peut changer (unique?)
   //photo?
   elo: number;
-  gamesWon: number;
-  gamesLost: number;
-  twoFa: boolean;
 }
 
-export interface UserPublicInfos {
+export interface IUserPublicInfos extends IUserForLeaderboard {
   //login42?
-  username: string;
-  //photo?
-  elo: number;
   gamesWon: number;
   gamesLost: number;
 }
 
-export interface UserForLeaderboard {
-  username: string;
+export interface IUser extends IUserPublicInfos {
+  id: string; // uuid
+  login42: string; // peut-etre a retirer (seul identifiant unique qu'on passe au front)
+  token42: string; // token 42 (changer le nom)
   //photo?
-  elo: number;
+  twoFa: boolean;
 }
