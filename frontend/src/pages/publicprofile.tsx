@@ -1,6 +1,5 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { useLoginContext } from "../context/LoginContext";
 import styles from "../styles/Home.module.css";
 import userService from "../services/users";
 
@@ -20,7 +19,7 @@ interface UserInfos {
 function UserName({ userInfos }: { userInfos: UserInfos }) {
   return (
     <div className={styles.profile_user_account_details_username}>
-      {userInfos.username}
+      {userInfos?.username}
     </div>
   );
 }
@@ -50,35 +49,43 @@ function AccountDetails({ userInfos }: { userInfos: UserInfos }) {
 }
 
 function UserStats({ userInfos }: { userInfos: UserInfos }) {
-
   return (
     <div className={styles.profile_user_stats}>
       <div className={styles.profile_user_stats_header}>
         <div className={styles.profile_user_stats_header_title}>Stats</div>
       </div>
-      <div className={styles.profile_user_stats_elo}>
-        Elo: {userInfos.elo}
-      </div>
+      <div className={styles.profile_user_stats_elo}>Elo: {userInfos?.elo}</div>
       <div className={styles.profile_user_stats_games_summary}>
-        Games won: {userInfos.gamesWon}
+        Games won: {userInfos?.gamesWon}
         <br />
-        Games lost: {userInfos.gamesLost}
+        Games lost: {userInfos?.gamesLost}
       </div>
     </div>
   );
 }
 
-function PublicProfile({ userInfos }: { userInfos: UserInfos }) {
-  console.log(userInfos);
+function Profile({
+  state,
+}: {
+  state: { usrInfo: UserInfos; setUsrInfo: (usrInfos: UserInfos) => void };
+}) {
+  React.useEffect(() => {
+    socket.on("update-leaderboard", () => {
+      userService.getOne(state.usrInfo.username).then((user: UserInfos) => {
+        state.setUsrInfo(user);
+      });
+    });
+  }, []);
+
   return (
     <div className={styles.profile}>
-      <AccountDetails userInfos={userInfos} />
-      <UserStats userInfos={userInfos} />
+      <AccountDetails userInfos={state.usrInfo} />
+      <UserStats userInfos={state.usrInfo} />
     </div>
   );
 }
 
-export default function Components() {
+export default function PublicProfile() {
   const router = useRouter();
   const { username } = router.query;
 
@@ -89,20 +96,18 @@ export default function Components() {
     gamesLost: 0,
   });
 
-  React.useEffect(() => {
+  if (username !== undefined && userInfos.username !== username) {
     userService.getOne(username).then((user: UserInfos) => {
       setUserInfos(user);
     });
+  }
 
-    socket.on("update-leaderboard", () => {
-      userService.getOne(username).then((user: UserInfos) => {
-        setUserInfos(user);
-      });
-    });
-  }, []);
-
-  if (username !== undefined && userInfos.username !== undefined) {
-    return <PublicProfile userInfos={userInfos} />;
+  if (
+    username !== undefined &&
+    userInfos.username !== undefined &&
+    userInfos.username !== ""
+  ) {
+    return <Profile state={{ usrInfo: userInfos, setUsrInfo: setUserInfos }} />;
   } else {
     return <div>User not found</div>;
   }
