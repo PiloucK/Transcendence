@@ -1,6 +1,5 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { Socket } from 'dgram';
 import { AppModule } from './app.module';
 
 async function bootstrap() {

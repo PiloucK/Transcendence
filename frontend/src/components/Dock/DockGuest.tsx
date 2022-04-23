@@ -27,7 +27,7 @@ export function DockGuest() {
     event.preventDefault();
 
     const newUserCredentials: IUserCredentials = {
-      login: username,
+      login42: username,
     };
 
     userService.add(newUserCredentials).then(() => {

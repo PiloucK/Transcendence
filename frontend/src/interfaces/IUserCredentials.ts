@@ -1,3 +1,3 @@
 export interface IUserCredentials {
-  login: string;
+  login42: string;
 }

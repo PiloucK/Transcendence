@@ -12,12 +12,8 @@ import io from "socket.io-client";
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 interface User {
-  id: string;
-  login: string;
-  level: number;
-  ranking: number;
-  gamesWon: number;
-  gamesLost: number;
+  username: string;
+  elo: number;
 }
 
 // Will display a button incrementing the user's ranking.
@@ -51,7 +47,7 @@ function DecrementRankingButton({
       className={styles.icons}
       aria-label="ranking"
       onClick={() => {
-        userService.updateUserRanking(currentUser.login, -15);
+        userService.updateUserRanking(currentUser.username, -15);
         socket.emit("user:update-elo");
       }}
     >
@@ -67,13 +63,13 @@ function createLeaderboard(users: User[]): ReactElement {
     <div className={styles.leaderboard}>
       {users.map((user, index) => {
         return (
-          <Link href={`/publicprofile?login=${user.login}`} key={index}>
+          <Link href={`/publicprofile?login=${user.username}`} key={index}>
             <div className={styles.leaderboard_user} key={index}>
               <DecrementRankingButton currentUser={user} />
               <div className={styles.leaderboard_user_rank}>{index + 1}</div>
-              <div className={styles.leaderboard_user_name}>{user.login}</div>
+              <div className={styles.leaderboard_user_name}>{user.username}</div>
               <div className={styles.leaderboard_user_score}>
-                {user.ranking}
+                {user.elo}
               </div>
               <IncrementRankingButton currentUser={user} />
             </div>
