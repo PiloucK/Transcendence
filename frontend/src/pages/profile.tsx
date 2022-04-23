@@ -21,11 +21,9 @@ import { DockGuest } from "../components/Dock/DockGuest";
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 interface UserInfos {
-  id: string;
-  login: string;
-  level: number;
-  ranking: number;
-  gamesWin: number;
+  username: string;
+  elo: number;
+  gamesWon: number;
   gamesLost: number;
 }
 
@@ -40,12 +38,11 @@ function MyUserName() {
 
     if (tmpUsername !== "") {
       userService
-        .changeUsername(loginContext.userName, tmpUsername) // change loginContext.userName to loginContext.login? or to loginContext.login42?
+        .changeUsername(loginContext.userName, tmpUsername) // change loginContext.userName to loginContext.username? or to loginContext.login42?
         .then(() => {
           loginContext.login(tmpUsername, loginContext.userSecret);
           setTmpUsername("");
           socket.emit("user:update-username");
-          //Emit on the socket here.
         });
     }
   };
@@ -118,11 +115,9 @@ function MyAccountDetails() {
 function UserStats() {
   const loginContext = useLoginContext();
   const [userInfos, setUserInfos] = useState<UserInfos>({
-    id: "",
-    login: "",
-    level: 0,
-    ranking: 0,
-    gamesWin: 0,
+    username: "",
+    elo: 0,
+    gamesWon: 0,
     gamesLost: 0,
   });
 
@@ -147,10 +142,10 @@ function UserStats() {
         <div className={styles.profile_user_stats_header_title}>Stats</div>
       </div>
       <div className={styles.profile_user_stats_elo}>
-        Elo: {userInfos.ranking}
+        Elo: {userInfos.elo}
       </div>
       <div className={styles.profile_user_stats_games_summary}>
-        Games won: {userInfos.gamesWin}
+        Games won: {userInfos.gamesWon}
         <br />
         Games lost: {userInfos.gamesLost}
       </div>

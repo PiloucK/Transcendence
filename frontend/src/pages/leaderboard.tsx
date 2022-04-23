@@ -25,9 +25,9 @@ function IncrementRankingButton({
   return (
     <IconButton
       className={styles.icons}
-      aria-label="ranking"
+      aria-label="elo"
       onClick={() => {
-        userService.updateUserRanking(currentUser.login, 15);
+        userService.updateUserElo(currentUser.username, 15);
         socket.emit("user:update-elo");
       }}
     >
@@ -45,9 +45,9 @@ function DecrementRankingButton({
   return (
     <IconButton
       className={styles.icons}
-      aria-label="ranking"
+      aria-label="elo"
       onClick={() => {
-        userService.updateUserRanking(currentUser.username, -15);
+        userService.updateUserElo(currentUser.username, -15);
         socket.emit("user:update-elo");
       }}
     >
@@ -63,7 +63,7 @@ function createLeaderboard(users: User[]): ReactElement {
     <div className={styles.leaderboard}>
       {users.map((user, index) => {
         return (
-          <Link href={`/publicprofile?login=${user.username}`} key={index}>
+          <Link href={`/publicprofile?username=${user.username}`} key={index}>
             <div className={styles.leaderboard_user} key={index}>
               <DecrementRankingButton currentUser={user} />
               <div className={styles.leaderboard_user_rank}>{index + 1}</div>
@@ -82,15 +82,15 @@ function createLeaderboard(users: User[]): ReactElement {
 
 // Will print the list of users in the leaderboard.
 export default function Leaderboard() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    userService.getAll().then((users) => {
+    userService.getAll().then((users:User[]) => {
       setUsers(users);
     });
 
     socket.on("update-leaderboard", () => {
-      userService.getAll().then((users) => {
+      userService.getAll().then((users:User[]) => {
         setUsers(users);
       });
     });
