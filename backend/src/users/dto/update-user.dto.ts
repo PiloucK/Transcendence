@@ -1,9 +1,9 @@
 import { IsNumber, IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdateUserRankingDto {
+export class UpdateUserEloDto {
   @IsNotEmpty()
   @IsNumber()
-  ranking: number;
+  elo: number;
 }
 
 export class UpdateUserUsernameDto {

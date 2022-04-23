@@ -18,7 +18,7 @@ import io from "socket.io-client";
 import Avatar from "@mui/material/Avatar";
 import { DockGuest } from "../components/Dock/DockGuest";
 
-const socket = io("http://0.0.0.0:3003", { transports: ["websocket"] });
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 interface UserInfos {
   id: string;

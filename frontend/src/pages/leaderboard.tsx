@@ -9,7 +9,7 @@ import Link from "next/link";
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3003", { transports: ["websocket"] });
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 interface User {
   id: string;

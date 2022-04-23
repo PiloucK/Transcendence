@@ -7,7 +7,7 @@ import userService from "../services/users";
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3003", {transports: ['websocket']});
+const socket = io("http://0.0.0.0:3002", {transports: ['websocket']});
 
 // Needed to update the user rank because you can't use the context in the function
 let currentUsername = "";

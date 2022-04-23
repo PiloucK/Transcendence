@@ -13,7 +13,7 @@ services:
   websocks:
       build: ./websocks
       ports:
-        - "3003:3003"
+        - "3002:3002"
       container_name: websocks-transcendence
       volumes:
         - ./websocks/src:/usr/src/app/websocks/src

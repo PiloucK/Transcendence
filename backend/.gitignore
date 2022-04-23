@@ -2,3 +2,9 @@
 /node_modules
 /dist
 
+# macos garbage
+.DS_Store
+
+# vim utils
+*.swp
+*.vim

@@ -10,7 +10,7 @@ import Button from "@mui/material/Button";
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3003", {transports: ['websocket']});
+const socket = io("http://0.0.0.0:3002", {transports: ['websocket']});
 
 export function DockGuest() {
 	const loginContext = useLoginContext();
@@ -22,7 +22,6 @@ export function DockGuest() {
 
     const newUserCredentials: IUserCredentials = {
       login: username,
-      password: "pass",
     };
     
     userService
