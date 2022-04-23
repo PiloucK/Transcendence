@@ -98,7 +98,7 @@ export default function Components() {
       setUserInfos(user);
     });
 
-    socket.on("leaderboardUpdate", () => {
+    socket.on("leaderboard-update", () => {
       userService.getOne(login).then((user: UserInfos) => {
         setUserInfos(user);
       });

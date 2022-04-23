@@ -1,17 +1,12 @@
 // from https://socket.io/docs/v4/server-initialization/#standalone
+// and https://socket.io/docs/v4/server-application-structure/#each-file-registers-its-own-event-handlers
 
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
+import { registerUserHandlers } from "./userHandler";
 
 const io = new Server(3002, {});
 
-io.on("connection", (socket) => {
-  socket.on("newUser", () => {
-    io.emit("leaderboardUpdate");
-  });
-  socket.on("newRank", () => {
-    io.emit("leaderboardUpdate");
-  });
-  socket.on("usernameChange", () => {
-    io.emit("leaderboardUpdate");
-  });
-});
+const onConnection = (socket: Socket) => {
+  registerUserHandlers(io, socket);
+};
+io.on("connection", onConnection);

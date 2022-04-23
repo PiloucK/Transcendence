@@ -44,7 +44,7 @@ function MyUserName() {
         .then(() => {
           loginContext.login(tmpUsername, loginContext.userSecret);
           setTmpUsername("");
-          socket.emit("usernameChange");
+          socket.emit("user:update-username");
           //Emit on the socket here.
         });
     }
@@ -133,7 +133,7 @@ function UserStats() {
       setUserInfos(user);
     });
 
-    socket.on("leaderboardUpdate", () => {
+    socket.on("leaderboard-update", () => {
 
       userService.getOne(loginContext.userName).then((user: UserInfos) => {
         setUserInfos(user);

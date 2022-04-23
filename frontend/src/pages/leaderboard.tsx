@@ -32,7 +32,7 @@ function IncrementRankingButton({
       aria-label="ranking"
       onClick={() => {
         userService.updateUserRanking(currentUser.login, 15);
-        socket.emit("newRank");
+        socket.emit("user:update-elo");
       }}
     >
       <AddBoxIcon />
@@ -52,7 +52,7 @@ function DecrementRankingButton({
       aria-label="ranking"
       onClick={() => {
         userService.updateUserRanking(currentUser.login, -15);
-        socket.emit("newRank");
+        socket.emit("user:update-elo");
       }}
     >
       <IndeterminateCheckBoxIcon />
@@ -93,7 +93,7 @@ export default function Leaderboard() {
       setUsers(users);
     });
 
-    socket.on("leaderboardUpdate", () => {
+    socket.on("leaderboard-update", () => {
       userService.getAll().then((users) => {
         setUsers(users);
       });

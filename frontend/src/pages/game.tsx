@@ -24,13 +24,13 @@ function DisplayBallForUser() {
 }
 
 // Access the global user name and update the user rank via the API.
-// Emit on the websocket the newRank event for the real time leaderboard.
+// Emit on the websocket the user:update-elo event for the real time leaderboard.
 function updateUserRanking(rankModification: number) {
   if (currentUsername !== "") {
     userService
       .updateUserRanking(currentUsername, rankModification)
       .then(() => {
-        socket.emit("newRank");
+        socket.emit("user:update-elo");
       });
   }
 }
