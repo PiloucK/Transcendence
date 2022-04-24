@@ -6,22 +6,11 @@ import React from "react";
 
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
-import Image from "next/image";
-import Ghost from "../public/ghost.png";
-import Blocked from "../public/blocked.png";
-import upToDate from "../public/upToDate.png";
-
-function selectButton(index: number) {
-  let buttonClass = [
-    styles.social_menu_button,
-    styles.social_menu_button,
-    styles.social_menu_button,
-    styles.social_menu_button,
-    styles.social_menu_button,
-  ];
-  buttonClass[index] = styles.social_menu_button_selected;
-  return buttonClass;
-}
+import {
+  EmptyFriendList,
+  EmptyBlockedList,
+  EmptyNotificationcenter,
+} from "../components/Social/emptyPages";
 
 function SocialMenuButtons({ setMenu }: { setMenu: (menu: string) => void }) {
   const [buttonClass, setButtonClass] = React.useState([
@@ -31,6 +20,18 @@ function SocialMenuButtons({ setMenu }: { setMenu: (menu: string) => void }) {
     styles.social_menu_button,
     styles.social_menu_button,
   ]);
+
+  const selectButton = (index: number) => {
+    let buttonClass = [
+      styles.social_menu_button,
+      styles.social_menu_button,
+      styles.social_menu_button,
+      styles.social_menu_button,
+      styles.social_menu_button,
+    ];
+    buttonClass[index] = styles.social_menu_button_selected;
+    return buttonClass;
+  };
 
   const setCurrentMenu = (index: number) => {
     setButtonClass(selectButton(index));
@@ -56,33 +57,6 @@ function SocialMenuButtons({ setMenu }: { setMenu: (menu: string) => void }) {
         <NotificationsIcon />
       </div>
     </>
-  );
-}
-
-function EmptyFriendList() {
-  return (
-    <div className={styles.social_empty_page}>
-      <Image src={Ghost} />
-      Looks like you don’t have friends yet...
-    </div>
-  );
-}
-
-function EmptyBlockedList() {
-  return (
-    <div className={styles.social_empty_page}>
-      <Image src={Blocked} />
-      Secret easter egg if you block at least 10 friends...
-    </div>
-  );
-}
-
-function EmptyNotificationcenter() {
-  return (
-    <div className={styles.social_empty_page}>
-      <Image src={upToDate} />
-      You're up to date for now !
-    </div>
   );
 }
 
