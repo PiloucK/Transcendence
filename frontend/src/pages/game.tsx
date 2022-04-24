@@ -10,13 +10,13 @@ import io from "socket.io-client";
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 // Needed to update the user rank because you can't use the context in the function
-let currentUsername = "";
+let currentUser = "";
 
 function DisplayBallForUser() {
   const loginContext = useLoginContext();
 
   if (loginContext.userLogin !== null) {
-    currentUsername = loginContext.userLogin;
+    currentUser = loginContext.userLogin;
     return <Ball />;
   } else {
     return <DockGuest />;
@@ -26,9 +26,9 @@ function DisplayBallForUser() {
 // Access the global user name and update the user rank via the API.
 // Emit on the websocket the user:update-elo event for the real time leaderboard.
 function updateUserElo(eloModification: number) {
-  if (currentUsername !== "") {
+  if (currentUser !== "") {
     userService
-      .updateUserElo(currentUsername, eloModification)
+      .updateUserElo(currentUser, eloModification)
       .then(() => {
         socket.emit("user:update-elo");
       });
