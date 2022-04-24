@@ -10,7 +10,7 @@ export function ButtonLogout() {
 		loginContext.logout?.();
 	};
 
-	if (loginContext.userName === null) return null;
+	if (loginContext.userLogin === null) return null;
   return (
     <button className={styles.logout_button} onClick={handleOnClick}>
       Logout

@@ -15,8 +15,8 @@ let currentUsername = "";
 function DisplayBallForUser() {
   const loginContext = useLoginContext();
 
-  if (loginContext.userName !== null) {
-    currentUsername = loginContext.userName;
+  if (loginContext.userLogin !== null) {
+    currentUsername = loginContext.userLogin;
     return <Ball />;
   } else {
     return <DockGuest />;

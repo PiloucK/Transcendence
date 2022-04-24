@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import { Dock } from "./Dock";
-import { IUserCredentials, IUserPublicInfos } from "../../interfaces/users";
+import { IUserCredentials, IUser } from "../../interfaces/users";
 import userService from "../../services/users";
 
 import { useLoginContext } from "../../context/LoginContext";
@@ -30,8 +30,8 @@ export function DockGuest() {
       login42: username,
     };
 
-    userService.add(newUserCredentials).then((user:IUserPublicInfos) => {
-      loginContext.login(username, "");
+    userService.add(newUserCredentials).then((user:IUser) => {
+      loginContext.login(user.login42, "");
       socket.emit("user:new", username);
       setUsername("");
     });
@@ -51,7 +51,7 @@ export function DockGuest() {
         <TextField
           value={username}
           onChange={handleUsernameChange}
-          label="Username"
+          label="Login"
         />
         <Button type="submit">add</Button>
       </form>

@@ -1,6 +1,6 @@
 import axios from "axios";
 const baseUrl = "http://0.0.0.0:3001/users";
-import { IUserCredentials } from "../interfaces/users";
+import { IUser, IUserCredentials } from "../interfaces/users";
 
 const getAll = () => {
   const request = axios.get(baseUrl);

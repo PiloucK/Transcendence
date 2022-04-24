@@ -3,30 +3,30 @@ import React from 'react'
 import Router from "next/router";
 
 interface ILoginContext {
-	userName: string | null;
+	userLogin: string | null;
 	userSecret: string | null;
-	login?: (userName: string, userSecret: string) => void;
+	login?: (userLogin: string, userSecret: string) => void;
 	logout?: () => void;
 }
 
 const defaultLoginState = {
-	userName: null,
+	userLogin: null,
 	userSecret: null,
 };
 
 const LoginContext = React.createContext<ILoginContext>(defaultLoginState)
 
 export const LoginProvider: React.FC = ( {children}: React.ReactNode ) => {
-	const [userName, setUserName] = useState(defaultLoginState.userName)
+	const [userLogin, setUserLogin] = useState(defaultLoginState.userLogin)
 	const [userSecret, setUserSecret] = useState(defaultLoginState.userSecret)
 
-	const login = (userName: string, userSecret: string) => {
-		setUserName(userName)
+	const login = (userLogin: string, userSecret: string) => {
+		setUserLogin(userLogin)
 		setUserSecret(userSecret)
 	}
 
 	const logout = () => {
-		setUserName(null)
+		setUserLogin(null)
 		setUserSecret(null)
 		Router.push("/");
 	}
@@ -34,7 +34,7 @@ export const LoginProvider: React.FC = ( {children}: React.ReactNode ) => {
 	return (
 		<LoginContext.Provider
 			value={{
-				userName,
+				userLogin,
 				userSecret,
 				login,
 				logout,

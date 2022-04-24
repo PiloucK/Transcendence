@@ -19,7 +19,7 @@ import { DockGuest } from "../components/Dock/DockGuest";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-function MyUserName() {
+function MyUserName( { userInfos }: { userInfos: IUser } ) {
   const loginContext = useLoginContext();
   const [isInModification, setIsInModification] = useState(false);
   const [tmpUsername, setTmpUsername] = useState(""); // tmpUsername -> usernameInput?
@@ -30,9 +30,8 @@ function MyUserName() {
 
     if (tmpUsername !== "") {
       userService
-        .changeUsername(loginContext.userName, tmpUsername) // change loginContext.userName to loginContext.username? or to loginContext.login42?
+        .changeUsername(loginContext.userLogin, tmpUsername)
         .then(() => {
-          loginContext.login(tmpUsername, loginContext.userSecret);
           setTmpUsername("");
           socket.emit("user:update-username");
         });
@@ -45,11 +44,11 @@ function MyUserName() {
     setTmpUsername(event.target.value);
   };
 
-  if (loginContext.userName === null) return null;
+  if (loginContext.userLogin === null) return null;
   if (isInModification === false) {
     return (
       <div className={styles.profile_user_account_details_username}>
-        {loginContext.userName}
+        {userInfos.username}
         <IconButton
           className={styles.icons}
           aria-label="userName edit"
@@ -66,7 +65,7 @@ function MyUserName() {
           <TextField
             value={tmpUsername}
             onChange={handleUsernameChange}
-            label={loginContext.userName}
+            label={userInfos.username}
           />
           <IconButton type="submit">
             <CheckIcon />
@@ -78,9 +77,6 @@ function MyUserName() {
 }
 
 function MyAvatar() {
-  const loginContext = useLoginContext();
-
-  if (loginContext.userName === null) return null;
   return (
     <div className={styles.profile_user_account_details_avatar}>
       <Avatar
@@ -92,50 +88,25 @@ function MyAvatar() {
   );
 }
 
-function MyAccountDetails() {
+function MyAccountDetails( { userInfos }: { userInfos: IUser } ) {
   return (
     <div className={styles.profile_user_account_details}>
       <div className={styles.profile_user_account_details_title}>
         Account details
       </div>
       <MyAvatar />
-      <MyUserName />
+      <MyUserName userInfos={userInfos} />
     </div>
   );
 }
 
-function UserStats() {
-  const loginContext = useLoginContext();
-  const [userInfos, setUserInfos] = useState<IUser>({
-    username: "",
-    elo: 0,
-    gamesWon: 0,
-    gamesLost: 0,
-  });
-
-  if (loginContext.userName === null) return null;
-
-  React.useEffect(() => {
-    userService.getOne(loginContext.userName).then((user: IUser) => {
-      setUserInfos(user);
-    });
-
-    socket.on("update-leaderboard", () => {
-
-      userService.getOne(loginContext.userName).then((user: IUser) => {
-        setUserInfos(user);
-      });
-    });
-  }, []);
-
+function UserStats( { userInfos }: { userInfos: IUser } ) {
   return (
     <div className={styles.profile_user_stats}>
       <div className={styles.profile_user_stats_header}>
         <div className={styles.profile_user_stats_header_title}>Stats</div>
       </div>
-      <div className={styles.profile_user_stats_elo}>
-        Elo: {userInfos.elo}
-      </div>
+      <div className={styles.profile_user_stats_elo}>Elo: {userInfos.elo}</div>
       <div className={styles.profile_user_stats_games_summary}>
         Games won: {userInfos.gamesWon}
         <br />
@@ -145,15 +116,49 @@ function UserStats() {
   );
 }
 
-export default function Profile() {
+function Profile({
+  state,
+}: {
+  state: { userInfos: IUser; setUserInfos: (userInfos: IUser) => void };
+}) {
   const loginContext = useLoginContext();
 
-  if (loginContext.userName === null) return <DockGuest />;
+  React.useEffect(() => {
+    socket.on("update-leaderboard", () => {
+      userService.getOne(loginContext.userLogin).then((user: IUser) => {
+        state.setUserInfos(user);
+      });
+    });
+  }, []);
+
   return (
     <div className={styles.profile}>
-      <MyAccountDetails />
-      <UserStats />
+      <MyAccountDetails userInfos={state.userInfos} />
+      <UserStats userInfos={state.userInfos} />
       <ButtonLogout />
     </div>
   );
+}
+
+export default function ProfilePage() {
+  const loginContext = useLoginContext();
+  const [userInfos, setUserInfos] = useState<IUser>({
+    id: "",
+    login42: "",
+    token42: "",
+    twoFa: false,
+    username: "",
+    elo: 0,
+    gamesWon: 0,
+    gamesLost: 0,
+  });
+
+	if (loginContext.userLogin !== null && loginContext.userLogin !== userInfos.login42) {
+		userService.getOne(loginContext.userLogin).then((user: IUser) => {
+			setUserInfos(user);
+		});
+	}
+
+  if (loginContext.userLogin === null) return <DockGuest />;
+  return <Profile state={{ userInfos: userInfos, setUserInfos: setUserInfos }}/>;
 }

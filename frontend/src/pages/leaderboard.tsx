@@ -59,7 +59,7 @@ function createLeaderboard(users: IUserForLeaderboard[]): ReactElement {
     <div className={styles.leaderboard}>
       {users.map((user, index) => {
         return (
-          <Link href={`/publicprofile?username=${user.username}`} key={index}>
+          <Link href={`/publicprofile?login=${user.login42}`} key={index}>
             <div className={styles.leaderboard_user} key={index}>
               <DecrementRankingButton currentUser={user} />
               <div className={styles.leaderboard_user_rank}>{index + 1}</div>

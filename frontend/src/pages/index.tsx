@@ -7,7 +7,7 @@ import Link from "next/link";
 function DockToShow() {
 	const loginContext = useLoginContext();
 
-	if (loginContext.userName !== null) {
+	if (loginContext.userLogin !== null) {
 		return <DockUser />;
 	} else {
 		return <DockGuest />;

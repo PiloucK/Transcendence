@@ -81,23 +81,24 @@ function Profile({
 
 export default function PublicProfile() {
   const router = useRouter();
-  const { username } = router.query;
+  const { login } = router.query;
 
   const [userInfos, setUserInfos] = React.useState<IUserPublicInfos>({
+		login42: "",
     username: "",
     elo: 0,
     gamesWon: 0,
     gamesLost: 0,
   });
 
-  if (username !== undefined && userInfos.username !== username) {
-    userService.getOne(username).then((user: IUserPublicInfos) => {
+  if (login !== undefined && userInfos.username !== login) {
+    userService.getOne(login).then((user: IUserPublicInfos) => {
       setUserInfos(user);
     });
   }
 
   if (
-    username !== undefined &&
+    login !== undefined &&
     userInfos.username !== undefined &&
     userInfos.username !== ""
   ) {

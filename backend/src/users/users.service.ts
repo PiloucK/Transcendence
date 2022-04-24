@@ -10,6 +10,7 @@ export class UsersService {
 
   private createUserPublicInfos(user: IUser): IUserPublicInfos {
     const ret: IUserPublicInfos = {
+			login42: user.login42,
       username: user.username,
       elo: user.elo,
       gamesWon: user.gamesWon,
@@ -34,21 +35,24 @@ export class UsersService {
       .sort((a, b) => a.elo - b.elo);
   }
 
-  private searchUser(login42: string): IUser {
+  private searchUser(login42: string): IUser | undefined {
     return this.users.find((user) => user.login42 == login42);
   }
 
-  getUserById(login42: string): IUserPublicInfos {
-    const user: IUser = this.searchUser(login42);
-    if (user) {
+  getUserById(login42: string): IUserPublicInfos | undefined {
+    const user: IUser | undefined = this.searchUser(login42);
+    if (typeof user !== 'undefined') {
       return this.createUserPublicInfos(user);
-    }
+    } else {
+			return undefined;
+		}
   }
 
-  createUser(createUserDto: CreateUserDto): IUserPublicInfos {
+  createUser(createUserDto: CreateUserDto): IUser {
     const { login42 } = createUserDto;
-    if (!this.searchUser(login42)) {
-      const user: IUser = {
+		let user: IUser | undefined = this.searchUser(login42);
+    if (typeof user === 'undefined') {
+			user = {
         id: uuid(),
         login42,
         token42: '',
@@ -59,31 +63,35 @@ export class UsersService {
         twoFa: false,
       };
       this.users.push(user);
-      return this.createUserPublicInfos(user);
     }
+		return user;
   }
 
   updateUserElo(
     login42: string,
     updateUserEloDto: UpdateUserEloDto,
-  ): IUserPublicInfos {
+  ): IUserPublicInfos | undefined {
     const { elo } = updateUserEloDto;
-    const user: IUser = this.searchUser(login42);
-    if (user) {
+    const user: IUser | undefined = this.searchUser(login42);
+    if (typeof user !== 'undefined') {
       user.elo = user.elo + elo;
       return this.createUserPublicInfos(user);
-    }
+    } else {
+			return undefined;
+		}
   }
 
   updateUserUsername(
     login42: string,
     updateUserUsernameDto: UpdateUserUsernameDto,
-  ): IUserPublicInfos {
+  ): IUserPublicInfos | undefined {
     const { username } = updateUserUsernameDto;
-    const user: IUser = this.searchUser(login42);
-    if (user) {
+    const user: IUser | undefined = this.searchUser(login42);
+    if (typeof user !== 'undefined') {
       user.username = username;
       return this.createUserPublicInfos(user);
-    }
+    } else {
+			return undefined;
+		}
   }
 }
