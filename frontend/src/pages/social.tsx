@@ -95,7 +95,7 @@ function SocialPage({ menu }: { menu: string }) {
   }, []);
 
   if (menu === "all" || menu === "online" || menu === "offline") {
-    if (friends.length === 0) {
+    if (typeof friends === "undefined" || friends.length === 0) {
       return <EmptyFriendList />;
     } else {
       return <FriendList friends={friends} />;
