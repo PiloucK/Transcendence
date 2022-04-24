@@ -77,6 +77,29 @@
   z-index: 1;
 }
 
+.leaderboard_firstuser {
+  background-color: #186e8a;
+  border-radius: 45px;
+  width: 45%;
+  height: 6rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  z-index: 1;
+  margin: 1.2rem;
+	box-shadow: -1px 6px 0px #FCA311;
+	border-radius: 45px;
+}
+
+
+.leaderboard_firstuser:hover {
+	box-shadow: -1px 6px 0px #C4C4C4;
+	border-radius: 45px;
+	cursor: pointer;
+}
+
 .leaderboard_user {
   background-color: #186e8a;
   border-radius: 45px;
@@ -89,6 +112,12 @@
   color: #fff;
   z-index: 1;
   margin: 1.2rem;
+}
+
+.leaderboard_user:hover {
+	box-shadow: -1px 6px 0px #C4C4C4;
+	border-radius: 45px;
+	cursor: pointer;
 }
 
 .leaderboard_user_name {

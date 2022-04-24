@@ -12,65 +12,34 @@ import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-// Will display a button incrementing the user's ranking.
-function IncrementRankingButton({
-  currentUser,
-}: {
-  currentUser: IUserForLeaderboard;
-}): ReactElement {
+function LeaderboardUserCard(props: {
+  user: IUserForLeaderboard;
+  index: number;
+}) {
+	let userStyle = styles.leaderboard_user;
+	if (props.index === 0) {
+		userStyle = styles.leaderboard_firstuser;
+	}
+
   return (
-    <IconButton
-      className={styles.icons}
-      aria-label="elo"
-      onClick={() => {
-        userService.updateUserElo(currentUser.username, 15);
-        socket.emit("user:update-elo");
-      }}
-    >
-      <AddBoxIcon />
-    </IconButton>
+    <Link href={`/publicprofile?login=${props.user.login42}`} key={props.index}>
+      <div className={userStyle} key={props.index}>
+        <div className={styles.leaderboard_user_rank}>{props.index + 1}</div>
+        <div className={styles.leaderboard_user_name}>
+          {props.user.username}
+        </div>
+        <div className={styles.leaderboard_user_score}>{props.user.elo}</div>
+      </div>
+    </Link>
   );
 }
-
-// Will display a button decrementing the user's ranking.
-function DecrementRankingButton({
-  currentUser,
-}: {
-  currentUser: IUserForLeaderboard;
-}): ReactElement {
-  return (
-    <IconButton
-      className={styles.icons}
-      aria-label="elo"
-      onClick={() => {
-        userService.updateUserElo(currentUser.username, -15);
-        socket.emit("user:update-elo");
-      }}
-    >
-      <IndeterminateCheckBoxIcon />
-    </IconButton>
-  );
-}
-
 // Will create the five cards component to display the users and their scores.
 function createLeaderboard(users: IUserForLeaderboard[]): ReactElement {
   // console.log(users);
   return (
     <div className={styles.leaderboard}>
       {users.map((user, index) => {
-        return (
-          <Link href={`/publicprofile?login=${user.login42}`} key={index}>
-            <div className={styles.leaderboard_user} key={index}>
-              <DecrementRankingButton currentUser={user} />
-              <div className={styles.leaderboard_user_rank}>{index + 1}</div>
-              <div className={styles.leaderboard_user_name}>{user.username}</div>
-              <div className={styles.leaderboard_user_score}>
-                {user.elo}
-              </div>
-              <IncrementRankingButton currentUser={user} />
-            </div>
-          </Link>
-        );
+        return LeaderboardUserCard({user, index});
       })}
     </div>
   );
@@ -81,12 +50,12 @@ export default function Leaderboard() {
   const [users, setUsers] = useState<IUserForLeaderboard[]>([]);
 
   useEffect(() => {
-    userService.getAll().then((users:IUserForLeaderboard[]) => {
+    userService.getAll().then((users: IUserForLeaderboard[]) => {
       setUsers(users);
     });
 
     socket.on("update-leaderboard", () => {
-      userService.getAll().then((users:IUserForLeaderboard[]) => {
+      userService.getAll().then((users: IUserForLeaderboard[]) => {
         setUsers(users);
       });
     });
