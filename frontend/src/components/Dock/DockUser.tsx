@@ -1,16 +1,17 @@
 import Link from "next/link";
-// import * as React from 'react';
+import React from "react";
 import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChatIcon from "@mui/icons-material/Chat";
 import GroupIcon from "@mui/icons-material/Group";
 import LeaderboardIcon from "@mui/icons-material/EmojiEvents";
 import GamemodeIcon from "@mui/icons-material/SportsEsports";
+import CheckIcon from "@mui/icons-material/Check";
 
 import { Dock } from "./Dock";
 import styles from "../../styles/Home.module.css";
 
-export function DockUser() {
+function NavigationDock({ setIsInNavigation }: {setIsInNavigation: (mode: boolean) => void}) {
   return (
     <Dock>
       <Link href="/profile">
@@ -37,11 +38,38 @@ export function DockUser() {
         </IconButton>
       </Link>
 
-      <Link href="/gamemode">
-        <IconButton className={styles.icons} aria-label="gamemode">
-          <GamemodeIcon />
-        </IconButton>
-      </Link>
+      <IconButton
+        onClick={() => setIsInNavigation(false)}
+        className={styles.icons}
+        aria-label="gamemode"
+      >
+        <GamemodeIcon />
+      </IconButton>
     </Dock>
   );
+}
+
+function GamemodeDock({ setIsInNavigation }: {setIsInNavigation: (mode: boolean) => void}) {
+  return (
+    <Dock>
+      
+      <IconButton
+        onClick={() => setIsInNavigation(true)}
+        className={styles.icons}
+        aria-label="gamemode"
+      >
+        <CheckIcon />
+      </IconButton>
+    </Dock>
+  );
+}
+
+export function DockUser() {
+  const [isInNavigation, setIsInNavigation] = React.useState(true);
+
+  if (isInNavigation) {
+    return <NavigationDock setIsInNavigation={setIsInNavigation} />;
+  } else {
+    return <GamemodeDock setIsInNavigation={setIsInNavigation} />;
+  }
 }
