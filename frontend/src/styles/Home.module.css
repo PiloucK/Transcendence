@@ -323,6 +323,109 @@
 }
 
 /*
+* Style about the social page and the inner components
+*/
+
+.social_title {
+  position: absolute;
+  width: 120px;
+  height: 70px;
+  left: 8%;
+  top: 5%;
+
+  /* Header 1 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 55px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.social_menu {
+  position: absolute;
+  height: 41px;
+  left: 8%;
+  top: 14%;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.social_menu_button {
+  margin: 0 1rem;
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+  /* Dark grey */
+
+  color: #c4c4c4;
+
+  cursor: pointer;
+}
+
+.social_menu_button_selected {
+  margin: 0 1rem;
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+  text-decoration: underline;
+
+  /* Dark grey */
+
+  color: #ffffff;
+}
+
+.social_empty_page {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+	
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.social_content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  color: #ffffff;
+}
+
+/*
 * Style about the profile page and the inner components
 */
 
@@ -378,7 +481,7 @@
   font-size: 26px;
   line-height: 40px;
   display: flex;
-	flex-direction: column;
+  flex-direction: column;
   align-items: center;
   text-align: center;
   letter-spacing: -0.02em;
