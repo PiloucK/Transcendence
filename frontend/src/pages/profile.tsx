@@ -17,7 +17,9 @@ import io from "socket.io-client";
 import Avatar from "@mui/material/Avatar";
 import { DockGuest } from "../components/Dock/DockGuest";
 
+import { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
+import PublicProfile from "../components/Profile/publicprofile";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
@@ -146,6 +148,11 @@ function Profile({
 }
 
 export default function ProfilePage() {
+	const router = useRouter();
+  const { login } = router.query;
+
+	if (login !== undefined)
+		return <PublicProfile login={login} />;
   const loginContext = useLoginContext();
   const [userInfos, setUserInfos] = useState<IUser>({
     id: "",

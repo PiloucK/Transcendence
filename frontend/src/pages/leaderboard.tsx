@@ -22,7 +22,7 @@ function LeaderboardUserCard(props: {
 	}
 
   return (
-    <Link href={`/publicprofile?login=${props.user.login42}`} key={props.index}>
+    <Link href={`/profile?login=${props.user.login42}`} key={props.index}>
       <div className={userStyle} key={props.index}>
         <div className={styles.leaderboard_user_rank}>{props.index + 1}</div>
         <div className={styles.leaderboard_user_name}>

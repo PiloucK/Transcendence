@@ -1,14 +1,14 @@
 import React from "react";
 import { useRouter } from "next/router";
-import styles from "../styles/Home.module.css";
-import userService from "../services/users";
-import { IUserPublicInfos } from "../interfaces/users";
+import styles from "../../styles/Home.module.css";
+import userService from "../../services/users";
+import { IUserPublicInfos } from "../../interfaces/users";
 
 import io from "socket.io-client";
 
 import Avatar from "@mui/material/Avatar";
 
-import { UserGameHistory } from "../components/Profile/UserGameHistory";
+import { UserGameHistory } from "./UserGameHistory";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
@@ -89,10 +89,7 @@ function Profile({
   );
 }
 
-export default function PublicProfile() {
-  const router = useRouter();
-  const { login } = router.query;
-
+export default function PublicProfile({login}: {login: string}) {
   const [userInfos, setUserInfos] = React.useState<IUserPublicInfos>({
     login42: "",
     username: "",
