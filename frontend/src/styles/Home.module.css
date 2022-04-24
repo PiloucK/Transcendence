@@ -89,15 +89,14 @@
   color: #fff;
   z-index: 1;
   margin: 1.2rem;
-	box-shadow: -1px 6px 0px #FCA311;
-	border-radius: 45px;
+  box-shadow: -1px 6px 0px #fca311;
+  border-radius: 45px;
 }
 
-
 .leaderboard_firstuser:hover {
-	box-shadow: -1px 6px 0px #C4C4C4;
-	border-radius: 45px;
-	cursor: pointer;
+  box-shadow: -1px 6px 0px #c4c4c4;
+  border-radius: 45px;
+  cursor: pointer;
 }
 
 .leaderboard_user {
@@ -115,9 +114,9 @@
 }
 
 .leaderboard_user:hover {
-	box-shadow: -1px 6px 0px #C4C4C4;
-	border-radius: 45px;
-	cursor: pointer;
+  box-shadow: -1px 6px 0px #c4c4c4;
+  border-radius: 45px;
+  cursor: pointer;
 }
 
 .leaderboard_user_name {
@@ -212,8 +211,8 @@
 }
 
 .play:hover {
-	color: #4cb8d0;
-	cursor: pointer;
+  color: #4cb8d0;
+  cursor: pointer;
 }
 
 .main {
@@ -327,7 +326,69 @@
 * Style about the profile page and the inner components
 */
 
-.profile {
+.profile_history {
+  position: absolute;
+  width: 76.5%;
+  height: 100%;
+  left: 23.5%;
+  right: 0%;
+  bottom: 0%;
+  top: 0%;
+  background-color: #00213d;
+}
+
+.profile_history_title {
+  position: absolute;
+  width: 201px;
+  height: 55px;
+  left: 50%;
+  top: 10%;
+
+  transform: translate(-50%, -50%);
+  /* Header 1 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 55px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.profile_history_content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  /* Header 2 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 40px;
+  display: flex;
+	flex-direction: column;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.profile_user {
   position: absolute;
   width: 23.5%;
   height: 100%;
@@ -423,7 +484,6 @@
 	transform: translate(-50%, 0%);
   top: 46.65%; */
   /* bottom: 49.43%; */
-
 }
 
 .profile_user_stats_header_title {
@@ -442,7 +502,7 @@
   font-size: 18px;
   line-height: 28px;
   display: flex;
-	flex-direction: column;
+  flex-direction: column;
   align-items: center;
   text-align: center;
   font-feature-settings: "tnum" on, "lnum" on;
@@ -467,7 +527,7 @@
   font-size: 13px;
   line-height: 20px;
   display: flex;
-	flex-direction: column;
+  flex-direction: column;
   align-items: center;
   text-align: center;
   letter-spacing: -0.02em;
@@ -480,7 +540,7 @@
 .profile_user_stats_games_summary {
   position: absolute;
   left: 50%;
-	transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   top: 56%;
   /* bottom: 38.81%; */
 
@@ -492,7 +552,7 @@
   font-size: 13px;
   line-height: 20px;
   display: flex;
-	flex-direction: column;
+  flex-direction: column;
   align-items: center;
   text-align: center;
   letter-spacing: -0.02em;

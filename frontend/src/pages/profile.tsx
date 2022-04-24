@@ -17,9 +17,11 @@ import io from "socket.io-client";
 import Avatar from "@mui/material/Avatar";
 import { DockGuest } from "../components/Dock/DockGuest";
 
+import { UserGameHistory } from "../components/Profile/UserGameHistory";
+
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-function MyUserName( { userInfos }: { userInfos: IUser } ) {
+function MyUserName({ userInfos }: { userInfos: IUser }) {
   const loginContext = useLoginContext();
   const [isInModification, setIsInModification] = useState(false);
   const [tmpUsername, setTmpUsername] = useState(""); // tmpUsername -> usernameInput?
@@ -88,7 +90,7 @@ function MyAvatar() {
   );
 }
 
-function MyAccountDetails( { userInfos }: { userInfos: IUser } ) {
+function MyAccountDetails({ userInfos }: { userInfos: IUser }) {
   return (
     <div className={styles.profile_user_account_details}>
       <div className={styles.profile_user_account_details_title}>
@@ -100,7 +102,7 @@ function MyAccountDetails( { userInfos }: { userInfos: IUser } ) {
   );
 }
 
-function UserStats( { userInfos }: { userInfos: IUser } ) {
+function UserStats({ userInfos }: { userInfos: IUser }) {
   return (
     <div className={styles.profile_user_stats}>
       <div className={styles.profile_user_stats_header}>
@@ -132,11 +134,14 @@ function Profile({
   }, []);
 
   return (
-    <div className={styles.profile}>
-      <MyAccountDetails userInfos={state.userInfos} />
-      <UserStats userInfos={state.userInfos} />
-      <ButtonLogout />
-    </div>
+    <>
+      <div className={styles.profile_user}>
+        <MyAccountDetails userInfos={state.userInfos} />
+        <UserStats userInfos={state.userInfos} />
+        <ButtonLogout />
+      </div>
+      <UserGameHistory userLogin={loginContext.userLogin} />
+    </>
   );
 }
 
@@ -153,12 +158,17 @@ export default function ProfilePage() {
     gamesLost: 0,
   });
 
-	if (loginContext.userLogin !== null && loginContext.userLogin !== userInfos.login42) {
-		userService.getOne(loginContext.userLogin).then((user: IUser) => {
-			setUserInfos(user);
-		});
-	}
+  if (
+    loginContext.userLogin !== null &&
+    loginContext.userLogin !== userInfos.login42
+  ) {
+    userService.getOne(loginContext.userLogin).then((user: IUser) => {
+      setUserInfos(user);
+    });
+  }
 
   if (loginContext.userLogin === null) return <DockGuest />;
-  return <Profile state={{ userInfos: userInfos, setUserInfos: setUserInfos }}/>;
+  return (
+    <Profile state={{ userInfos: userInfos, setUserInfos: setUserInfos }} />
+  );
 }

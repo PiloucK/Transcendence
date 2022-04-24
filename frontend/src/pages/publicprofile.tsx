@@ -8,6 +8,8 @@ import io from "socket.io-client";
 
 import Avatar from "@mui/material/Avatar";
 
+import { UserGameHistory } from "../components/Profile/UserGameHistory";
+
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 function UserName({ userInfos }: { userInfos: IUserPublicInfos }) {
@@ -61,21 +63,29 @@ function UserStats({ userInfos }: { userInfos: IUserPublicInfos }) {
 function Profile({
   state,
 }: {
-  state: { usrInfo: IUserPublicInfos; setUsrInfo: (usrInfos: IUserPublicInfos) => void };
+  state: {
+    usrInfo: IUserPublicInfos;
+    setUsrInfo: (usrInfos: IUserPublicInfos) => void;
+  };
 }) {
   React.useEffect(() => {
     socket.on("update-leaderboard", () => {
-      userService.getOne(state.usrInfo.username).then((user: IUserPublicInfos) => {
-        state.setUsrInfo(user);
-      });
+      userService
+        .getOne(state.usrInfo.username)
+        .then((user: IUserPublicInfos) => {
+          state.setUsrInfo(user);
+        });
     });
   }, []);
 
   return (
-    <div className={styles.profile}>
-      <AccountDetails userInfos={state.usrInfo} />
-      <UserStats userInfos={state.usrInfo} />
-    </div>
+    <>
+      <div className={styles.profile_user}>
+        <AccountDetails userInfos={state.usrInfo} />
+        <UserStats userInfos={state.usrInfo} />
+      </div>
+      <UserGameHistory userLogin={state.usrInfo.login42} />
+    </>
   );
 }
 
@@ -84,7 +94,7 @@ export default function PublicProfile() {
   const { login } = router.query;
 
   const [userInfos, setUserInfos] = React.useState<IUserPublicInfos>({
-		login42: "",
+    login42: "",
     username: "",
     elo: 0,
     gamesWon: 0,
