@@ -12,6 +12,15 @@ import {
   EmptyNotificationcenter,
 } from "../components/Social/emptyPages";
 
+import { IUserPublicInfos } from "../interfaces/users";
+import userService from "../services/users";
+
+import { CardUserSocial } from "../components/Cards/CardUserSocial";
+
+import io from "socket.io-client";
+
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
 function SocialMenuButtons({ setMenu }: { setMenu: (menu: string) => void }) {
   const [buttonClass, setButtonClass] = React.useState([
     styles.social_menu_button_selected,
@@ -60,9 +69,37 @@ function SocialMenuButtons({ setMenu }: { setMenu: (menu: string) => void }) {
   );
 }
 
+function FriendList({ friends }: { friends: IUserPublicInfos[] }) {
+  return (
+    <div className={styles.social_content}>
+      {friends.map((friend) => (
+        <CardUserSocial userInfos={friend} />
+      ))}
+    </div>
+  );
+}
+
 function SocialPage({ menu }: { menu: string }) {
+  const [friends, setFriends] = React.useState<IUserPublicInfos[]>([]);
+
+  React.useEffect(() => {
+    userService.getAll().then((friends: IUserPublicInfos[]) => {
+      setFriends(friends);
+    });
+
+    socket.on("update-leaderboard", () => {
+      userService.getAll().then((friends: IUserPublicInfos[]) => {
+        setFriends(friends);
+      });
+    });
+  }, []);
+
   if (menu === "all" || menu === "online" || menu === "offline") {
-    return <EmptyFriendList />;
+    if (friends.length === 0) {
+      return <EmptyFriendList />;
+    } else {
+      return <FriendList friends={friends} />;
+    }
   } else if (menu === "blocked") {
     return <EmptyBlockedList />;
   } else if (menu === "notifications") {

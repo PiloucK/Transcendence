@@ -399,7 +399,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-	
+
   font-family: "Khand";
   font-style: normal;
   font-weight: 600;
@@ -416,13 +416,38 @@
   color: #ffffff;
 }
 
+/* This div will have every friend cards
+and should display them in columns of three cards max */
 .social_content {
   position: absolute;
   left: 50%;
-  top: 50%;
+  width: 100%;
+  top: 70%;
+
   transform: translate(-50%, -50%);
 
+  /* columns: 4; */
+}
+
+.social_friend_card {
+  width: 338px;
+  height: 110px;
+
+  margin: 1rem;
+  padding: 1.5rem;
+  text-align: left;
+
+  float: left;
+  align-items: center;
+  justify-content: center;
+	display: flex;
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+
   color: #ffffff;
+  background-color: #163f5b;
+  cursor: pointer;
 }
 
 /*
