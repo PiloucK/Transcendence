@@ -10,22 +10,14 @@ import TextField from "@mui/material/TextField";
 import React from "react";
 import { FormEventHandler, ChangeEventHandler, useState } from "react";
 import userService from "../services/users";
+import { IUser } from "../interfaces/users";
 
 import io from "socket.io-client";
 
-// import Image from "next/image";
-// import UserAvatar from "../public/profile_icon.png"
 import Avatar from "@mui/material/Avatar";
 import { DockGuest } from "../components/Dock/DockGuest";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
-
-interface UserInfos {
-  username: string;
-  elo: number;
-  gamesWon: number;
-  gamesLost: number;
-}
 
 function MyUserName() {
   const loginContext = useLoginContext();
@@ -114,7 +106,7 @@ function MyAccountDetails() {
 
 function UserStats() {
   const loginContext = useLoginContext();
-  const [userInfos, setUserInfos] = useState<UserInfos>({
+  const [userInfos, setUserInfos] = useState<IUser>({
     username: "",
     elo: 0,
     gamesWon: 0,
@@ -124,13 +116,13 @@ function UserStats() {
   if (loginContext.userName === null) return null;
 
   React.useEffect(() => {
-    userService.getOne(loginContext.userName).then((user: UserInfos) => {
+    userService.getOne(loginContext.userName).then((user: IUser) => {
       setUserInfos(user);
     });
 
     socket.on("update-leaderboard", () => {
 
-      userService.getOne(loginContext.userName).then((user: UserInfos) => {
+      userService.getOne(loginContext.userName).then((user: IUser) => {
         setUserInfos(user);
       });
     });

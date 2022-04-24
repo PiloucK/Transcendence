@@ -4,6 +4,7 @@ import userService from "../services/users";
 import IconButton from "@mui/material/IconButton";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
+import { IUserForLeaderboard } from "../interfaces/users";
 
 import Link from "next/link";
 
@@ -11,16 +12,11 @@ import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-interface User {
-  username: string;
-  elo: number;
-}
-
 // Will display a button incrementing the user's ranking.
 function IncrementRankingButton({
   currentUser,
 }: {
-  currentUser: User;
+  currentUser: IUserForLeaderboard;
 }): ReactElement {
   return (
     <IconButton
@@ -40,7 +36,7 @@ function IncrementRankingButton({
 function DecrementRankingButton({
   currentUser,
 }: {
-  currentUser: User;
+  currentUser: IUserForLeaderboard;
 }): ReactElement {
   return (
     <IconButton
@@ -57,7 +53,7 @@ function DecrementRankingButton({
 }
 
 // Will create the five cards component to display the users and their scores.
-function createLeaderboard(users: User[]): ReactElement {
+function createLeaderboard(users: IUserForLeaderboard[]): ReactElement {
   // console.log(users);
   return (
     <div className={styles.leaderboard}>
@@ -82,15 +78,15 @@ function createLeaderboard(users: User[]): ReactElement {
 
 // Will print the list of users in the leaderboard.
 export default function Leaderboard() {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<IUserForLeaderboard[]>([]);
 
   useEffect(() => {
-    userService.getAll().then((users:User[]) => {
+    userService.getAll().then((users:IUserForLeaderboard[]) => {
       setUsers(users);
     });
 
     socket.on("update-leaderboard", () => {
-      userService.getAll().then((users:User[]) => {
+      userService.getAll().then((users:IUserForLeaderboard[]) => {
         setUsers(users);
       });
     });

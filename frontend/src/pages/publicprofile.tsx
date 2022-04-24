@@ -2,6 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
 import userService from "../services/users";
+import { IUserPublicInfos } from "../interfaces/users";
 
 import io from "socket.io-client";
 
@@ -9,14 +10,7 @@ import Avatar from "@mui/material/Avatar";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-interface UserInfos {
-  username: string;
-  elo: number;
-  gamesWon: number;
-  gamesLost: number;
-}
-
-function UserName({ userInfos }: { userInfos: UserInfos }) {
+function UserName({ userInfos }: { userInfos: IUserPublicInfos }) {
   return (
     <div className={styles.profile_user_account_details_username}>
       {userInfos?.username}
@@ -24,7 +18,7 @@ function UserName({ userInfos }: { userInfos: UserInfos }) {
   );
 }
 
-function UserAvatar({ userInfos }: { userInfos: UserInfos }) {
+function UserAvatar({ userInfos }: { userInfos: IUserPublicInfos }) {
   return (
     <div className={styles.profile_user_account_details_avatar}>
       <Avatar
@@ -36,7 +30,7 @@ function UserAvatar({ userInfos }: { userInfos: UserInfos }) {
   );
 }
 
-function AccountDetails({ userInfos }: { userInfos: UserInfos }) {
+function AccountDetails({ userInfos }: { userInfos: IUserPublicInfos }) {
   return (
     <div className={styles.profile_user_account_details}>
       <div className={styles.profile_user_account_details_title}>
@@ -48,7 +42,7 @@ function AccountDetails({ userInfos }: { userInfos: UserInfos }) {
   );
 }
 
-function UserStats({ userInfos }: { userInfos: UserInfos }) {
+function UserStats({ userInfos }: { userInfos: IUserPublicInfos }) {
   return (
     <div className={styles.profile_user_stats}>
       <div className={styles.profile_user_stats_header}>
@@ -67,11 +61,11 @@ function UserStats({ userInfos }: { userInfos: UserInfos }) {
 function Profile({
   state,
 }: {
-  state: { usrInfo: UserInfos; setUsrInfo: (usrInfos: UserInfos) => void };
+  state: { usrInfo: IUserPublicInfos; setUsrInfo: (usrInfos: IUserPublicInfos) => void };
 }) {
   React.useEffect(() => {
     socket.on("update-leaderboard", () => {
-      userService.getOne(state.usrInfo.username).then((user: UserInfos) => {
+      userService.getOne(state.usrInfo.username).then((user: IUserPublicInfos) => {
         state.setUsrInfo(user);
       });
     });
@@ -89,7 +83,7 @@ export default function PublicProfile() {
   const router = useRouter();
   const { username } = router.query;
 
-  const [userInfos, setUserInfos] = React.useState<UserInfos>({
+  const [userInfos, setUserInfos] = React.useState<IUserPublicInfos>({
     username: "",
     elo: 0,
     gamesWon: 0,
@@ -97,7 +91,7 @@ export default function PublicProfile() {
   });
 
   if (username !== undefined && userInfos.username !== username) {
-    userService.getOne(username).then((user: UserInfos) => {
+    userService.getOne(username).then((user: IUserPublicInfos) => {
       setUserInfos(user);
     });
   }

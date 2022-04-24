@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import { Dock } from "./Dock";
-import { IUserCredentials } from "../../interfaces/IUserCredentials";
+import { IUserCredentials, IUserPublicInfos } from "../../interfaces/users";
 import userService from "../../services/users";
 
 import { useLoginContext } from "../../context/LoginContext";
@@ -30,7 +30,7 @@ export function DockGuest() {
       login42: username,
     };
 
-    userService.add(newUserCredentials).then(() => {
+    userService.add(newUserCredentials).then((user:IUserPublicInfos) => {
       loginContext.login(username, "");
       socket.emit("user:new", username);
       setUsername("");

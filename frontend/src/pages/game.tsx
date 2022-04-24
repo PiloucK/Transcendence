@@ -2,7 +2,7 @@ import styles from "../styles/Home.module.css";
 import { useLoginContext } from "../context/LoginContext";
 import React from "react";
 import { DockGuest } from "../components/Dock/DockGuest";
-import { Ball } from "../components/Ball";
+import { Ball } from "../components/Game/Ball";
 import userService from "../services/users";
 
 import io from "socket.io-client";
