@@ -73,7 +73,7 @@ function FriendList({ friends }: { friends: IUserPublicInfos[] }) {
   return (
     <div className={styles.social_content}>
       {friends.map((friend) => (
-        <CardUserSocial userInfos={friend} />
+        CardUserSocial({userInfos:friend})
       ))}
     </div>
   );
