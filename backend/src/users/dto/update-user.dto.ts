@@ -11,3 +11,15 @@ export class UpdateUserUsernameDto {
   @IsString()
   username!: string;
 }
+
+export class UpdateUserGamesWonDto {
+  @IsNotEmpty()
+  @IsNumber()
+  gamesWon!: number;
+}
+
+export class UpdateUserGamesLostDto {
+  @IsNotEmpty()
+  @IsNumber()
+  gamesLost!: number;
+}

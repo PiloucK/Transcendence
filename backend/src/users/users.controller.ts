@@ -2,7 +2,12 @@ import { Body, Controller, Get, Post, Param, Patch } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { IUser, IUserForLeaderboard, IUserPublicInfos } from './user.model';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserEloDto, UpdateUserUsernameDto } from './dto/update-user.dto';
+import {
+  UpdateUserEloDto,
+  UpdateUserGamesLostDto,
+  UpdateUserGamesWonDto,
+  UpdateUserUsernameDto,
+} from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -19,8 +24,8 @@ export class UsersController {
   }
 
   @Get('/:login42')
-  getUserById(@Param('login42') login42: string): IUserPublicInfos {
-    return this.usersService.getUserById(login42);
+  getUserByLogin(@Param('login42') login42: string): IUserPublicInfos {
+    return this.usersService.getUserByLogin(login42);
   }
 
   @Post()
@@ -42,5 +47,24 @@ export class UsersController {
     @Body() updateUserUsernameDto: UpdateUserUsernameDto,
   ): IUserPublicInfos {
     return this.usersService.updateUserUsername(login42, updateUserUsernameDto);
+  }
+
+  @Patch('/:login42/gamesWon')
+  updateUserGamesWon(
+    @Param('login42') login42: string,
+    @Body() updateUserGamesWonDto: UpdateUserGamesWonDto,
+  ): IUserPublicInfos {
+    return this.usersService.updateUserGamesWon(login42, updateUserGamesWonDto);
+  }
+
+  @Patch('/:login42/gamesLost')
+  updateUserGamesLost(
+    @Param('login42') login42: string,
+    @Body() updateUserGamesLostDto: UpdateUserGamesLostDto,
+  ): IUserPublicInfos {
+    return this.usersService.updateUserGamesLost(
+      login42,
+      updateUserGamesLostDto,
+    );
   }
 }

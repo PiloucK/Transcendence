@@ -34,7 +34,7 @@ function MyUserName({ userInfos }: { userInfos: IUser }) {
 
     if (tmpUsername !== "") {
       userService
-        .changeUsername(loginContext.userLogin, tmpUsername)
+        .updateUserUsername(loginContext.userLogin, tmpUsername)
         .then(() => {
           setTmpUsername("");
           socket.emit("user:update-username");

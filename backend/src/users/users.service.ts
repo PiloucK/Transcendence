@@ -1,12 +1,13 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { IUser, IUserForLeaderboard, IUserPublicInfos } from './user.model';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserEloDto, UpdateUserUsernameDto } from './dto/update-user.dto';
+import {
+  UpdateUserEloDto,
+  UpdateUserGamesLostDto,
+  UpdateUserGamesWonDto,
+  UpdateUserUsernameDto,
+} from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -44,7 +45,7 @@ export class UsersService {
     return this.users.find((user) => user.login42 == login42);
   }
 
-  getUserById(login42: string): IUserPublicInfos {
+  getUserByLogin(login42: string): IUserPublicInfos {
     const user: IUser | undefined = this.searchUser(login42);
     if (!user) {
       throw new NotFoundException(`User with login42 "${login42}" not found`);
@@ -94,6 +95,32 @@ export class UsersService {
       throw new NotFoundException(`User with login42 "${login42}" not found`);
     }
     user.username = username;
+    return this.createUserPublicInfos(user);
+  }
+
+  updateUserGamesWon(
+    login42: string,
+    updateUserGamesWonDto: UpdateUserGamesWonDto,
+  ): IUserPublicInfos {
+    const { gamesWon } = updateUserGamesWonDto;
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+    user.gamesWon = gamesWon;
+    return this.createUserPublicInfos(user);
+  }
+
+  updateUserGamesLost(
+    login42: string,
+    updateUserGamesLostDto: UpdateUserGamesLostDto,
+  ): IUserPublicInfos {
+    const { gamesLost } = updateUserGamesLostDto;
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+    user.gamesLost = gamesLost;
     return this.createUserPublicInfos(user);
   }
 }
