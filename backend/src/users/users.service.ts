@@ -55,22 +55,19 @@ export class UsersService {
   createUser(createUserDto: CreateUserDto): IUser {
     const { login42 } = createUserDto;
     let user: IUser | undefined = this.searchUser(login42);
-    if (user) {
-      throw new ConflictException(
-        `User with login42 "${login42}" already exists in the database`,
-      );
+    if (!user) {
+      user = {
+        id: uuid(),
+        login42,
+        token42: '',
+        username: login42,
+        elo: 0,
+        gamesWon: 0,
+        gamesLost: 0,
+        twoFa: false,
+      };
+      this.users.push(user);
     }
-    user = {
-      id: uuid(),
-      login42,
-      token42: '',
-      username: login42,
-      elo: 0,
-      gamesWon: 0,
-      gamesLost: 0,
-      twoFa: false,
-    };
-    this.users.push(user);
     return user;
   }
 

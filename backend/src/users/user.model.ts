@@ -6,7 +6,7 @@ export interface IUserForLeaderboard {
 }
 
 export interface IUserPublicInfos extends IUserForLeaderboard {
-  //login42?
+  //photo?
   gamesWon: number;
   gamesLost: number;
 }
@@ -14,6 +14,5 @@ export interface IUserPublicInfos extends IUserForLeaderboard {
 export interface IUser extends IUserPublicInfos {
   id: string; // uuid
   token42: string; // token 42 (changer le nom)
-  //photo?
   twoFa: boolean;
 }
