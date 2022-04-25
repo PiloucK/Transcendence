@@ -572,7 +572,7 @@ and should display them in columns of three cards max */
 .chat_menu {
   position: absolute;
   width: 3.9%;
-  height: 100%;
+  height: 96.7%;
   left: 0px;
   top: 0px;
 
@@ -609,7 +609,7 @@ and should display them in columns of three cards max */
 .chat_direct_message_menu {
   position: absolute;
   width: 12.6%;
-  height: 100%;
+  height: 97.2%;
   left: 3.9%;
   top: 0px;
 
@@ -662,8 +662,8 @@ and should display them in columns of three cards max */
   line-height: 28px;
   /* identical to box height */
 
-	column-gap: 10px;
-	justify-content: space-between;
+  column-gap: 10px;
+  justify-content: space-between;
 
   display: flex;
   align-items: center;
@@ -672,7 +672,7 @@ and should display them in columns of three cards max */
   /* Dark grey */
 
   color: #c4c4c4;
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .chat_direct_message_menu_new_selected {
@@ -692,8 +692,8 @@ and should display them in columns of three cards max */
   line-height: 28px;
   /* identical to box height */
 
-	column-gap: 10px;
-	justify-content: space-between;
+  column-gap: 10px;
+  justify-content: space-between;
 
   display: flex;
   align-items: center;
@@ -731,6 +731,232 @@ and should display them in columns of three cards max */
   /* White */
 
   color: #ffffff;
+}
+
+.chat_add_channel {
+  position: absolute;
+  left: 3.9%;
+  top: 0px;
+
+  width: 96.1%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  color: #ffffff;
+  background-color: #00213d;
+}
+
+.chat_add_channel_menu {
+  position: absolute;
+  width: 95%;
+  height: 40px;
+  left: 5%;
+  top: 5%;
+
+  display: flex;
+  flex-direction: row;
+  column-gap: 5%;
+  /* justify-content: space-between; */
+}
+
+.chat_add_channel_menu_button {
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 55px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  /* Dark grey */
+
+  color: #c4c4c4;
+	cursor: pointer;
+}
+
+.chat_add_channel_menu_button_selected {
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 55px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  /* Dark grey */
+
+  color: #ffffff;
+
+  text-decoration: underline;
+}
+
+.chat_add_channel_content {
+  position: absolute;
+  left: 5%;
+  top: 20%;
+
+  width: 90%;
+  max-height: 80%;
+  overflow-x: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  flex-flow: column wrap;
+}
+
+.chat_create_channel {
+  position: absolute;
+
+  left: 5%;
+  top: 20%;
+	
+	width: 95%;
+	height: 80%;
+}
+
+.chat_create_channel_image {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  left: 18.3%;
+  top: 16%;
+}
+
+.chat_create_channel_browse,
+.chat_create_channel_browse:hover {
+  position: absolute;
+  width: 119px;
+  height: 42px;
+  left: 21.7%;
+  top: 55%;
+	
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+
+
+  /* Teal */
+
+  background: #163f5b;
+  /* White */
+
+  border: 2px solid #ffffff;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  color: #e5e5e5;
+}
+
+.chat_create_channel_browse:hover {
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.chat_create_channel_form {
+  position: absolute;
+
+  left: 60rem;
+}
+
+.chat_create_channel_form_input {
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 40px;
+  display: flex;
+	flex-direction: column;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+	white-space: nowrap;
+  /* White */
+
+  color: #ffffff;
+	padding: 15px;
+}
+
+.chat_create_channel_form_switch {
+  position: absolute;
+  /* width: 163px;
+  height: 26px; */
+  top: 103%;
+	left: 15%;
+
+	/* Make the text stand on one line */
+	white-space: nowrap;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  display: flex;
+  align-items: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.chat_create_channel_form_create,
+.chat_create_channel_form_create:hover {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  width: 119px;
+  height: 42px;
+  left: -80%;
+  top: 125%;
+
+  /* Green */
+
+  background: #25bf75;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px 10px;
+}
+
+.chat_create_channel_form_create:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    #25bf75;
+  cursor: pointer;
 }
 
 /*
