@@ -1,6 +1,15 @@
-import { Body, Controller, Get, Post, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Param,
+  Patch,
+  Query,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { IUser, IUserForLeaderboard, IUserPublicInfos } from './user.model';
+import { GetUsersDto } from './dto/get-users.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
   UpdateUserEloDto,
@@ -14,13 +23,14 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get()
-  getAllUsers(): IUserPublicInfos[] {
-    return this.usersService.getAllUsers();
-  }
-
-  @Get('/leaderboard')
-  getUsersForLeaderboard(): IUserForLeaderboard[] {
-    return this.usersService.getUsersForLeaderboard();
+  getAllUsers(
+    @Query() getUsersDto: GetUsersDto,
+  ): IUserPublicInfos[] | IUserForLeaderboard[] {
+    if (Object.keys(getUsersDto).length) {
+      return this.usersService.getUsersForLeaderboard();
+    } else {
+      return this.usersService.getAllUsers();
+    }
   }
 
   @Get('/:login42')

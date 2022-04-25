@@ -11,6 +11,15 @@ const getAll = () => {
     });
 };
 
+const getAllForLeaderboard = () => {
+  const request = axios.get(`${baseUrl}?forLeaderboard=true`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const getOne = (login: string) => {
   const request = axios.get(`${baseUrl}/${login}`);
   return request
@@ -20,7 +29,7 @@ const getOne = (login: string) => {
     });
 };
 
-const add = (newUser: IUserCredentials) => {
+const addOne = (newUser: IUserCredentials) => {
   const request = axios.post(baseUrl, newUser);
   return request
     .then((response) => response.data)
@@ -76,8 +85,9 @@ const updateUserGamesLost = (login: string, gamesLost: string) => {
 
 export default {
   getAll,
+  getAllForLeaderboard,
   getOne,
-  add,
+  addOne,
   deleteOne,
   updateUserElo,
   updateUserUsername,

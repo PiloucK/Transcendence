@@ -30,7 +30,7 @@ export function DockGuest() {
       login42: username,
     };
 
-    userService.add(newUserCredentials).then((user:IUser) => {
+    userService.addOne(newUserCredentials).then((user:IUser) => {
       loginContext.login(user.login42, "");
       socket.emit("user:new", username);
       setUsername("");
