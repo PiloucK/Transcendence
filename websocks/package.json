@@ -1,10 +1,10 @@
 {
   "name": "transcendence-websockets",
+  "license": "ISC",
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "ts-node-dev src/index.ts"
   },
-  "license": "ISC",
   "dependencies": {
     "socket.io": "^4.4.1"
   },
