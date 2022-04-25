@@ -423,15 +423,15 @@ and should display them in columns of three cards max */
   left: 5%;
   top: 20%;
 
-	width: 90%;
-	max-height: 80%;
-	overflow-x: auto;
+  width: 90%;
+  max-height: 80%;
+  overflow-x: auto;
 
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: left;
-	flex-flow: column wrap;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  flex-flow: column wrap;
 }
 
 .social_friend_card {
@@ -535,10 +535,9 @@ and should display them in columns of three cards max */
   background: #163f5b;
   /* White */
 
-  border: 2px solid #E5E5E5;
+  border: 2px solid #e5e5e5;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
-
 }
 
 .social_friend_card_button:hover {
@@ -565,6 +564,55 @@ and should display them in columns of three cards max */
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
   cursor: pointer;
+}
+
+/* 
+* Style about the chat page.
+*/
+.chat_menu {
+  position: absolute;
+  width: 3.9%;
+  height:100%;
+  left: 0px;
+  top: 0px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+  /* Teal */
+
+  background: #163f5b;
+}
+
+.chat_direct_message_menu {
+  position: absolute;
+  width: 12.6%;
+  height: 100%;
+  left: 3.9%;
+  top: 0px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+  /* Teal */
+
+  background: #163f5b;
+}
+
+.chat_direct_message_content {
+	position: absolute;
+	width: 83.5%;
+	height: 100%;
+	left: 16.5%;
+	top: 0px;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	/* Teal */
+
+	background: #00213D;
 }
 
 /*
