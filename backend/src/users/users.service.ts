@@ -12,6 +12,7 @@ import { SendFriendRequestDto } from './dto/user-friends.dto';
 
 @Injectable()
 export class UsersService {
+  // to split when using the db: UsersService and UsersFriendsService
   private users: IUser[] = [];
 
   private createUserPublicInfos(user: IUser): IUserPublicInfos {
@@ -33,11 +34,7 @@ export class UsersService {
     return this.users
       .map((user) => {
         const ret: IUserForLeaderboard = {
-<<<<<<< HEAD
-					login42: user.login42,
-=======
           login42: user.login42,
->>>>>>> origin/LeaderboardToBackToWebsock
           username: user.username,
           elo: user.elo,
         };
@@ -60,17 +57,10 @@ export class UsersService {
 
   createUser(createUserDto: CreateUserDto): IUser {
     const { login42 } = createUserDto;
-<<<<<<< HEAD
-		let user: IUser | undefined = this.searchUser(login42);
-    if (typeof user === 'undefined') {
-			user = {
-        id: "",
-=======
     let user: IUser | undefined = this.searchUser(login42);
     if (!user) {
       user = {
         id: uuid(),
->>>>>>> origin/LeaderboardToBackToWebsock
         login42,
         token42: '',
         username: login42,
