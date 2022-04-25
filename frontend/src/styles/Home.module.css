@@ -776,7 +776,7 @@ and should display them in columns of three cards max */
   /* Dark grey */
 
   color: #c4c4c4;
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .chat_add_channel_menu_button_selected {
@@ -818,9 +818,9 @@ and should display them in columns of three cards max */
 
   left: 5%;
   top: 20%;
-	
-	width: 95%;
-	height: 80%;
+
+  width: 95%;
+  height: 80%;
 }
 
 .chat_create_channel_image {
@@ -838,13 +838,12 @@ and should display them in columns of three cards max */
   height: 42px;
   left: 21.7%;
   top: 55%;
-	
+
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 10px;
-
 
   /* Teal */
 
@@ -877,15 +876,15 @@ and should display them in columns of three cards max */
   font-size: 26px;
   line-height: 40px;
   display: flex;
-	flex-direction: column;
+  flex-direction: column;
   align-items: center;
   letter-spacing: -0.02em;
 
-	white-space: nowrap;
+  white-space: nowrap;
   /* White */
 
   color: #ffffff;
-	padding: 15px;
+  padding: 15px;
 }
 
 .chat_create_channel_form_switch {
@@ -893,10 +892,10 @@ and should display them in columns of three cards max */
   /* width: 163px;
   height: 26px; */
   top: 103%;
-	left: 15%;
+  left: 15%;
 
-	/* Make the text stand on one line */
-	white-space: nowrap;
+  /* Make the text stand on one line */
+  white-space: nowrap;
 
   font-family: "Khand";
   font-style: normal;
@@ -1199,6 +1198,31 @@ and should display them in columns of three cards max */
   color: #ffffff;
 }
 
+.add_friend_button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+
+  position: absolute;
+  left: 31.66%;
+  right: 33.14%;
+  top: 82.93%;
+  bottom: 11.76%;
+
+  /* Teal */
+
+  background: #163f5b;
+  /* Platinum */
+
+  border: 2px solid #e5e5e5;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+	cursor: pointer;
+}
+
 .logout_button {
   display: flex;
   flex-direction: row;
@@ -1221,6 +1245,8 @@ and should display them in columns of three cards max */
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
+
+	cursor: pointer;
 }
 
 .card {

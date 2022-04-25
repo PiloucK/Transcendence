@@ -1,4 +1,4 @@
-import { ButtonLogout } from "../hooks/ButtonLogout";
+import { ButtonLogout } from "../components/Buttons/ButtonLogout";
 import styles from "../styles/Home.module.css";
 import { useLoginContext } from "../context/LoginContext";
 

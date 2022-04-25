@@ -9,6 +9,7 @@ import io from "socket.io-client";
 import Avatar from "@mui/material/Avatar";
 
 import { UserGameHistory } from "./UserGameHistory";
+import { ButtonAddFriend } from "../Buttons/ButtonAddFriend";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
@@ -83,6 +84,7 @@ function Profile({
       <div className={styles.profile_user}>
         <AccountDetails userInfos={state.usrInfo} />
         <UserStats userInfos={state.usrInfo} />
+				<ButtonAddFriend userInfos={state.usrInfo} />
       </div>
       <UserGameHistory userLogin={state.usrInfo.login42} />
     </>
