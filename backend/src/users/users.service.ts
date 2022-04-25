@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 import { IUser, IUserForLeaderboard, IUserPublicInfos } from './user.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserEloDto, UpdateUserUsernameDto } from './dto/update-user.dto';
@@ -27,6 +27,7 @@ export class UsersService {
     return this.users
       .map((user) => {
         const ret: IUserForLeaderboard = {
+					login42: user.login42,
           username: user.username,
           elo: user.elo,
         };
@@ -53,7 +54,7 @@ export class UsersService {
 		let user: IUser | undefined = this.searchUser(login42);
     if (typeof user === 'undefined') {
 			user = {
-        id: uuid(),
+        id: "",
         login42,
         token42: '',
         username: login42,
