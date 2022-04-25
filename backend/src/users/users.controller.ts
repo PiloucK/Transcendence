@@ -17,6 +17,7 @@ import {
   UpdateUserGamesWonDto,
   UpdateUserUsernameDto,
 } from './dto/update-user.dto';
+import { SendFriendRequestDto } from './dto/user-friends.dto';
 
 @Controller('users')
 export class UsersController {
@@ -41,6 +42,14 @@ export class UsersController {
   @Post()
   createUser(@Body() createUserDto: CreateUserDto): IUser {
     return this.usersService.createUser(createUserDto);
+  }
+
+  @Patch('/:login42/sendFriendRequest')
+  sendFriendRequest(
+    @Param('login42') login42: string,
+    @Body() sendFriendRequestDto: SendFriendRequestDto,
+  ): IUser {
+    return this.usersService.sendFriendRequest(login42, sendFriendRequestDto);
   }
 
   @Patch('/:login42/elo')

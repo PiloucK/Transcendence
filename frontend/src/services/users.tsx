@@ -47,6 +47,17 @@ const deleteOne = (login: string) => {
     });
 };
 
+const sendFriendRequest = (login: string, friendLogin42: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/sendFriendRequest`, {
+    friendLogin42,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const updateUserElo = (login: string, elo: number) => {
   const request = axios.patch(`${baseUrl}/${login}/elo`, { elo });
   return request
@@ -89,10 +100,11 @@ export default {
   getOne,
   addOne,
   deleteOne,
+  sendFriendRequest,
   updateUserElo,
   updateUserUsername,
   updateUserGamesWon,
-  updateUserGamesLost
+  updateUserGamesLost,
 };
 // ES6 shorthand for
 // export default {

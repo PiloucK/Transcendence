@@ -14,5 +14,9 @@ export interface IUserPublicInfos extends IUserForLeaderboard {
 export interface IUser extends IUserPublicInfos {
   id: string; // uuid
   token42: string; // token 42 (changer le nom)
+  friends: Array<string>;
+  friendRequestsSent: Array<string>;
+  friendRequestsReceived: Array<string>;
+  blockedUsers: Array<string>;
   twoFa: boolean;
 }

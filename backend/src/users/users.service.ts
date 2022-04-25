@@ -8,6 +8,7 @@ import {
   UpdateUserGamesWonDto,
   UpdateUserUsernameDto,
 } from './dto/update-user.dto';
+import { SendFriendRequestDto } from './dto/user-friends.dto';
 
 @Injectable()
 export class UsersService {
@@ -62,6 +63,10 @@ export class UsersService {
         login42,
         token42: '',
         username: login42,
+        friends: [],
+        friendRequestsSent: [],
+        friendRequestsReceived: [],
+        blockedUsers: [],
         elo: 0,
         gamesWon: 0,
         gamesLost: 0,
@@ -69,6 +74,29 @@ export class UsersService {
       };
       this.users.push(user);
     }
+    return user;
+  }
+
+  sendFriendRequest(
+    login42: string,
+    sendFriendRequestDto: SendFriendRequestDto,
+  ): IUser {
+    const { friendLogin42 } = sendFriendRequestDto;
+
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+
+    const friend: IUser | undefined = this.searchUser(friendLogin42);
+    if (!friend) {
+      throw new NotFoundException(
+        `User (friend) with login42 "${friendLogin42}" not found`,
+      );
+    }
+
+    user.friendRequestsSent.push(friendLogin42);
+
     return user;
   }
 
