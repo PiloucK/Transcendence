@@ -1,5 +1,5 @@
 export interface IUserForLeaderboard {
-	login42: string; // peut-etre a retirer (seul identifiant unique qu'on passe au front)
+  login42: string; // peut-etre a retirer (seul identifiant unique qu'on passe au front)
   username: string; // username qu'on peut changer (unique?)
   //photo?
   elo: number;

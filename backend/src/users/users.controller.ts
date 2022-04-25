@@ -19,7 +19,7 @@ export class UsersController {
   }
 
   @Get('/:login42')
-  getUserById(@Param('login42') login42: string): IUserPublicInfos | undefined {
+  getUserById(@Param('login42') login42: string): IUserPublicInfos {
     return this.usersService.getUserById(login42);
   }
 
@@ -32,7 +32,7 @@ export class UsersController {
   updateUserElo(
     @Param('login42') login42: string,
     @Body() updateUserEloDto: UpdateUserEloDto,
-  ): IUserPublicInfos | undefined {
+  ): IUserPublicInfos {
     return this.usersService.updateUserElo(login42, updateUserEloDto);
   }
 
@@ -40,7 +40,7 @@ export class UsersController {
   updateUserUsername(
     @Param('login42') login42: string,
     @Body() updateUserUsernameDto: UpdateUserUsernameDto,
-  ): IUserPublicInfos | undefined {
+  ): IUserPublicInfos {
     return this.usersService.updateUserUsername(login42, updateUserUsernameDto);
   }
 }
