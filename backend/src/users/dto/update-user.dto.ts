@@ -6,7 +6,7 @@ export class UpdateUserEloDto {
 	}
   @IsNotEmpty()
   @IsNumber()
-  elo: number;
+  elo!: number;
 }
 
 export class UpdateUserUsernameDto {
@@ -15,5 +15,17 @@ export class UpdateUserUsernameDto {
 	}
   @IsNotEmpty()
   @IsString()
-  username: string;
+  username!: string;
+}
+
+export class UpdateUserGamesWonDto {
+  @IsNotEmpty()
+  @IsNumber()
+  gamesWon!: number;
+}
+
+export class UpdateUserGamesLostDto {
+  @IsNotEmpty()
+  @IsNumber()
+  gamesLost!: number;
 }
