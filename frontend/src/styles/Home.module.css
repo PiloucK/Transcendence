@@ -1369,10 +1369,10 @@ and should display them in columns of three cards max */
   width: 100%;
   height: 30%;
 
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .public_profile_buttons .social_friend_card_button {
@@ -1441,24 +1441,24 @@ and should display them in columns of three cards max */
 .block_button,
 .block_button:hover {
   display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	/* padding: 10px; */
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  /* padding: 10px; */
 
-	position: absolute;
-	width: 119px;
-	height: 42px;
+  position: absolute;
+  width: 119px;
+  height: 42px;
 
-	left: 52.5%;
-	transform: translate(-50%, 0%);
-	top: 55%;
+  left: 52.5%;
+  transform: translate(-50%, 0%);
+  top: 55%;
 
-	/* Soft red */
+  /* Soft red */
 
-	background: #FC605C;
-	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-	border-radius: 15px;
+  background: #fc605c;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
 
   /* Header 3 */
 
@@ -1485,7 +1485,8 @@ and should display them in columns of three cards max */
   cursor: pointer;
 }
 
-.logout_button {
+.logout_button,
+.logout_button:hover {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -1493,10 +1494,9 @@ and should display them in columns of three cards max */
   padding: 10px;
 
   position: absolute;
-  left: 31.66%;
-  right: 33.14%;
+  left: 50%;
+	transform: translate(-50%, 0%);
   top: 82.93%;
-  bottom: 11.76%;
 
   /* Teal */
 
@@ -1508,7 +1508,23 @@ and should display them in columns of three cards max */
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
 
-  cursor: pointer;
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  color: #ffffff;
+}
+
+.logout_button:hover {
+  border: 2px solid #e5e5e5;
+	color: #e5e5e5;
+	cursor: pointer;
 }
 
 .card {
