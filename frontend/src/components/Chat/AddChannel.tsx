@@ -13,6 +13,8 @@ import { inputPFState } from "../../interfaces/inputPasswordField";
 
 import Switch from "@mui/material/Switch";
 
+import { ButtonCreateChannel } from "../Buttons/ButtonCreateChannel";
+
 function EmptyPublicChannels() {
   return (
     <div className={styles.social_empty_page}>
@@ -68,7 +70,7 @@ function CreateChannelForm() {
         Set channel as private{" "}
         <Switch checked={isPrivate} onChange={handleSwitchChange} />
       </div>
-      <div className={styles.chat_create_channel_form_create}>Create</div>
+			<ButtonCreateChannel />
     </div>
   );
 }
