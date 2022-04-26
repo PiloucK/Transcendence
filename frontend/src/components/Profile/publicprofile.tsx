@@ -10,6 +10,8 @@ import Avatar from "@mui/material/Avatar";
 
 import { UserGameHistory } from "./UserGameHistory";
 import { ButtonAddFriend } from "../Buttons/ButtonAddFriend";
+import { ButtonUserStatus } from "../Buttons/ButtonUserStatus";
+import { ButtonBlock } from "../Buttons/ButtonBlock";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
@@ -84,14 +86,18 @@ function Profile({
       <div className={styles.profile_user}>
         <AccountDetails userInfos={state.usrInfo} />
         <UserStats userInfos={state.usrInfo} />
-				<ButtonAddFriend userInfos={state.usrInfo} />
+        <div className={styles.public_profile_buttons}>
+          <ButtonUserStatus userInfos={state.usrInfo} />
+          <ButtonAddFriend userInfos={state.usrInfo} />
+					<ButtonBlock userInfos={state.usrInfo} />
+        </div>
       </div>
       <UserGameHistory userLogin={state.usrInfo.login42} />
     </>
   );
 }
 
-export default function PublicProfile({login}: {login: string}) {
+export default function PublicProfile({ login }: { login: string }) {
   const [userInfos, setUserInfos] = React.useState<IUserPublicInfos>({
     login42: "",
     username: "",
@@ -100,14 +106,19 @@ export default function PublicProfile({login}: {login: string}) {
     gamesLost: 0,
   });
 
-  if (login !== undefined && userInfos !== undefined && userInfos.username !== login) {
+  if (
+    login !== undefined &&
+    userInfos !== undefined &&
+    userInfos.username !== login
+  ) {
     userService.getOne(login).then((user: IUserPublicInfos) => {
       setUserInfos(user);
     });
   }
 
   if (
-    login !== undefined && userInfos !== undefined &&
+    login !== undefined &&
+    userInfos !== undefined &&
     userInfos.username !== undefined &&
     userInfos.username !== ""
   ) {
