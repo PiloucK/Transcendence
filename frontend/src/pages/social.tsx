@@ -2,7 +2,7 @@ import Link from "next/link";
 import styles from "../styles/Home.module.css";
 import { useLoginContext } from "../context/LoginContext";
 import { DockGuest } from "../components/Dock/DockGuest";
-import React from "react";
+import React, { useState } from "react";
 
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
@@ -24,7 +24,7 @@ import io from "socket.io-client";
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 function SocialMenuButtons({ setMenu }: { setMenu: (menu: string) => void }) {
-  const [buttonClass, setButtonClass] = React.useState([
+  const [buttonClass, setButtonClass] = useState([
     styles.social_menu_button_selected,
     styles.social_menu_button,
     styles.social_menu_button,
@@ -102,9 +102,9 @@ function NotificationList({ requests }: { requests: IUserPublicInfos[] }) {
 }
 
 function SocialPage({ menu }: { menu: string }) {
-  const [friends, setFriends] = React.useState<IUserPublicInfos[]>([]);
-	const [blocked, setBlocked] = React.useState<IUserPublicInfos[]>([]);
-	const [notifications, setNotifications] = React.useState<IUserPublicInfos[]>([]);
+  const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
+	const [blocked, setBlocked] = useState<IUserPublicInfos[]>([]);
+	const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
 
   React.useEffect(() => {
     userService.getAll().then((friends: IUserPublicInfos[]) => {
@@ -148,7 +148,7 @@ function SocialMenu({ setMenu }: { setMenu: (menu: string) => void }) {
 }
 
 export default function Social() {
-  const [menu, setMenu] = React.useState("all");
+  const [menu, setMenu] = useState("all");
 
   if (typeof window !== "undefined") {
     document.body.style.backgroundColor = "#00213D";
