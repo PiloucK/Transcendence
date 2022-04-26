@@ -575,6 +575,56 @@ and should display them in columns of three cards max */
   cursor: pointer;
 }
 
+.offline_button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  left: 58.83%;
+  top: 50%;
+
+  transform: translate(0%, -50%);
+
+  width: 103px;
+  height: 42px;
+
+  /* Teal */
+
+  background: #163f5b;
+  /* White */
+
+  border: 2px solid #6c7280;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  /* Header 3 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* Dark grey */
+
+  color: #c4c4c4;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px 10px;
+}
+
 .social_friend_request_card_button {
   display: flex;
   flex-direction: column;
@@ -1495,7 +1545,7 @@ and should display them in columns of three cards max */
 
   position: absolute;
   left: 50%;
-	transform: translate(-50%, 0%);
+  transform: translate(-50%, 0%);
   top: 82.93%;
 
   /* Teal */
@@ -1523,8 +1573,8 @@ and should display them in columns of three cards max */
 
 .logout_button:hover {
   border: 2px solid #e5e5e5;
-	color: #e5e5e5;
-	cursor: pointer;
+  color: #e5e5e5;
+  cursor: pointer;
 }
 
 .card {

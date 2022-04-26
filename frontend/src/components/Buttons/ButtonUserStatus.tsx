@@ -25,7 +25,7 @@ export function ButtonUserStatus({
     );
   } else {
     return (
-      <div className={styles.social_friend_card_button} onClick={() => {}}>
+      <div className={styles.offline_button} onClick={() => {}}>
         Offline
       </div>
     );
