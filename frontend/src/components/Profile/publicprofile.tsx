@@ -68,6 +68,48 @@ function UserStats({ userInfos }: { userInfos: IUserPublicInfos }) {
   );
 }
 
+function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
+  const loginContext = useLoginContext();
+  const [friendList, setFriendList] = React.useState<[]>([]);
+  const [sentRList, setSentRList] = React.useState<[]>([]);
+
+  React.useEffect(() => {
+    userService
+      .getUserFriends(loginContext.userLogin)
+      .then((friends: IUserPublicInfos[]) => {
+        setFriendList(friends);
+      });
+    userService
+      .getUserFriendRequestsSent(loginContext.userLogin)
+      .then((requests: IUserPublicInfos[]) => {
+        setSentRList(requests);
+      });
+  }, []);
+
+  const friendButton = () => {
+    if (
+      friendList.find(
+        (friend: IUserPublicInfos) => friend.login42 === userInfos.login42
+      ) ||
+      sentRList.find(
+        (friend: IUserPublicInfos) => friend.login42 === userInfos.login42
+      )
+    ) {
+      return <ButtonRemoveFriend userInfos={userInfos} />;
+    } else {
+      return <ButtonAddFriend userInfos={userInfos} />;
+    }
+  };
+
+  return (
+    <div className={styles.public_profile_buttons}>
+      <ButtonUserStatus userInfos={userInfos} />
+      {friendButton()}
+      <ButtonBlock userInfos={userInfos} />
+    </div>
+  );
+}
+
 function Profile({
   state,
 }: {
@@ -91,11 +133,7 @@ function Profile({
       <div className={styles.profile_user}>
         <AccountDetails userInfos={state.usrInfo} />
         <UserStats userInfos={state.usrInfo} />
-        <div className={styles.public_profile_buttons}>
-          <ButtonUserStatus userInfos={state.usrInfo} />
-          <ButtonAddFriend userInfos={state.usrInfo} />
-          <ButtonBlock userInfos={state.usrInfo} />
-        </div>
+        <Interactions userInfos={state.usrInfo} />
       </div>
       <UserGameHistory userLogin={state.usrInfo.login42} />
     </>

@@ -102,14 +102,30 @@ function SocialPage({ menu }: { menu: string }) {
   const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
 
   React.useEffect(() => {
-    userService.getUserFriends(loginContext.userLogin).then((friends: IUserPublicInfos[]) => {
-      setFriends(friends);
-    });
-
-    socket.on("update-leaderboard", () => {
-      userService.getUserFriends(loginContext.userLogin).then((friends: IUserPublicInfos[]) => {
+    userService
+      .getUserFriends(loginContext.userLogin)
+      .then((friends: IUserPublicInfos[]) => {
         setFriends(friends);
       });
+
+    userService
+      .getUserFriendRequestsReceived(loginContext.userLogin)
+      .then((notifications: IUserPublicInfos[]) => {
+        setNotifications(notifications);
+      });
+
+    socket.on("update-leaderboard", () => {
+      userService
+        .getUserFriends(loginContext.userLogin)
+        .then((friends: IUserPublicInfos[]) => {
+          setFriends(friends);
+        });
+
+      userService
+        .getUserFriendRequestsReceived(loginContext.userLogin)
+        .then((notifications: IUserPublicInfos[]) => {
+          setNotifications(notifications);
+        });
     });
   }, []);
 
@@ -126,10 +142,10 @@ function SocialPage({ menu }: { menu: string }) {
       return <BlockedList users={friends} />;
     }
   } else if (menu === "notifications") {
-    if (typeof friends === "undefined" || friends.length === 0) {
+    if (typeof notifications === "undefined" || notifications.length === 0) {
       return <EmptyNotificationcenter />;
     } else {
-      return <NotificationList requests={friends} />;
+      return <NotificationList requests={notifications} />;
     }
   }
 }

@@ -26,7 +26,7 @@ export function ButtonsFriendRequest({
 
   return (
     <div className={styles.social_friend_request_card_button}>
-      <div className={styles.confirm} onClick={() => {acceptFriend}}>
+      <div className={styles.confirm} onClick={acceptFriend}>
         Confirm
       </div>
       <div className={styles.decline} onClick={() => {}}>
