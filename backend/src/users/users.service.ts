@@ -64,6 +64,22 @@ export class UsersService {
     return this.createUserPublicInfos(user);
   }
 
+  getUserFriends(login42: string): IUserPublicInfos[] {
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+    return user.friends.map((curLogin42) => {
+      const friend = this.searchUser(curLogin42);
+      if (!friend) {
+        throw new NotFoundException(
+          `User (friend) with login42 "${curLogin42}" not found`,
+        );
+      }
+      return this.createUserPublicInfos(friend);
+    });
+  }
+
   createUser(createUserDto: CreateUserDto): IUser {
     const { login42 } = createUserDto;
     let user: IUser | undefined = this.searchUser(login42);

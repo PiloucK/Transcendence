@@ -48,6 +48,11 @@ export class UsersController {
     return this.usersService.getUserByLogin(login42);
   }
 
+  @Get('/:login42/friends')
+  getUserFriends(@Param('login42') login42: string): IUserPublicInfos[] {
+    return this.usersService.getUserFriends(login42);
+  }
+
   @Post()
   createUser(@Body() createUserDto: CreateUserDto): IUser {
     return this.usersService.createUser(createUserDto);
