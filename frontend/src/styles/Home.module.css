@@ -439,6 +439,9 @@ and should display them in columns of three cards max */
   width: 338px;
   height: 110px;
 
+	min-height: 110px;
+	min-width: 338px;
+
   margin: 0.8rem;
   text-align: left;
 
@@ -515,7 +518,8 @@ and should display them in columns of three cards max */
   color: #ffffff;
 }
 
-.social_friend_card_button {
+.social_friend_card_button,
+.social_friend_card_button:hover {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -541,28 +545,114 @@ and should display them in columns of three cards max */
 }
 
 .social_friend_card_button:hover {
+  border: 2px solid #ffffff;
+  cursor: pointer;
+}
+
+.social_friend_request_card_button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  left: 58.83%;
+  top: 0%;
+	width: 79px;
+	height: 28px;
+}
+
+.social_friend_request_card_button .decline,
+.social_friend_request_card_button .decline:hover {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  /* padding: 10px; */
+
+  position: absolute;
+  top: 60px;
+  width: 90px;
+  height: 30px;
+
+  background: #fca311;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px 10px;
+}
+
+.social_friend_request_card_button .decline:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    #fc605c;
+  cursor: pointer;
+}
+
+.social_friend_request_card_button .confirm,
+.social_friend_request_card_button .confirm:hover {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 
   position: absolute;
-  left: 58.83%;
-  top: 50%;
+  top: 20px;
+	
+  width: 90px;
+  height: 30px;
 
-  transform: translate(0%, -50%);
+  background: #1985a1;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
 
-  width: 103px;
-  height: 42px;
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
 
-  /* Teal */
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
 
-  background: #163f5b;
   /* White */
 
-  border: 2px solid #ffffff;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 15px;
+  color: #ffffff;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px 10px;
+}
+
+.social_friend_request_card_button .confirm:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    #25bf75;
   cursor: pointer;
 }
 
@@ -1220,7 +1310,7 @@ and should display them in columns of three cards max */
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
 
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .logout_button {
@@ -1246,7 +1336,7 @@ and should display them in columns of three cards max */
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
 
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .card {

@@ -16,6 +16,7 @@ import { IUserPublicInfos } from "../interfaces/users";
 import userService from "../services/users";
 
 import { CardUserSocial } from "../components/Cards/CardUserSocial";
+import { CardFriendRequest } from "../components/Cards/CardFriendRequest";
 
 import io from "socket.io-client";
 
@@ -79,8 +80,20 @@ function FriendList({ friends }: { friends: IUserPublicInfos[] }) {
   );
 }
 
+function NotificationList({ requests }: { requests: IUserPublicInfos[] }) {
+  return (
+    <div className={styles.social_content}>
+      {requests.map((request) => (
+        CardFriendRequest({userInfos:request})
+      ))}
+    </div>
+  );
+}
+
 function SocialPage({ menu }: { menu: string }) {
   const [friends, setFriends] = React.useState<IUserPublicInfos[]>([]);
+	const [blocked, setBlocked] = React.useState<IUserPublicInfos[]>([]);
+	const [notifications, setNotifications] = React.useState<IUserPublicInfos[]>([]);
 
   React.useEffect(() => {
     userService.getAll().then((friends: IUserPublicInfos[]) => {
@@ -101,9 +114,17 @@ function SocialPage({ menu }: { menu: string }) {
       return <FriendList friends={friends} />;
     }
   } else if (menu === "blocked") {
-    return <EmptyBlockedList />;
+		if (typeof blocked === "undefined" || blocked.length === 0) {
+			return <EmptyBlockedList />;
+    } else {
+      return <FriendList friends={blocked} />;
+    }
   } else if (menu === "notifications") {
-    return <EmptyNotificationcenter />;
+		if (typeof notifications === "undefined" || notifications.length === 0) {
+			return <EmptyNotificationcenter />;
+    } else {
+      return <NotificationList requests={notifications} />;
+    }
   }
 }
 
