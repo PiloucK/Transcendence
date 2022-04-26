@@ -4,14 +4,19 @@ import styles from "../../styles/Home.module.css";
 import userService from "../../services/users";
 import { IUserPublicInfos } from "../../interfaces/users";
 
+import Link from "next/link";
+
 import io from "socket.io-client";
 
 import Avatar from "@mui/material/Avatar";
 
 import { UserGameHistory } from "./UserGameHistory";
 import { ButtonAddFriend } from "../Buttons/ButtonAddFriend";
+import { ButtonRemoveFriend } from "../Buttons/ButtonRemoveFriend";
 import { ButtonUserStatus } from "../Buttons/ButtonUserStatus";
 import { ButtonBlock } from "../Buttons/ButtonBlock";
+
+import { useLoginContext } from "../../context/LoginContext";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
@@ -63,6 +68,28 @@ function UserStats({ userInfos }: { userInfos: IUserPublicInfos }) {
   );
 }
 
+function PublicProfileButtons({ userInfos }: { userInfos: IUserPublicInfos }) {
+  const loginContext = useLoginContext();
+
+  if (loginContext.userLogin === userInfos.login42) {
+    return (
+      <div className={styles.public_profile_buttons}>
+        <Link href="/profile">
+          <div className={styles.add_friend_button}>Your profile</div>
+        </Link>
+      </div>
+    );
+  } else {
+    return (
+      <div className={styles.public_profile_buttons}>
+        <ButtonUserStatus userInfos={userInfos} />
+        <ButtonAddFriend userInfos={userInfos} />
+        <ButtonBlock userInfos={userInfos} />
+      </div>
+    );
+  }
+}
+
 function Profile({
   state,
 }: {
@@ -86,11 +113,7 @@ function Profile({
       <div className={styles.profile_user}>
         <AccountDetails userInfos={state.usrInfo} />
         <UserStats userInfos={state.usrInfo} />
-        <div className={styles.public_profile_buttons}>
-          <ButtonUserStatus userInfos={state.usrInfo} />
-          <ButtonAddFriend userInfos={state.usrInfo} />
-					<ButtonBlock userInfos={state.usrInfo} />
-        </div>
+        <PublicProfileButtons userInfos={state.usrInfo} />
       </div>
       <UserGameHistory userLogin={state.usrInfo.login42} />
     </>

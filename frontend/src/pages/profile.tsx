@@ -150,10 +150,10 @@ function Profile({
 export default function ProfilePage() {
 	const router = useRouter();
   const { login } = router.query;
-
-	if (login !== undefined)
-		return <PublicProfile login={login} />;
   const loginContext = useLoginContext();
+
+	if (login !== undefined && loginContext.userLogin !== null)
+		return <PublicProfile login={login} />;
   const [userInfos, setUserInfos] = useState<IUser>({
     id: "",
     login42: "",
