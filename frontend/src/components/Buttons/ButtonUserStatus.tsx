@@ -8,9 +8,26 @@ export function ButtonUserStatus({
 }: {
   userInfos: IUserPublicInfos;
 }) {
-  return (
-    <div className={styles.social_friend_card_button} onClick={() => {}}>
-      Defy
-    </div>
-  );
+  // Will check the status of the user and display the right button
+  const status = Math.random();
+
+  if (status < 0.33) {
+    return (
+      <div className={styles.social_friend_card_button} onClick={() => {}}>
+        Defy
+      </div>
+    );
+  } else if (status < 0.66) {
+    return (
+      <div className={styles.social_friend_card_button} onClick={() => {}}>
+        Spectate
+      </div>
+    );
+  } else {
+    return (
+      <div className={styles.social_friend_card_button} onClick={() => {}}>
+        Offline
+      </div>
+    );
+  }
 }
