@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  frontend:
+      build: ./frontend
+      ports:
+        - "3000:3000"
+      container_name: frontend-transcendence
+      volumes:
+        - ./frontend/src:/usr/src/app/frontend/src
+      restart: always
+
+  websocks:
+      build: ./websocks
+      ports:
+        - "3002:3002"
+      container_name: websocks-transcendence
+      volumes:
+        - ./websocks/src:/usr/src/app/websocks/src
+      restart: always
+
+  backend:
+      build: ./backend
+      ports:
+        - "3001:3001"
+      container_name: backend-transcendence
+      volumes:
+        - ./backend/src:/usr/src/app/backend/src
+      restart: always
+
+  # db:
+  #     image: postgres
+  #     ports:
+  #       - "5432:5432"
+  #     container_name: db-transcendence
+  #     restart: always
+
+    # volumes:
+    #   - data:/var/lib/postgresql/data
