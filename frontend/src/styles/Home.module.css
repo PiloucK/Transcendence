@@ -1427,11 +1427,14 @@ and should display them in columns of three cards max */
 
 .public_profile_buttons .social_friend_card_button {
   position: absolute;
+	width: 119px;
+  height: 42px;
+
   left: 50%;
   transform: translate(-50%, 0%);
-  /* right: 20.71%; */
   top: 0%;
-  /* bottom: 90.21%; */
+
+  margin: 0px 0px;
 }
 
 .add_friend_button,
@@ -1440,9 +1443,11 @@ and should display them in columns of three cards max */
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 10px;
 
   position: absolute;
+	width: 119px;
+  height: 42px;
+
   left: 50%;
   transform: translate(-50%, 0%);
   top: 25.93%;
@@ -1470,16 +1475,12 @@ and should display them in columns of three cards max */
   text-align: center;
   font-feature-settings: "tnum" on, "lnum" on;
 
+	/* Force to be on the same line */
+	white-space: nowrap;
+
   /* White */
 
   color: #e5e5e5;
-
-  /* Inside auto layout */
-
-  flex: none;
-  order: 0;
-  flex-grow: 0;
-  margin: 0px 10px;
 }
 
 .add_friend_button:hover {
@@ -1500,7 +1501,7 @@ and should display them in columns of three cards max */
   width: 119px;
   height: 42px;
 
-  left: 52.5%;
+  left: 50%;
   transform: translate(-50%, 0%);
   top: 55%;
 
