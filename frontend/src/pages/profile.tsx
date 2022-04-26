@@ -152,8 +152,9 @@ export default function ProfilePage() {
   const { login } = router.query;
   const loginContext = useLoginContext();
 
-	if (login !== undefined && loginContext.userLogin !== null)
+	if (login !== undefined && loginContext.userLogin !== null && login !== loginContext.userLogin) {
 		return <PublicProfile login={login} />;
+	}
   const [userInfos, setUserInfos] = useState<IUser>({
     id: "",
     login42: "",

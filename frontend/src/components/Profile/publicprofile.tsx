@@ -68,28 +68,6 @@ function UserStats({ userInfos }: { userInfos: IUserPublicInfos }) {
   );
 }
 
-function PublicProfileButtons({ userInfos }: { userInfos: IUserPublicInfos }) {
-  const loginContext = useLoginContext();
-
-  if (loginContext.userLogin === userInfos.login42) {
-    return (
-      <div className={styles.public_profile_buttons}>
-        <Link href="/profile">
-          <div className={styles.add_friend_button}>Your profile</div>
-        </Link>
-      </div>
-    );
-  } else {
-    return (
-      <div className={styles.public_profile_buttons}>
-        <ButtonUserStatus userInfos={userInfos} />
-        <ButtonAddFriend userInfos={userInfos} />
-        <ButtonBlock userInfos={userInfos} />
-      </div>
-    );
-  }
-}
-
 function Profile({
   state,
 }: {
@@ -113,7 +91,11 @@ function Profile({
       <div className={styles.profile_user}>
         <AccountDetails userInfos={state.usrInfo} />
         <UserStats userInfos={state.usrInfo} />
-        <PublicProfileButtons userInfos={state.usrInfo} />
+        <div className={styles.public_profile_buttons}>
+          <ButtonUserStatus userInfos={state.userInfos} />
+          <ButtonAddFriend userInfos={state.userInfos} />
+          <ButtonBlock userInfos={state.userInfos} />
+        </div>
       </div>
       <UserGameHistory userLogin={state.usrInfo.login42} />
     </>
