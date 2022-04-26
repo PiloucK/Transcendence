@@ -100,14 +100,14 @@ export default function PublicProfile({login}: {login: string}) {
     gamesLost: 0,
   });
 
-  if (login !== undefined && userInfos.username !== login) {
+  if (login !== undefined && userInfos !== undefined && userInfos.username !== login) {
     userService.getOne(login).then((user: IUserPublicInfos) => {
       setUserInfos(user);
     });
   }
 
   if (
-    login !== undefined &&
+    login !== undefined && userInfos !== undefined &&
     userInfos.username !== undefined &&
     userInfos.username !== ""
   ) {
