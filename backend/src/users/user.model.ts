@@ -20,3 +20,8 @@ export interface IUser extends IUserPublicInfos {
   blockedUsers: Array<string>;
   twoFa: boolean;
 }
+
+export type Friends = Array<string>;
+export type FriendRequestsSent = Array<string>;
+export type FriendRequestsReceived = Array<string>;
+export type BlockedUsers = Array<string>;

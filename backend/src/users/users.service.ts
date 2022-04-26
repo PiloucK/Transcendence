@@ -1,6 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
-import { IUser, IUserForLeaderboard, IUserPublicInfos } from './user.model';
+import {
+  FriendRequestsSent,
+  Friends,
+  IUser,
+  IUserForLeaderboard,
+  IUserPublicInfos,
+} from './user.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
   UpdateUserEloDto,
@@ -8,7 +14,10 @@ import {
   UpdateUserGamesWonDto,
   UpdateUserUsernameDto,
 } from './dto/update-user.dto';
-import { SendFriendRequestDto } from './dto/user-friends.dto';
+import {
+  AcceptFriendRequestDto,
+  SendFriendRequestDto,
+} from './dto/user-friends.dto';
 
 @Injectable()
 export class UsersService {
@@ -81,7 +90,7 @@ export class UsersService {
   sendFriendRequest(
     login42: string,
     sendFriendRequestDto: SendFriendRequestDto,
-  ): IUser {
+  ): FriendRequestsSent {
     const { friendLogin42 } = sendFriendRequestDto;
 
     const user: IUser | undefined = this.searchUser(login42);
@@ -97,8 +106,39 @@ export class UsersService {
     }
 
     user.friendRequestsSent.push(friendLogin42);
+    friend.friendRequestsReceived.push(login42);
 
-    return user;
+    return user.friendRequestsSent;
+  }
+
+  acceptFriendRequest(
+    login42: string,
+    acceptFriendRequestDto: AcceptFriendRequestDto,
+  ): Friends {
+    const { friendLogin42 } = acceptFriendRequestDto;
+
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+
+    const friend: IUser | undefined = this.searchUser(friendLogin42);
+    if (!friend) {
+      throw new NotFoundException(
+        `User (friend) with login42 "${friendLogin42}" not found`,
+      );
+    }
+
+    user.friends.push(friendLogin42);
+    friend.friends.push(login42);
+    user.friendRequestsReceived = user.friendRequestsReceived.filter(
+      (curLogin42) => curLogin42 !== friendLogin42,
+    );
+    friend.friendRequestsSent = friend.friendRequestsSent.filter(
+      (curLogin42) => curLogin42 !== login42,
+    );
+
+    return user.friends;
   }
 
   updateUserElo(

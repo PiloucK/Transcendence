@@ -58,6 +58,17 @@ const sendFriendRequest = (login: string, friendLogin42: string) => {
     });
 };
 
+const acceptFriendRequest = (login: string, friendLogin42: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/acceptFriendRequest`, {
+    friendLogin42,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const updateUserElo = (login: string, elo: number) => {
   const request = axios.patch(`${baseUrl}/${login}/elo`, { elo });
   return request
@@ -101,6 +112,7 @@ export default {
   addOne,
   deleteOne,
   sendFriendRequest,
+  acceptFriendRequest,
   updateUserElo,
   updateUserUsername,
   updateUserGamesWon,

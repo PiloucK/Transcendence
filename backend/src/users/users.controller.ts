@@ -8,7 +8,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { IUser, IUserForLeaderboard, IUserPublicInfos } from './user.model';
+import {
+  FriendRequestsSent,
+  Friends,
+  IUser,
+  IUserForLeaderboard,
+  IUserPublicInfos,
+} from './user.model';
 import { GetUsersDto } from './dto/get-users.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
@@ -17,7 +23,10 @@ import {
   UpdateUserGamesWonDto,
   UpdateUserUsernameDto,
 } from './dto/update-user.dto';
-import { SendFriendRequestDto } from './dto/user-friends.dto';
+import {
+  AcceptFriendRequestDto,
+  SendFriendRequestDto,
+} from './dto/user-friends.dto';
 
 @Controller('users')
 export class UsersController {
@@ -48,8 +57,19 @@ export class UsersController {
   sendFriendRequest(
     @Param('login42') login42: string,
     @Body() sendFriendRequestDto: SendFriendRequestDto,
-  ): IUser {
+  ): FriendRequestsSent {
     return this.usersService.sendFriendRequest(login42, sendFriendRequestDto);
+  }
+
+  @Patch('/:login42/acceptFriendRequest')
+  acceptFriendRequest(
+    @Param('login42') login42: string,
+    @Body() acceptFriendRequestDto: AcceptFriendRequestDto,
+  ): Friends {
+    return this.usersService.acceptFriendRequest(
+      login42,
+      acceptFriendRequestDto,
+    );
   }
 
   @Patch('/:login42/elo')
