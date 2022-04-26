@@ -1437,6 +1437,18 @@ and should display them in columns of three cards max */
   margin: 0px 0px;
 }
 
+.public_profile_buttons .offline_button {
+  position: absolute;
+	width: 119px;
+  height: 42px;
+
+  left: 50%;
+  transform: translate(-50%, 0%);
+  top: 0%;
+
+  margin: 0px 0px;
+}
+
 .add_friend_button,
 .add_friend_button:hover {
   display: flex;
