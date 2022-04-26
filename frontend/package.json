@@ -1,5 +1,6 @@
 {
-  "private": true,
+  "name": "transcendence-frontend",
+  "license": "ISC",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
