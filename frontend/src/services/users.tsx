@@ -69,7 +69,7 @@ const acceptFriendRequest = (login: string, friendLogin42: string) => {
     });
 };
 
-const getUserFriends = (login: string, friendLogin42: string) => {
+const getUserFriends = (login: string) => {
   const request = axios.get(`${baseUrl}/${login}/friends`);
   return request
     .then((response) => response.data)

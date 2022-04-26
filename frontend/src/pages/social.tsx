@@ -74,9 +74,7 @@ function SocialMenuButtons({ setMenu }: { setMenu: (menu: string) => void }) {
 function FriendList({ friends }: { friends: IUserPublicInfos[] }) {
   return (
     <div className={styles.social_content}>
-      {friends.map((friend) => (
-        CardUserSocial({userInfos:friend})
-      ))}
+      {friends.map((friend) => CardUserSocial({ userInfos: friend }))}
     </div>
   );
 }
@@ -84,9 +82,7 @@ function FriendList({ friends }: { friends: IUserPublicInfos[] }) {
 function BlockedList({ users }: { users: IUserPublicInfos[] }) {
   return (
     <div className={styles.social_content}>
-      {users.map((user) => (
-        CardBlockedUser({userInfos:user})
-      ))}
+      {users.map((user) => CardBlockedUser({ userInfos: user }))}
     </div>
   );
 }
@@ -94,25 +90,24 @@ function BlockedList({ users }: { users: IUserPublicInfos[] }) {
 function NotificationList({ requests }: { requests: IUserPublicInfos[] }) {
   return (
     <div className={styles.social_content}>
-      {requests.map((request) => (
-        CardFriendRequest({userInfos:request})
-      ))}
+      {requests.map((request) => CardFriendRequest({ userInfos: request }))}
     </div>
   );
 }
 
 function SocialPage({ menu }: { menu: string }) {
+  const loginContext = useLoginContext();
   const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
-	const [blocked, setBlocked] = useState<IUserPublicInfos[]>([]);
-	const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
+  const [blocked, setBlocked] = useState<IUserPublicInfos[]>([]);
+  const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
 
   React.useEffect(() => {
-    userService.getAll().then((friends: IUserPublicInfos[]) => {
+    userService.getUserFriends(loginContext.userLogin).then((friends: IUserPublicInfos[]) => {
       setFriends(friends);
     });
 
     socket.on("update-leaderboard", () => {
-      userService.getAll().then((friends: IUserPublicInfos[]) => {
+      userService.getUserFriends(loginContext.userLogin).then((friends: IUserPublicInfos[]) => {
         setFriends(friends);
       });
     });
@@ -125,14 +120,14 @@ function SocialPage({ menu }: { menu: string }) {
       return <FriendList friends={friends} />;
     }
   } else if (menu === "blocked") {
-		if (typeof friends === "undefined" || friends.length === 0) {
-			return <EmptyBlockedList />;
+    if (typeof friends === "undefined" || friends.length === 0) {
+      return <EmptyBlockedList />;
     } else {
       return <BlockedList users={friends} />;
     }
   } else if (menu === "notifications") {
-		if (typeof friends === "undefined" || friends.length === 0) {
-			return <EmptyNotificationcenter />;
+    if (typeof friends === "undefined" || friends.length === 0) {
+      return <EmptyNotificationcenter />;
     } else {
       return <NotificationList requests={friends} />;
     }
@@ -149,16 +144,21 @@ function SocialMenu({ setMenu }: { setMenu: (menu: string) => void }) {
 
 export default function Social() {
   const [menu, setMenu] = useState("all");
+  const loginContext = useLoginContext();
 
   if (typeof window !== "undefined") {
     document.body.style.backgroundColor = "#00213D";
   }
 
-  return (
-    <>
-      <div className={styles.social_title}>Friends</div>
-      <SocialMenu setMenu={setMenu} />
-      <SocialPage menu={menu} />
-    </>
-  );
+  if (loginContext.userLogin === null) {
+    return <DockGuest />;
+  } else {
+    return (
+      <>
+        <div className={styles.social_title}>Friends</div>
+        <SocialMenu setMenu={setMenu} />
+        <SocialPage menu={menu} />
+      </>
+    );
+  }
 }
