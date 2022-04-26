@@ -78,6 +78,24 @@ const getUserFriends = (login: string) => {
     });
 };
 
+const getUserFriendRequestsReceived = (login: string) => {
+  const request = axios.get(`${baseUrl}/${login}/friendRequestsReceived`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const getUserFriendRequestsSent = (login: string) => {
+  const request = axios.get(`${baseUrl}/${login}/friendRequestsSent`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const updateUserElo = (login: string, elo: number) => {
   const request = axios.patch(`${baseUrl}/${login}/elo`, { elo });
   return request
@@ -123,6 +141,8 @@ export default {
   sendFriendRequest,
   acceptFriendRequest,
   getUserFriends,
+	getUserFriendRequestsReceived,
+	getUserFriendRequestsSent,
   updateUserElo,
   updateUserUsername,
   updateUserGamesWon,
