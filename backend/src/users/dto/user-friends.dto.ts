@@ -5,3 +5,9 @@ export class SendFriendRequestDto {
   @IsString()
   friendLogin42!: string;
 }
+
+export class AcceptFriendRequestDto {
+  @IsNotEmpty()
+  @IsString()
+  friendLogin42!: string;
+}
