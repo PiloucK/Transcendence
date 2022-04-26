@@ -17,6 +17,7 @@ import userService from "../services/users";
 
 import { CardUserSocial } from "../components/Cards/CardUserSocial";
 import { CardFriendRequest } from "../components/Cards/CardFriendRequest";
+import { CardBlockedUser } from "../components/Cards/CardBlockedUser";
 
 import io from "socket.io-client";
 
@@ -80,6 +81,16 @@ function FriendList({ friends }: { friends: IUserPublicInfos[] }) {
   );
 }
 
+function BlockedList({ users }: { users: IUserPublicInfos[] }) {
+  return (
+    <div className={styles.social_content}>
+      {users.map((user) => (
+        CardBlockedUser({userInfos:user})
+      ))}
+    </div>
+  );
+}
+
 function NotificationList({ requests }: { requests: IUserPublicInfos[] }) {
   return (
     <div className={styles.social_content}>
@@ -114,16 +125,16 @@ function SocialPage({ menu }: { menu: string }) {
       return <FriendList friends={friends} />;
     }
   } else if (menu === "blocked") {
-		if (typeof blocked === "undefined" || blocked.length === 0) {
+		if (typeof friends === "undefined" || friends.length === 0) {
 			return <EmptyBlockedList />;
     } else {
-      return <FriendList friends={blocked} />;
+      return <BlockedList users={friends} />;
     }
   } else if (menu === "notifications") {
-		if (typeof notifications === "undefined" || notifications.length === 0) {
+		if (typeof friends === "undefined" || friends.length === 0) {
 			return <EmptyNotificationcenter />;
     } else {
-      return <NotificationList requests={notifications} />;
+      return <NotificationList requests={friends} />;
     }
   }
 }
