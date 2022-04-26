@@ -92,9 +92,9 @@ function Profile({
         <AccountDetails userInfos={state.usrInfo} />
         <UserStats userInfos={state.usrInfo} />
         <div className={styles.public_profile_buttons}>
-          <ButtonUserStatus userInfos={state.userInfos} />
-          <ButtonAddFriend userInfos={state.userInfos} />
-          <ButtonBlock userInfos={state.userInfos} />
+          <ButtonUserStatus userInfos={state.usrInfo} />
+          <ButtonAddFriend userInfos={state.usrInfo} />
+          <ButtonBlock userInfos={state.usrInfo} />
         </div>
       </div>
       <UserGameHistory userLogin={state.usrInfo.login42} />
