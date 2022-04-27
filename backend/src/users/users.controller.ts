@@ -87,6 +87,17 @@ export class UsersController {
     );
   }
 
+  @Patch('/:login42/declineFriendRequest')
+  declineFriendRequest(
+    @Param('login42') login42: string,
+    @Body() acceptFriendRequestDto: AcceptFriendRequestDto,
+  ): Friends {
+    return this.usersService.declineFriendRequest(
+      login42,
+      acceptFriendRequestDto,
+    );
+  }
+
   @Patch('/:login42/elo')
   updateUserElo(
     @Param('login42') login42: string,
