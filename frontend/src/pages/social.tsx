@@ -127,6 +127,20 @@ function SocialPage({ menu }: { menu: string }) {
           setNotifications(notifications);
         });
     });
+
+    socket.on("update-relations", () => {
+      userService
+        .getUserFriends(loginContext.userLogin)
+        .then((friends: IUserPublicInfos[]) => {
+          setFriends(friends);
+        });
+
+      userService
+        .getUserFriendRequestsReceived(loginContext.userLogin)
+        .then((notifications: IUserPublicInfos[]) => {
+          setNotifications(notifications);
+        });
+    });
   }, []);
 
   if (menu === "all" || menu === "online" || menu === "offline") {

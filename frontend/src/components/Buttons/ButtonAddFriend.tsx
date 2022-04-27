@@ -7,24 +7,32 @@ import userServices from "../../services/users";
 
 import { useLoginContext } from "../../context/LoginContext";
 
+import io from "socket.io-client";
+
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
 export function ButtonAddFriend({
   userInfos,
 }: {
   userInfos: IUserPublicInfos;
 }) {
-	const loginContext = useLoginContext();
+  const loginContext = useLoginContext();
 
   const sendFriendRequest = () => {
-		if (loginContext.userLogin !== null && loginContext.userLogin !== userInfos.login42) {
-			userServices.sendFriendRequest(loginContext.userLogin, userInfos.login42);
-		}
+    if (
+      loginContext.userLogin !== null &&
+      loginContext.userLogin !== userInfos.login42
+    ) {
+      userServices
+        .sendFriendRequest(loginContext.userLogin, userInfos.login42)
+        .then(() => {
+          socket.emit("user:update-relations");
+        });
+    }
   };
 
   return (
-    <div
-      className={styles.add_friend_button}
-      onClick={sendFriendRequest}
-    >
+    <div className={styles.add_friend_button} onClick={sendFriendRequest}>
       Add friend
     </div>
   );

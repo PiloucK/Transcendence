@@ -87,6 +87,19 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
       .then((requests: IUserPublicInfos[]) => {
         setSentRList(requests);
       });
+
+    socket.on("update-relations", () => {
+      userService
+        .getUserFriends(loginContext.userLogin)
+        .then((friends: IUserPublicInfos[]) => {
+          setFriendList(friends);
+        });
+      userService
+        .getUserFriendRequestsSent(loginContext.userLogin)
+        .then((requests: IUserPublicInfos[]) => {
+          setSentRList(requests);
+        });
+    });
   }, []);
 
   const friendButton = () => {
