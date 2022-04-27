@@ -18,6 +18,7 @@ import { ButtonCancelRequest } from "../Buttons/ButtonCancelRequest";
 
 import { ButtonUserStatus } from "../Buttons/ButtonUserStatus";
 import { ButtonBlock } from "../Buttons/ButtonBlock";
+import { ButtonUnblock } from "../Buttons/ButtonUnblock";
 
 import { useLoginContext } from "../../context/LoginContext";
 
@@ -75,6 +76,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
   const loginContext = useLoginContext();
   const [friendList, setFriendList] = React.useState<[]>([]);
   const [sentRList, setSentRList] = React.useState<[]>([]);
+  const [blockedList, setBlockedList] = React.useState<[]>([]);
 
   React.useEffect(() => {
     userService
@@ -87,6 +89,11 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
       .then((requests: IUserPublicInfos[]) => {
         setSentRList(requests);
       });
+    userService
+      .getUserBlocked(loginContext.userLogin)
+      .then((blocked: IUserPublicInfos[]) => {
+        setBlockedList(blocked);
+      });
 
     socket.on("update-relations", () => {
       userService
@@ -98,6 +105,11 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         .getUserFriendRequestsSent(loginContext.userLogin)
         .then((requests: IUserPublicInfos[]) => {
           setSentRList(requests);
+        });
+      userService
+        .getUserBlocked(loginContext.userLogin)
+        .then((blocked: IUserPublicInfos[]) => {
+          setBlockedList(blocked);
         });
     });
   }, []);
@@ -120,11 +132,23 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
     }
   };
 
+	const blockButton = () => {
+		if (
+			blockedList.find(
+				(blocked: IUserPublicInfos) => blocked.login42 === userInfos.login42
+			)
+		) {
+			return <ButtonUnblock userInfos={userInfos} />;
+		} else {
+			return <ButtonBlock userInfos={userInfos} />;
+		}
+	};
+
   return (
     <div className={styles.public_profile_buttons}>
       <ButtonUserStatus userInfos={userInfos} />
       {friendButton()}
-      <ButtonBlock userInfos={userInfos} />
+      {blockButton()}
     </div>
   );
 }

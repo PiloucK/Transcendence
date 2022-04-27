@@ -31,6 +31,12 @@ function SocialPage({ menu }: { menu: string }) {
       });
 
     userService
+      .getUserBlocked(loginContext.userLogin)
+      .then((users: IUserPublicInfos[]) => {
+        setBlocked(users);
+      });
+
+    userService
       .getUserFriendRequestsReceived(loginContext.userLogin)
       .then((notifications: IUserPublicInfos[]) => {
         setNotifications(notifications);
@@ -41,6 +47,12 @@ function SocialPage({ menu }: { menu: string }) {
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
+        });
+
+      userService
+        .getUserBlocked(loginContext.userLogin)
+        .then((users: IUserPublicInfos[]) => {
+          setBlocked(users);
         });
 
       userService
@@ -58,6 +70,12 @@ function SocialPage({ menu }: { menu: string }) {
         });
 
       userService
+        .getUserBlocked(loginContext.userLogin)
+        .then((users: IUserPublicInfos[]) => {
+          setBlocked(users);
+        });
+
+      userService
         .getUserFriendRequestsReceived(loginContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
@@ -65,6 +83,7 @@ function SocialPage({ menu }: { menu: string }) {
     });
   }, []);
 
+	console.log("Blocked", blocked);
   if (menu === "all" || menu === "online" || menu === "offline") {
     return <FriendContent friends={friends} />;
   } else if (menu === "blocked") {

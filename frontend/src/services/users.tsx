@@ -47,9 +47,9 @@ const deleteOne = (login: string) => {
     });
 };
 
-const blockUser = (login: string, userLogin42: string) => {
+const blockUser = (login: string, friendLogin42: string) => {
   const request = axios.patch(`${baseUrl}/${login}/blockUser`, {
-    userLogin42,
+    friendLogin42,
   });
   return request
     .then((response) => response.data)
@@ -58,9 +58,9 @@ const blockUser = (login: string, userLogin42: string) => {
     });
 };
 
-const unblockUser = (login: string, userLogin42: string) => {
+const unblockUser = (login: string, friendLogin42: string) => {
   const request = axios.patch(`${baseUrl}/${login}/unblockUser`, {
-    userLogin42,
+    friendLogin42,
   });
   return request
     .then((response) => response.data)
@@ -152,6 +152,16 @@ const getUserFriendRequestsSent = (login: string) => {
     });
 };
 
+
+const getUserBlocked = (login: string) => {
+  const request = axios.get(`${baseUrl}/${login}/blockedUsers`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const updateUserElo = (login: string, elo: number) => {
   const request = axios.patch(`${baseUrl}/${login}/elo`, { elo });
   return request
@@ -204,6 +214,7 @@ export default {
   getUserFriends,
 	getUserFriendRequestsReceived,
 	getUserFriendRequestsSent,
+	getUserBlocked,
   updateUserElo,
   updateUserUsername,
   updateUserGamesWon,
