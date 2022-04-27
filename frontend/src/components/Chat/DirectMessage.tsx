@@ -6,11 +6,23 @@ import { DirectMessageMenu } from "./Menus";
 import { useLoginContext } from "../../context/LoginContext";
 import { IUserPublicInfos } from "../interfaces/users";
 import userService from "../../services/users";
-import { FriendContent } from "../Social/pagesContent";
+import { CardUserNoInteractions } from "../Cards/CardUserNoInteractions";
 
 import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
+function FriendList({ friends }: { friends: IUserPublicInfos[] }) {
+	if (typeof friends === "undefined" || friends.length === 0) {
+		return <EmptyFriendList />;
+	}
+
+  return (
+    <div className={styles.social_content}>
+      {friends.map((friend) => CardUserNoInteractions({ userInfos: friend }))}
+    </div>
+  );
+}
 
 function NewDirectMessage() {
   const loginContext = useLoginContext();
@@ -42,7 +54,7 @@ function NewDirectMessage() {
   return (
     <div className={styles.chat_direct_message_content}>
       Select a friend to start a conversation
-      <FriendContent friends={friends} />
+      <FriendList friends={friends} />
     </div>
   );
 }

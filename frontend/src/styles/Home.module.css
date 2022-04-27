@@ -461,6 +461,86 @@ and should display them in columns of three cards max */
   flex-flow: column wrap;
 }
 
+.user_card {
+  position: relative;
+  width: 309px;
+  height: 141px;
+
+  min-width: 309px;
+  min-height: 141px;
+
+  margin: 0.8rem;
+  text-align: left;
+
+  float: left;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+
+  background: #163f5b;
+  color: #ffffff;
+}
+
+.user_card_username {
+  position: absolute;
+  left: 50.16%;
+  right: 6.8%;
+  top: 20.57%;
+  bottom: 43.26%;
+
+  /* Header 2 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.user_card_avatar {
+	
+	position: absolute;
+  left: 10.03%;
+  right: 57.61%;
+  top: 14.18%;
+  bottom: 14.89%;
+  width: 100px;
+  height: 100px;
+}
+
+.user_card_elo {
+  position: absolute;
+  left: 50.16%;
+  right: 25.24%;
+  top: 56.74%;
+  bottom: 31.21%;
+
+  /* Body */
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+}
+
 .social_friend_card {
   position: relative;
   width: 338px;
@@ -1557,7 +1637,7 @@ and should display them in columns of three cards max */
 }
 
 .public_profile_buttons .social_friend_card_unblock_button {
-	display: flex;
+  display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -1567,7 +1647,7 @@ and should display them in columns of three cards max */
   height: 22px;
 
   left: 50%;
-	transform: translate(-50%, 0%);
+  transform: translate(-50%, 0%);
   top: 55%;
 
   /* Soft red */
@@ -1595,9 +1675,7 @@ and should display them in columns of three cards max */
   color: #ffffff;
 }
 
-
-.public_profile_buttons 
-.social_friend_card_unblock_button:hover {
+.public_profile_buttons .social_friend_card_unblock_button:hover {
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     #fc605c;
   cursor: pointer;
