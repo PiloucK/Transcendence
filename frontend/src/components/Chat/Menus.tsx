@@ -7,25 +7,39 @@ import directMessage from "../../public/direct_message.png";
 import addChannel from "../../public/add_channel.png";
 
 import { useLoginContext } from "../../context/LoginContext";
-import { IUserPublicInfos } from "../../interfaces/users";
+import { IUserPublicInfos, DM } from "../../interfaces/users";
 import userService from "../../services/users";
 
 import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-function DMList({ openedDMs, getStyle, setMenu }: { openedDMs: IUserPublicInfos[], getStyle: (key: string) => any, setMenu: (menu: string) => void }) {
-  return (
-    <div
-      className={getStyle("direct_message")}
-      onClick={() => {
-        setMenu("direct_message");
-      }}
-    >
-      {/* Display the user avatar here */}
-      Direct message
-    </div>
-  );
+function DMList({
+  openedDMs,
+  getStyle,
+  setMenu,
+}: {
+  openedDMs: DM[];
+  getStyle: (key: string) => any;
+  setMenu: (menu: string) => void;
+}) {
+	const loginContext = useLoginContext();
+
+  return openedDMs?.map((dm) => {
+    const key = dm.userOne.login42 + '|' + dm.userTwo.login42;
+
+    return (
+      <div
+        key={key}
+        className={getStyle(`${key}`)}
+        onClick={() => {
+          setMenu(`${key}`);
+        }}
+      >
+        {dm.userOne.login42 === loginContext.login42 ? dm.userTwo.username : dm.userOne.username}
+      </div>
+    );
+  });
 }
 
 export function DirectMessageMenu(props: {
@@ -33,19 +47,19 @@ export function DirectMessageMenu(props: {
   setMenu: (menu: string) => void;
 }) {
   const loginContext = useLoginContext();
-  const [openedDMs, setOpenedDMs] = React.useState<IUserPublicInfos[]>([]);
+  const [openedDMs, setOpenedDMs] = React.useState<DM[]>([]);
 
   React.useEffect(() => {
     userService
       .getAllDMOpened(loginContext.userLogin)
-      .then((currentDMs: IUserPublicInfos[]) => {
+      .then((currentDMs: DM[]) => {
         setOpenedDMs(currentDMs);
       });
 
     socket.on("update-direct-messages", () => {
       userService
         .getAllDMOpened(loginContext.userLogin)
-        .then((currentDMs: IUserPublicInfos[]) => {
+        .then((currentDMs: DM[]) => {
           setOpenedDMs(currentDMs);
         });
     });
@@ -73,7 +87,11 @@ export function DirectMessageMenu(props: {
         <Image src={newMessageLogo} alt="new message" width={18} height={18} />
         New message
       </div>
-      <DMList openedDMs={openedDMs} getStyle={getStyle} setMenu={props.setMenu} />
+      <DMList
+        openedDMs={openedDMs}
+        getStyle={getStyle}
+        setMenu={props.setMenu}
+      />
     </div>
   );
 }
