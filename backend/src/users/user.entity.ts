@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -10,18 +10,24 @@ export class User {
 
   @Column()
   username!: string;
+  // https://stackoverflow.com/questions/25300821/difference-between-varchar-and-text-in-mysql
+  // https://typeorm.io/#column-data-types
 
-  @Column()
+  @Column({ default: 0 })
   elo!: number;
 
-  @Column()
+  @Column({ default: 0 })
   gamesWon!: number;
 
-  @Column()
+  @Column({ default: 0 })
   gamesLost!: number;
 
-  @Column()
+  @Column({ default: false })
   twoFa!: boolean;
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  friends!: User[];
 }
 
 // export interface IUserForLeaderboard {

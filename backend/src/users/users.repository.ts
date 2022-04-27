@@ -6,18 +6,18 @@ import { User } from './user.entity';
 export class UsersRepository extends Repository<User> {
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const { login42 } = createUserDto;
-    const user = this.create({
-      login42,
-      token42: '',
-      username: login42,
-      elo: 0,
-      gamesWon: 0,
-      gamesLost: 0,
-      twoFa: false,
-    });
 
-    // if (login42 does not exist)
-    await this.save(user);
+    let user = await this.findOne(login42);
+    if (!user) {
+      user = this.create({
+        login42,
+        token42: '', // to fill
+        username: login42,
+      });
+
+      await this.save(user);
+    }
+
     return user;
   }
 }

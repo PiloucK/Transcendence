@@ -9,6 +9,7 @@ import {
 } from './dto/update-user.dto';
 import {
   AcceptFriendRequestDto,
+  FriendDto,
   SendFriendRequestDto,
 } from './dto/user-friends.dto';
 import { User } from './user.entity';
@@ -33,9 +34,10 @@ export class UsersService {
   //   return ret;
   // }
 
-  // getAllUsers(): IUserPublicInfos[] {
-  //   return this.users.map((user) => this.createUserPublicInfos(user));
-  // }
+  async getAllUsers(): Promise<User[]> {
+    const users = await this.usersRepository.find({ relations: ['friends'] });
+    return users;
+  }
 
   // getUsersForLeaderboard(): IUserForLeaderboard[] {
   //   return this.users
@@ -55,28 +57,19 @@ export class UsersService {
   // }
 
   async getUserByLogin(login42: string): Promise<User> {
-    const user = await this.usersRepository.findOne(login42);
+    const user = await this.usersRepository.findOne(login42, {
+      relations: ['friends'],
+    });
     if (!user) {
       throw new NotFoundException(`User with login42 "${login42}" not found`);
     }
     return user;
   }
 
-  // getUserFriends(login42: string): IUserPublicInfos[] {
-  //   const user: IUser | undefined = this.searchUser(login42);
-  //   if (!user) {
-  //     throw new NotFoundException(`User with login42 "${login42}" not found`);
-  //   }
-  //   return user.friends.map((curLogin42) => {
-  //     const friend = this.searchUser(curLogin42);
-  //     if (!friend) {
-  //       throw new NotFoundException(
-  //         `User (friend) with login42 "${curLogin42}" not found`,
-  //       );
-  //     }
-  //     return this.createUserPublicInfos(friend);
-  //   });
-  // }
+  async getUserFriends(login42: string): Promise<User[]> {
+    const user = await this.getUserByLogin(login42);
+    return user.friends;
+  }
 
   createUser(createUserDto: CreateUserDto): Promise<User> {
     return this.usersRepository.createUser(createUserDto);
@@ -87,6 +80,18 @@ export class UsersService {
 
     if (result.affected === 0) {
       throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+  }
+
+  async addFriend(login42: string, friendDto: FriendDto): Promise<void> {
+    const { friendLogin42 } = friendDto;
+    const user = await this.getUserByLogin(login42);
+    const friend = await this.getUserByLogin(friendLogin42);
+    if (user.login42 !== friend.login42) {
+      user.friends = [...user.friends, friend];
+      await this.usersRepository.save(user);
+      friend.friends = [...friend.friends, user];
+      await this.usersRepository.save(friend);
     }
   }
 
@@ -149,52 +154,42 @@ export class UsersService {
     updateUserEloDto: UpdateUserEloDto,
   ): Promise<User> {
     const { elo } = updateUserEloDto;
-
     const user = await this.getUserByLogin(login42);
-
     user.elo = elo;
-
     await this.usersRepository.save(user);
-
     return user;
   }
 
-  // updateUserUsername(
-  //   login42: string,
-  //   updateUserUsernameDto: UpdateUserUsernameDto,
-  // ): IUserPublicInfos {
-  //   const { username } = updateUserUsernameDto;
-  //   const user: IUser | undefined = this.searchUser(login42);
-  //   if (!user) {
-  //     throw new NotFoundException(`User with login42 "${login42}" not found`);
-  //   }
-  //   user.username = username;
-  //   return this.createUserPublicInfos(user);
-  // }
+  async updateUserUsername(
+    login42: string,
+    updateUserUsernameDto: UpdateUserUsernameDto,
+  ): Promise<User> {
+    const { username } = updateUserUsernameDto;
+    const user = await this.getUserByLogin(login42);
+    user.username = username;
+    await this.usersRepository.save(user);
+    return user;
+  }
 
-  // updateUserGamesWon(
-  //   login42: string,
-  //   updateUserGamesWonDto: UpdateUserGamesWonDto,
-  // ): IUserPublicInfos {
-  //   const { gamesWon } = updateUserGamesWonDto;
-  //   const user: IUser | undefined = this.searchUser(login42);
-  //   if (!user) {
-  //     throw new NotFoundException(`User with login42 "${login42}" not found`);
-  //   }
-  //   user.gamesWon = gamesWon;
-  //   return this.createUserPublicInfos(user);
-  // }
+  async updateUserGamesWon(
+    login42: string,
+    updateUserGamesWonDto: UpdateUserGamesWonDto,
+  ): Promise<User> {
+    const { gamesWon } = updateUserGamesWonDto;
+    const user = await this.getUserByLogin(login42);
+    user.gamesWon = gamesWon;
+    await this.usersRepository.save(user);
+    return user;
+  }
 
-  // updateUserGamesLost(
-  //   login42: string,
-  //   updateUserGamesLostDto: UpdateUserGamesLostDto,
-  // ): IUserPublicInfos {
-  //   const { gamesLost } = updateUserGamesLostDto;
-  //   const user: IUser | undefined = this.searchUser(login42);
-  //   if (!user) {
-  //     throw new NotFoundException(`User with login42 "${login42}" not found`);
-  //   }
-  //   user.gamesLost = gamesLost;
-  //   return this.createUserPublicInfos(user);
-  // }
+  async updateUserGamesLost(
+    login42: string,
+    updateUserGamesLostDto: UpdateUserGamesLostDto,
+  ): Promise<User> {
+    const { gamesLost } = updateUserGamesLostDto;
+    const user = await this.getUserByLogin(login42);
+    user.gamesLost = gamesLost;
+    await this.usersRepository.save(user);
+    return user;
+  }
 }
