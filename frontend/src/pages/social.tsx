@@ -4,7 +4,7 @@ import { useLoginContext } from "../context/LoginContext";
 import { DockGuest } from "../components/Dock/DockGuest";
 import React, { useState } from "react";
 
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import BellIcon from "@mui/icons-material/Notifications";
 
 import {
   EmptyFriendList,
@@ -18,10 +18,20 @@ import userService from "../services/users";
 import { CardUserSocial } from "../components/Cards/CardUserSocial";
 import { CardFriendRequest } from "../components/Cards/CardFriendRequest";
 import { CardBlockedUser } from "../components/Cards/CardBlockedUser";
+import { NotificationChip } from "../components/Social/NotificationChip";
 
 import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
+function NotificationsButton() {
+	return (
+		<>
+			<NotificationChip />
+			<BellIcon />
+		</>
+	)
+}
 
 function SocialMenuButtons({ setMenu }: { setMenu: (menu: string) => void }) {
   const [buttonClass, setButtonClass] = useState([
@@ -65,7 +75,7 @@ function SocialMenuButtons({ setMenu }: { setMenu: (menu: string) => void }) {
         Blocked users
       </div>
       <div className={buttonClass[4]} onClick={() => setCurrentMenu(4)}>
-        <NotificationsIcon />
+				<NotificationsButton />
       </div>
     </>
   );

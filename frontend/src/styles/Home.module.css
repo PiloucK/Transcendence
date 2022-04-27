@@ -326,6 +326,33 @@
 * Style about the social page and the inner components
 */
 
+.notification_chip {
+  position: absolute;
+  left: 96.14%;
+  bottom: 72.66%;
+
+  width: 17px;
+  height: 17px;
+
+  border-radius: 50%;
+
+  background: #fc605c;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 17px;
+  /* display: flex; */
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+}
+
 .social_title {
   position: absolute;
   width: 120px;
@@ -1427,7 +1454,7 @@ and should display them in columns of three cards max */
 
 .public_profile_buttons .social_friend_card_button {
   position: absolute;
-	width: 119px;
+  width: 119px;
   height: 42px;
 
   left: 50%;
@@ -1439,7 +1466,7 @@ and should display them in columns of three cards max */
 
 .public_profile_buttons .offline_button {
   position: absolute;
-	width: 119px;
+  width: 119px;
   height: 42px;
 
   left: 50%;
@@ -1457,7 +1484,7 @@ and should display them in columns of three cards max */
   align-items: center;
 
   position: absolute;
-	width: 119px;
+  width: 119px;
   height: 42px;
 
   left: 50%;
@@ -1487,8 +1514,8 @@ and should display them in columns of three cards max */
   text-align: center;
   font-feature-settings: "tnum" on, "lnum" on;
 
-	/* Force to be on the same line */
-	white-space: nowrap;
+  /* Force to be on the same line */
+  white-space: nowrap;
 
   /* White */
 
