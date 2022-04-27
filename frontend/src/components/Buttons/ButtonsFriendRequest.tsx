@@ -18,9 +18,9 @@ export function ButtonsFriendRequest({
 		}
 	}
 
-	const declineFriend = () => {
+	const declineRequest = () => {
 		if (loginContext.userLogin !== null && loginContext.userLogin !== userInfos.login42) {
-			// userServices.declineFriendRequest(loginContext.userLogin, userInfos.login42);
+			userServices.declineFriendRequest(loginContext.userLogin, userInfos.login42);
 		}
 	}
 
@@ -29,7 +29,7 @@ export function ButtonsFriendRequest({
       <div className={styles.confirm} onClick={acceptFriend}>
         Confirm
       </div>
-      <div className={styles.decline} onClick={() => {}}>
+      <div className={styles.decline} onClick={declineRequest}>
         Decline
       </div>
     </div>
