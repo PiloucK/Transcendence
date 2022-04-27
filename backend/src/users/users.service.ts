@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import {
+	FriendRequestsReceived,
   FriendRequestsSent,
   Friends,
   IUser,
@@ -156,6 +157,33 @@ export class UsersService {
     user.friendRequestsSent.push(friendLogin42);
     friend.friendRequestsReceived.push(login42);
 
+    return user.friendRequestsSent;
+  }
+
+	cancelFriendRequest(
+    login42: string,
+    sendFriendRequestDto: SendFriendRequestDto,
+  ): FriendRequestsReceived {
+    const { friendLogin42 } = sendFriendRequestDto;
+
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+
+    const friend: IUser | undefined = this.searchUser(friendLogin42);
+    if (!friend) {
+      throw new NotFoundException(
+        `User (friend) with login42 "${friendLogin42}" not found`,
+      );
+    }
+
+    user.friendRequestsSent = user.friendRequestsSent.filter(
+      (curLogin42) => curLogin42 !== friendLogin42,
+    );
+    friend.friendRequestsReceived = friend.friendRequestsReceived.filter(
+      (curLogin42) => curLogin42 !== login42,
+    );
     return user.friendRequestsSent;
   }
 

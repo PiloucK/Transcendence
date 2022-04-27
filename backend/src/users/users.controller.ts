@@ -76,6 +76,14 @@ export class UsersController {
     return this.usersService.sendFriendRequest(login42, sendFriendRequestDto);
   }
 
+  @Patch('/:login42/cancelFriendRequest')
+ 	cancelFriendRequest(
+    @Param('login42') login42: string,
+    @Body() sendFriendRequestDto: SendFriendRequestDto,
+  ): FriendRequestsSent {
+    return this.usersService.cancelFriendRequest(login42, sendFriendRequestDto);
+  }
+
   @Patch('/:login42/acceptFriendRequest')
   acceptFriendRequest(
     @Param('login42') login42: string,
