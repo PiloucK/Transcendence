@@ -27,6 +27,7 @@ function DMList({
 
   return openedDMs?.map((dm) => {
     const key = dm.userOne.login42 + '|' + dm.userTwo.login42;
+		const username = dm.userOne.login42 === loginContext.userLogin ? dm.userTwo.username : dm.userOne.username;
 
     return (
       <div
@@ -36,7 +37,7 @@ function DMList({
           setMenu(`${key}`);
         }}
       >
-        {dm.userOne.login42 === loginContext.login42 ? dm.userTwo.username : dm.userOne.username}
+        {username}
       </div>
     );
   });
