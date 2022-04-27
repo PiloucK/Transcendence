@@ -10,8 +10,12 @@ export const registerUserHandlers = (io: Server, socket: Socket) => {
   const usernameUpdate = () => {
     io.emit("update-leaderboard");
   };
+	const relationsUpdate = () => {
+		io.emit("update-relations");
+	};
 
   socket.on("user:new", newUser);
   socket.on("user:update-elo", eloUpdate);
   socket.on("user:update-username", usernameUpdate);
+	socket.on("user:update-relations", relationsUpdate);
 };

@@ -5,6 +5,10 @@ import { IUserPublicInfos } from "../../interfaces/users";
 import { useLoginContext } from "../../context/LoginContext";
 import userServices from "../../services/users";
 
+import io from "socket.io-client";
+
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
 export function ButtonsFriendRequest({
   userInfos,
 }: {
@@ -17,10 +21,11 @@ export function ButtonsFriendRequest({
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userServices.acceptFriendRequest(
-        loginContext.userLogin,
-        userInfos.login42
-      );
+      userServices
+        .acceptFriendRequest(loginContext.userLogin, userInfos.login42)
+        .then(() => {
+          socket.emit("user:update-relations");
+        });
     }
   };
 
@@ -29,10 +34,11 @@ export function ButtonsFriendRequest({
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userServices.declineFriendRequest(
-        loginContext.userLogin,
-        userInfos.login42
-      );
+      userServices
+        .declineFriendRequest(loginContext.userLogin, userInfos.login42)
+        .then(() => {
+          socket.emit("user:update-relations");
+        });
     }
   };
 

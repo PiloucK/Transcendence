@@ -7,6 +7,10 @@ import userServices from "../../services/users";
 
 import { useLoginContext } from "../../context/LoginContext";
 
+import io from "socket.io-client";
+
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
 export function ButtonCancelRequest({
   userInfos,
 }: {
@@ -19,10 +23,11 @@ export function ButtonCancelRequest({
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userServices.cancelFriendRequest(
-        loginContext.userLogin,
-        userInfos.login42
-      );
+      userServices
+        .cancelFriendRequest(loginContext.userLogin, userInfos.login42)
+        .then(() => {
+          socket.emit("user:update-relations");
+        });
     }
   };
 
