@@ -14,11 +14,21 @@ export function ButtonCancelRequest({
 }) {
   const loginContext = useLoginContext();
 
-  const cancelRequest = () => {};
+  const cancelRequest = () => {
+    if (
+      loginContext.userLogin !== null &&
+      loginContext.userLogin !== userInfos.login42
+    ) {
+      userServices.cancelFriendRequest(
+        loginContext.userLogin,
+        userInfos.login42
+      );
+    }
+  };
 
-	return (
-		<div className={styles.add_friend_button} onClick={cancelRequest}>
-			Cancel request
-		</div>
-	);
+  return (
+    <div className={styles.add_friend_button} onClick={cancelRequest}>
+      Cancel request
+    </div>
+  );
 }

@@ -14,7 +14,14 @@ export function ButtonRemoveFriend({
 }) {
   const loginContext = useLoginContext();
 
-  const removeFromFriend = () => {};
+  const removeFromFriend = () => {
+    if (
+      loginContext.userLogin !== null &&
+      loginContext.userLogin !== userInfos.login42
+    ) {
+      userServices.removeFriend(loginContext.userLogin, userInfos.login42);
+    }
+  };
 
   return (
     <div className={styles.add_friend_button} onClick={removeFromFriend}>

@@ -58,8 +58,41 @@ const sendFriendRequest = (login: string, friendLogin42: string) => {
     });
 };
 
+const cancelFriendRequest = (login: string, friendLogin42: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/cancelFriendRequest`, {
+    friendLogin42,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const acceptFriendRequest = (login: string, friendLogin42: string) => {
   const request = axios.patch(`${baseUrl}/${login}/acceptFriendRequest`, {
+    friendLogin42,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const declineFriendRequest = (login: string, friendLogin42: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/declineFriendRequest`, {
+    friendLogin42,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const removeFriend = (login: string, friendLogin42: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/removeFriend`, {
     friendLogin42,
   });
   return request
@@ -139,7 +172,10 @@ export default {
   addOne,
   deleteOne,
   sendFriendRequest,
+	cancelFriendRequest,
   acceptFriendRequest,
+	declineFriendRequest,
+	removeFriend,
   getUserFriends,
 	getUserFriendRequestsReceived,
 	getUserFriendRequestsSent,
