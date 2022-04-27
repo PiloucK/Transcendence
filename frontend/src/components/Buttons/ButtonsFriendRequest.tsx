@@ -10,19 +10,31 @@ export function ButtonsFriendRequest({
 }: {
   userInfos: IUserPublicInfos;
 }) {
-	const loginContext = useLoginContext();
+  const loginContext = useLoginContext();
 
-	const acceptFriend = () => {
-		if (loginContext.userLogin !== null && loginContext.userLogin !== userInfos.login42) {
-			userServices.acceptFriendRequest(loginContext.userLogin, userInfos.login42);
-		}
-	}
+  const acceptFriend = () => {
+    if (
+      loginContext.userLogin !== null &&
+      loginContext.userLogin !== userInfos.login42
+    ) {
+      userServices.acceptFriendRequest(
+        loginContext.userLogin,
+        userInfos.login42
+      );
+    }
+  };
 
-	const declineRequest = () => {
-		if (loginContext.userLogin !== null && loginContext.userLogin !== userInfos.login42) {
-			userServices.declineFriendRequest(loginContext.userLogin, userInfos.login42);
-		}
-	}
+  const declineRequest = () => {
+    if (
+      loginContext.userLogin !== null &&
+      loginContext.userLogin !== userInfos.login42
+    ) {
+      userServices.declineFriendRequest(
+        loginContext.userLogin,
+        userInfos.login42
+      );
+    }
+  };
 
   return (
     <div className={styles.social_friend_request_card_button}>
