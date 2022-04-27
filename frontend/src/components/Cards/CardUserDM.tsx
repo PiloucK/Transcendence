@@ -6,13 +6,13 @@ import { IUserPublicInfos } from "../../interfaces/users";
 import Avatar from "@mui/material/Avatar";
 import profileIcon from "../../public/profile_icon.png";
 
-export function CardUserNoInteractions({
+export function CardUserDM({
   userInfos,
 }: {
   userInfos: IUserPublicInfos;
 }) {
   return (
-    <div className={styles.user_card} key={userInfos.login42}>
+    <div className={styles.user_card_dm} key={userInfos.login42}>
       <div className={styles.user_card_avatar}>
         <Avatar src={profileIcon} sx={{ width: "100px", height: "100px" }} />
       </div>

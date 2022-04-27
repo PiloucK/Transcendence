@@ -6,7 +6,7 @@ import { DirectMessageMenu } from "./Menus";
 import { useLoginContext } from "../../context/LoginContext";
 import { IUserPublicInfos } from "../interfaces/users";
 import userService from "../../services/users";
-import { CardUserNoInteractions } from "../Cards/CardUserNoInteractions";
+import { CardUserDM } from "../Cards/CardUserDM";
 
 import io from "socket.io-client";
 
@@ -19,7 +19,7 @@ function FriendList({ friends }: { friends: IUserPublicInfos[] }) {
 
   return (
     <div className={styles.social_content}>
-      {friends.map((friend) => CardUserNoInteractions({ userInfos: friend }))}
+      {friends.map((friend) => CardUserDM({ userInfos: friend }))}
     </div>
   );
 }

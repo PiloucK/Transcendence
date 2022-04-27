@@ -461,7 +461,7 @@ and should display them in columns of three cards max */
   flex-flow: column wrap;
 }
 
-.user_card {
+.user_card, .user_card_dm, .user_card_dm:hover {
   position: relative;
   width: 309px;
   height: 141px;
@@ -482,6 +482,10 @@ and should display them in columns of three cards max */
 
   background: #163f5b;
   color: #ffffff;
+}
+
+.user_card_dm:hover {
+	cursor: pointer;
 }
 
 .user_card_username {
