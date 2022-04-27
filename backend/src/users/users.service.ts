@@ -189,6 +189,34 @@ export class UsersService {
     return user.friends;
   }
 
+  declineFriendRequest(
+    login42: string,
+    acceptFriendRequestDto: AcceptFriendRequestDto,
+  ): Friends {
+    const { friendLogin42 } = acceptFriendRequestDto;
+
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+
+    const friend: IUser | undefined = this.searchUser(friendLogin42);
+    if (!friend) {
+      throw new NotFoundException(
+        `User (friend) with login42 "${friendLogin42}" not found`,
+      );
+    }
+
+    user.friendRequestsReceived = user.friendRequestsReceived.filter(
+      (curLogin42) => curLogin42 !== friendLogin42,
+    );
+    friend.friendRequestsSent = friend.friendRequestsSent.filter(
+      (curLogin42) => curLogin42 !== login42,
+    );
+
+    return user.friends;
+  }
+
   updateUserElo(
     login42: string,
     updateUserEloDto: UpdateUserEloDto,
