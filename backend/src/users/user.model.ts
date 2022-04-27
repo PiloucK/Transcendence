@@ -25,3 +25,5 @@ export type Friends = Array<string>;
 export type FriendRequestsSent = Array<string>;
 export type FriendRequestsReceived = Array<string>;
 export type BlockedUsers = Array<string>;
+export type IMessage = {author: string, content: string};
+export type DM = {userOne: IUser, userTwo: IUser, messages: Array<IMessage>};

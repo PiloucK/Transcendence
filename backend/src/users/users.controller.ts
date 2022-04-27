@@ -11,6 +11,8 @@ import { UsersService } from './users.service';
 import {
   FriendRequestsSent,
   Friends,
+	IMessage,
+	DM,
   IUser,
   IUserForLeaderboard,
   IUserPublicInfos,
@@ -62,6 +64,29 @@ export class UsersController {
   getUserFriendRequestsSent(@Param('login42') login42: string): IUserPublicInfos[] {
     return this.usersService.getUserFriendRequestsSent(login42);
   }
+
+	@Patch('/:login42/createDM')
+	createDM(
+		@Param('login42') login42: string,
+		@Body() sendFriendRequestDto: SendFriendRequestDto,
+	): DM {
+		return this.usersService.createDM(login42, sendFriendRequestDto);
+	}
+
+	@Get('/:login42/getOneDM')
+	getOneDM(
+		@Param('login42') login42: string,
+		@Body() sendFriendRequestDto: SendFriendRequestDto,
+	): DM {
+		return this.usersService.getOneDM(login42, sendFriendRequestDto);
+	}
+
+	@Get('/:login42/getAllDMOpened')
+	getAllDMOpened(
+		@Param('login42') login42: string,
+	): DM[] {
+		return this.usersService.getAllDMOpened(login42);
+	}
 
   @Get('/:login42/blockedUsers')
   blockedUsers(@Param('login42') login42: string): IUserPublicInfos[] {

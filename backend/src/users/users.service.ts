@@ -4,6 +4,8 @@ import {
 	FriendRequestsReceived,
   FriendRequestsSent,
   Friends,
+	IMessage,
+	DM,
   IUser,
   IUserForLeaderboard,
   IUserPublicInfos,
@@ -24,6 +26,7 @@ import {
 export class UsersService {
   // to split when using the db: UsersService and UsersFriendsService
   private users: IUser[] = [];
+	private directConversations: DM[] = [];
 
   private createUserPublicInfos(user: IUser): IUserPublicInfos {
     const ret: IUserPublicInfos = {
@@ -111,6 +114,102 @@ export class UsersService {
       }
       return this.createUserPublicInfos(friend);
     });
+  }
+
+	private areFriends(user: IUser, friend: IUser): boolean {
+		return user.friends.includes(friend.login42);
+	}
+
+	private getUsersDM(user: IUser, friend: IUser) : DM | undefined {
+		const dm: DM | undefined = this.directConversations.find(
+			(curDM) =>
+				(curDM.userOne.login42 === user.login42 && curDM.userTwo.login42 === friend.login42) ||
+				(curDM.userOne.login42 === friend.login42 && curDM.userTwo.login42 === user.login42)
+			);
+		return dm;
+	}
+
+  createDM(
+    login42: string,
+    sendFriendRequestDto: SendFriendRequestDto,
+  ): DM {
+    const { friendLogin42 } = sendFriendRequestDto;
+
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+
+    const friend: IUser | undefined = this.searchUser(friendLogin42);
+    if (!friend) {
+      throw new NotFoundException(
+        `User (friend) with login42 "${friendLogin42}" not found`,
+      );
+    }
+
+		// If a DM is found with the two users, return it
+		const dm: DM | undefined = this.getUsersDM(user, friend);
+		if (dm) {
+			return dm;
+		}
+
+		if (this.areFriends(user, friend)) {
+			this.directConversations.push({
+				userOne: user,
+				userTwo: friend,
+				messages: [],
+			});
+		} else {
+			throw new NotFoundException(
+				`User (friend) with login42 "${friendLogin42}" is not your friend`,
+			);
+		}
+
+		return this.directConversations[this.directConversations.length - 1];
+  }
+
+  getOneDM(
+    login42: string,
+    sendFriendRequestDto: SendFriendRequestDto,
+  ): DM {
+    const { friendLogin42 } = sendFriendRequestDto;
+
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+
+    const friend: IUser | undefined = this.searchUser(friendLogin42);
+    if (!friend) {
+      throw new NotFoundException(
+        `User (friend) with login42 "${friendLogin42}" not found`,
+      );
+    }
+
+		// If a DM is found with the two users, return it
+		const dm: DM | undefined = this.getUsersDM(user, friend);
+		if (dm) {
+			return dm;
+		} else {
+			throw new NotFoundException(
+				`Your are not in a direct conversation with user with login42 "${friendLogin42}"`,
+			);
+		}
+  }
+
+	getAllDMOpened(
+    login42: string,
+  ): DM[] {
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+
+		return this.directConversations.filter((dm) => {
+			return (
+				dm.userOne.login42 === user.login42 || dm.userTwo.login42 === user.login42
+			);
+		});
   }
 
   createUser(createUserDto: CreateUserDto): IUser {

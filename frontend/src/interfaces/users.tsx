@@ -21,3 +21,6 @@ export interface IUser extends IUserPublicInfos {
 export interface IUserCredentials {
   login42: string;
 }
+
+export type IMessage = {author: string, content: string};
+export type DM = {userOne: IUser, userTwo: IUser, messages: Array<IMessage>};
