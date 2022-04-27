@@ -47,6 +47,29 @@ const deleteOne = (login: string) => {
     });
 };
 
+const blockUser = (login: string, userLogin42: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/blockUser`, {
+    userLogin42,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const unblockUser = (login: string, userLogin42: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/unblockUser`, {
+    userLogin42,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+
 const sendFriendRequest = (login: string, friendLogin42: string) => {
   const request = axios.patch(`${baseUrl}/${login}/sendFriendRequest`, {
     friendLogin42,
@@ -171,6 +194,8 @@ export default {
   getOne,
   addOne,
   deleteOne,
+	blockUser,
+	unblockUser,
   sendFriendRequest,
 	cancelFriendRequest,
   acceptFriendRequest,

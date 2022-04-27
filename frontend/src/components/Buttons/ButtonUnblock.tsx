@@ -3,13 +3,35 @@ import styles from "../../styles/Home.module.css";
 
 import { IUserPublicInfos } from "../../interfaces/users";
 
-export function ButtonUnblock({
-  userInfos,
-}: {
-  userInfos: IUserPublicInfos;
-}) {
+import userServices from "../../services/users";
+
+import { useLoginContext } from "../../context/LoginContext";
+
+import io from "socket.io-client";
+
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
+export function ButtonUnblock({ userInfos }: { userInfos: IUserPublicInfos }) {
+  const loginContext = useLoginContext();
+
+  const unblockAUser = () => {
+    if (
+      loginContext.userLogin !== null &&
+      loginContext.userLogin !== userInfos.login42
+    ) {
+      userServices
+        .unblockUser(loginContext.userLogin, userInfos.login42)
+        .then(() => {
+          socket.emit("user:update-relations");
+        });
+    }
+  };
+
   return (
-    <div className={styles.social_friend_card_unblock_button} onClick={() => {}}>
+    <div
+      className={styles.social_friend_card_unblock_button}
+      onClick={unblockAUser}
+    >
       Unblock
     </div>
   );
