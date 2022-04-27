@@ -63,9 +63,30 @@ export class UsersController {
     return this.usersService.getUserFriendRequestsSent(login42);
   }
 
+  @Get('/:login42/blockedUsers')
+  blockedUsers(@Param('login42') login42: string): IUserPublicInfos[] {
+    return this.usersService.blockedUsers(login42);
+  }
+
   @Post()
   createUser(@Body() createUserDto: CreateUserDto): IUser {
     return this.usersService.createUser(createUserDto);
+  }
+
+  @Patch('/:login42/blockUser')
+  blockUser(
+    @Param('login42') login42: string,
+    @Body() sendFriendRequestDto: SendFriendRequestDto,
+  ): FriendRequestsSent {
+    return this.usersService.blockUser(login42, sendFriendRequestDto);
+  }
+
+  @Patch('/:login42/unblockUser')
+  unblockUser(
+    @Param('login42') login42: string,
+    @Body() sendFriendRequestDto: SendFriendRequestDto,
+  ): FriendRequestsSent {
+    return this.usersService.unblockUser(login42, sendFriendRequestDto);
   }
 
   @Patch('/:login42/sendFriendRequest')

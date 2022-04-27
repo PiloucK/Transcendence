@@ -136,6 +136,80 @@ export class UsersService {
     return user;
   }
 
+	blockedUsers(login42: string): IUserPublicInfos[] {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+		return user.blockedUsers.map((curLogin42) => {
+			const user = this.searchUser(curLogin42);
+			if (!user) {
+				throw new NotFoundException(
+					`User with login42 "${curLogin42}" not found`,
+				);
+			}
+			return this.createUserPublicInfos(user);
+		});
+	}
+
+  blockUser(
+    login42: string,
+    sendFriendRequestDto: SendFriendRequestDto,
+  ): FriendRequestsSent {
+    const { friendLogin42 } = sendFriendRequestDto;
+
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+
+    const friend: IUser | undefined = this.searchUser(friendLogin42);
+    if (!friend) {
+      throw new NotFoundException(
+        `User (friend) with login42 "${friendLogin42}" not found`,
+      );
+    }
+
+		if (user.blockedUsers.includes(friendLogin42)) {
+			throw new NotFoundException(
+				`User with login42 "${login42}" already blocked`,
+			);
+		} else {
+			user.blockedUsers.push(friendLogin42);
+		}
+
+    return user.blockedUsers;
+  }
+
+  unblockUser(
+    login42: string,
+    sendFriendRequestDto: SendFriendRequestDto,
+  ): FriendRequestsSent {
+    const { friendLogin42 } = sendFriendRequestDto;
+
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+
+    const friend: IUser | undefined = this.searchUser(friendLogin42);
+    if (!friend) {
+      throw new NotFoundException(
+        `User (friend) with login42 "${friendLogin42}" not found`,
+      );
+    }
+
+		if (user.blockedUsers.includes(friendLogin42)) {
+			user.blockedUsers.splice(user.blockedUsers.indexOf(friendLogin42), 1);
+		} else {
+			throw new NotFoundException(
+				`User with login42 "${login42}" not blocked`,
+			);
+		}
+
+    return user.blockedUsers;
+  }
+
   sendFriendRequest(
     login42: string,
     sendFriendRequestDto: SendFriendRequestDto,

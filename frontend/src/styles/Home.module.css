@@ -1341,25 +1341,6 @@ and should display them in columns of three cards max */
   color: #ffffff;
 }
 
-.profile_user_stats {
-  /* position: flex;
-  left: 50%;
-  right: 50%;
-  top: 46.65%;
-  bottom: 38.81%;
-
-	align-items: center; */
-}
-
-.profile_user_stats_header {
-  /* position: absolute;
-  left: 50%;
-  right: 50%;
-	transform: translate(-50%, 0%);
-  top: 46.65%; */
-  /* bottom: 49.43%; */
-}
-
 .profile_user_stats_header_title {
   position: absolute;
   left: 50%;
@@ -1570,6 +1551,53 @@ and should display them in columns of three cards max */
 }
 
 .block_button:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    #fc605c;
+  cursor: pointer;
+}
+
+.public_profile_buttons .social_friend_card_unblock_button {
+	display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  width: 99px;
+  height: 22px;
+
+  left: 50%;
+	transform: translate(-50%, 0%);
+  top: 55%;
+
+  /* Soft red */
+
+  background: #fc605c;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  /* Header 3 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+
+.public_profile_buttons 
+.social_friend_card_unblock_button:hover {
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
     #fc605c;
   cursor: pointer;
