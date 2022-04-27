@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import styles from "../../styles/Home.module.css";
 
 import { IUserPublicInfos } from "../../interfaces/users";
@@ -54,13 +54,19 @@ export function BlockedContent({ users }: { users: IUserPublicInfos[] }) {
 }
 
 export function NotificationContent({
+  blockedUsers,
   notifications,
 }: {
+  blockedUsers: IUserPublicInfos[];
   notifications: IUserPublicInfos[];
 }) {
-  if (typeof notifications === "undefined" || notifications.length === 0) {
+	const requests = notifications.filter(
+		(notification) => !blockedUsers?.some((blockedUser) => blockedUser.login42 === notification.login42)
+	);
+
+  if (typeof requests === "undefined" || requests.length === 0) {
     return <EmptyNotificationcenter />;
   } else {
-    return <NotificationList requests={notifications} />;
+    return <NotificationList requests={requests} />;
   }
 }
