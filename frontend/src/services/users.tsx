@@ -47,6 +47,37 @@ const deleteOne = (login: string) => {
     });
 };
 
+const createDM = (login: string, friendLogin42: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/createDM`, {
+    friendLogin42,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const getOneDM = (login: string, friendLogin42: string) => {
+  const request = axios.get(`${baseUrl}/${login}/getOneDM`, {
+    friendLogin42,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const getAllDMOpened = (login: string) => {
+  const request = axios.get(`${baseUrl}/${login}/getAllDMOpened`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const blockUser = (login: string, friendLogin42: string) => {
   const request = axios.patch(`${baseUrl}/${login}/blockUser`, {
     friendLogin42,
@@ -68,7 +99,6 @@ const unblockUser = (login: string, friendLogin42: string) => {
       console.error(e);
     });
 };
-
 
 const sendFriendRequest = (login: string, friendLogin42: string) => {
   const request = axios.patch(`${baseUrl}/${login}/sendFriendRequest`, {
@@ -152,7 +182,6 @@ const getUserFriendRequestsSent = (login: string) => {
     });
 };
 
-
 const getUserBlocked = (login: string) => {
   const request = axios.get(`${baseUrl}/${login}/blockedUsers`);
   return request
@@ -204,17 +233,20 @@ export default {
   getOne,
   addOne,
   deleteOne,
-	blockUser,
-	unblockUser,
+	createDM,
+	getOneDM,
+	getAllDMOpened,
+  blockUser,
+  unblockUser,
   sendFriendRequest,
-	cancelFriendRequest,
+  cancelFriendRequest,
   acceptFriendRequest,
-	declineFriendRequest,
-	removeFriend,
+  declineFriendRequest,
+  removeFriend,
   getUserFriends,
-	getUserFriendRequestsReceived,
-	getUserFriendRequestsSent,
-	getUserBlocked,
+  getUserFriendRequestsReceived,
+  getUserFriendRequestsSent,
+  getUserBlocked,
   updateUserElo,
   updateUserUsername,
   updateUserGamesWon,

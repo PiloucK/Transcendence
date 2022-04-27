@@ -5,14 +5,35 @@ import { IUserPublicInfos } from "../../interfaces/users";
 
 import Avatar from "@mui/material/Avatar";
 import profileIcon from "../../public/profile_icon.png";
+import { useLoginContext } from "../../context/LoginContext";
+import userService from "../../services/users";
 
-export function CardUserDM({
-  userInfos,
-}: {
-  userInfos: IUserPublicInfos;
-}) {
+import io from "socket.io-client";
+
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
+export function CardUserDM({ userInfos }: { userInfos: IUserPublicInfos }) {
+  const loginContext = useLoginContext();
+
+  const createDM = () => {
+    if (
+      loginContext.userLogin !== null &&
+      loginContext.userLogin !== userInfos.login42
+    ) {
+      userService
+        .createDM(loginContext.userLogin, userInfos.login42)
+        .then(() => {
+          socket.emit("user:update-direct-messages");
+        });
+    }
+  };
+
   return (
-    <div className={styles.user_card_dm} key={userInfos.login42}>
+    <div
+      className={styles.user_card_dm}
+      onClick={createDM}
+      key={userInfos.login42}
+    >
       <div className={styles.user_card_avatar}>
         <Avatar src={profileIcon} sx={{ width: "100px", height: "100px" }} />
       </div>

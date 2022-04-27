@@ -967,11 +967,10 @@ and should display them in columns of three cards max */
   color: #ffffff;
 }
 
-.chat_direct_message_menu_new {
-  position: absolute;
-  left: 15%;
-  top: 8%;
-
+.chat_direct_message_menu_new, .chat_direct_message_menu_new_selected {
+  position: relative;
+	top: 5%;
+	
   /* transform: translate(-50%, 0%); */
   /* Body */
 
@@ -998,32 +997,8 @@ and should display them in columns of three cards max */
 }
 
 .chat_direct_message_menu_new_selected {
-  position: absolute;
-  left: 15%;
-  top: 8%;
-
-  /* transform: translate(-50%, 0%); */
-  /* Body */
-
-  margin: 0.3rem;
-  /* White */
-  font-family: "Khand";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 28px;
-  /* identical to box height */
-
-  column-gap: 10px;
-  justify-content: space-between;
-
-  display: flex;
-  align-items: center;
-  font-feature-settings: "tnum" on, "lnum" on;
-
-  /* Dark grey */
-
   color: #ffffff;
+	cursor: default;
 }
 
 .chat_direct_message_content {

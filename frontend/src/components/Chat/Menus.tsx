@@ -6,10 +6,51 @@ import newMessageLogo from "../../public/new_message_logo.png";
 import directMessage from "../../public/direct_message.png";
 import addChannel from "../../public/add_channel.png";
 
+import { useLoginContext } from "../../context/LoginContext";
+import { IUserPublicInfos } from "../../interfaces/users";
+import userService from "../../services/users";
+
+import io from "socket.io-client";
+
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
+function DMList({ openedDMs, getStyle, setMenu }: { openedDMs: IUserPublicInfos[], getStyle: (key: string) => any, setMenu: (menu: string) => void }) {
+  return (
+    <div
+      className={getStyle("direct_message")}
+      onClick={() => {
+        setMenu("direct_message");
+      }}
+    >
+      {/* Display the user avatar here */}
+      Direct message
+    </div>
+  );
+}
+
 export function DirectMessageMenu(props: {
   menu: string;
   setMenu: (menu: string) => void;
 }) {
+  const loginContext = useLoginContext();
+  const [openedDMs, setOpenedDMs] = React.useState<IUserPublicInfos[]>([]);
+
+  React.useEffect(() => {
+    userService
+      .getAllDMOpened(loginContext.userLogin)
+      .then((currentDMs: IUserPublicInfos[]) => {
+        setOpenedDMs(currentDMs);
+      });
+
+    socket.on("update-direct-messages", () => {
+      userService
+        .getAllDMOpened(loginContext.userLogin)
+        .then((currentDMs: IUserPublicInfos[]) => {
+          setOpenedDMs(currentDMs);
+        });
+    });
+  }, []);
+
   const getStyle = (key: string) => {
     if (props.menu === key) {
       return styles.chat_direct_message_menu_new_selected;
@@ -17,6 +58,7 @@ export function DirectMessageMenu(props: {
       return styles.chat_direct_message_menu_new;
     }
   };
+
   return (
     <div className={styles.chat_direct_message_menu}>
       <div className={styles.chat_direct_message_menu_title}>
@@ -31,7 +73,7 @@ export function DirectMessageMenu(props: {
         <Image src={newMessageLogo} alt="new message" width={18} height={18} />
         New message
       </div>
-      {/* Put the map of current DM here */}
+      <DMList openedDMs={openedDMs} getStyle={getStyle} setMenu={props.setMenu} />
     </div>
   );
 }
