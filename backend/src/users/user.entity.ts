@@ -28,6 +28,14 @@ export class User {
   @ManyToMany(() => User)
   @JoinTable()
   friends!: User[];
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  friendRequestsSent!: User[];
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  friendRequestsReceived!: User[];
 }
 
 // export interface IUserForLeaderboard {

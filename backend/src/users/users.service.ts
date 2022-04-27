@@ -35,7 +35,9 @@ export class UsersService {
   // }
 
   async getAllUsers(): Promise<User[]> {
-    const users = await this.usersRepository.find({ relations: ['friends'] });
+    const users = await this.usersRepository.find({
+      relations: ['friends', 'friendRequestsSent', 'friendRequestsReceived'],
+    });
     return users;
   }
 
@@ -58,7 +60,7 @@ export class UsersService {
 
   async getUserByLogin(login42: string): Promise<User> {
     const user = await this.usersRepository.findOne(login42, {
-      relations: ['friends'],
+      relations: ['friends', 'friendRequestsSent', 'friendRequestsReceived'],
     });
     if (!user) {
       throw new NotFoundException(`User with login42 "${login42}" not found`);
@@ -88,66 +90,59 @@ export class UsersService {
     const user = await this.getUserByLogin(login42);
     const friend = await this.getUserByLogin(friendLogin42);
     if (user.login42 !== friend.login42) {
-      user.friends = [...user.friends, friend];
+      user.friends = user.friends.concat(friend);
       await this.usersRepository.save(user);
-      friend.friends = [...friend.friends, user];
+      friend.friends = friend.friends.concat(user);
       await this.usersRepository.save(friend);
     }
   }
 
-  // sendFriendRequest(
-  //   login42: string,
-  //   sendFriendRequestDto: SendFriendRequestDto,
-  // ): FriendRequestsSent {
-  //   const { friendLogin42 } = sendFriendRequestDto;
+  async sendFriendRequest(
+    login42: string,
+    sendFriendRequestDto: SendFriendRequestDto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = sendFriendRequestDto;
 
-  //   const user: IUser | undefined = this.searchUser(login42);
-  //   if (!user) {
-  //     throw new NotFoundException(`User with login42 "${login42}" not found`);
-  //   }
+    const user = await this.getUserByLogin(login42);
+    const friend = await this.getUserByLogin(friendLogin42);
 
-  //   const friend: IUser | undefined = this.searchUser(friendLogin42);
-  //   if (!friend) {
-  //     throw new NotFoundException(
-  //       `User (friend) with login42 "${friendLogin42}" not found`,
-  //     );
-  //   }
+    if (user.login42 !== friend.login42) {
+      user.friendRequestsSent = user.friendRequestsSent.concat(friend);
+      await this.usersRepository.save(user);
 
-  //   user.friendRequestsSent.push(friendLogin42);
-  //   friend.friendRequestsReceived.push(login42);
+      friend.friendRequestsReceived =
+        friend.friendRequestsReceived.concat(user);
+      await this.usersRepository.save(friend);
+    }
 
-  //   return user.friendRequestsSent;
-  // }
+    return user.friendRequestsSent;
+  }
 
-  // acceptFriendRequest(
-  //   login42: string,
-  //   acceptFriendRequestDto: AcceptFriendRequestDto,
-  // ): Friends {
-  //   const { friendLogin42 } = acceptFriendRequestDto;
+  async acceptFriendRequest(
+    login42: string,
+    acceptFriendRequestDto: AcceptFriendRequestDto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = acceptFriendRequestDto;
 
-  //   const user: IUser | undefined = this.searchUser(login42);
-  //   if (!user) {
-  //     throw new NotFoundException(`User with login42 "${login42}" not found`);
-  //   }
+    const user = await this.getUserByLogin(login42);
+    const friend = await this.getUserByLogin(friendLogin42);
 
-  //   const friend: IUser | undefined = this.searchUser(friendLogin42);
-  //   if (!friend) {
-  //     throw new NotFoundException(
-  //       `User (friend) with login42 "${friendLogin42}" not found`,
-  //     );
-  //   }
+    if (user.login42 !== friend.login42) {
+      user.friends = user.friends.concat(friend);
+      user.friendRequestsReceived = user.friendRequestsReceived.filter(
+        (curUser) => curUser.login42 !== friendLogin42,
+      );
+      await this.usersRepository.save(user);
 
-  //   user.friends.push(friendLogin42);
-  //   friend.friends.push(login42);
-  //   user.friendRequestsReceived = user.friendRequestsReceived.filter(
-  //     (curLogin42) => curLogin42 !== friendLogin42,
-  //   );
-  //   friend.friendRequestsSent = friend.friendRequestsSent.filter(
-  //     (curLogin42) => curLogin42 !== login42,
-  //   );
+      friend.friends = [...friend.friends, user];
+      friend.friendRequestsSent = friend.friendRequestsSent.filter(
+        (curUser) => curUser.login42 !== login42,
+      );
+      await this.usersRepository.save(friend);
+    }
 
-  //   return user.friends;
-  // }
+    return user.friends;
+  }
 
   async updateUserElo(
     login42: string,

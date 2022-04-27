@@ -65,24 +65,24 @@ export class UsersController {
     return this.usersService.addFriend(login42, friendDto);
   }
 
-  // @Patch('/:login42/sendFriendRequest')
-  // sendFriendRequest(
-  //   @Param('login42') login42: string,
-  //   @Body() sendFriendRequestDto: SendFriendRequestDto,
-  // ): FriendRequestsSent {
-  //   return this.usersService.sendFriendRequest(login42, sendFriendRequestDto);
-  // }
+  @Patch('/:login42/sendFriendRequest')
+  sendFriendRequest(
+    @Param('login42') login42: string,
+    @Body() sendFriendRequestDto: SendFriendRequestDto,
+  ): Promise<User[]> {
+    return this.usersService.sendFriendRequest(login42, sendFriendRequestDto);
+  }
 
-  // @Patch('/:login42/acceptFriendRequest')
-  // acceptFriendRequest(
-  //   @Param('login42') login42: string,
-  //   @Body() acceptFriendRequestDto: AcceptFriendRequestDto,
-  // ): Friends {
-  //   return this.usersService.acceptFriendRequest(
-  //     login42,
-  //     acceptFriendRequestDto,
-  //   );
-  // }
+  @Patch('/:login42/acceptFriendRequest')
+  acceptFriendRequest(
+    @Param('login42') login42: string,
+    @Body() acceptFriendRequestDto: AcceptFriendRequestDto,
+  ): Promise<User[]> {
+    return this.usersService.acceptFriendRequest(
+      login42,
+      acceptFriendRequestDto,
+    );
+  }
 
   @Patch('/:login42/elo')
   updateUserElo(
