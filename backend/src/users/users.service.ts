@@ -154,8 +154,19 @@ export class UsersService {
       );
     }
 
-    user.friendRequestsSent.push(friendLogin42);
-    friend.friendRequestsReceived.push(login42);
+		if (user.friendRequestsReceived.includes(friendLogin42)) {
+			user.friends.push(friendLogin42);
+			friend.friends.push(login42);
+			user.friendRequestsReceived = user.friendRequestsReceived.filter(
+				(curLogin42) => curLogin42 !== friendLogin42,
+			);
+			friend.friendRequestsSent = friend.friendRequestsSent.filter(
+				(curLogin42) => curLogin42 !== login42,
+			);
+		} else {
+			user.friendRequestsSent.push(friendLogin42);
+			friend.friendRequestsReceived.push(login42);
+		}
 
     return user.friendRequestsSent;
   }
