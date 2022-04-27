@@ -11,8 +11,11 @@ import io from "socket.io-client";
 import Avatar from "@mui/material/Avatar";
 
 import { UserGameHistory } from "./UserGameHistory";
+
 import { ButtonAddFriend } from "../Buttons/ButtonAddFriend";
 import { ButtonRemoveFriend } from "../Buttons/ButtonRemoveFriend";
+import { ButtonCancelRequest } from "../Buttons/ButtonCancelRequest";
+
 import { ButtonUserStatus } from "../Buttons/ButtonUserStatus";
 import { ButtonBlock } from "../Buttons/ButtonBlock";
 
@@ -90,12 +93,15 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
     if (
       friendList.find(
         (friend: IUserPublicInfos) => friend.login42 === userInfos.login42
-      ) ||
+      )
+    ) {
+      return <ButtonRemoveFriend userInfos={userInfos} />;
+    } else if (
       sentRList.find(
         (friend: IUserPublicInfos) => friend.login42 === userInfos.login42
       )
     ) {
-      return <ButtonRemoveFriend userInfos={userInfos} />;
+      return <ButtonCancelRequest userInfos={userInfos} />;
     } else {
       return <ButtonAddFriend userInfos={userInfos} />;
     }
