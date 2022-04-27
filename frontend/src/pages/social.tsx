@@ -83,13 +83,12 @@ function SocialPage({ menu }: { menu: string }) {
     });
   }, []);
 
-	console.log("Blocked", blocked);
   if (menu === "all" || menu === "online" || menu === "offline") {
     return <FriendContent friends={friends} />;
   } else if (menu === "blocked") {
     return <BlockedContent users={blocked} />;
   } else if (menu === "notifications") {
-    return <NotificationContent notifications={notifications} />;
+    return <NotificationContent blockedUsers={blocked} notifications={notifications} />;
   }
 }
 
