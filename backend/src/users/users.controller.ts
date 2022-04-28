@@ -52,12 +52,17 @@ export class UsersController {
     return this.usersService.createUser(createUserDto);
   }
 
+  @Delete() // dev
+  deleteAllUsers(): Promise<void> {
+    return this.usersService.deleteAllUsers();
+  }
+
   @Delete('/:login42')
   deleteUser(@Param('login42') login42: string): Promise<void> {
     return this.usersService.deleteUser(login42);
   }
 
-  @Patch('/:login42/addFriend')
+  @Patch('/:login42/addFriend') // dev
   addFriend(
     @Param('login42') login42: string,
     @Body() friendDto: FriendDto,

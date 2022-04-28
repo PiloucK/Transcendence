@@ -77,6 +77,11 @@ export class UsersService {
     return this.usersRepository.createUser(createUserDto);
   }
 
+  async deleteAllUsers(): Promise<void> {
+    const users = await this.getAllUsers();
+    await this.usersRepository.remove(users);
+  }
+
   async deleteUser(login42: string): Promise<void> {
     const result = await this.usersRepository.delete(login42);
 
