@@ -59,13 +59,7 @@ export class UsersService {
   // }
 
   async getUserByLogin(login42: string): Promise<User> {
-    const user = await this.usersRepository.findOne(login42, {
-      relations: ['friends', 'friendRequestsSent', 'friendRequestsReceived'],
-    });
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-    return user;
+    return this.usersRepository.getUserByLoginWithAllRelations(login42);
   }
 
   async getUserFriends(login42: string): Promise<User[]> {
@@ -106,47 +100,20 @@ export class UsersService {
     login42: string,
     sendFriendRequestDto: SendFriendRequestDto,
   ): Promise<User[]> {
-    const { friendLogin42 } = sendFriendRequestDto;
-
-    const user = await this.getUserByLogin(login42);
-    const friend = await this.getUserByLogin(friendLogin42);
-
-    if (user.login42 !== friend.login42) {
-      user.friendRequestsSent = user.friendRequestsSent.concat(friend);
-      await this.usersRepository.save(user);
-
-      friend.friendRequestsReceived =
-        friend.friendRequestsReceived.concat(user);
-      await this.usersRepository.save(friend);
-    }
-
-    return user.friendRequestsSent;
+    return this.usersRepository.sendFriendRequest(
+      login42,
+      sendFriendRequestDto,
+    );
   }
 
   async acceptFriendRequest(
     login42: string,
     acceptFriendRequestDto: AcceptFriendRequestDto,
   ): Promise<User[]> {
-    const { friendLogin42 } = acceptFriendRequestDto;
-
-    const user = await this.getUserByLogin(login42);
-    const friend = await this.getUserByLogin(friendLogin42);
-
-    if (user.login42 !== friend.login42) {
-      user.friends = user.friends.concat(friend);
-      user.friendRequestsReceived = user.friendRequestsReceived.filter(
-        (curUser) => curUser.login42 !== friendLogin42,
-      );
-      await this.usersRepository.save(user);
-
-      friend.friends = [...friend.friends, user];
-      friend.friendRequestsSent = friend.friendRequestsSent.filter(
-        (curUser) => curUser.login42 !== login42,
-      );
-      await this.usersRepository.save(friend);
-    }
-
-    return user.friends;
+    return this.usersRepository.acceptFriendRequest(
+      login42,
+      acceptFriendRequestDto,
+    );
   }
 
   async updateUserElo(
