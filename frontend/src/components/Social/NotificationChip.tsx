@@ -5,11 +5,13 @@ import { useLoginContext } from "../../context/LoginContext";
 import { IUserPublicInfos } from "../../interfaces/users";
 import userService from "../../services/users";
 
+import Badge from "@mui/material/Badge";
+
 import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-export function NotificationChip() {
+export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
   const loginContext = useLoginContext();
   const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
   const [blockedUsers, setBlockedUsers] = useState<IUserPublicInfos[]>([]);
@@ -47,8 +49,12 @@ export function NotificationChip() {
       )
   );
 
-  if (typeof requests === "undefined" || requests.length === 0) {
-    return null;
+  if (typeof requests === "undefined") {
+    return children;
   }
-  return <div className={styles.notification_chip}>{notifications.length}</div>;
-}
+  return (
+    <Badge badgeContent={requests.length} color='primary'>
+      {children}
+    </Badge>
+  );
+};
