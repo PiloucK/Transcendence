@@ -19,7 +19,6 @@ import {
 } from './dto/update-user.dto';
 import {
   AcceptFriendRequestDto,
-  FriendDto,
   SendFriendRequestDto,
 } from './dto/user-friends.dto';
 import { User } from './user.entity';
