@@ -62,14 +62,6 @@ export class UsersController {
     return this.usersService.deleteUser(login42);
   }
 
-  @Patch('/:login42/addFriend') // dev
-  addFriend(
-    @Param('login42') login42: string,
-    @Body() friendDto: FriendDto,
-  ): Promise<void> {
-    return this.usersService.addFriend(login42, friendDto);
-  }
-
   @Patch('/:login42/sendFriendRequest')
   sendFriendRequest(
     @Param('login42') login42: string,
@@ -89,20 +81,20 @@ export class UsersController {
     );
   }
 
-  @Patch('/:login42/elo')
-  updateUserElo(
-    @Param('login42') login42: string,
-    @Body() updateUserEloDto: UpdateUserEloDto,
-  ): Promise<User> {
-    return this.usersService.updateUserElo(login42, updateUserEloDto);
-  }
-
   @Patch('/:login42/username')
   updateUserUsername(
     @Param('login42') login42: string,
     @Body() updateUserUsernameDto: UpdateUserUsernameDto,
   ): Promise<User> {
     return this.usersService.updateUserUsername(login42, updateUserUsernameDto);
+  }
+
+  @Patch('/:login42/elo')
+  updateUserElo(
+    @Param('login42') login42: string,
+    @Body() updateUserEloDto: UpdateUserEloDto,
+  ): Promise<User> {
+    return this.usersService.updateUserElo(login42, updateUserEloDto);
   }
 
   @Patch('/:login42/gamesWon')

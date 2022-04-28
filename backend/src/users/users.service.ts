@@ -58,7 +58,7 @@ export class UsersService {
   //   return this.users.find((user) => user.login42 == login42);
   // }
 
-  async getUserByLogin(login42: string): Promise<User> {
+  getUserByLogin(login42: string): Promise<User> {
     return this.usersRepository.getUserByLoginWithAllRelations(login42);
   }
 
@@ -84,19 +84,7 @@ export class UsersService {
     }
   }
 
-  async addFriend(login42: string, friendDto: FriendDto): Promise<void> {
-    const { friendLogin42 } = friendDto;
-    const user = await this.getUserByLogin(login42);
-    const friend = await this.getUserByLogin(friendLogin42);
-    if (user.login42 !== friend.login42) {
-      user.friends = user.friends.concat(friend);
-      await this.usersRepository.save(user);
-      friend.friends = friend.friends.concat(user);
-      await this.usersRepository.save(friend);
-    }
-  }
-
-  async sendFriendRequest(
+  sendFriendRequest(
     login42: string,
     sendFriendRequestDto: SendFriendRequestDto,
   ): Promise<User[]> {
@@ -106,7 +94,7 @@ export class UsersService {
     );
   }
 
-  async acceptFriendRequest(
+  acceptFriendRequest(
     login42: string,
     acceptFriendRequestDto: AcceptFriendRequestDto,
   ): Promise<User[]> {
@@ -116,17 +104,6 @@ export class UsersService {
     );
   }
 
-  async updateUserElo(
-    login42: string,
-    updateUserEloDto: UpdateUserEloDto,
-  ): Promise<User> {
-    const { elo } = updateUserEloDto;
-    const user = await this.getUserByLogin(login42);
-    user.elo = elo;
-    await this.usersRepository.save(user);
-    return user;
-  }
-
   async updateUserUsername(
     login42: string,
     updateUserUsernameDto: UpdateUserUsernameDto,
@@ -134,6 +111,17 @@ export class UsersService {
     const { username } = updateUserUsernameDto;
     const user = await this.getUserByLogin(login42);
     user.username = username;
+    await this.usersRepository.save(user);
+    return user;
+  }
+
+  async updateUserElo(
+    login42: string,
+    updateUserEloDto: UpdateUserEloDto,
+  ): Promise<User> {
+    const { elo } = updateUserEloDto;
+    const user = await this.getUserByLogin(login42);
+    user.elo = elo;
     await this.usersRepository.save(user);
     return user;
   }

@@ -69,17 +69,8 @@ const acceptFriendRequest = (login: string, friendLogin42: string) => {
     });
 };
 
-const getUserFriends = (login: string, friendLogin42: string) => {
+const getUserFriends = (login: string) => {
   const request = axios.get(`${baseUrl}/${login}/friends`);
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
-};
-
-const updateUserElo = (login: string, elo: number) => {
-  const request = axios.patch(`${baseUrl}/${login}/elo`, { elo });
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -89,6 +80,15 @@ const updateUserElo = (login: string, elo: number) => {
 
 const updateUserUsername = (login: string, username: string) => {
   const request = axios.patch(`${baseUrl}/${login}/username`, { username });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const updateUserElo = (login: string, elo: number) => {
+  const request = axios.patch(`${baseUrl}/${login}/elo`, { elo });
   return request
     .then((response) => response.data)
     .catch((e) => {
