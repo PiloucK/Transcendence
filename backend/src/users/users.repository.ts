@@ -1,10 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import {
-  AcceptFriendRequestDto,
-  SendFriendRequestDto,
-} from './dto/user-friends.dto';
+import { FriendRequestDto } from './dto/user-friends.dto';
 import { User } from './user.entity';
 
 @EntityRepository(User)
@@ -51,9 +48,9 @@ export class UsersRepository extends Repository<User> {
 
   async sendFriendRequest(
     login42: string,
-    sendFriendRequestDto: SendFriendRequestDto,
+    friendRequestDto: FriendRequestDto,
   ): Promise<User[]> {
-    const { friendLogin42 } = sendFriendRequestDto;
+    const { friendLogin42 } = friendRequestDto;
 
     const user = await this.getUserWithRelations(login42, [
       'friendRequestsSent',
@@ -77,9 +74,9 @@ export class UsersRepository extends Repository<User> {
 
   async acceptFriendRequest(
     login42: string,
-    acceptFriendRequestDto: AcceptFriendRequestDto,
+    friendRequestDto: FriendRequestDto,
   ): Promise<User[]> {
-    const { friendLogin42 } = acceptFriendRequestDto;
+    const { friendLogin42 } = friendRequestDto;
 
     const user = await this.getUserWithRelations(login42, [
       'friends',

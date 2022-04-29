@@ -7,10 +7,7 @@ import {
   UpdateUserGamesWonDto,
   UpdateUserUsernameDto,
 } from './dto/update-user.dto';
-import {
-  AcceptFriendRequestDto,
-  SendFriendRequestDto,
-} from './dto/user-friends.dto';
+import { FriendRequestDto } from './dto/user-friends.dto';
 import { User } from './user.entity';
 import { UsersRepository } from './users.repository';
 
@@ -101,22 +98,16 @@ export class UsersService {
 
   sendFriendRequest(
     login42: string,
-    sendFriendRequestDto: SendFriendRequestDto,
+    friendRequestDto: FriendRequestDto,
   ): Promise<User[]> {
-    return this.usersRepository.sendFriendRequest(
-      login42,
-      sendFriendRequestDto,
-    );
+    return this.usersRepository.sendFriendRequest(login42, friendRequestDto);
   }
 
   acceptFriendRequest(
     login42: string,
-    acceptFriendRequestDto: AcceptFriendRequestDto,
+    friendRequestDto: FriendRequestDto,
   ): Promise<User[]> {
-    return this.usersRepository.acceptFriendRequest(
-      login42,
-      acceptFriendRequestDto,
-    );
+    return this.usersRepository.acceptFriendRequest(login42, friendRequestDto);
   }
 
   async updateUserUsername(

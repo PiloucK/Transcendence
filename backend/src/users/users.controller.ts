@@ -17,10 +17,7 @@ import {
   UpdateUserGamesWonDto,
   UpdateUserUsernameDto,
 } from './dto/update-user.dto';
-import {
-  AcceptFriendRequestDto,
-  SendFriendRequestDto,
-} from './dto/user-friends.dto';
+import { FriendRequestDto } from './dto/user-friends.dto';
 import { User } from './user.entity';
 
 @Controller('users')
@@ -78,20 +75,17 @@ export class UsersController {
   @Patch('/:login42/sendFriendRequest')
   sendFriendRequest(
     @Param('login42') login42: string,
-    @Body() sendFriendRequestDto: SendFriendRequestDto,
+    @Body() friendRequestDto: FriendRequestDto,
   ): Promise<User[]> {
-    return this.usersService.sendFriendRequest(login42, sendFriendRequestDto);
+    return this.usersService.sendFriendRequest(login42, friendRequestDto);
   }
 
   @Patch('/:login42/acceptFriendRequest')
   acceptFriendRequest(
     @Param('login42') login42: string,
-    @Body() acceptFriendRequestDto: AcceptFriendRequestDto,
+    @Body() friendRequestDto: FriendRequestDto,
   ): Promise<User[]> {
-    return this.usersService.acceptFriendRequest(
-      login42,
-      acceptFriendRequestDto,
-    );
+    return this.usersService.acceptFriendRequest(login42, friendRequestDto);
   }
 
   @Patch('/:login42/username')
