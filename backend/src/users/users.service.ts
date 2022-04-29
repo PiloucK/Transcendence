@@ -58,12 +58,28 @@ export class UsersService {
   // }
 
   getUserByLogin(login42: string): Promise<User> {
-    return this.usersRepository.getUserByLoginWithAllRelations(login42);
+    return this.usersRepository.getUserByLoginWithAllRelations(login42); // all relations?
   }
 
   async getUserFriends(login42: string): Promise<User[]> {
-    const user = await this.getUserByLogin(login42);
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+    ]);
     return user.friends;
+  }
+
+  async getUserFriendRequestsSent(login42: string): Promise<User[]> {
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friendRequestsSent',
+    ]);
+    return user.friendRequestsSent;
+  }
+
+  async getUserFriendRequestsReceived(login42: string): Promise<User[]> {
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friendRequestsReceived',
+    ]);
+    return user.friendRequestsReceived;
   }
 
   createUser(createUserDto: CreateUserDto): Promise<User> {

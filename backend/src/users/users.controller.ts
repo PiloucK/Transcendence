@@ -46,6 +46,20 @@ export class UsersController {
     return this.usersService.getUserFriends(login42);
   }
 
+  @Get('/:login42/friendRequestsSent')
+  getUserFriendRequestsSent(
+    @Param('login42') login42: string,
+  ): Promise<User[]> {
+    return this.usersService.getUserFriendRequestsSent(login42);
+  }
+
+  @Get('/:login42/friendRequestsReceived')
+  getUserFriendRequestsReceived(
+    @Param('login42') login42: string,
+  ): Promise<User[]> {
+    return this.usersService.getUserFriendRequestsReceived(login42);
+  }
+
   @Post()
   createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createUser(createUserDto);
