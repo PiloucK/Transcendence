@@ -12,6 +12,7 @@ import {
 } from './user.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
+	SendDMDto,
   UpdateUserEloDto,
   UpdateUserGamesLostDto,
   UpdateUserGamesWonDto,
@@ -166,6 +167,35 @@ export class UsersService {
 		}
 
 		return this.directConversations[this.directConversations.length - 1];
+  }
+
+  sendDM(
+    login42: string,
+    sendDMDto: SendDMDto,
+  ): DM {
+    const { dest, message } = sendDMDto;
+
+    const user: IUser | undefined = this.searchUser(login42);
+    if (!user) {
+      throw new NotFoundException(`User with login42 "${login42}" not found`);
+    }
+
+    const friend: IUser | undefined = this.searchUser(dest);
+    if (!friend) {
+      throw new NotFoundException(
+        `User (friend) with login42 "${dest}" not found`,
+      );
+    }
+
+		const dm: DM | undefined = this.getUsersDM(user, friend);
+		if (dm) {
+			dm.messages.push(message);
+		} else {
+			throw new NotFoundException(
+				`You don't have a direct conversation with user with login42 "${dest}"`,
+			);
+		}
+		return dm;
   }
 
   getOneDM(

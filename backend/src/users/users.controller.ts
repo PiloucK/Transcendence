@@ -20,6 +20,7 @@ import {
 import { GetUsersDto } from './dto/get-users.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
+	SendDMDto,
   UpdateUserEloDto,
   UpdateUserGamesLostDto,
   UpdateUserGamesWonDto,
@@ -71,6 +72,14 @@ export class UsersController {
 		@Body() sendFriendRequestDto: SendFriendRequestDto,
 	): DM {
 		return this.usersService.createDM(login42, sendFriendRequestDto);
+	}
+
+	@Patch('/:login42/sendDM')
+	sendDM(
+		@Param('login42') login42: string,
+		@Body() sendDMDto: SendDMDto,
+	): DM {
+		return this.usersService.sendDM(login42, sendDMDto);
 	}
 
 	@Get('/:login42/getOneDM')

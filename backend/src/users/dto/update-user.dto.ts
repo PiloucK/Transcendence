@@ -1,5 +1,19 @@
 import { IsNumber, IsNotEmpty, IsString } from 'class-validator';
+import { IMessage } from '../user.model';
 
+export class SendDMDto {
+	constructor(login: string, message: IMessage) {
+		this.dest = login;
+		this.message = message;
+	}
+
+	@IsNotEmpty()
+	@IsString()
+	dest!: string;
+
+	@IsNotEmpty()
+	message!: IMessage;
+}
 export class UpdateUserEloDto {
 	constructor(elo: number) {
 		this.elo = elo;

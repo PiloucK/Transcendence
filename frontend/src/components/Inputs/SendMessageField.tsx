@@ -9,6 +9,8 @@ import SendIcon from "@mui/icons-material/Send";
 
 import { useLoginContext } from "../../context/LoginContext";
 
+import userServices from "../../services/users";
+
 export function SendMessageField({
   input,
   setInput,
@@ -18,7 +20,7 @@ export function SendMessageField({
   setInput: (input: string) => void;
   channel: string;
 }) {
-	const loginContext = useLoginContext();
+  const loginContext = useLoginContext();
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -31,7 +33,14 @@ export function SendMessageField({
       const otherLogin =
         users[0] === loginContext.userLogin ? users[1] : users[0];
 
-			console.log(`${loginContext.userLogin} -> ${otherLogin} : ${input}`);
+      userServices
+        .sendDM(loginContext.userLogin, otherLogin, {
+          author: loginContext.userLogin,
+          content: input,
+        })
+        .then(() => {
+          setInput("");
+        });
     }
   };
 

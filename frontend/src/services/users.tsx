@@ -1,6 +1,6 @@
 import axios from "axios";
 const baseUrl = "http://0.0.0.0:3001/users";
-import { IUserCredentials } from "../interfaces/users";
+import { IUserCredentials, IMessage } from "../interfaces/users";
 
 const getAll = () => {
   const request = axios.get(baseUrl);
@@ -58,9 +58,9 @@ const createDM = (login: string, friendLogin42: string) => {
     });
 };
 
-const sendDM = (login: string, friendLogin42: string, message: string) => {
+const sendDM = (login: string, dest: string, message: IMessage) => {
   const request = axios.patch(`${baseUrl}/${login}/sendDM`, {
-    friendLogin42,
+    dest,
     message,
   });
   return request
