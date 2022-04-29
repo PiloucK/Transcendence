@@ -160,4 +160,28 @@ export class UsersRepository extends Repository<User> {
 
     return user.friendRequestsReceived;
   }
+
+  async removeFriend(
+    login42: string,
+    friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendRequestDto;
+
+    const user = await this.getUserWithRelations(login42, ['friends']);
+    const friend = await this.getUserWithRelations(friendLogin42, ['friends']);
+
+    if (user.login42 !== friend.login42) {
+      user.friends = user.friends.filter(
+        (curUser) => curUser.login42 !== friendLogin42,
+      );
+      await this.save(user);
+
+      friend.friends = friend.friends.filter(
+        (curUser) => curUser.login42 !== login42,
+      );
+      await this.save(friend);
+    }
+
+    return user.friends;
+  }
 }

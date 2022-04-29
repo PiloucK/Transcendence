@@ -104,6 +104,14 @@ export class UsersController {
     return this.usersService.declineFriendRequest(login42, friendRequestDto);
   }
 
+  @Patch('/:login42/removeFriend')
+  removeFriend(
+    @Param('login42') login42: string,
+    @Body() friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    return this.usersService.removeFriend(login42, friendRequestDto);
+  }
+
   @Patch('/:login42/username')
   updateUserUsername(
     @Param('login42') login42: string,

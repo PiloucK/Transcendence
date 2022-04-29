@@ -124,6 +124,13 @@ export class UsersService {
     return this.usersRepository.declineFriendRequest(login42, friendRequestDto);
   }
 
+  removeFriend(
+    login42: string,
+    friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    return this.usersRepository.removeFriend(login42, friendRequestDto);
+  }
+
   async updateUserUsername(
     login42: string,
     updateUserUsernameDto: UpdateUserUsernameDto,

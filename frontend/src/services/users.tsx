@@ -100,6 +100,17 @@ const declineFriendRequest = (login: string, friendLogin42: string) => {
     });
 };
 
+const removeFriend = (login: string, friendLogin42: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/removeFriend`, {
+    friendLogin42,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const getUserFriends = (login: string) => {
   const request = axios.get(`${baseUrl}/${login}/friends`);
   return request
@@ -174,6 +185,7 @@ export default {
   cancelFriendRequest,
   acceptFriendRequest,
   declineFriendRequest,
+  removeFriend,
   getUserFriends,
   getUserFriendRequestsSent,
   getUserFriendRequestsReceived,
@@ -182,9 +194,3 @@ export default {
   updateUserGamesWon,
   updateUserGamesLost,
 };
-// ES6 shorthand for
-// export default {
-//   getAll: getAll,
-//   create: create,
-//   update: update,
-// };
