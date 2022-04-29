@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
@@ -58,27 +62,6 @@ export class UsersService {
     return this.usersRepository.getUserByLoginWithAllRelations(login42); // all relations?
   }
 
-  async getUserFriends(login42: string): Promise<User[]> {
-    const user = await this.usersRepository.getUserWithRelations(login42, [
-      'friends',
-    ]);
-    return user.friends;
-  }
-
-  async getUserFriendRequestsSent(login42: string): Promise<User[]> {
-    const user = await this.usersRepository.getUserWithRelations(login42, [
-      'friendRequestsSent',
-    ]);
-    return user.friendRequestsSent;
-  }
-
-  async getUserFriendRequestsReceived(login42: string): Promise<User[]> {
-    const user = await this.usersRepository.getUserWithRelations(login42, [
-      'friendRequestsReceived',
-    ]);
-    return user.friendRequestsReceived;
-  }
-
   createUser(createUserDto: CreateUserDto): Promise<User> {
     return this.usersRepository.createUser(createUserDto);
   }
@@ -94,41 +77,6 @@ export class UsersService {
     if (result.affected === 0) {
       throw new NotFoundException(`User with login42 "${login42}" not found`);
     }
-  }
-
-  sendFriendRequest(
-    login42: string,
-    friendRequestDto: FriendRequestDto,
-  ): Promise<User[]> {
-    return this.usersRepository.sendFriendRequest(login42, friendRequestDto);
-  }
-
-  cancelFriendRequest(
-    login42: string,
-    friendRequestDto: FriendRequestDto,
-  ): Promise<User[]> {
-    return this.usersRepository.cancelFriendRequest(login42, friendRequestDto);
-  }
-
-  acceptFriendRequest(
-    login42: string,
-    friendRequestDto: FriendRequestDto,
-  ): Promise<User[]> {
-    return this.usersRepository.acceptFriendRequest(login42, friendRequestDto);
-  }
-
-  declineFriendRequest(
-    login42: string,
-    friendRequestDto: FriendRequestDto,
-  ): Promise<User[]> {
-    return this.usersRepository.declineFriendRequest(login42, friendRequestDto);
-  }
-
-  removeFriend(
-    login42: string,
-    friendRequestDto: FriendRequestDto,
-  ): Promise<User[]> {
-    return this.usersRepository.removeFriend(login42, friendRequestDto);
   }
 
   async updateUserUsername(
@@ -173,5 +121,164 @@ export class UsersService {
     user.gamesLost = gamesLost;
     await this.usersRepository.save(user);
     return user;
+  }
+
+  async getUserFriends(login42: string): Promise<User[]> {
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+    ]);
+    return user.friends;
+  }
+
+  async getUserFriendRequestsSent(login42: string): Promise<User[]> {
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friendRequestsSent',
+    ]);
+    return user.friendRequestsSent;
+  }
+
+  async getUserFriendRequestsReceived(login42: string): Promise<User[]> {
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friendRequestsReceived',
+    ]);
+    return user.friendRequestsReceived;
+  }
+
+  async sendFriendRequest(
+    login42: string,
+    friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendRequestDto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+      'friendRequestsSent',
+      'friendRequestsReceived',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      ['friendRequestsReceived'],
+    );
+
+    if (user.login42 === friend.login42) {
+      throw new ConflictException('You cannot add yourself to your friendlist');
+    }
+    if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
+      throw new ConflictException(
+        `User with login42 ${friendLogin42} is already in your friendlist`,
+      );
+    } else if (
+      user.friendRequestsReceived.find(
+        (friend) => friend.login42 === friendLogin42,
+      )
+    ) {
+      throw new ConflictException(
+        `User with login42 ${friendLogin42} has already sent you a friend request`,
+      );
+    }
+
+    this.usersRepository.addUserToFriendRequestsSent(user, friend);
+    this.usersRepository.addUserToFriendRequestsReceived(friend, user);
+
+    friend.friendRequestsReceived = []; // to prevent circular references error
+    return user.friendRequestsSent;
+  }
+
+  async cancelFriendRequest(
+    login42: string,
+    friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendRequestDto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+      'friendRequestsSent',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      ['friendRequestsReceived'],
+    );
+
+    if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
+      throw new ConflictException(
+        `User with login42 ${friendLogin42} is already in your friendlist`,
+      );
+    }
+
+    this.usersRepository.removeUserFromFriendRequestsSent(user, friend);
+    this.usersRepository.removeUserFromFriendRequestsReceived(friend, user);
+
+    return user.friendRequestsSent;
+  }
+
+  async acceptFriendRequest(
+    login42: string,
+    friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendRequestDto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+      'friendRequestsReceived',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      ['friends', 'friendRequestsSent'],
+    );
+
+    this.usersRepository.addUserToFriends(user, friend);
+    this.usersRepository.removeUserFromFriendRequestsReceived(user, friend);
+
+    this.usersRepository.addUserToFriends(friend, user);
+    this.usersRepository.removeUserFromFriendRequestsSent(friend, user);
+
+    friend.friends = []; // to prevent circular references error
+    return user.friends;
+  }
+
+  async declineFriendRequest(
+    login42: string,
+    friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendRequestDto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friendRequestsReceived',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      ['friendRequestsSent'],
+    );
+
+    if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
+      throw new ConflictException(
+        `User with login42 ${friendLogin42} is already in your friendlist`,
+      );
+    }
+
+    this.usersRepository.removeUserFromFriendRequestsReceived(user, friend);
+    this.usersRepository.removeUserFromFriendRequestsSent(friend, user);
+
+    return user.friendRequestsReceived;
+  }
+
+  async removeFriend(
+    login42: string,
+    friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendRequestDto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      ['friends'],
+    );
+
+    this.usersRepository.removeUserFromFriends(user, friend);
+    this.usersRepository.removeUserFromFriends(friend, user);
+
+    return user.friends;
   }
 }

@@ -38,6 +38,56 @@ export class UsersController {
     return this.usersService.getUserByLogin(login42);
   }
 
+  @Post()
+  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.usersService.createUser(createUserDto);
+  }
+
+  @Delete() // dev
+  deleteAllUsers(): Promise<void> {
+    return this.usersService.deleteAllUsers();
+  }
+
+  @Delete('/:login42')
+  deleteUser(@Param('login42') login42: string): Promise<void> {
+    return this.usersService.deleteUser(login42);
+  }
+
+  @Patch('/:login42/username')
+  updateUserUsername(
+    @Param('login42') login42: string,
+    @Body() updateUserUsernameDto: UpdateUserUsernameDto,
+  ): Promise<User> {
+    return this.usersService.updateUserUsername(login42, updateUserUsernameDto);
+  }
+
+  @Patch('/:login42/elo')
+  updateUserElo(
+    @Param('login42') login42: string,
+    @Body() updateUserEloDto: UpdateUserEloDto,
+  ): Promise<User> {
+    return this.usersService.updateUserElo(login42, updateUserEloDto);
+  }
+
+  @Patch('/:login42/gamesWon')
+  updateUserGamesWon(
+    @Param('login42') login42: string,
+    @Body() updateUserGamesWonDto: UpdateUserGamesWonDto,
+  ): Promise<User> {
+    return this.usersService.updateUserGamesWon(login42, updateUserGamesWonDto);
+  }
+
+  @Patch('/:login42/gamesLost')
+  updateUserGamesLost(
+    @Param('login42') login42: string,
+    @Body() updateUserGamesLostDto: UpdateUserGamesLostDto,
+  ): Promise<User> {
+    return this.usersService.updateUserGamesLost(
+      login42,
+      updateUserGamesLostDto,
+    );
+  }
+
   @Get('/:login42/friends')
   getUserFriends(@Param('login42') login42: string): Promise<User[]> {
     return this.usersService.getUserFriends(login42);
@@ -55,21 +105,6 @@ export class UsersController {
     @Param('login42') login42: string,
   ): Promise<User[]> {
     return this.usersService.getUserFriendRequestsReceived(login42);
-  }
-
-  @Post()
-  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.createUser(createUserDto);
-  }
-
-  @Delete() // dev
-  deleteAllUsers(): Promise<void> {
-    return this.usersService.deleteAllUsers();
-  }
-
-  @Delete('/:login42')
-  deleteUser(@Param('login42') login42: string): Promise<void> {
-    return this.usersService.deleteUser(login42);
   }
 
   @Patch('/:login42/sendFriendRequest')
@@ -110,40 +145,5 @@ export class UsersController {
     @Body() friendRequestDto: FriendRequestDto,
   ): Promise<User[]> {
     return this.usersService.removeFriend(login42, friendRequestDto);
-  }
-
-  @Patch('/:login42/username')
-  updateUserUsername(
-    @Param('login42') login42: string,
-    @Body() updateUserUsernameDto: UpdateUserUsernameDto,
-  ): Promise<User> {
-    return this.usersService.updateUserUsername(login42, updateUserUsernameDto);
-  }
-
-  @Patch('/:login42/elo')
-  updateUserElo(
-    @Param('login42') login42: string,
-    @Body() updateUserEloDto: UpdateUserEloDto,
-  ): Promise<User> {
-    return this.usersService.updateUserElo(login42, updateUserEloDto);
-  }
-
-  @Patch('/:login42/gamesWon')
-  updateUserGamesWon(
-    @Param('login42') login42: string,
-    @Body() updateUserGamesWonDto: UpdateUserGamesWonDto,
-  ): Promise<User> {
-    return this.usersService.updateUserGamesWon(login42, updateUserGamesWonDto);
-  }
-
-  @Patch('/:login42/gamesLost')
-  updateUserGamesLost(
-    @Param('login42') login42: string,
-    @Body() updateUserGamesLostDto: UpdateUserGamesLostDto,
-  ): Promise<User> {
-    return this.usersService.updateUserGamesLost(
-      login42,
-      updateUserGamesLostDto,
-    );
   }
 }
