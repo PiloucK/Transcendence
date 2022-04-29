@@ -80,12 +80,28 @@ export class UsersController {
     return this.usersService.sendFriendRequest(login42, friendRequestDto);
   }
 
+  @Patch('/:login42/cancelFriendRequest')
+  cancelFriendRequest(
+    @Param('login42') login42: string,
+    @Body() friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    return this.usersService.cancelFriendRequest(login42, friendRequestDto);
+  }
+
   @Patch('/:login42/acceptFriendRequest')
   acceptFriendRequest(
     @Param('login42') login42: string,
     @Body() friendRequestDto: FriendRequestDto,
   ): Promise<User[]> {
     return this.usersService.acceptFriendRequest(login42, friendRequestDto);
+  }
+
+  @Patch('/:login42/declineFriendRequest')
+  declineFriendRequest(
+    @Param('login42') login42: string,
+    @Body() friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    return this.usersService.declineFriendRequest(login42, friendRequestDto);
   }
 
   @Patch('/:login42/username')

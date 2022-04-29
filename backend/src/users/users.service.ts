@@ -103,11 +103,25 @@ export class UsersService {
     return this.usersRepository.sendFriendRequest(login42, friendRequestDto);
   }
 
+  cancelFriendRequest(
+    login42: string,
+    friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    return this.usersRepository.cancelFriendRequest(login42, friendRequestDto);
+  }
+
   acceptFriendRequest(
     login42: string,
     friendRequestDto: FriendRequestDto,
   ): Promise<User[]> {
     return this.usersRepository.acceptFriendRequest(login42, friendRequestDto);
+  }
+
+  declineFriendRequest(
+    login42: string,
+    friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    return this.usersRepository.declineFriendRequest(login42, friendRequestDto);
   }
 
   async updateUserUsername(

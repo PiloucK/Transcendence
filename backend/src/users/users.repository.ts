@@ -72,6 +72,34 @@ export class UsersRepository extends Repository<User> {
     return user.friendRequestsSent;
   }
 
+  async cancelFriendRequest(
+    login42: string,
+    friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendRequestDto;
+
+    const user = await this.getUserWithRelations(login42, [
+      'friendRequestsSent',
+    ]);
+    const friend = await this.getUserWithRelations(friendLogin42, [
+      'friendRequestsReceived',
+    ]);
+
+    if (user.login42 !== friend.login42) {
+      user.friendRequestsSent = user.friendRequestsSent.filter(
+        (curUser) => curUser.login42 !== friendLogin42,
+      );
+      await this.save(user);
+
+      friend.friendRequestsReceived = friend.friendRequestsReceived.filter(
+        (curUser) => curUser.login42 !== login42,
+      );
+      await this.save(friend);
+    }
+
+    return user.friendRequestsSent;
+  }
+
   async acceptFriendRequest(
     login42: string,
     friendRequestDto: FriendRequestDto,
@@ -103,5 +131,33 @@ export class UsersRepository extends Repository<User> {
 
     friend.friends = []; // to prevent circular references error
     return user.friends;
+  }
+
+  async declineFriendRequest(
+    login42: string,
+    friendRequestDto: FriendRequestDto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendRequestDto;
+
+    const user = await this.getUserWithRelations(login42, [
+      'friendRequestsReceived',
+    ]);
+    const friend = await this.getUserWithRelations(friendLogin42, [
+      'friendRequestsSent',
+    ]);
+
+    if (user.login42 !== friend.login42) {
+      user.friendRequestsReceived = user.friendRequestsReceived.filter(
+        (curUser) => curUser.login42 !== friendLogin42,
+      );
+      await this.save(user);
+
+      friend.friendRequestsSent = friend.friendRequestsSent.filter(
+        (curUser) => curUser.login42 !== login42,
+      );
+      await this.save(friend);
+    }
+
+    return user.friendRequestsReceived;
   }
 }
