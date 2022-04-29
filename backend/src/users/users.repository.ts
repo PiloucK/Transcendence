@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FriendRequestDto } from './dto/user-friends.dto';
@@ -53,13 +53,29 @@ export class UsersRepository extends Repository<User> {
     const { friendLogin42 } = friendRequestDto;
 
     const user = await this.getUserWithRelations(login42, [
+      'friends',
       'friendRequestsSent',
+      'friendRequestsReceived',
     ]);
     const friend = await this.getUserWithRelations(friendLogin42, [
       'friendRequestsReceived',
     ]);
 
     if (user.login42 !== friend.login42) {
+      if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
+        throw new ConflictException(
+          `User with login42 ${friendLogin42} is already in your friendlist`,
+        );
+      } else if (
+        user.friendRequestsReceived.find(
+          (friend) => friend.login42 === friendLogin42,
+        )
+      ) {
+        throw new ConflictException(
+          `User with login42 ${friendLogin42} has already sent you a friend request`,
+        );
+      }
+
       user.friendRequestsSent = user.friendRequestsSent.concat(friend);
       await this.save(user);
 
@@ -79,6 +95,7 @@ export class UsersRepository extends Repository<User> {
     const { friendLogin42 } = friendRequestDto;
 
     const user = await this.getUserWithRelations(login42, [
+      'friends',
       'friendRequestsSent',
     ]);
     const friend = await this.getUserWithRelations(friendLogin42, [
@@ -86,6 +103,11 @@ export class UsersRepository extends Repository<User> {
     ]);
 
     if (user.login42 !== friend.login42) {
+      if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
+        throw new ConflictException(
+          `User with login42 ${friendLogin42} is already in your friendlist`,
+        );
+      }
       user.friendRequestsSent = user.friendRequestsSent.filter(
         (curUser) => curUser.login42 !== friendLogin42,
       );
@@ -147,6 +169,11 @@ export class UsersRepository extends Repository<User> {
     ]);
 
     if (user.login42 !== friend.login42) {
+      if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
+        throw new ConflictException(
+          `User with login42 ${friendLogin42} is already in your friendlist`,
+        );
+      }
       user.friendRequestsReceived = user.friendRequestsReceived.filter(
         (curUser) => curUser.login42 !== friendLogin42,
       );
