@@ -197,7 +197,7 @@ export class UsersService {
 		}
   }
 
-	getAllDMOpened(
+	getAllOpenedDM(
     login42: string,
   ): DM[] {
     const user: IUser | undefined = this.searchUser(login42);

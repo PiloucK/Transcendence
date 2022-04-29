@@ -1,18 +1,19 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos } from "../../interfaces/users";
+import { IUserPublicInfos, DM } from "../../interfaces/users";
 
 import Avatar from "@mui/material/Avatar";
 import profileIcon from "../../public/profile_icon.png";
 import { useLoginContext } from "../../context/LoginContext";
 import userService from "../../services/users";
 
+
 import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-export function CardUserDM({ userInfos }: { userInfos: IUserPublicInfos }) {
+export function CardUserDM({ userInfos, setMenu }: { userInfos: IUserPublicInfos, setMenu: (menu: string) => void }) {
   const loginContext = useLoginContext();
 
   const createDM = () => {
@@ -22,7 +23,8 @@ export function CardUserDM({ userInfos }: { userInfos: IUserPublicInfos }) {
     ) {
       userService
         .createDM(loginContext.userLogin, userInfos.login42)
-        .then(() => {
+        .then((dm:DM) => {
+					setMenu(dm.userOne.login42 + '|' + dm.userTwo.login42);
           socket.emit("user:update-direct-messages");
         });
     }

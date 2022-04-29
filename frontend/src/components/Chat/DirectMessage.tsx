@@ -18,19 +18,27 @@ import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-function FriendList({ friends }: { friends: IUserPublicInfos[] }) {
+function FriendList({
+  friends,
+  setMenu,
+}: {
+  friends: IUserPublicInfos[];
+  setMenu: (menu: string) => void;
+}) {
   if (typeof friends === "undefined" || friends.length === 0) {
     return <EmptyFriendList />;
   }
 
   return (
     <div className={styles.social_content}>
-      {friends.map((friend) => CardUserDM({ userInfos: friend }))}
+      {friends.map((friend) =>
+        CardUserDM({ userInfos: friend, setMenu: setMenu })
+      )}
     </div>
   );
 }
 
-function NewDirectMessage() {
+function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
   const loginContext = useLoginContext();
   const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
 
@@ -60,7 +68,7 @@ function NewDirectMessage() {
   return (
     <div className={styles.chat_direct_message_content}>
       Select a friend to start a conversation
-      <FriendList friends={friends} />
+      <FriendList friends={friends} setMenu={setMenu} />
     </div>
   );
 }
@@ -76,9 +84,15 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
   );
 }
 
-function DirectMessageContent({ menu }: { menu: string }) {
+function DirectMessageContent({
+  menu,
+  setMenu,
+}: {
+  menu: string;
+  setMenu: (menu: string) => void;
+}) {
   if (menu === "new_message") {
-    return <NewDirectMessage />;
+    return <NewDirectMessage setMenu={setMenu} />;
   } else {
     return <CurrentDirectMessage menu={menu} />;
   }
@@ -90,7 +104,7 @@ export function DirectMessage() {
   return (
     <>
       <DirectMessageMenu menu={menu} setMenu={setMenu} />
-      <DirectMessageContent menu={menu} />
+      <DirectMessageContent menu={menu} setMenu={setMenu} />
     </>
   );
 }

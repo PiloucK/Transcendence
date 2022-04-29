@@ -52,14 +52,14 @@ export function DirectMessageMenu(props: {
 
   React.useEffect(() => {
     userService
-      .getAllDMOpened(loginContext.userLogin)
+      .getAllOpenedDM(loginContext.userLogin)
       .then((currentDMs: DM[]) => {
         setOpenedDMs(currentDMs);
       });
 
     socket.on("update-direct-messages", () => {
       userService
-        .getAllDMOpened(loginContext.userLogin)
+        .getAllOpenedDM(loginContext.userLogin)
         .then((currentDMs: DM[]) => {
           setOpenedDMs(currentDMs);
         });

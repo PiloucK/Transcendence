@@ -58,6 +58,18 @@ const createDM = (login: string, friendLogin42: string) => {
     });
 };
 
+const sendDM = (login: string, friendLogin42: string, message: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/sendDM`, {
+    friendLogin42,
+    message,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const getOneDM = (login: string, friendLogin42: string) => {
   const request = axios.get(`${baseUrl}/${login}/getOneDM`, {
     friendLogin42,
@@ -69,8 +81,8 @@ const getOneDM = (login: string, friendLogin42: string) => {
     });
 };
 
-const getAllDMOpened = (login: string) => {
-  const request = axios.get(`${baseUrl}/${login}/getAllDMOpened`);
+const getAllOpenedDM = (login: string) => {
+  const request = axios.get(`${baseUrl}/${login}/getAllOpenedDM`);
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -233,9 +245,10 @@ export default {
   getOne,
   addOne,
   deleteOne,
-	createDM,
-	getOneDM,
-	getAllDMOpened,
+  createDM,
+	sendDM,
+  getOneDM,
+  getAllOpenedDM,
   blockUser,
   unblockUser,
   sendFriendRequest,

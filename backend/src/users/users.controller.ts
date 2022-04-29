@@ -81,11 +81,11 @@ export class UsersController {
 		return this.usersService.getOneDM(login42, sendFriendRequestDto);
 	}
 
-	@Get('/:login42/getAllDMOpened')
-	getAllDMOpened(
+	@Get('/:login42/getAllOpenedDM')
+	getAllOpenedDM(
 		@Param('login42') login42: string,
 	): DM[] {
-		return this.usersService.getAllDMOpened(login42);
+		return this.usersService.getAllOpenedDM(login42);
 	}
 
   @Get('/:login42/blockedUsers')
