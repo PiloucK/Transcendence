@@ -11,6 +11,10 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import userServices from "../../services/users";
 
+import io from "socket.io-client";
+
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
 export function SendMessageField({
   input,
   setInput,
@@ -39,6 +43,7 @@ export function SendMessageField({
           content: input,
         })
         .then(() => {
+					socket.emit("user:update-direct-messages");
           setInput("");
         });
     }

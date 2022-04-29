@@ -200,19 +200,17 @@ export class UsersService {
 
   getOneDM(
     login42: string,
-    sendFriendRequestDto: SendFriendRequestDto,
+    fLogin42: string,
   ): DM {
-    const { friendLogin42 } = sendFriendRequestDto;
-
     const user: IUser | undefined = this.searchUser(login42);
     if (!user) {
       throw new NotFoundException(`User with login42 "${login42}" not found`);
     }
 
-    const friend: IUser | undefined = this.searchUser(friendLogin42);
+    const friend: IUser | undefined = this.searchUser(fLogin42);
     if (!friend) {
       throw new NotFoundException(
-        `User (friend) with login42 "${friendLogin42}" not found`,
+        `User (friend) with login42 "${fLogin42}" not found`,
       );
     }
 
@@ -222,7 +220,7 @@ export class UsersService {
 			return dm;
 		} else {
 			throw new NotFoundException(
-				`Your are not in a direct conversation with user with login42 "${friendLogin42}"`,
+				`Your are not in a direct conversation with user with login42 "${fLogin42}"`,
 			);
 		}
   }

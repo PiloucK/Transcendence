@@ -4,14 +4,13 @@ import { EmptyFriendList } from "../Social/emptyPages";
 
 import { DirectMessageMenu } from "./Menus";
 import { useLoginContext } from "../../context/LoginContext";
-import { IUserPublicInfos } from "../interfaces/users";
+import { IUserPublicInfos, DM, IMessage } from "../interfaces/users";
 import userService from "../../services/users";
 import { CardUserDM } from "../Cards/CardUserDM";
 
-import TextField from "@mui/material/TextField";
-import IconButton from "@mui/material/IconButton";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import Button from "@mui/material/Button";
+import Image from "next/image";
+import Rocket from "../../public/no_dm_content.png";
+
 import { SendMessageField } from "../Inputs/SendMessageField";
 
 import io from "socket.io-client";
@@ -73,13 +72,56 @@ function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
   );
 }
 
+function Messages({ dm }: { dm: DM }) {
+  const loginContext = useLoginContext();
+
+  if (typeof dm === "undefined" || dm.messages.length === 0) {
+    return (
+      <div className={styles.social_empty_page}>
+        <Image src={Rocket} />
+        Be the first one to send a message !
+      </div>
+    );
+  }
+
+  const getStyle = (author: string) => {
+    if (author === loginContext.userLogin) {
+      return styles.message_author;
+    } else {
+      return styles.message_friend;
+    }
+  };
+
+  return (
+    <div className={styles.messages_area}>
+      {dm.messages.map((message) => (
+        <div className={getStyle(message.author)}>{message.content}</div>
+      ))}
+    </div>
+  );
+}
+
 function CurrentDirectMessage({ menu }: { menu: string }) {
   const [input, setInput] = React.useState("");
+  const [dm, setDm] = useState<DM>();
+  const users = menu.split("|");
+
+  React.useEffect(() => {
+    userService.getOneDM(users[0], users[1]).then((dm: DM) => {
+      setDm(dm);
+    });
+
+    socket.on("update-direct-messages", () => {
+      userService.getOneDM(users[0], users[1]).then((dm: DM) => {
+        setDm(dm);
+      });
+    });
+  }, []);
 
   return (
     <div className={styles.chat_direct_message_content}>
-      <div className={styles.chat_direct_message_content}>{menu}</div>
       <SendMessageField input={input} setInput={setInput} channel={menu} />
+      <Messages dm={dm}/>
     </div>
   );
 }
@@ -93,9 +135,8 @@ function DirectMessageContent({
 }) {
   if (menu === "new_message") {
     return <NewDirectMessage setMenu={setMenu} />;
-  } else {
-    return <CurrentDirectMessage menu={menu} />;
   }
+  return <CurrentDirectMessage menu={menu} />;
 }
 
 export function DirectMessage() {

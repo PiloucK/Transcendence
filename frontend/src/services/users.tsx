@@ -71,13 +71,11 @@ const sendDM = (login: string, dest: string, message: IMessage) => {
 };
 
 const getOneDM = (login: string, friendLogin42: string) => {
-  const request = axios.get(`${baseUrl}/${login}/getOneDM`, {
-    friendLogin42,
-  });
+  const request = axios.get(`${baseUrl}/${login}/${friendLogin42}/getOneDM`);
   return request
     .then((response) => response.data)
     .catch((e) => {
-      console.error(e);
+      console.error("getOneDM", e);
     });
 };
 

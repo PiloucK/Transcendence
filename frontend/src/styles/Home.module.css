@@ -461,7 +461,9 @@ and should display them in columns of three cards max */
   flex-flow: column wrap;
 }
 
-.user_card, .user_card_dm, .user_card_dm:hover {
+.user_card,
+.user_card_dm,
+.user_card_dm:hover {
   position: relative;
   width: 309px;
   height: 141px;
@@ -485,7 +487,7 @@ and should display them in columns of three cards max */
 }
 
 .user_card_dm:hover {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .user_card_username {
@@ -512,8 +514,7 @@ and should display them in columns of three cards max */
 }
 
 .user_card_avatar {
-	
-	position: absolute;
+  position: absolute;
   left: 10.03%;
   right: 57.61%;
   top: 14.18%;
@@ -967,10 +968,11 @@ and should display them in columns of three cards max */
   color: #ffffff;
 }
 
-.chat_direct_message_menu_new, .chat_direct_message_menu_new_selected {
+.chat_direct_message_menu_new,
+.chat_direct_message_menu_new_selected {
   position: relative;
-	top: 5%;
-	
+  top: 5%;
+
   /* transform: translate(-50%, 0%); */
   /* Body */
 
@@ -998,7 +1000,7 @@ and should display them in columns of three cards max */
 
 .chat_direct_message_menu_new_selected {
   color: #ffffff;
-	cursor: default;
+  cursor: default;
 }
 
 .chat_direct_message_content {
@@ -1028,6 +1030,63 @@ and should display them in columns of three cards max */
   /* White */
 
   color: #ffffff;
+}
+
+.messages_area {
+	overflow-y: auto;
+
+	position: absolute;
+	width: 100%;
+	height: 80%;
+	left: 0px;
+	top: 5%;
+}
+
+.message,
+.message_author,
+.message_friend {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+
+  /* position: absolute; */
+
+  border-radius: 20px;
+
+  /* Body */
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  /* identical to box height */
+
+  display: flex;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 1rem;
+  /* margin: 0px 10px; */
+}
+
+.message_author {
+  right: 10%;
+  background: #fca311;
+}
+
+.message_friend {
+  left: 10%;
+  background: #1985a1;
 }
 
 .chat_add_channel {

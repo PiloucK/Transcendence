@@ -82,12 +82,12 @@ export class UsersController {
 		return this.usersService.sendDM(login42, sendDMDto);
 	}
 
-	@Get('/:login42/getOneDM')
+	@Get('/:login42/:fLogin42/getOneDM')
 	getOneDM(
 		@Param('login42') login42: string,
-		@Body() sendFriendRequestDto: SendFriendRequestDto,
+		@Param('fLogin42') fLogin42: string,
 	): DM {
-		return this.usersService.getOneDM(login42, sendFriendRequestDto);
+		return this.usersService.getOneDM(login42, fLogin42);
 	}
 
 	@Get('/:login42/getAllOpenedDM')
