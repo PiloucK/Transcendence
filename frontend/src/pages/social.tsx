@@ -31,7 +31,7 @@ function SocialPage({ menu }: { menu: string }) {
       });
 
     userService
-      .getUserBlocked(loginContext.userLogin)
+      .getUserBlockedUsers(loginContext.userLogin)
       .then((users: IUserPublicInfos[]) => {
         setBlocked(users);
       });
@@ -50,7 +50,7 @@ function SocialPage({ menu }: { menu: string }) {
         });
 
       userService
-        .getUserBlocked(loginContext.userLogin)
+        .getUserBlockedUsers(loginContext.userLogin)
         .then((users: IUserPublicInfos[]) => {
           setBlocked(users);
         });
@@ -70,7 +70,7 @@ function SocialPage({ menu }: { menu: string }) {
         });
 
       userService
-        .getUserBlocked(loginContext.userLogin)
+        .getUserBlockedUsers(loginContext.userLogin)
         .then((users: IUserPublicInfos[]) => {
           setBlocked(users);
         });

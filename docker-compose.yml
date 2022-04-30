@@ -26,12 +26,16 @@ services:
         - ./backend/src:/usr/src/app/backend/src
       restart: always
 
-  # db:
-  #     image: postgres
-  #     ports:
-  #       - "5432:5432"
-  #     container_name: db-transcendence
-  #     restart: always
+  database:
+      image: postgres:14
+      ports:
+        - "5432:5432"
+      container_name: database-transcendence
+      restart: always
+      environment:
+        POSTGRES_USER: postgres_user
+        POSTGRES_PASSWORD: postgres_pass
+        POSTGRES_DB: pong_db
 
     # volumes:
     #   - data:/var/lib/postgresql/data

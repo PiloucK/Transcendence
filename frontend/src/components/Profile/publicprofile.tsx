@@ -90,7 +90,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         setSentRList(requests);
       });
     userService
-      .getUserBlocked(loginContext.userLogin)
+      .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       });
@@ -107,7 +107,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
           setSentRList(requests);
         });
       userService
-        .getUserBlocked(loginContext.userLogin)
+        .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
         });

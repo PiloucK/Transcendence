@@ -1,13 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
 import {
-	FriendRequestsReceived,
-  FriendRequestsSent,
-  Friends,
-  IUser,
-  IUserForLeaderboard,
-  IUserPublicInfos,
-} from './user.model';
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import { User } from './user.entity';
+import { UsersRepository } from './users.repository';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
   UpdateUserEloDto,
@@ -15,398 +15,337 @@ import {
   UpdateUserGamesWonDto,
   UpdateUserUsernameDto,
 } from './dto/update-user.dto';
-import {
-  AcceptFriendRequestDto,
-  SendFriendRequestDto,
-} from './dto/user-friends.dto';
+import { FriendLogin42Dto } from './dto/friend-login42.dto';
 
 @Injectable()
 export class UsersService {
+  constructor(
+    @InjectRepository(UsersRepository)
+    private usersRepository: UsersRepository,
+  ) {}
   // to split when using the db: UsersService and UsersFriendsService
-  private users: IUser[] = [];
 
-  private createUserPublicInfos(user: IUser): IUserPublicInfos {
-    const ret: IUserPublicInfos = {
-      login42: user.login42,
-      username: user.username,
-      elo: user.elo,
-      gamesWon: user.gamesWon,
-      gamesLost: user.gamesLost,
-    };
-    return ret;
-  }
+  // private createUserPublicInfos(user: IUser): IUserPublicInfos {
+  //   const ret: IUserPublicInfos = {
+  //     login42: user.login42,
+  //     username: user.username,
+  //     elo: user.elo,
+  //     gamesWon: user.gamesWon,
+  //     gamesLost: user.gamesLost,
+  //   };
+  //   return ret;
+  // }
 
-  getAllUsers(): IUserPublicInfos[] {
-    return this.users.map((user) => this.createUserPublicInfos(user));
-  }
-
-  getUsersForLeaderboard(): IUserForLeaderboard[] {
-    return this.users
-      .map((user) => {
-        const ret: IUserForLeaderboard = {
-          login42: user.login42,
-          username: user.username,
-          elo: user.elo,
-        };
-        return ret;
-      })
-      .sort((a, b) => a.elo - b.elo);
-  }
-
-  private searchUser(login42: string): IUser | undefined {
-    return this.users.find((user) => user.login42 == login42);
-  }
-
-  getUserByLogin(login42: string): IUserPublicInfos {
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-    return this.createUserPublicInfos(user);
-  }
-
-  getUserFriends(login42: string): IUserPublicInfos[] {
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-    return user.friends.map((curLogin42) => {
-      const friend = this.searchUser(curLogin42);
-      if (!friend) {
-        throw new NotFoundException(
-          `User (friend) with login42 "${curLogin42}" not found`,
-        );
-      }
-      return this.createUserPublicInfos(friend);
+  async getAllUsers(): Promise<User[]> {
+    const users = await this.usersRepository.find({
+      relations: [
+        'friends',
+        'friendRequestsSent',
+        'friendRequestsReceived',
+        'blockedUsers',
+      ],
     });
+    return users;
   }
 
-  getUserFriendRequestsReceived(login42: string): IUserPublicInfos[] {
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
+  // getUsersForLeaderboard(): IUserForLeaderboard[] {
+  //   return this.users
+  //     .map((user) => {
+  //       const ret: IUserForLeaderboard = {
+  //         login42: user.login42,
+  //         username: user.username,
+  //         elo: user.elo,
+  //       };
+  //       return ret;
+  //     })
+  //     .sort((a, b) => a.elo - b.elo);
+  // }
+
+  // private searchUser(login42: string): IUser | undefined {
+  //   return this.users.find((user) => user.login42 == login42);
+  // }
+
+  getUserByLogin(login42: string): Promise<User> {
+    return this.usersRepository.getUserByLoginWithAllRelations(login42); // all relations?
+  }
+
+  createUser(createUserDto: CreateUserDto): Promise<User> {
+    return this.usersRepository.createUser(createUserDto);
+  }
+
+  async deleteAllUsers(): Promise<void> {
+    const users = await this.getAllUsers();
+    await this.usersRepository.remove(users);
+  }
+
+  async deleteUser(login42: string): Promise<void> {
+    const result = await this.usersRepository.delete(login42);
+
+    if (result.affected === 0) {
       throw new NotFoundException(`User with login42 "${login42}" not found`);
     }
-    return user.friendRequestsReceived.map((curLogin42) => {
-      const friend = this.searchUser(curLogin42);
-      if (!friend) {
-        throw new NotFoundException(
-          `User (friend) with login42 "${curLogin42}" not found`,
-        );
-      }
-      return this.createUserPublicInfos(friend);
-    });
   }
 
-  getUserFriendRequestsSent(login42: string): IUserPublicInfos[] {
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-    return user.friendRequestsSent.map((curLogin42) => {
-      const friend = this.searchUser(curLogin42);
-      if (!friend) {
-        throw new NotFoundException(
-          `User (friend) with login42 "${curLogin42}" not found`,
-        );
-      }
-      return this.createUserPublicInfos(friend);
-    });
-  }
-
-  createUser(createUserDto: CreateUserDto): IUser {
-    const { login42 } = createUserDto;
-    let user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      user = {
-        id: uuid(),
-        login42,
-        token42: '',
-        username: login42,
-        friends: [],
-        friendRequestsSent: [],
-        friendRequestsReceived: [],
-        blockedUsers: [],
-        elo: 0,
-        gamesWon: 0,
-        gamesLost: 0,
-        twoFa: false,
-      };
-      this.users.push(user);
-    }
+  async updateUserUsername(
+    login42: string,
+    updateUserUsernameDto: UpdateUserUsernameDto,
+  ): Promise<User> {
+    const { username } = updateUserUsernameDto;
+    const user = await this.getUserByLogin(login42);
+    user.username = username;
+    await this.usersRepository.save(user);
     return user;
   }
 
-	blockedUsers(login42: string): IUserPublicInfos[] {
-		const user: IUser | undefined = this.searchUser(login42);
-		if (!user) {
-			throw new NotFoundException(`User with login42 "${login42}" not found`);
-		}
-		return user.blockedUsers.map((curLogin42) => {
-			const user = this.searchUser(curLogin42);
-			if (!user) {
-				throw new NotFoundException(
-					`User with login42 "${curLogin42}" not found`,
-				);
-			}
-			return this.createUserPublicInfos(user);
-		});
-	}
-
-  blockUser(
-    login42: string,
-    sendFriendRequestDto: SendFriendRequestDto,
-  ): FriendRequestsSent {
-    const { friendLogin42 } = sendFriendRequestDto;
-
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-
-    const friend: IUser | undefined = this.searchUser(friendLogin42);
-    if (!friend) {
-      throw new NotFoundException(
-        `User (friend) with login42 "${friendLogin42}" not found`,
-      );
-    }
-
-		if (user.blockedUsers.includes(friendLogin42)) {
-			throw new NotFoundException(
-				`User with login42 "${login42}" already blocked`,
-			);
-		} else {
-			user.blockedUsers.push(friendLogin42);
-		}
-
-    return user.blockedUsers;
-  }
-
-  unblockUser(
-    login42: string,
-    sendFriendRequestDto: SendFriendRequestDto,
-  ): FriendRequestsSent {
-    const { friendLogin42 } = sendFriendRequestDto;
-
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-
-    const friend: IUser | undefined = this.searchUser(friendLogin42);
-    if (!friend) {
-      throw new NotFoundException(
-        `User (friend) with login42 "${friendLogin42}" not found`,
-      );
-    }
-
-		if (user.blockedUsers.includes(friendLogin42)) {
-			user.blockedUsers.splice(user.blockedUsers.indexOf(friendLogin42), 1);
-		} else {
-			throw new NotFoundException(
-				`User with login42 "${login42}" not blocked`,
-			);
-		}
-
-    return user.blockedUsers;
-  }
-
-  sendFriendRequest(
-    login42: string,
-    sendFriendRequestDto: SendFriendRequestDto,
-  ): FriendRequestsSent {
-    const { friendLogin42 } = sendFriendRequestDto;
-
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-
-    const friend: IUser | undefined = this.searchUser(friendLogin42);
-    if (!friend) {
-      throw new NotFoundException(
-        `User (friend) with login42 "${friendLogin42}" not found`,
-      );
-    }
-
-		if (user.friendRequestsReceived.includes(friendLogin42)) {
-			user.friends.push(friendLogin42);
-			friend.friends.push(login42);
-			user.friendRequestsReceived = user.friendRequestsReceived.filter(
-				(curLogin42) => curLogin42 !== friendLogin42,
-			);
-			friend.friendRequestsSent = friend.friendRequestsSent.filter(
-				(curLogin42) => curLogin42 !== login42,
-			);
-		} else {
-			user.friendRequestsSent.push(friendLogin42);
-			friend.friendRequestsReceived.push(login42);
-		}
-
-    return user.friendRequestsSent;
-  }
-
-	cancelFriendRequest(
-    login42: string,
-    sendFriendRequestDto: SendFriendRequestDto,
-  ): FriendRequestsReceived {
-    const { friendLogin42 } = sendFriendRequestDto;
-
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-
-    const friend: IUser | undefined = this.searchUser(friendLogin42);
-    if (!friend) {
-      throw new NotFoundException(
-        `User (friend) with login42 "${friendLogin42}" not found`,
-      );
-    }
-
-    user.friendRequestsSent = user.friendRequestsSent.filter(
-      (curLogin42) => curLogin42 !== friendLogin42,
-    );
-    friend.friendRequestsReceived = friend.friendRequestsReceived.filter(
-      (curLogin42) => curLogin42 !== login42,
-    );
-    return user.friendRequestsSent;
-  }
-
-  acceptFriendRequest(
-    login42: string,
-    acceptFriendRequestDto: AcceptFriendRequestDto,
-  ): Friends {
-    const { friendLogin42 } = acceptFriendRequestDto;
-
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-
-    const friend: IUser | undefined = this.searchUser(friendLogin42);
-    if (!friend) {
-      throw new NotFoundException(
-        `User (friend) with login42 "${friendLogin42}" not found`,
-      );
-    }
-
-    user.friends.push(friendLogin42);
-    friend.friends.push(login42);
-    user.friendRequestsReceived = user.friendRequestsReceived.filter(
-      (curLogin42) => curLogin42 !== friendLogin42,
-    );
-    friend.friendRequestsSent = friend.friendRequestsSent.filter(
-      (curLogin42) => curLogin42 !== login42,
-    );
-
-    return user.friends;
-  }
-
-  declineFriendRequest(
-    login42: string,
-    acceptFriendRequestDto: AcceptFriendRequestDto,
-  ): Friends {
-    const { friendLogin42 } = acceptFriendRequestDto;
-
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-
-    const friend: IUser | undefined = this.searchUser(friendLogin42);
-    if (!friend) {
-      throw new NotFoundException(
-        `User (friend) with login42 "${friendLogin42}" not found`,
-      );
-    }
-
-    user.friendRequestsReceived = user.friendRequestsReceived.filter(
-      (curLogin42) => curLogin42 !== friendLogin42,
-    );
-    friend.friendRequestsSent = friend.friendRequestsSent.filter(
-      (curLogin42) => curLogin42 !== login42,
-    );
-
-    return user.friends;
-  }
-
-  removeFriend(
-    login42: string,
-    acceptFriendRequestDto: AcceptFriendRequestDto,
-  ): Friends {
-    const { friendLogin42 } = acceptFriendRequestDto;
-
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-
-    const friend: IUser | undefined = this.searchUser(friendLogin42);
-    if (!friend) {
-      throw new NotFoundException(
-        `User (friend) with login42 "${friendLogin42}" not found`,
-      );
-    }
-
-    user.friends = user.friends.filter(
-      (curLogin42) => curLogin42 !== friendLogin42,
-    );
-    friend.friends = friend.friends.filter(
-      (curLogin42) => curLogin42 !== login42,
-    );
-
-    return user.friends;
-  }
-
-  updateUserElo(
+  async updateUserElo(
     login42: string,
     updateUserEloDto: UpdateUserEloDto,
-  ): IUserPublicInfos {
+  ): Promise<User> {
     const { elo } = updateUserEloDto;
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-    user.elo = user.elo + elo;
-    return this.createUserPublicInfos(user);
+    const user = await this.getUserByLogin(login42);
+    user.elo = elo;
+    await this.usersRepository.save(user);
+    return user;
   }
 
-  updateUserUsername(
-    login42: string,
-    updateUserUsernameDto: UpdateUserUsernameDto,
-  ): IUserPublicInfos {
-    const { username } = updateUserUsernameDto;
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-    user.username = username;
-    return this.createUserPublicInfos(user);
-  }
-
-  updateUserGamesWon(
+  async updateUserGamesWon(
     login42: string,
     updateUserGamesWonDto: UpdateUserGamesWonDto,
-  ): IUserPublicInfos {
+  ): Promise<User> {
     const { gamesWon } = updateUserGamesWonDto;
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
+    const user = await this.getUserByLogin(login42);
     user.gamesWon = gamesWon;
-    return this.createUserPublicInfos(user);
+    await this.usersRepository.save(user);
+    return user;
   }
 
-  updateUserGamesLost(
+  async updateUserGamesLost(
     login42: string,
     updateUserGamesLostDto: UpdateUserGamesLostDto,
-  ): IUserPublicInfos {
+  ): Promise<User> {
     const { gamesLost } = updateUserGamesLostDto;
-    const user: IUser | undefined = this.searchUser(login42);
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
+    const user = await this.getUserByLogin(login42);
     user.gamesLost = gamesLost;
-    return this.createUserPublicInfos(user);
+    await this.usersRepository.save(user);
+    return user;
+  }
+
+  async getUserFriends(login42: string): Promise<User[]> {
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+    ]);
+    return user.friends;
+  }
+
+  async getUserFriendRequestsSent(login42: string): Promise<User[]> {
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friendRequestsSent',
+    ]);
+    return user.friendRequestsSent;
+  }
+
+  async getUserFriendRequestsReceived(login42: string): Promise<User[]> {
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friendRequestsReceived',
+    ]);
+    return user.friendRequestsReceived;
+  }
+
+  async sendFriendRequest(
+    login42: string,
+    friendLogin42Dto: FriendLogin42Dto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendLogin42Dto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+      'friendRequestsSent',
+      'friendRequestsReceived',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      ['friendRequestsReceived'],
+    );
+
+    if (user.login42 === friend.login42) {
+      throw new ConflictException('You cannot add yourself to your friendlist');
+    } else if (
+      user.friends.find((friend) => friend.login42 === friendLogin42)
+    ) {
+      throw new ConflictException(
+        `User with login42 ${friendLogin42} is already in your friendlist`,
+      );
+    } else if (
+      user.friendRequestsReceived.find(
+        (friend) => friend.login42 === friendLogin42,
+      )
+    ) {
+      throw new ConflictException(
+        `User with login42 ${friendLogin42} has already sent you a friend request`,
+      );
+    }
+
+    await this.usersRepository.addUserToFriendRequestsReceived(friend, user);
+    await this.usersRepository.addUserToFriendRequestsSent(user, friend);
+
+    friend.friendRequestsReceived = []; // to prevent circular references error
+    return user.friendRequestsSent;
+  }
+
+  async cancelFriendRequest(
+    login42: string,
+    friendLogin42Dto: FriendLogin42Dto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendLogin42Dto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+      'friendRequestsSent',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      ['friendRequestsReceived'],
+    );
+
+    if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
+      throw new ConflictException(
+        `User with login42 ${friendLogin42} is already in your friendlist`,
+      );
+    }
+
+    await this.usersRepository.removeUserFromFriendRequestsSent(user, friend);
+    await this.usersRepository.removeUserFromFriendRequestsReceived(
+      friend,
+      user,
+    );
+
+    return user.friendRequestsSent;
+  }
+
+  async acceptFriendRequest(
+    login42: string,
+    friendLogin42Dto: FriendLogin42Dto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendLogin42Dto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+      'friendRequestsReceived',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      ['friends', 'friendRequestsSent'],
+    );
+
+    this.usersRepository.addUserToFriends(user, friend);
+    await this.usersRepository.removeUserFromFriendRequestsReceived(
+      user,
+      friend,
+    );
+
+    this.usersRepository.addUserToFriends(friend, user);
+    await this.usersRepository.removeUserFromFriendRequestsSent(friend, user);
+
+    friend.friends = []; // to prevent circular references error
+    return user.friends;
+  }
+
+  async declineFriendRequest(
+    login42: string,
+    friendLogin42Dto: FriendLogin42Dto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendLogin42Dto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+      'friendRequestsReceived',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      ['friendRequestsSent'],
+    );
+
+    if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
+      throw new ConflictException(
+        `User with login42 ${friendLogin42} is already in your friendlist`,
+      );
+    }
+
+    await this.usersRepository.removeUserFromFriendRequestsReceived(
+      user,
+      friend,
+    );
+    await this.usersRepository.removeUserFromFriendRequestsSent(friend, user);
+
+    return user.friendRequestsReceived;
+  }
+
+  async removeFriend(
+    login42: string,
+    friendLogin42Dto: FriendLogin42Dto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendLogin42Dto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      ['friends'],
+    );
+
+    await this.usersRepository.removeUserFromFriends(user, friend);
+    await this.usersRepository.removeUserFromFriends(friend, user);
+
+    return user.friends;
+  }
+
+  async getUserBlockedUsers(login42: string): Promise<User[]> {
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'blockedUsers',
+    ]);
+    return user.blockedUsers;
+  }
+
+  async blockUser(
+    login42: string,
+    friendLogin42Dto: FriendLogin42Dto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendLogin42Dto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'blockedUsers',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      [],
+    );
+
+    if (user.login42 === friend.login42) {
+      throw new ConflictException('You cannot block yourself');
+    }
+
+    await this.usersRepository.addUserToBlockedUsers(user, friend);
+
+    return user.blockedUsers;
+  }
+
+  async unblockUser(
+    login42: string,
+    friendLogin42Dto: FriendLogin42Dto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendLogin42Dto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'blockedUsers',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      [],
+    );
+
+    await this.usersRepository.removeUserFromBlockedUsers(user, friend);
+
+    return user.blockedUsers;
   }
 }

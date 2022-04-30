@@ -38,6 +38,16 @@ const addOne = (newUser: IUserCredentials) => {
     });
 };
 
+const deleteAll = () => {
+  // dev
+  const request = axios.delete(baseUrl);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const deleteOne = (login: string) => {
   const request = axios.delete(`${baseUrl}/${login}`);
   return request
@@ -47,10 +57,8 @@ const deleteOne = (login: string) => {
     });
 };
 
-const blockUser = (login: string, friendLogin42: string) => {
-  const request = axios.patch(`${baseUrl}/${login}/blockUser`, {
-    friendLogin42,
-  });
+const updateUserUsername = (login: string, username: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/username`, { username });
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -58,10 +66,8 @@ const blockUser = (login: string, friendLogin42: string) => {
     });
 };
 
-const unblockUser = (login: string, friendLogin42: string) => {
-  const request = axios.patch(`${baseUrl}/${login}/unblockUser`, {
-    friendLogin42,
-  });
+const updateUserElo = (login: string, elo: number) => {
+  const request = axios.patch(`${baseUrl}/${login}/elo`, { elo });
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -69,6 +75,50 @@ const unblockUser = (login: string, friendLogin42: string) => {
     });
 };
 
+const updateUserGamesWon = (login: string, gamesWon: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/gamesWon`, { gamesWon });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const updateUserGamesLost = (login: string, gamesLost: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/gamesLost`, { gamesLost });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const getUserFriends = (login: string) => {
+  const request = axios.get(`${baseUrl}/${login}/friends`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const getUserFriendRequestsSent = (login: string) => {
+  const request = axios.get(`${baseUrl}/${login}/friendRequestsSent`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const getUserFriendRequestsReceived = (login: string) => {
+  const request = axios.get(`${baseUrl}/${login}/friendRequestsReceived`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
 
 const sendFriendRequest = (login: string, friendLogin42: string) => {
   const request = axios.patch(`${baseUrl}/${login}/sendFriendRequest`, {
@@ -125,35 +175,7 @@ const removeFriend = (login: string, friendLogin42: string) => {
     });
 };
 
-const getUserFriends = (login: string) => {
-  const request = axios.get(`${baseUrl}/${login}/friends`);
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
-};
-
-const getUserFriendRequestsReceived = (login: string) => {
-  const request = axios.get(`${baseUrl}/${login}/friendRequestsReceived`);
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
-};
-
-const getUserFriendRequestsSent = (login: string) => {
-  const request = axios.get(`${baseUrl}/${login}/friendRequestsSent`);
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
-};
-
-
-const getUserBlocked = (login: string) => {
+const getUserBlockedUsers = (login: string) => {
   const request = axios.get(`${baseUrl}/${login}/blockedUsers`);
   return request
     .then((response) => response.data)
@@ -162,8 +184,10 @@ const getUserBlocked = (login: string) => {
     });
 };
 
-const updateUserElo = (login: string, elo: number) => {
-  const request = axios.patch(`${baseUrl}/${login}/elo`, { elo });
+const blockUser = (login: string, friendLogin42: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/blockUser`, {
+    friendLogin42,
+  });
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -171,26 +195,10 @@ const updateUserElo = (login: string, elo: number) => {
     });
 };
 
-const updateUserUsername = (login: string, username: string) => {
-  const request = axios.patch(`${baseUrl}/${login}/username`, { username });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
-};
-
-const updateUserGamesWon = (login: string, gamesWon: string) => {
-  const request = axios.patch(`${baseUrl}/${login}/gamesWon`, { gamesWon });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
-};
-
-const updateUserGamesLost = (login: string, gamesLost: string) => {
-  const request = axios.patch(`${baseUrl}/${login}/gamesLost`, { gamesLost });
+const unblockUser = (login: string, friendLogin42: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/unblockUser`, {
+    friendLogin42,
+  });
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -203,26 +211,21 @@ export default {
   getAllForLeaderboard,
   getOne,
   addOne,
+  deleteAll,
   deleteOne,
-	blockUser,
-	unblockUser,
-  sendFriendRequest,
-	cancelFriendRequest,
-  acceptFriendRequest,
-	declineFriendRequest,
-	removeFriend,
-  getUserFriends,
-	getUserFriendRequestsReceived,
-	getUserFriendRequestsSent,
-	getUserBlocked,
-  updateUserElo,
   updateUserUsername,
+  updateUserElo,
   updateUserGamesWon,
   updateUserGamesLost,
+  getUserFriends,
+  getUserFriendRequestsSent,
+  getUserFriendRequestsReceived,
+  sendFriendRequest,
+  cancelFriendRequest,
+  acceptFriendRequest,
+  declineFriendRequest,
+  removeFriend,
+  getUserBlockedUsers,
+  blockUser,
+  unblockUser,
 };
-// ES6 shorthand for
-// export default {
-//   getAll: getAll,
-//   create: create,
-//   update: update,
-// };
