@@ -36,6 +36,10 @@ export class User {
   @ManyToMany(() => User)
   @JoinTable()
   friendRequestsReceived!: User[];
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  blockedUsers!: User[];
 }
 
 // export interface IUserForLeaderboard {

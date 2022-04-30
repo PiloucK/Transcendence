@@ -1,9 +1,13 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+
+import { User } from './user.entity';
+import { UsersRepository } from './users.repository';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
   UpdateUserEloDto,
@@ -11,9 +15,7 @@ import {
   UpdateUserGamesWonDto,
   UpdateUserUsernameDto,
 } from './dto/update-user.dto';
-import { FriendRequestDto } from './dto/user-friends.dto';
-import { User } from './user.entity';
-import { UsersRepository } from './users.repository';
+import { FriendLogin42Dto } from './dto/friend-login42.dto';
 
 @Injectable()
 export class UsersService {
@@ -36,7 +38,12 @@ export class UsersService {
 
   async getAllUsers(): Promise<User[]> {
     const users = await this.usersRepository.find({
-      relations: ['friends', 'friendRequestsSent', 'friendRequestsReceived'],
+      relations: [
+        'friends',
+        'friendRequestsSent',
+        'friendRequestsReceived',
+        'blockedUsers',
+      ],
     });
     return users;
   }
@@ -146,24 +153,36 @@ export class UsersService {
 
   async sendFriendRequest(
     login42: string,
-    friendRequestDto: FriendRequestDto,
+    friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
-    const { friendLogin42 } = friendRequestDto;
+    const { friendLogin42 } = friendLogin42Dto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
       'friends',
       'friendRequestsSent',
       'friendRequestsReceived',
+      'blockedUsers',
     ]);
     const friend = await this.usersRepository.getUserWithRelations(
       friendLogin42,
-      ['friendRequestsReceived'],
+      ['friendRequestsReceived', 'blockedUsers'],
     );
 
     if (user.login42 === friend.login42) {
       throw new ConflictException('You cannot add yourself to your friendlist');
-    }
-    if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
+    } else if (friend.blockedUsers.find((user) => user.login42 === login42)) {
+      throw new ForbiddenException(
+        `User with login42 ${friendLogin42} has blocked you`,
+      );
+    } else if (
+      user.blockedUsers.find((friend) => friend.login42 === friendLogin42)
+    ) {
+      throw new ConflictException(
+        `User with login42 ${friendLogin42} is in your list of blocked users`,
+      );
+    } else if (
+      user.friends.find((friend) => friend.login42 === friendLogin42)
+    ) {
       throw new ConflictException(
         `User with login42 ${friendLogin42} is already in your friendlist`,
       );
@@ -186,9 +205,9 @@ export class UsersService {
 
   async cancelFriendRequest(
     login42: string,
-    friendRequestDto: FriendRequestDto,
+    friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
-    const { friendLogin42 } = friendRequestDto;
+    const { friendLogin42 } = friendLogin42Dto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
       'friends',
@@ -216,9 +235,9 @@ export class UsersService {
 
   async acceptFriendRequest(
     login42: string,
-    friendRequestDto: FriendRequestDto,
+    friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
-    const { friendLogin42 } = friendRequestDto;
+    const { friendLogin42 } = friendLogin42Dto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
       'friends',
@@ -244,9 +263,9 @@ export class UsersService {
 
   async declineFriendRequest(
     login42: string,
-    friendRequestDto: FriendRequestDto,
+    friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
-    const { friendLogin42 } = friendRequestDto;
+    const { friendLogin42 } = friendLogin42Dto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
       'friends',
@@ -274,9 +293,9 @@ export class UsersService {
 
   async removeFriend(
     login42: string,
-    friendRequestDto: FriendRequestDto,
+    friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
-    const { friendLogin42 } = friendRequestDto;
+    const { friendLogin42 } = friendLogin42Dto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
       'friends',
@@ -290,5 +309,79 @@ export class UsersService {
     await this.usersRepository.removeUserFromFriends(friend, user);
 
     return user.friends;
+  }
+
+  async getUserBlockedUsers(login42: string): Promise<User[]> {
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'blockedUsers',
+    ]);
+    return user.blockedUsers;
+  }
+
+  async blockUser(
+    login42: string,
+    friendLogin42Dto: FriendLogin42Dto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendLogin42Dto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'blockedUsers',
+      'friends',
+      'friendRequestsSent',
+      'friendRequestsReceived',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      ['friends', 'friendRequestsSent', 'friendRequestsReceived'],
+    );
+
+    if (user.login42 === friend.login42) {
+      throw new ConflictException('You cannot block yourself');
+    }
+    if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
+      await this.usersRepository.removeUserFromFriends(user, friend);
+      await this.usersRepository.removeUserFromFriends(friend, user);
+    } else if (
+      user.friendRequestsSent.find((friend) => friend.login42 === friendLogin42)
+    ) {
+      await this.usersRepository.removeUserFromFriendRequestsSent(user, friend);
+      await this.usersRepository.removeUserFromFriendRequestsReceived(
+        friend,
+        user,
+      );
+    } else if (
+      user.friendRequestsReceived.find(
+        (friend) => friend.login42 === friendLogin42,
+      )
+    ) {
+      await this.usersRepository.removeUserFromFriendRequestsReceived(
+        user,
+        friend,
+      );
+      await this.usersRepository.removeUserFromFriendRequestsSent(friend, user);
+    }
+
+    await this.usersRepository.addUserToBlockedUsers(user, friend);
+
+    return user.blockedUsers;
+  }
+
+  async unblockUser(
+    login42: string,
+    friendLogin42Dto: FriendLogin42Dto,
+  ): Promise<User[]> {
+    const { friendLogin42 } = friendLogin42Dto;
+
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'blockedUsers',
+    ]);
+    const friend = await this.usersRepository.getUserWithRelations(
+      friendLogin42,
+      [],
+    );
+
+    await this.usersRepository.removeUserFromBlockedUsers(user, friend);
+
+    return user.blockedUsers;
   }
 }

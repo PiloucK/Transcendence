@@ -8,6 +8,8 @@ import {
   Query,
   Delete,
 } from '@nestjs/common';
+
+import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { GetUsersDto } from './dto/get-users.dto';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,8 +19,7 @@ import {
   UpdateUserGamesWonDto,
   UpdateUserUsernameDto,
 } from './dto/update-user.dto';
-import { FriendRequestDto } from './dto/user-friends.dto';
-import { User } from './user.entity';
+import { FriendLogin42Dto } from './dto/friend-login42.dto';
 
 @Controller('users')
 export class UsersController {
@@ -110,40 +111,61 @@ export class UsersController {
   @Patch('/:login42/sendFriendRequest')
   sendFriendRequest(
     @Param('login42') login42: string,
-    @Body() friendRequestDto: FriendRequestDto,
+    @Body() friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
-    return this.usersService.sendFriendRequest(login42, friendRequestDto);
+    return this.usersService.sendFriendRequest(login42, friendLogin42Dto);
   }
 
   @Patch('/:login42/cancelFriendRequest')
   cancelFriendRequest(
     @Param('login42') login42: string,
-    @Body() friendRequestDto: FriendRequestDto,
+    @Body() friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
-    return this.usersService.cancelFriendRequest(login42, friendRequestDto);
+    return this.usersService.cancelFriendRequest(login42, friendLogin42Dto);
   }
 
   @Patch('/:login42/acceptFriendRequest')
   acceptFriendRequest(
     @Param('login42') login42: string,
-    @Body() friendRequestDto: FriendRequestDto,
+    @Body() friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
-    return this.usersService.acceptFriendRequest(login42, friendRequestDto);
+    return this.usersService.acceptFriendRequest(login42, friendLogin42Dto);
   }
 
   @Patch('/:login42/declineFriendRequest')
   declineFriendRequest(
     @Param('login42') login42: string,
-    @Body() friendRequestDto: FriendRequestDto,
+    @Body() friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
-    return this.usersService.declineFriendRequest(login42, friendRequestDto);
+    return this.usersService.declineFriendRequest(login42, friendLogin42Dto);
   }
 
   @Patch('/:login42/removeFriend')
   removeFriend(
     @Param('login42') login42: string,
-    @Body() friendRequestDto: FriendRequestDto,
+    @Body() friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
-    return this.usersService.removeFriend(login42, friendRequestDto);
+    return this.usersService.removeFriend(login42, friendLogin42Dto);
+  }
+
+  @Get('/:login42/blockedUsers')
+  getUserBlockedUsers(@Param('login42') login42: string): Promise<User[]> {
+    return this.usersService.getUserBlockedUsers(login42);
+  }
+
+  @Patch('/:login42/blockUser')
+  blockUser(
+    @Param('login42') login42: string,
+    @Body() friendLogin42Dto: FriendLogin42Dto,
+  ): Promise<User[]> {
+    return this.usersService.blockUser(login42, friendLogin42Dto);
+  }
+
+  @Patch('/:login42/unblockUser')
+  unblockUser(
+    @Param('login42') login42: string,
+    @Body() friendLogin42Dto: FriendLogin42Dto,
+  ): Promise<User[]> {
+    return this.usersService.unblockUser(login42, friendLogin42Dto);
   }
 }
