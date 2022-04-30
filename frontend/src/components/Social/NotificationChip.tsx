@@ -21,7 +21,7 @@ export function NotificationChip() {
         setNotifications(notifications);
       });
     userService
-      .getUserBlocked(loginContext.userLogin)
+      .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedUsers(blocked);
       });
@@ -33,7 +33,7 @@ export function NotificationChip() {
           setNotifications(notifications);
         });
       userService
-        .getUserBlocked(loginContext.userLogin)
+        .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedUsers(blocked);
         });

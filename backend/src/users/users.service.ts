@@ -161,25 +161,14 @@ export class UsersService {
       'friends',
       'friendRequestsSent',
       'friendRequestsReceived',
-      'blockedUsers',
     ]);
     const friend = await this.usersRepository.getUserWithRelations(
       friendLogin42,
-      ['friendRequestsReceived', 'blockedUsers'],
+      ['friendRequestsReceived'],
     );
 
     if (user.login42 === friend.login42) {
       throw new ConflictException('You cannot add yourself to your friendlist');
-    } else if (friend.blockedUsers.find((user) => user.login42 === login42)) {
-      throw new ForbiddenException(
-        `User with login42 ${friendLogin42} has blocked you`,
-      );
-    } else if (
-      user.blockedUsers.find((friend) => friend.login42 === friendLogin42)
-    ) {
-      throw new ConflictException(
-        `User with login42 ${friendLogin42} is in your list of blocked users`,
-      );
     } else if (
       user.friends.find((friend) => friend.login42 === friendLogin42)
     ) {
@@ -326,39 +315,14 @@ export class UsersService {
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
       'blockedUsers',
-      'friends',
-      'friendRequestsSent',
-      'friendRequestsReceived',
     ]);
     const friend = await this.usersRepository.getUserWithRelations(
       friendLogin42,
-      ['friends', 'friendRequestsSent', 'friendRequestsReceived'],
+      [],
     );
 
     if (user.login42 === friend.login42) {
       throw new ConflictException('You cannot block yourself');
-    }
-    if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
-      await this.usersRepository.removeUserFromFriends(user, friend);
-      await this.usersRepository.removeUserFromFriends(friend, user);
-    } else if (
-      user.friendRequestsSent.find((friend) => friend.login42 === friendLogin42)
-    ) {
-      await this.usersRepository.removeUserFromFriendRequestsSent(user, friend);
-      await this.usersRepository.removeUserFromFriendRequestsReceived(
-        friend,
-        user,
-      );
-    } else if (
-      user.friendRequestsReceived.find(
-        (friend) => friend.login42 === friendLogin42,
-      )
-    ) {
-      await this.usersRepository.removeUserFromFriendRequestsReceived(
-        user,
-        friend,
-      );
-      await this.usersRepository.removeUserFromFriendRequestsSent(friend, user);
     }
 
     await this.usersRepository.addUserToBlockedUsers(user, friend);
