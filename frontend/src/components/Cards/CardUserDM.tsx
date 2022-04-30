@@ -4,7 +4,7 @@ import styles from "../../styles/Home.module.css";
 import { IUserPublicInfos, DM } from "../../interfaces/users";
 
 import Avatar from "@mui/material/Avatar";
-import profileIcon from "../../public/profile_icon.png";
+// import profileIcon from "../../public/profile_icon.png";
 import { useLoginContext } from "../../context/LoginContext";
 import userService from "../../services/users";
 
@@ -37,7 +37,7 @@ export function CardUserDM({ userInfos, setMenu }: { userInfos: IUserPublicInfos
       key={userInfos.login42}
     >
       <div className={styles.user_card_avatar}>
-        <Avatar src={profileIcon} sx={{ width: "100px", height: "100px" }} />
+        <Avatar src={"../../public/profile_icon.png"} sx={{ width: "100px", height: "100px" }} />
       </div>
       <div className={styles.user_card_username}>{userInfos.username}</div>
       <div className={styles.user_card_elo}>Elo: {userInfos.elo}</div>
