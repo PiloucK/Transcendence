@@ -177,8 +177,8 @@ export class UsersService {
       );
     }
 
-    this.usersRepository.addUserToFriendRequestsSent(user, friend);
-    this.usersRepository.addUserToFriendRequestsReceived(friend, user);
+    await this.usersRepository.addUserToFriendRequestsReceived(friend, user);
+    await this.usersRepository.addUserToFriendRequestsSent(user, friend);
 
     friend.friendRequestsReceived = []; // to prevent circular references error
     return user.friendRequestsSent;
@@ -205,8 +205,11 @@ export class UsersService {
       );
     }
 
-    this.usersRepository.removeUserFromFriendRequestsSent(user, friend);
-    this.usersRepository.removeUserFromFriendRequestsReceived(friend, user);
+    await this.usersRepository.removeUserFromFriendRequestsSent(user, friend);
+    await this.usersRepository.removeUserFromFriendRequestsReceived(
+      friend,
+      user,
+    );
 
     return user.friendRequestsSent;
   }
@@ -227,10 +230,13 @@ export class UsersService {
     );
 
     this.usersRepository.addUserToFriends(user, friend);
-    this.usersRepository.removeUserFromFriendRequestsReceived(user, friend);
+    await this.usersRepository.removeUserFromFriendRequestsReceived(
+      user,
+      friend,
+    );
 
     this.usersRepository.addUserToFriends(friend, user);
-    this.usersRepository.removeUserFromFriendRequestsSent(friend, user);
+    await this.usersRepository.removeUserFromFriendRequestsSent(friend, user);
 
     friend.friends = []; // to prevent circular references error
     return user.friends;
@@ -243,6 +249,7 @@ export class UsersService {
     const { friendLogin42 } = friendRequestDto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
+      'friends',
       'friendRequestsReceived',
     ]);
     const friend = await this.usersRepository.getUserWithRelations(
@@ -256,8 +263,11 @@ export class UsersService {
       );
     }
 
-    this.usersRepository.removeUserFromFriendRequestsReceived(user, friend);
-    this.usersRepository.removeUserFromFriendRequestsSent(friend, user);
+    await this.usersRepository.removeUserFromFriendRequestsReceived(
+      user,
+      friend,
+    );
+    await this.usersRepository.removeUserFromFriendRequestsSent(friend, user);
 
     return user.friendRequestsReceived;
   }
@@ -276,8 +286,8 @@ export class UsersService {
       ['friends'],
     );
 
-    this.usersRepository.removeUserFromFriends(user, friend);
-    this.usersRepository.removeUserFromFriends(friend, user);
+    await this.usersRepository.removeUserFromFriends(user, friend);
+    await this.usersRepository.removeUserFromFriends(friend, user);
 
     return user.friends;
   }
