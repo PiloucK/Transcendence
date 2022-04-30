@@ -94,34 +94,46 @@ function Messages({ dm }: { dm: DM }) {
 
   return (
     <div className={styles.messages_area}>
-      {dm.messages.map((message) => (
-        <div className={getStyle(message.author)}>{message.content}</div>
+      {dm.messages.map((message, index) => (
+        <div className={getStyle(message.author)} key={index}>{message.content}</div>
       ))}
     </div>
   );
 }
 
 function CurrentDirectMessage({ menu }: { menu: string }) {
+  const loginContext = useLoginContext();
   const [input, setInput] = React.useState("");
-  const [dm, setDm] = useState<DM>();
+  const [dms, setDms] = useState<DM[]>();
   const users = menu.split("|");
 
   React.useEffect(() => {
-    userService.getOneDM(users[0], users[1]).then((dm: DM) => {
-      setDm(dm);
-    });
+    userService
+      .getAllOpenedDM(loginContext.userLogin)
+      .then((openedDMs: DM[]) => {
+        setDms(openedDMs);
+      });
 
     socket.on("update-direct-messages", () => {
-      userService.getOneDM(users[0], users[1]).then((dm: DM) => {
-        setDm(dm);
-      });
+      userService
+        .getAllOpenedDM(loginContext.userLogin)
+        .then((openedDMs: DM[]) => {
+          setDms(openedDMs);
+        });
     });
   }, []);
 
+  const dm = dms?.find(
+    (currDm:DM) =>
+      (currDm.userOne.login42 === users[0] &&
+        currDm.userTwo.login42 === users[1]) ||
+      (currDm.userOne.login42 === users[1] &&
+        currDm.userTwo.login42 === users[0])
+  );
   return (
     <div className={styles.chat_direct_message_content}>
       <SendMessageField input={input} setInput={setInput} channel={menu} />
-      <Messages dm={dm}/>
+      <Messages dm={dm} />
     </div>
   );
 }
