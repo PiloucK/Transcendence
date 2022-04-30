@@ -11,29 +11,25 @@ import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-export function ButtonAddFriend({
-  userInfos,
-}: {
-  userInfos: IUserPublicInfos;
-}) {
+export function ButtonBlock({ userInfos }: { userInfos: IUserPublicInfos }) {
   const loginContext = useLoginContext();
 
-  const sendFriendRequest = () => {
+  const blockAUser = () => {
     if (
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
       userServices
-        .sendFriendRequest(loginContext.userLogin, userInfos.login42)
+        .blockUser(loginContext.userLogin, userInfos.login42)
         .then(() => {
           socket.emit("user:update-relations");
         });
     }
   };
-
+	
   return (
-    <div className={styles.add_friend_button} onClick={sendFriendRequest}>
-      Add friend
+    <div className={styles.block_button} onClick={blockAUser}>
+      Block
     </div>
   );
 }

@@ -150,10 +150,11 @@ function Profile({
 export default function ProfilePage() {
 	const router = useRouter();
   const { login } = router.query;
-
-	if (login !== undefined)
-		return <PublicProfile login={login} />;
   const loginContext = useLoginContext();
+
+	if (login !== undefined && loginContext.userLogin !== null && login !== loginContext.userLogin) {
+		return <PublicProfile login={login} />;
+	}
   const [userInfos, setUserInfos] = useState<IUser>({
     id: "",
     login42: "",
@@ -167,6 +168,7 @@ export default function ProfilePage() {
 
   if (
     loginContext.userLogin !== null &&
+		userInfos !== undefined &&
     loginContext.userLogin !== userInfos.login42
   ) {
     userService.getOne(loginContext.userLogin).then((user: IUser) => {
