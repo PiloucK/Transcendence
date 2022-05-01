@@ -152,12 +152,12 @@ function DirectMessageContent({
 }
 
 export function DirectMessage() {
-  const [menu, setMenu] = React.useState("new_message");
+	const loginContext = useLoginContext();
 
   return (
     <>
-      <DirectMessageMenu menu={menu} setMenu={setMenu} />
-      <DirectMessageContent menu={menu} setMenu={setMenu} />
+      <DirectMessageMenu menu={loginContext.chatDM} setMenu={loginContext.setChatDM} />
+      <DirectMessageContent menu={loginContext.chatDM} setMenu={loginContext.setChatDM} />
     </>
   );
 }
