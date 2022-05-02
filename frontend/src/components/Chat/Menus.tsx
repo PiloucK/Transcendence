@@ -11,6 +11,7 @@ import { IUserPublicInfos, DM } from "../../interfaces/users";
 import userService from "../../services/users";
 
 import { ButtonTxtViewProfile } from "../Buttons/ButtonTxtViewProfile";
+import { ButtonTxtBlockUser } from "../Buttons/ButtonTxtBlockUser";
 
 import io from "socket.io-client";
 
@@ -28,7 +29,7 @@ function SelectedDMMenu({
       {userLogin}
       <ButtonTxtViewProfile login={userLogin} />
       <div>invite to play</div>
-      <div>Block</div>
+			<ButtonTxtBlockUser login={userLogin} />
     </div>
   );
 }
