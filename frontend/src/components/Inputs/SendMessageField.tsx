@@ -4,8 +4,10 @@ import styles from "../../styles/Home.module.css";
 import FormControl from "@mui/material/FormControl";
 import InputAdornment from "@mui/material/InputAdornment";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import Input from "@mui/material/Input";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
+import Box from "@mui/material/Box";
 
 import { useLoginContext } from "../../context/LoginContext";
 
@@ -43,40 +45,43 @@ export function SendMessageField({
           content: input,
         })
         .then(() => {
-					socket.emit("user:update-direct-messages");
+          socket.emit("user:update-direct-messages");
           setInput("");
         });
     }
   };
 
   return (
-    <FormControl
+    <Input
+      onSubmit={handleSendMessage}
+			autoFocus="true"
+      autoComplete="off"
+			disableUnderline="true"
+			multiline="true"
+			maxRows={4}
       sx={{
-        top: "90%",
+				border: "5px solid #E5E5E5",
+				top: "86%",
         width: "1002px",
-        // height: "42px",
+				lineHeight: "27px",
         borderRadius: "20px",
         backgroundColor: "#E5E5E5",
       }}
-      variant="outlined"
-    >
-      <OutlinedInput
-        id="outlined-adornment-input"
-        value={input}
-        onChange={handleInputChange}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="toggle input visibility"
-              edge="end"
-              onClick={handleSendMessage}
-            >
-              <SendIcon />
-            </IconButton>
-          </InputAdornment>
-        }
-        label="Text message"
-      />
-    </FormControl>
+      id="outlined-adornment-input"
+      value={input}
+      onChange={handleInputChange}
+      endAdornment={
+        <InputAdornment position="end">
+          <IconButton
+            aria-label="send message"
+            edge="end"
+            onClick={handleSendMessage}
+          >
+            <SendIcon />
+          </IconButton>
+        </InputAdornment>
+      }
+      label="Text message"
+    />
   );
 }
