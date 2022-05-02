@@ -12,6 +12,7 @@ import userService from "../../services/users";
 
 import { ButtonTxtViewProfile } from "../Buttons/ButtonTxtViewProfile";
 import { ButtonTxtBlockUser } from "../Buttons/ButtonTxtBlockUser";
+import { ButtonTxtUserStatus } from "../Buttons/ButtonTxtUserStatus";
 
 import io from "socket.io-client";
 
@@ -28,7 +29,7 @@ function SelectedDMMenu({
     <div key={key} className={styles.chat_direct_message_menu_dm_selected}>
       {userLogin}
       <ButtonTxtViewProfile login={userLogin} />
-      <div>invite to play</div>
+      <ButtonTxtUserStatus login={userLogin} />
 			<ButtonTxtBlockUser login={userLogin} />
     </div>
   );

@@ -973,7 +973,6 @@ and should display them in columns of three cards max */
 .chat_direct_message_menu_dm_selected {
   position: relative;
   top: 5%;
-
   /* transform: translate(-50%, 0%); */
   /* Body */
 
@@ -987,7 +986,7 @@ and should display them in columns of three cards max */
   /* identical to box height */
 
   column-gap: 10px;
-  justify-content: space-between;
+	justify-content: space-evenly;
 
   display: flex;
   align-items: center;
@@ -1011,6 +1010,30 @@ and should display them in columns of three cards max */
   border-radius: 20px;
   color: #ffffff;
   cursor: default;
+}
+
+.chat_direct_message_menu_dm_selected .buttons {
+	/* position: absolute; */
+	width: 92px;
+	height: 19px;
+	/* left: 65px; */
+	/* top: 69px; */
+	
+	/* Body */
+	
+	font-family: 'Poppins';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 13px;
+	line-height: 20px;
+	display: flex;
+	align-items: center;
+	letter-spacing: -0.02em;
+	
+	/* White */
+	
+	color: #FFFFFF;
+	cursor: pointer;
 }
 
 .chat_direct_message_menu_new_selected {

@@ -3,11 +3,8 @@ import React from "react";
 import styles from "../../styles/Home.module.css";
 import { IUserPublicInfos } from "../../interfaces/users";
 
-import Router from "next/router";
-
-export function ButtonTxtViewProfile({ login }: { login: string }) {
+export function ButtonTxtUserStatus({ login }: { login: string }) {
   const handleOnClick = () => {
-    Router.push(`/profile?login=${login}`);
   };
 
   return (
@@ -15,7 +12,7 @@ export function ButtonTxtViewProfile({ login }: { login: string }) {
       className={styles.buttons}
       onClick={handleOnClick}
     >
-      View profile
+      Invite to play
     </div>
   );
 }

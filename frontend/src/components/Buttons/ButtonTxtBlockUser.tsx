@@ -63,7 +63,7 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
 	) {
 		return (
 			<div
-				className={styles.chat_direct_message_menu_new}
+				className={styles.buttons}
 				onClick={handleUnblockOnClick}
 			>
 				Unblock
@@ -72,7 +72,7 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
 	} else {
 		return (
 			<div
-				className={styles.chat_direct_message_menu_new}
+				className={styles.buttons}
 				onClick={handleBlockOnClick}
 			>
 				Block
