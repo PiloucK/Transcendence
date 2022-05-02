@@ -9,9 +9,7 @@ WORKDIR /usr/src/app/frontend
 
 # Install dependencies
 COPY    package*.json ./
-COPY    yarn.lock ./
-
-RUN     yarn
+RUN     npm install
 
 # Copy the app's files
 COPY    . .
@@ -20,4 +18,5 @@ COPY    . .
 EXPOSE  3000
 
 # Set the command to run the app at start
-CMD     [ "yarn", "dev" ]
+CMD     [ "npm", "run", "dev" ]
+# change for "npm run start" when development is finished?
