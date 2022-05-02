@@ -54,10 +54,10 @@ export function SendMessageField({
   return (
     <Input
       onSubmit={handleSendMessage}
-			autoFocus="true"
+			autoFocus={true}
       autoComplete="off"
-			disableUnderline="true"
-			multiline="true"
+			disableUnderline={true}
+			multiline={true}
 			maxRows={4}
       sx={{
 				border: "5px solid #E5E5E5",
