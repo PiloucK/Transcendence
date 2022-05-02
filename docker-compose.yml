@@ -4,38 +4,38 @@ services:
       ports:
         - "3000:3000"
       container_name: frontend-transcendence
-      volumes:
+      volumes: #remove when development is finished
         - ./frontend/src:/usr/src/app/frontend/src
-      restart: always
+      restart: unless-stopped
 
   websocks:
       build: ./websocks
       ports:
         - "3002:3002"
       container_name: websocks-transcendence
-      volumes:
+      volumes: #remove when development is finished
         - ./websocks/src:/usr/src/app/websocks/src
-      restart: always
+      restart: unless-stopped
 
   backend:
       build: ./backend
       ports:
         - "3001:3001"
       container_name: backend-transcendence
-      volumes:
+      volumes: #remove when development is finished
         - ./backend/src:/usr/src/app/backend/src
-      restart: always
+      restart: unless-stopped
 
   database:
       image: postgres:14
       ports:
         - "5432:5432"
       container_name: database-transcendence
-      restart: always
       environment:
         POSTGRES_USER: postgres_user
         POSTGRES_PASSWORD: postgres_pass
         POSTGRES_DB: pong_db
+      restart: unless-stopped
 
     # volumes:
     #   - data:/var/lib/postgresql/data
