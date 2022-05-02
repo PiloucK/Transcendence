@@ -969,7 +969,8 @@ and should display them in columns of three cards max */
 }
 
 .chat_direct_message_menu_new,
-.chat_direct_message_menu_new_selected {
+.chat_direct_message_menu_new_selected,
+.chat_direct_message_menu_dm_selected {
   position: relative;
   top: 5%;
 
@@ -998,9 +999,23 @@ and should display them in columns of three cards max */
   cursor: pointer;
 }
 
-.chat_direct_message_menu_new_selected {
+.chat_direct_message_menu_dm_selected {
+  /* position: absolute; */
+  width: 242px;
+  height: 131px;
+
+  /* Teal selected (brighter) */
+	flex-direction: column;
+
+  background: #2b506a;
+  border-radius: 20px;
   color: #ffffff;
   cursor: default;
+}
+
+.chat_direct_message_menu_new_selected {
+  color: #ffffff;
+  /* cursor: default; */
 }
 
 .chat_direct_message_content {
@@ -1631,11 +1646,11 @@ and should display them in columns of three cards max */
 }
 
 .send_dm_button {
-	top: -25%;
+  top: -25%;
 }
 
 .send_dm_button:hover {
-	top: -25%;
+  top: -25%;
 }
 
 .block_button,

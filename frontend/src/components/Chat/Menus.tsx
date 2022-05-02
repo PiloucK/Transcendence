@@ -10,29 +10,54 @@ import { useLoginContext } from "../../context/LoginContext";
 import { IUserPublicInfos, DM } from "../../interfaces/users";
 import userService from "../../services/users";
 
+import { ButtonTxtViewProfile } from "../Buttons/ButtonTxtViewProfile";
+
 import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
+function SelectedDMMenu({
+  key,
+  userLogin,
+}: {
+  key: string;
+  userLogin: string;
+}) {
+  return (
+    <div key={key} className={styles.chat_direct_message_menu_dm_selected}>
+      {userLogin}
+      <ButtonTxtViewProfile login={userLogin} />
+      <div>invite to play</div>
+      <div>Block</div>
+    </div>
+  );
+}
+
 function DMList({
   openedDMs,
-  getStyle,
+  menu,
   setMenu,
 }: {
   openedDMs: DM[];
-  getStyle: (key: string) => any;
+  menu: string;
   setMenu: (menu: string) => void;
 }) {
-	const loginContext = useLoginContext();
+  const loginContext = useLoginContext();
 
   return openedDMs?.map((dm) => {
-    const key = dm.userOne.login42 + '|' + dm.userTwo.login42;
-		const username = dm.userOne.login42 === loginContext.userLogin ? dm.userTwo.username : dm.userOne.username;
+    const key = dm.userOne.login42 + "|" + dm.userTwo.login42;
+    const username =
+      dm.userOne.login42 === loginContext.userLogin
+        ? dm.userTwo.username
+        : dm.userOne.username;
 
+    if (key === menu) {
+      return <SelectedDMMenu key={key} userLogin={username} />;
+    }
     return (
       <div
         key={key}
-        className={getStyle(`${key}`)}
+        className={styles.chat_direct_message_menu_new_selected}
         onClick={() => {
           setMenu(`${key}`);
         }}
@@ -88,11 +113,7 @@ export function DirectMessageMenu(props: {
         <Image src={newMessageLogo} alt="new message" width={18} height={18} />
         New message
       </div>
-      <DMList
-        openedDMs={openedDMs}
-        getStyle={getStyle}
-        setMenu={props.setMenu}
-      />
+      <DMList openedDMs={openedDMs} menu={props.menu} setMenu={props.setMenu} />
     </div>
   );
 }
