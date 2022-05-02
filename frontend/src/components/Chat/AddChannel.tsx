@@ -27,6 +27,14 @@ function EmptyPublicChannels() {
 function PublicChannels() {
   return <EmptyPublicChannels />;
 }
+
+interface channel {
+  name: string;
+  password: string;
+  passwordConfirm: string;
+  isPrivate: boolean;
+}
+
 function CreateChannelForm() {
   const [channelName, setChannelName] = useState("");
   const [channelPassword, setChannelPassword] = useState<inputPFState>({
@@ -47,6 +55,15 @@ function CreateChannelForm() {
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsPrivate(event.target.checked);
+  };
+
+  const createChannel = () => {
+    const channel: channel = {
+      name: channelName,
+      password: channelPassword.password,
+      passwordConfirm: confirmation.password,
+      isPrivate: isPrivate,
+    };
   };
 
   return (
@@ -75,7 +92,7 @@ function CreateChannelForm() {
         Set channel as private{" "}
         <Switch checked={isPrivate} onChange={handleSwitchChange} />
       </div>
-      <ButtonCreateChannel />
+      <ButtonCreateChannel createChannel={createChannel} />
     </div>
   );
 }
