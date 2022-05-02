@@ -19,14 +19,14 @@ import io from "socket.io-client";
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 function SelectedDMMenu({
-  key,
+  keyV,
   userLogin,
 }: {
-  key: string;
+  keyV: string;
   userLogin: string;
 }) {
   return (
-    <div key={key} className={styles.chat_direct_message_menu_dm_selected}>
+    <div key={keyV} className={styles.chat_direct_message_menu_dm_selected}>
       {userLogin}
       <ButtonTxtViewProfile login={userLogin} />
       <ButtonTxtUserStatus login={userLogin} />
@@ -54,14 +54,14 @@ function DMList({
         : dm.userOne.username;
 
     if (key === menu) {
-      return <SelectedDMMenu key={key} userLogin={username} />;
+      return <SelectedDMMenu key={"selectedDMMenu"} keyV={key} userLogin={username} />;
     }
     return (
       <div
         key={key}
         className={styles.chat_direct_message_menu_new_selected}
         onClick={() => {
-          setMenu(`${key}`);
+          setMenu(key);
         }}
       >
         {username}
