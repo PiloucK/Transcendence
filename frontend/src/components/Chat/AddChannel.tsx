@@ -60,17 +60,22 @@ function CreateChannelForm() {
         <PasswordField
           password={channelPassword}
           setPassword={setChannelPassword}
+          id="channelPasswordField"
         />
       </div>
       <div className={styles.chat_create_channel_form_input}>
         Confirm Password
-        <PasswordField password={confirmation} setPassword={setConfirmation} />
+        <PasswordField
+          password={confirmation}
+          setPassword={setConfirmation}
+          id="channelPasswordConfirmationField"
+        />
       </div>
       <div className={styles.chat_create_channel_form_switch}>
         Set channel as private{" "}
         <Switch checked={isPrivate} onChange={handleSwitchChange} />
       </div>
-			<ButtonCreateChannel />
+      <ButtonCreateChannel />
     </div>
   );
 }

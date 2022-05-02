@@ -13,6 +13,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 export function PasswordField(props: {
   password: inputPFState;
   setPassword: (password: inputPFState) => void;
+	id: string;
 }) {
   const handlePasswordChange =
     (prop: keyof inputPFState) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +50,7 @@ export function PasswordField(props: {
         Empty for no password
       </InputLabel>
       <OutlinedInput
-        id="outlined-adornment-password"
+        id={props.id}
         type={props.password.showPassword ? "text" : "password"}
         value={props.password.password}
         onChange={handlePasswordChange("password")}
