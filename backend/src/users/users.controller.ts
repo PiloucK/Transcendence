@@ -76,6 +76,13 @@ export class UsersController {
 		return this.usersService.createChannel(login42, createChannel);
 	}
 
+	@Get('/:login42/publicChannels')
+	publicChannels(
+		@Param('login42') login42: string,
+	): Channel[] {
+		return this.usersService.publicChannels(login42);
+	}
+	
 	@Patch('/:login42/createDM')
 	createDM(
 		@Param('login42') login42: string,

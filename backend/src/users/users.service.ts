@@ -165,6 +165,17 @@ export class UsersService {
 		return channel;
 	}
 
+	publicChannels(login42: string): Channel[] {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+		const publicChannels: Channel[] = this.channels.filter(
+			(curChannel) => !curChannel.isPrivate && curChannel.banned.indexOf(login42) === -1
+		);
+		return publicChannels;
+	}
+	
   createDM(
     login42: string,
     sendFriendRequestDto: SendFriendRequestDto,

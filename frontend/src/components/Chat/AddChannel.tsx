@@ -14,7 +14,8 @@ import { inputPFState } from "../../interfaces/inputPasswordField";
 import Switch from "@mui/material/Switch";
 
 import { ButtonCreateChannel } from "../Buttons/ButtonCreateChannel";
-import { ChannelCreation } from "../../interfaces/users";
+import { Channel, ChannelCreation } from "../../interfaces/users";
+import { CardPublicChannel } from "../Cards/CardPublicChannel";
 
 import userServices from "../../services/users";
 import { useLoginContext } from "../../context/LoginContext";
@@ -28,12 +29,45 @@ function EmptyPublicChannels() {
   );
 }
 
+function PublicChannelsList({ channels }: { channels: Channel[] }) {
+  if (typeof channels === "undefined" || channels.length === 0) {
+    return <EmptyPublicChannels />;
+  }
+
+  return (
+    <div className={styles.public_channels_list}>
+      {channels.map((channel, index) =>
+        CardPublicChannel({ channelInfos: channel, index: index })
+      )}
+    </div>
+  );
+}
+
 function PublicChannels() {
-  return <EmptyPublicChannels />;
+  const loginContext = useLoginContext();
+  const [channels, setChannels] = useState<Channel[]>([]);
+
+  React.useEffect(() => {
+    userServices
+      .getPublicChannels(loginContext.userLogin)
+      .then((channels: Channel[]) => {
+        setChannels(channels);
+      });
+
+    // socket.on("update-channels", () => {
+    // 	userServices
+    // 		.getPublicChannels(loginContext.userLogin)
+    // 		.then((channels: ChannelCreation[]) => {
+    // 			setChannels(channels);
+    // 		});
+    // });
+  }, []);
+
+  return <PublicChannelsList channels={channels} />;
 }
 
 function CreateChannelForm() {
-	const loginContext = useLoginContext();
+  const loginContext = useLoginContext();
   const [channelName, setChannelName] = useState("");
   const [channelPassword, setChannelPassword] = useState<inputPFState>({
     amount: "",
@@ -51,8 +85,8 @@ function CreateChannelForm() {
   });
   const [isPrivate, setIsPrivate] = useState(false);
 
-	const [textFieldError, setTextFieldError] = useState("");
-	const [confirmationFieldError, setConfirmationFieldError] = useState("");
+  const [textFieldError, setTextFieldError] = useState("");
+  const [confirmationFieldError, setConfirmationFieldError] = useState("");
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsPrivate(event.target.checked);
@@ -64,30 +98,35 @@ function CreateChannelForm() {
       password: channelPassword.password,
       isPrivate: isPrivate,
     };
-		let error = false; // Needed due to to async nature of the useState.
-		setTextFieldError("");
-		setConfirmationFieldError("");
-		if (channel.name === "") {
-			setTextFieldError("Channel name is required.");
-			error = true;
-		}
-		if (channel.password !== confirmation.password) {
-			setConfirmationFieldError("Passwords do not match.");
-			error = true;
-		}
-		if (error === false) {
-			console.log("Creating channel...");
-			userServices.createChannel(loginContext.userLogin, channel).then((res) => {
-				console.log(res);
-			});
-		}
+    let error = false; // Needed due to to async nature of the useState.
+    setTextFieldError("");
+    setConfirmationFieldError("");
+    if (channel.name === "") {
+      setTextFieldError("Channel name is required.");
+      error = true;
+    }
+    if (channel.password !== confirmation.password) {
+      setConfirmationFieldError("Passwords do not match.");
+      error = true;
+    }
+    if (error === false) {
+      userServices
+        .createChannel(loginContext.userLogin, channel)
+        .then((res) => {
+          // Emit a socket event and update the user menu to send him on the channel.
+        });
+    }
   };
 
   return (
     <div className={styles.chat_create_channel_form}>
       <div className={styles.chat_create_channel_form_input}>
         Channel Name
-        <TextField value={channelName} setValue={setChannelName} error={textFieldError} />
+        <TextField
+          value={channelName}
+          setValue={setChannelName}
+          error={textFieldError}
+        />
       </div>
       <div className={styles.chat_create_channel_form_input}>
         Channel Password
@@ -95,7 +134,7 @@ function CreateChannelForm() {
           password={channelPassword}
           setPassword={setChannelPassword}
           id="channelPasswordField"
-					error=""
+          error=""
         />
       </div>
       <div className={styles.chat_create_channel_form_input}>
@@ -104,7 +143,7 @@ function CreateChannelForm() {
           password={confirmation}
           setPassword={setConfirmation}
           id="channelPasswordConfirmationField"
-					error={confirmationFieldError}
+          error={confirmationFieldError}
         />
       </div>
       <div className={styles.chat_create_channel_form_switch}>
@@ -135,11 +174,8 @@ function CreateChannel() {
 function AddChannelContent({ menu }: { menu: string }) {
   if (menu === "public_channels") {
     return <PublicChannels />;
-  } else if (menu === "create_channel") {
-    return <CreateChannel />;
-  } else {
-    return null;
   }
+  return <CreateChannel />;
 }
 
 export function AddChannel() {
