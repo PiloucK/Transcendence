@@ -40,8 +40,8 @@ function PublicChannelsList({ channels }: { channels: Channel[] }) {
 
   return (
     <div className={styles.public_channels_list}>
-      {channels.map((channel, index) =>
-        CardPublicChannel({ channelInfos: channel, index: index })
+      {channels.map((channel) =>
+        CardPublicChannel({ channelInfos: channel})
       )}
     </div>
   );
@@ -118,7 +118,8 @@ function CreateChannelForm() {
         .createChannel(loginContext.userLogin, channel)
         .then((res) => {
 					socket.emit("user:update-public-channels");
-          // Update the user menu to send him on the channel.
+          socket.emit("user:update-joined-channel");
+					loginContext.setChatMenu(res.id);
         });
     }
   };

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import {
 	FriendRequestsReceived,
@@ -14,6 +14,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import {
 	CreateChannelDto,
+	JoinChannelDto,
 	SendDMDto,
   UpdateUserEloDto,
   UpdateUserGamesLostDto,
@@ -161,6 +162,32 @@ export class UsersService {
 		};
 
 		this.channels.push(channel);
+
+		return channel;
+	}
+
+	joinChannel(login42: string, joinChannelDto: JoinChannelDto): Channel {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+
+		const channel: Channel | undefined = this.channels.find(
+			(curChannel) => curChannel.id === joinChannelDto.channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${joinChannelDto.channelId}" not found`);
+		}
+
+		if (channel.banned.includes(login42)) {
+			throw new ForbiddenException(`You are banned from this channel`);
+		}
+
+		if (channel.users.find((curUser) => curUser.login42 === login42)) {
+			return channel;
+		}
+
+		channel.users.push(this.createUserMinimalInfos(user));
 
 		return channel;
 	}

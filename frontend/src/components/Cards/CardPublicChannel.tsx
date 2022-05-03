@@ -8,29 +8,31 @@ import Avatar from "@mui/material/Avatar";
 import { useLoginContext } from "../../context/LoginContext";
 import userService from "../../services/users";
 
-
 import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-export function CardPublicChannel({ channelInfos, index }: { channelInfos: ChannelCreation, index: number }) {
+export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
   const loginContext = useLoginContext();
 
   const joinChannel = () => {
-    //Call the service to join the channel.
-		// userService
-		//	.joinChannel(loginContext.userLogin, channelInfos.id)
-		//	.then((channel: Channel) => {
-		//		setMenu(channel.id);
+    if (loginContext.userLogin !== null) {
+      userService
+        .joinChannel(loginContext.userLogin, channelInfos.id)
+        .then((channel: Channel) => {
+          loginContext.setChatMenu(channel.id);
+          socket.emit("user:update-joined-channel");
+        });
+    }
   };
 
   return (
     <div
       className={styles.channel_card}
       onClick={joinChannel}
-      key={index}
+      key={channelInfos.id}
     >
-			{/* Channel Avatar here */}
+      {/* Channel Avatar here */}
       <div className={styles.channel_name}>{channelInfos.name}</div>
     </div>
   );
