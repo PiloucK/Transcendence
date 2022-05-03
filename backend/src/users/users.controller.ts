@@ -20,6 +20,7 @@ import {
 import { GetUsersDto } from './dto/get-users.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
+	CreateChannelDto,
 	SendDMDto,
   UpdateUserEloDto,
   UpdateUserGamesLostDto,
@@ -65,6 +66,13 @@ export class UsersController {
   getUserFriendRequestsSent(@Param('login42') login42: string): IUserPublicInfos[] {
     return this.usersService.getUserFriendRequestsSent(login42);
   }
+
+	@Patch('/:login42/createChannel')
+	createChannel(
+		@Param('login42') login42: string,
+		@Body() createChannel: CreateChannelDto,
+	): void {
+	}
 
 	@Patch('/:login42/createDM')
 	createDM(
