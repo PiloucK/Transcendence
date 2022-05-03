@@ -26,7 +26,7 @@ export type IMessage = {author: string, content: string};
 export type DM = {userOne: IUser, userTwo: IUser, messages: Array<IMessage>};
 export type Channel = {
 	name: string,
-	id: number,
+	id: string,
 	password: string,
 	isPrivate: boolean,
 	owner: string,
