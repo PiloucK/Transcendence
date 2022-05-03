@@ -148,10 +148,10 @@ export class UsersService {
 		}
 
 		const channel: Channel = {
-			name: createChannelDto.name,
+			name: createChannelDto.channelInfos.name,
 			id: uuid(),
-			password: createChannelDto.password,
-			isPrivate: createChannelDto.isPrivate,
+			password: createChannelDto.channelInfos.password,
+			isPrivate: createChannelDto.channelInfos.isPrivate,
 			owner: login42,
 			admin: [login42,],
 			muted: [],

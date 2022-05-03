@@ -1,25 +1,15 @@
 import { IsNumber, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
-import { IMessage } from '../user.model';
+import { IMessage, Channel } from '../user.model';
 
 export class CreateChannelDto {
-	constructor(name: string, password: string, isPrivate: boolean) {
-		this.name = name;
-		this.password = password;
-		this.isPrivate = isPrivate;
+	constructor(channelInfos: Channel) {
+		this.channelInfos = channelInfos;
 	}
 
 	@IsNotEmpty()
-	@IsString()
-	name!: string;
-
-	@IsNotEmpty()
-	@IsString()
-	password!: string;
-
-	@IsNotEmpty()
-	@IsBoolean()
-	isPrivate!: boolean;
+	channelInfos: Channel;
 }
+
 export class SendDMDto {
 	constructor(login: string, message: IMessage) {
 		this.dest = login;

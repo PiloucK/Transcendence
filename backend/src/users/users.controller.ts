@@ -73,7 +73,7 @@ export class UsersController {
 		@Param('login42') login42: string,
 		@Body() createChannel: CreateChannelDto,
 	): Channel {
-		return this.createChannel(login42, createChannel);
+		return this.usersService.createChannel(login42, createChannel);
 	}
 
 	@Patch('/:login42/createDM')

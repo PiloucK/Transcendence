@@ -16,6 +16,9 @@ import Switch from "@mui/material/Switch";
 import { ButtonCreateChannel } from "../Buttons/ButtonCreateChannel";
 import { ChannelCreation } from "../../interfaces/users";
 
+import userServices from "../../services/users";
+import { useLoginContext } from "../../context/LoginContext";
+
 function EmptyPublicChannels() {
   return (
     <div className={styles.social_empty_page}>
@@ -30,6 +33,7 @@ function PublicChannels() {
 }
 
 function CreateChannelForm() {
+	const loginContext = useLoginContext();
   const [channelName, setChannelName] = useState("");
   const [channelPassword, setChannelPassword] = useState<inputPFState>({
     amount: "",
@@ -73,6 +77,9 @@ function CreateChannelForm() {
 		}
 		if (error === false) {
 			console.log("Creating channel...");
+			userServices.createChannel(loginContext.userLogin, channel).then((res) => {
+				console.log(res);
+			});
 		}
   };
 
