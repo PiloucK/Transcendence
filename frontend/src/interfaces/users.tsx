@@ -24,3 +24,15 @@ export interface IUserCredentials {
 
 export type IMessage = {author: string, content: string};
 export type DM = {userOne: IUser, userTwo: IUser, messages: Array<IMessage>};
+export type Channel = {
+	name: string,
+	id: number,
+	password: string,
+	isPrivate: boolean,
+	owner: string,
+	admin: Array<string>,
+	muted: Array<string>,
+	banned: Array<string>,
+	users: Array<IUserForLeaderboard>,
+	messages: Array<IMessage>,
+}

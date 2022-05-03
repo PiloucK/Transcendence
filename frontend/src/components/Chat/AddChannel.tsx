@@ -67,14 +67,19 @@ function CreateChannelForm() {
       passwordConfirm: confirmation.password,
       isPrivate: isPrivate,
     };
+		let error = false; // Needed due to to async nature of the useState.
 		setTextFieldError("");
 		setConfirmationFieldError("");
-		console.log(channel);
 		if (channel.name === "") {
 			setTextFieldError("Channel name is required.");
+			error = true;
 		}
 		if (channel.password !== channel.passwordConfirm) {
 			setConfirmationFieldError("Passwords do not match.");
+			error = true;
+		}
+		if (error === false) {
+			console.log("Creating channel...");
 		}
   };
 
