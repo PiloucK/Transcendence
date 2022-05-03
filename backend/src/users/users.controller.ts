@@ -13,6 +13,7 @@ import {
   Friends,
 	IMessage,
 	DM,
+	Channel,
   IUser,
   IUserForLeaderboard,
   IUserPublicInfos,
@@ -71,7 +72,8 @@ export class UsersController {
 	createChannel(
 		@Param('login42') login42: string,
 		@Body() createChannel: CreateChannelDto,
-	): void {
+	): Channel {
+		return this.createChannel(login42, createChannel);
 	}
 
 	@Patch('/:login42/createDM')

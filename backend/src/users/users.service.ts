@@ -6,12 +6,14 @@ import {
   Friends,
 	IMessage,
 	DM,
+	Channel,
   IUser,
   IUserForLeaderboard,
   IUserPublicInfos,
 } from './user.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
+	CreateChannelDto,
 	SendDMDto,
   UpdateUserEloDto,
   UpdateUserGamesLostDto,
@@ -28,6 +30,7 @@ export class UsersService {
   // to split when using the db: UsersService and UsersFriendsService
   private users: IUser[] = [];
 	private directConversations: DM[] = [];
+	private channels: Channel[] = [];
 
   private createUserPublicInfos(user: IUser): IUserPublicInfos {
     const ret: IUserPublicInfos = {
@@ -39,7 +42,15 @@ export class UsersService {
     };
     return ret;
   }
-
+	private createUserMinimalInfos(user: IUser): IUserForLeaderboard {
+		const ret: IUserForLeaderboard = {
+			login42: user.login42,
+			username: user.username,
+			elo: user.elo,
+		};
+		return ret;
+	}
+	
   getAllUsers(): IUserPublicInfos[] {
     return this.users.map((user) => this.createUserPublicInfos(user));
   }
@@ -128,6 +139,30 @@ export class UsersService {
 				(curDM.userOne.login42 === friend.login42 && curDM.userTwo.login42 === user.login42)
 			);
 		return dm;
+	}
+
+	createChannel(login42: string, createChannelDto: CreateChannelDto): Channel {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+
+		const channel: Channel = {
+			name: createChannelDto.name,
+			id: uuid(),
+			password: createChannelDto.password,
+			isPrivate: createChannelDto.isPrivate,
+			owner: login42,
+			admin: [login42,],
+			muted: [],
+			banned: [],
+			users: [this.createUserMinimalInfos(user),],
+			messages: [],
+		};
+
+		this.channels.push(channel);
+
+		return channel;
 	}
 
   createDM(
