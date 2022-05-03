@@ -5,7 +5,7 @@ import { inputPFState } from "../../interfaces/inputPasswordField";
 import FormControl from "@mui/material/FormControl";
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import FilledInput from "@mui/material/FilledInput";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -44,12 +44,13 @@ export function PasswordField(props: {
         backgroundColor: "#E5E5E5",
         borderRadius: "10px",
       }}
-      variant="outlined"
+      variant="filled"
     >
-      <InputLabel htmlFor="outlined-adornment-password">
+      <InputLabel htmlFor="filled-adornment-password">
         Empty for no password
       </InputLabel>
-      <OutlinedInput
+      <FilledInput
+				disableUnderline={true}
         id={props.id}
         type={props.password.showPassword ? "text" : "password"}
         value={props.password.password}
