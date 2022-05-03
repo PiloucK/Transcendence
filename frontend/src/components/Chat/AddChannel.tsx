@@ -20,6 +20,10 @@ import { CardPublicChannel } from "../Cards/CardPublicChannel";
 import userServices from "../../services/users";
 import { useLoginContext } from "../../context/LoginContext";
 
+import io from "socket.io-client";
+
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
 function EmptyPublicChannels() {
   return (
     <div className={styles.social_empty_page}>
@@ -54,13 +58,13 @@ function PublicChannels() {
         setChannels(channels);
       });
 
-    // socket.on("update-channels", () => {
-    // 	userServices
-    // 		.getPublicChannels(loginContext.userLogin)
-    // 		.then((channels: ChannelCreation[]) => {
-    // 			setChannels(channels);
-    // 		});
-    // });
+    socket.on("update-public-channels", () => {
+    	userServices
+    		.getPublicChannels(loginContext.userLogin)
+    		.then((channels: ChannelCreation[]) => {
+    			setChannels(channels);
+    		});
+    });
   }, []);
 
   return <PublicChannelsList channels={channels} />;
@@ -113,7 +117,8 @@ function CreateChannelForm() {
       userServices
         .createChannel(loginContext.userLogin, channel)
         .then((res) => {
-          // Emit a socket event and update the user menu to send him on the channel.
+					socket.emit("user:update-public-channels");
+          // Update the user menu to send him on the channel.
         });
     }
   };
