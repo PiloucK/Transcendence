@@ -63,12 +63,21 @@ const createChannel = (login: string, channelInfos: ChannelCreation) => {
 };
 
 const getPublicChannels = (login: string) => {
-	const request = axios.get(`${baseUrl}/${login}/publicChannels`);
-	return request
-		.then((response) => response.data)
-		.catch((e) => {
-			console.error(e);
-		});
+  const request = axios.get(`${baseUrl}/${login}/publicChannels`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const getJoinedChannels = (login: string) => {
+  const request = axios.get(`${baseUrl}/${login}/joinedChannels`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
 };
 
 const createDM = (login: string, friendLogin42: string) => {
@@ -268,7 +277,8 @@ export default {
   addOne,
   deleteOne,
   createChannel,
-	getPublicChannels,
+  getPublicChannels,
+	getJoinedChannels,
   createDM,
   sendDM,
   getOneDM,

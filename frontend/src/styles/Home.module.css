@@ -921,10 +921,13 @@ and should display them in columns of three cards max */
 .chat_menu_button_selected {
   margin: 0.3rem;
 
+	min-width: 0px;
+	min-height: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
 
+	border: 3px solid #1985A1;
   border-radius: 50%;
   background: #1985a1;
 }

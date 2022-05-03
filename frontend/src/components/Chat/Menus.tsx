@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "../../styles/Home.module.css";
 
 import Image from "next/image";
 import newMessageLogo from "../../public/new_message_logo.png";
+import channelImage from "../../public/channel_image.png";
 import directMessage from "../../public/direct_message.png";
 import addChannel from "../../public/add_channel.png";
 
 import { useLoginContext } from "../../context/LoginContext";
-import { IUserPublicInfos, DM } from "../../interfaces/users";
+import { IUserPublicInfos, DM, Channel } from "../../interfaces/users";
 import userService from "../../services/users";
 
 import { ButtonTxtViewProfile } from "../Buttons/ButtonTxtViewProfile";
@@ -30,7 +31,7 @@ function SelectedDMMenu({
       {userLogin}
       <ButtonTxtViewProfile login={userLogin} />
       <ButtonTxtUserStatus login={userLogin} />
-			<ButtonTxtBlockUser login={userLogin} />
+      <ButtonTxtBlockUser login={userLogin} />
     </div>
   );
 }
@@ -54,7 +55,13 @@ function DMList({
         : dm.userOne.username;
 
     if (key === menu) {
-      return <SelectedDMMenu key={"selectedDMMenu"} keyV={key} userLogin={username} />;
+      return (
+        <SelectedDMMenu
+          key={"selectedDMMenu"}
+          keyV={key}
+          userLogin={username}
+        />
+      );
     }
     return (
       <div
@@ -154,10 +161,54 @@ export function AddChannelMenu(props: {
   );
 }
 
+function ChannelList({
+  getStyle,
+  setMenu,
+  channels,
+}: {
+  getStyle: (key: string) => string;
+  setMenu: (menu: string) => void;
+  channels: Channel[];
+}) {
+  if (channels.length === 0) return null;
+  return channels?.map((channel) => {
+    return (
+      <div
+				key={channel.id}
+        className={getStyle(channel.id)}
+        onClick={() => {
+          setMenu(channel.id);
+        }}
+      >
+        <Image src={channelImage} alt="channel img" width={45} height={45} />
+      </div>
+    );
+  });
+}
+
 export function ChatMenu(props: {
   menu: string;
   setMenu: (menu: string) => void;
 }) {
+  const [channels, setChannels] = useState<Channel[]>([]);
+  const loginContext = useLoginContext();
+
+  React.useEffect(() => {
+    userService
+      .getJoinedChannels(loginContext.userLogin)
+      .then((currentChannels: Channel[]) => {
+        setChannels(currentChannels);
+      });
+
+    socket.on("update-channels", () => {
+      userService
+        .getJoinedChannels(loginContext.userLogin)
+        .then((currentChannels: Channel[]) => {
+          setChannels(currentChannels);
+        });
+    });
+  }, []);
+
   const getStyle = (key: string) => {
     if (props.menu === key) {
       return styles.chat_menu_button_selected;
@@ -176,11 +227,15 @@ export function ChatMenu(props: {
         <Image
           src={directMessage}
           alt="direct message"
-          width={45}
-          height={45}
+          width={55}
+          height={55}
         />
       </div>
-      {/* Here should be a map of element for each server */}
+      <ChannelList
+        getStyle={getStyle}
+        setMenu={props.setMenu}
+        channels={channels}
+      />
       <div
         className={getStyle("add_channel")}
         onClick={() => {

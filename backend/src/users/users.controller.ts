@@ -82,7 +82,14 @@ export class UsersController {
 	): Channel[] {
 		return this.usersService.publicChannels(login42);
 	}
-	
+
+	@Get('/:login42/joinedChannels')
+	joinedChannels(
+		@Param('login42') login42: string,
+	): Channel[] {
+		return this.usersService.joinedChannels(login42);
+	}
+
 	@Patch('/:login42/createDM')
 	createDM(
 		@Param('login42') login42: string,
