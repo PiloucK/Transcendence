@@ -1,6 +1,10 @@
 import axios from "axios";
 const baseUrl = "http://0.0.0.0:3001/users";
-import { IUserCredentials, IMessage } from "../interfaces/users";
+import {
+  IUserCredentials,
+  IMessage,
+  ChannelCreation,
+} from "../interfaces/users";
 
 const getAll = () => {
   const request = axios.get(baseUrl);
@@ -40,6 +44,17 @@ const addOne = (newUser: IUserCredentials) => {
 
 const deleteOne = (login: string) => {
   const request = axios.delete(`${baseUrl}/${login}`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const createChannel = (login: string, channelInfos: ChannelCreation) => {
+  const request = axios.patch(`${baseUrl}/${login}/createChannel`, {
+    channelInfos,
+  });
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -243,8 +258,9 @@ export default {
   getOne,
   addOne,
   deleteOne,
+  createChannel,
   createDM,
-	sendDM,
+  sendDM,
   getOneDM,
   getAllOpenedDM,
   blockUser,

@@ -36,3 +36,9 @@ export type Channel = {
 	users: Array<IUserForLeaderboard>,
 	messages: Array<IMessage>,
 }
+
+export type ChannelCreation = {
+  name: string;
+  password: string;
+  isPrivate: boolean;
+}

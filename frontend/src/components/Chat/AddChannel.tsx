@@ -14,6 +14,7 @@ import { inputPFState } from "../../interfaces/inputPasswordField";
 import Switch from "@mui/material/Switch";
 
 import { ButtonCreateChannel } from "../Buttons/ButtonCreateChannel";
+import { ChannelCreation } from "../../interfaces/users";
 
 function EmptyPublicChannels() {
   return (
@@ -26,13 +27,6 @@ function EmptyPublicChannels() {
 
 function PublicChannels() {
   return <EmptyPublicChannels />;
-}
-
-interface channel {
-  name: string;
-  password: string;
-  passwordConfirm: string;
-  isPrivate: boolean;
 }
 
 function CreateChannelForm() {
@@ -61,10 +55,9 @@ function CreateChannelForm() {
   };
 
   const createChannel = () => {
-    const channel: channel = {
+    const channel: ChannelCreation = {
       name: channelName,
       password: channelPassword.password,
-      passwordConfirm: confirmation.password,
       isPrivate: isPrivate,
     };
 		let error = false; // Needed due to to async nature of the useState.
@@ -74,7 +67,7 @@ function CreateChannelForm() {
 			setTextFieldError("Channel name is required.");
 			error = true;
 		}
-		if (channel.password !== channel.passwordConfirm) {
+		if (channel.password !== confirmation.password) {
 			setConfirmationFieldError("Passwords do not match.");
 			error = true;
 		}
