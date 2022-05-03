@@ -53,6 +53,9 @@ function CreateChannelForm() {
   });
   const [isPrivate, setIsPrivate] = useState(false);
 
+	const [textFieldError, setTextFieldError] = useState("");
+	const [confirmationFieldError, setConfirmationFieldError] = useState("");
+
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsPrivate(event.target.checked);
   };
@@ -64,13 +67,22 @@ function CreateChannelForm() {
       passwordConfirm: confirmation.password,
       isPrivate: isPrivate,
     };
+		setTextFieldError("");
+		setConfirmationFieldError("");
+		console.log(channel);
+		if (channel.name === "") {
+			setTextFieldError("Channel name is required.");
+		}
+		if (channel.password !== channel.passwordConfirm) {
+			setConfirmationFieldError("Passwords do not match.");
+		}
   };
 
   return (
     <div className={styles.chat_create_channel_form}>
       <div className={styles.chat_create_channel_form_input}>
         Channel Name
-        <TextField value={channelName} setValue={setChannelName} />
+        <TextField value={channelName} setValue={setChannelName} error={textFieldError} />
       </div>
       <div className={styles.chat_create_channel_form_input}>
         Channel Password
@@ -78,6 +90,7 @@ function CreateChannelForm() {
           password={channelPassword}
           setPassword={setChannelPassword}
           id="channelPasswordField"
+					error=""
         />
       </div>
       <div className={styles.chat_create_channel_form_input}>
@@ -86,6 +99,7 @@ function CreateChannelForm() {
           password={confirmation}
           setPassword={setConfirmation}
           id="channelPasswordConfirmationField"
+					error={confirmationFieldError}
         />
       </div>
       <div className={styles.chat_create_channel_form_switch}>

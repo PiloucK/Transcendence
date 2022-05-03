@@ -3,6 +3,7 @@ import styles from "../../styles/Home.module.css";
 import { inputPFState } from "../../interfaces/inputPasswordField";
 
 import FormControl from "@mui/material/FormControl";
+import FormHelperText from '@mui/material/FormHelperText';
 import InputAdornment from "@mui/material/InputAdornment";
 import InputLabel from "@mui/material/InputLabel";
 import FilledInput from "@mui/material/FilledInput";
@@ -13,10 +14,12 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 export function PasswordField(props: {
   password: inputPFState;
   setPassword: (password: inputPFState) => void;
-	id: string;
+  id: string;
+  error: string;
 }) {
   const handlePasswordChange =
-    (prop: keyof inputPFState) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    (prop: keyof inputPFState) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       props.setPassword({
         ...props.password,
         [prop]: event.target.value,
@@ -35,40 +38,87 @@ export function PasswordField(props: {
   ) => {
     event.preventDefault();
   };
-
-  return (
-    <FormControl
-      sx={{
-        m: 1,
-        width: "20ch",
-        backgroundColor: "#E5E5E5",
-        borderRadius: "10px",
-      }}
-      variant="filled"
-    >
-      <InputLabel htmlFor="filled-adornment-password">
-        Empty for no password
-      </InputLabel>
-      <FilledInput
-				disableUnderline={true}
-        id={props.id}
-        type={props.password.showPassword ? "text" : "password"}
-        value={props.password.password}
-        onChange={handlePasswordChange("password")}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="toggle password visibility"
-              onClick={handleClickShowPassword}
-              onMouseDown={handleMouseDownPassword}
-              edge="end"
-            >
-              {props.password.showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          </InputAdornment>
-        }
-        label="Password"
-      />
-    </FormControl>
-  );
+  if (props.error !== "") {
+    return (
+      <FormControl
+        sx={{
+          m: 1,
+          width: "20ch",
+          backgroundColor: "#E5E5E5",
+          borderRadius: "10px",
+        }}
+        variant="filled"
+        error={true}
+      >
+        <InputLabel htmlFor="filled-adornment-password">
+          Empty for no password
+        </InputLabel>
+        <FilledInput
+          disableUnderline={true}
+          id={props.id}
+          type={props.password.showPassword ? "text" : "password"}
+          value={props.password.password}
+          onChange={handlePasswordChange("password")}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+              >
+                {props.password.showPassword ? (
+                  <VisibilityOff />
+                ) : (
+                  <Visibility />
+                )}
+              </IconButton>
+            </InputAdornment>
+          }
+          label="Password"
+        />
+				<FormHelperText>{props.error}</FormHelperText>
+      </FormControl>
+    );
+  } else {
+    return (
+      <FormControl
+        sx={{
+          m: 1,
+          width: "20ch",
+          backgroundColor: "#E5E5E5",
+          borderRadius: "10px",
+        }}
+        variant="filled"
+      >
+        <InputLabel htmlFor="filled-adornment-password">
+          Empty for no password
+        </InputLabel>
+        <FilledInput
+          disableUnderline={true}
+          id={props.id}
+          type={props.password.showPassword ? "text" : "password"}
+          value={props.password.password}
+          onChange={handlePasswordChange("password")}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+              >
+                {props.password.showPassword ? (
+                  <VisibilityOff />
+                ) : (
+                  <Visibility />
+                )}
+              </IconButton>
+            </InputAdornment>
+          }
+          label="Password"
+        />
+      </FormControl>
+    );
+  }
 }
