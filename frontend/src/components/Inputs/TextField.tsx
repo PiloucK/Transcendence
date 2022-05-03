@@ -8,7 +8,9 @@ export function TextField(props: {
   error: string;
 }) {
   const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setValue(event.target.value);
+		if (event.target.value.length < 20 || event.target.value === "delete") {
+			props.setValue(event.target.value);
+		}
   };
 
   if (props.error !== "") {
