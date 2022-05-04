@@ -27,4 +27,17 @@ export class AuthService {
       accessToken: this.jwtService.sign(payload),
     }; // sign() function from the @nestjs/jwt library
   }
+
+  async register(login42: string) {
+    try {
+      const user = await this.usersService.getUserByLogin(login42);
+      return user;
+    } catch (error: any) {
+      // no any
+      if (error.status === 404) {
+        this.usersService.createUser({ login42 });
+      }
+    }
+    return null;
+  }
 }

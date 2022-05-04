@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
+    "@nestjs/config": "^2.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/jwt": "^8.0.0",
     "@nestjs/passport": "^8.2.1",
@@ -27,6 +28,7 @@
     "class-validator": "^0.13.2",
     "multer": "^1.4.4",
     "passport": "^0.5.2",
+    "passport-42": "^1.2.6",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.7.3",

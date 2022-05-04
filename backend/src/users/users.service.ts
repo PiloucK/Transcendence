@@ -65,6 +65,7 @@ export class UsersService {
   //   return this.users.find((user) => user.login42 == login42);
   // }
 
+  // returns an user if called with undefined as argument
   getUserByLogin(login42: string): Promise<User> {
     return this.usersRepository.getUserByLoginWithAllRelations(login42); // all relations?
   }
