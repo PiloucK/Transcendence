@@ -192,6 +192,30 @@ export class UsersService {
 		return channel;
 	}
 
+	channel(login42: string, channelId: string): Channel {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+
+		const channel: Channel | undefined = this.channels.find(
+			(curChannel) => curChannel.id === channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${channelId}" not found`);
+		}
+
+		if (channel.banned.includes(login42)) {
+			throw new ForbiddenException(`You are banned from this channel`);
+		}
+
+		if (!channel.users.find((curUser) => curUser.login42 === login42)) {
+			throw new ForbiddenException(`You are not in this channel`);
+		}
+
+		return channel;
+	}
+
 	publicChannels(login42: string): Channel[] {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {

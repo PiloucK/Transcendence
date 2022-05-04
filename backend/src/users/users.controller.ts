@@ -85,6 +85,14 @@ export class UsersController {
 		return this.usersService.joinChannel(login42, joinChannelDto);
 	}
 
+	@Get('/:login42/channel/:channelId')
+	channel(
+		@Param('login42') login42: string,
+		@Param('channelId') channelId: string,
+	): Channel {
+		return this.usersService.channel(login42, channelId);
+	}
+
 	@Get('/:login42/publicChannels')
 	publicChannels(
 		@Param('login42') login42: string,
