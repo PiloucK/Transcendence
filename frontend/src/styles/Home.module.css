@@ -899,6 +899,7 @@ and should display them in columns of three cards max */
   left: 0px;
   top: 0px;
 
+	overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -906,6 +907,10 @@ and should display them in columns of three cards max */
   /* Teal */
 
   background: #163f5b;
+}
+
+.chat_menu::-webkit-scrollbar {
+	width: 0 !important;
 }
 
 .chat_menu_button {
@@ -921,8 +926,6 @@ and should display them in columns of three cards max */
 .chat_menu_button_selected {
   margin: 0.3rem;
 
-	min-width: 0px;
-	min-height: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -947,6 +950,10 @@ and should display them in columns of three cards max */
   /* Teal */
 
   background: #163f5b;
+}
+
+.chat_direct_message_menu::-webkit-scrollbar {
+	width: 0 !important;
 }
 
 .chat_direct_message_menu_title {
