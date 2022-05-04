@@ -127,6 +127,14 @@ export function DirectMessageMenu(props: {
   );
 }
 
+export function ChannelMenu({ channel }: { channel: Channel }) {
+	return (
+		<div className={styles.channel_menu}>
+			{channel?.name}
+		</div>
+	);
+}
+
 export function AddChannelMenu(props: {
   menu: string;
   setMenu: (menu: string) => void;

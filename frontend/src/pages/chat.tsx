@@ -4,7 +4,7 @@ import { ChatMenu } from "../components/Chat/Menus";
 
 import { DirectMessage } from "../components/Chat/DirectMessage";
 import { AddChannel } from "../components/Chat/AddChannel";
-
+import { Channel } from "../components/Chat/Channel";
 import { useLoginContext } from "../context/LoginContext";
 import { DockGuest } from "../components/Dock/DockGuest";
 
@@ -14,7 +14,7 @@ function ChatContent({ menu }: { menu: string }) {
   } else if (menu === "add_channel") {
     return <AddChannel />;
   } else {
-    return <div>Channel</div>;
+    return <Channel id={menu}/>;
   }
 }
 
