@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-42';
+import { User } from 'src/users/user.entity';
 import { AuthService } from './auth.service';
 
 @Injectable()
@@ -22,11 +23,13 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
     });
   }
 
+  // Passport will call the verify function, implemented with this validate()
+  // method, using an appropriate strategy-specific set of parameters
   async validate(
     accessToken: string,
     refreshToken: string,
     profile: any, // no any
-  ) {
+  ): Promise<User> {
     return this.authService.findOrCreate42UserInDatabase(profile.username);
   }
 }

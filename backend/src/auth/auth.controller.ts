@@ -1,4 +1,5 @@
-import { Controller, Get, Redirect, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Redirect, Req, Res, UseGuards } from '@nestjs/common';
+import { Response } from 'express';
 import { SkipJwtAuth } from 'src/skipJwtAuth.guard';
 import { AuthService } from './auth.service';
 import { FortyTwoAuthGuard } from './fortyTwoAuth.guard';
@@ -8,11 +9,14 @@ import { RequestWithUser } from './requestWithUser.interface';
 export class AuthController {
   constructor(private authService: AuthService) {} // add readonly?
 
-  @SkipJwtAuth()
-  @UseGuards(FortyTwoAuthGuard)
+  @SkipJwtAuth() // remove this? if a user is already logged on, do not query 42 api...
+  // "Verifying tokens" on https://wanago.io/2020/05/25/api-nestjs-authenticating-users-bcrypt-passport-jwt-cookies/
+  @UseGuards(FortyTwoAuthGuard) // pass through FortyTwoStrategy
   @Get()
-  fortyTwoAuth() {
-    console.log('will never pass here');
+  fortyTwoAuth(): void {
+    console.log(
+      'will never pass here (redirected to /auth/42/callback within FortyTwoAuthGuard)',
+    );
     return;
   }
 
@@ -20,7 +24,15 @@ export class AuthController {
   @UseGuards(FortyTwoAuthGuard)
   //@Redirect()
   @Get('42/callback')
-  fortyTwoAuthRedirect(@Request() req: RequestWithUser) {
-    return this.authService.issueJwtToken(req.user.login42);
+  fortyTwoAuthRedirect(
+    @Req() request: RequestWithUser,
+    @Res() response: Response,
+  ) {
+    // Passport assigns the User object returned by the validate() method to the
+    // Request object, as request.user
+    const jwtToken = this.authService.issueJwtToken(request.user.login42);
+    const cookie = this.authService.getCookieWithJwtToken(jwtToken);
+    response.setHeader('Set-Cookie', cookie);
+    return response.send(request.user);
   }
 }

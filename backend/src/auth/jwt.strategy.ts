@@ -1,13 +1,21 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
+import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { jwtConstants } from './constants';
+import { TokenPayload } from './tokenPayload.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request: Request) => {
+          return request?.cookies?.Authentication; // what are these question marks
+          // sign cookies? https://docs.nestjs.com/techniques/cookies#use-with-express-default
+        },
+      ]),
       // supplies the method by which the JWT will be extracted from the Request
       ignoreExpiration: false,
       // false is the default value: the Passport module will ensure that a JWT
@@ -15,10 +23,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       // request will be denied and a 401 Unauthorized response sent. Passport
       // conveniently handles this automatically for us.
       secretOrKey: jwtConstants.secret,
+      // secretOrKey: configService.get('JWT_SECRET')
     }); // https://github.com/mikenicholson/passport-jwt#configure-strategy
   }
 
-  async validate(payload: any) {
+  async validate(payload: TokenPayload) {
+    console.log('JwtStrategy validate: payload.login42 =', payload.login42);
+
     return { login42: payload.login42 };
     // Passport will build a user object based on the return value of our
     // validate() method, and attach it as a property on the Request object.

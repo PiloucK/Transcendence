@@ -59,6 +59,7 @@ export class UsersController {
     @Param('login42') login42: string,
     @Body() updateUserUsernameDto: UpdateUserUsernameDto,
   ): Promise<User> {
+    // verify if it's login42 that does this request (in request.user.login42 returned by jwt strategy)
     return this.usersService.updateUserUsername(login42, updateUserUsernameDto);
   }
 

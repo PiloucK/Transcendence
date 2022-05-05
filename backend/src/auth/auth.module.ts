@@ -14,16 +14,24 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     UsersModule,
     PassportModule,
     ConfigModule, // not needed?
+    // ConfigModule.forRoot({
+    //   validationSchema: Joi.object({
+    //     //...
+    //     JWT_SECRET: Joi.string().required(),
+    //     JWT_EXPIRATION_TIME: Joi.string().required(),
+    //   }),
+    // }),
+    // https://wanago.io/2020/05/25/api-nestjs-authenticating-users-bcrypt-passport-jwt-cookies/
     JwtModule.registerAsync({
       imports: [ConfigModule], // not needed?
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         return {
           secret: jwtConstants.secret,
-          signOptions: { expiresIn: '60s' },
-          // secret: configService.get<string>('JWT_SECRET'),
+          signOptions: { expiresIn: '86400s' },
+          // secret: configService.get('JWT_SECRET'),
           // signOptions: {
-          //   expiresIn: configService.get<string>('JWT_EXPIRES_IN'),
+          //   expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}s`,
           // },
         };
       },
