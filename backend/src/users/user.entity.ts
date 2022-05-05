@@ -42,27 +42,13 @@ export class User {
   blockedUsers!: User[];
 }
 
-// export interface IUserForLeaderboard {
-//   login42: string; // peut-etre a retirer (seul identifiant unique qu'on passe au front)
-//   username: string; // username qu'on peut changer (unique?)
-//   //photo?
-//   elo: number;
-// }
+// photo
 
-// export interface IUserPublicInfos extends IUserForLeaderboard {
-//   //photo?
-//   gamesWon: number;
-//   gamesLost: number;
-// }
-
-// export interface IUser extends IUserPublicInfos {
-//   id: string; // uuid
-//   token42: string; // token 42 (changer le nom)
-//   friends: Array<string>;
-//   friendRequestsSent: Array<string>;
-//   friendRequestsReceived: Array<string>;
-//   blockedUsers: Array<string>;
-//   twoFa: boolean;
+// export enum UserState {
+//   IN_GAME = "IN_GAME",
+//   IN_QUEUE = "IN_QUEUE",
+//   IS_ONLINE = "IN_ONLINE",
+//   IS_OFFLINE = "IS_OFFLINE"
 // }
 
 // export type Friends = Array<string>;
