@@ -1,6 +1,5 @@
 import {
   ConflictException,
-  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -185,8 +184,8 @@ export class UsersService {
       );
     }
 
-    await this.usersRepository.addUserToFriendRequestsReceived(friend, user);
     await this.usersRepository.addUserToFriendRequestsSent(user, friend);
+    await this.usersRepository.addUserToFriendRequestsReceived(friend, user);
 
     friend.friendRequestsReceived = []; // to prevent circular references error
     return user.friendRequestsSent;
