@@ -208,7 +208,7 @@ export function ChatMenu(props: {
         setChannels(currentChannels);
       });
 
-    socket.on("update-channels", () => {
+    socket.on("update-channels-list", () => {
       userService
         .getJoinedChannels(loginContext.userLogin)
         .then((currentChannels: Channel[]) => {

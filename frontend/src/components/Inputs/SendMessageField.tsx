@@ -36,7 +36,15 @@ export function SendMessageField({
   const handleSendMessage = () => {
     if (input.length > 0) {
       if (channel.length === 36) {
-				console.log(`Sending ${input} to ${channel}`);
+        userServices
+          .sendMSGToChannel(loginContext.userLogin, channel, {
+            author: loginContext.userLogin,
+            content: input,
+          })
+          .then(() => {
+            socket.emit("user:update-channel-content");
+            setInput("");
+          });
       } else {
         const users = channel.split("|");
         const otherLogin =

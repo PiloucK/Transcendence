@@ -15,6 +15,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import {
 	CreateChannelDto,
 	JoinChannelDto,
+	SendMSGToChannelDto,
 	SendDMDto,
   UpdateUserEloDto,
   UpdateUserGamesLostDto,
@@ -192,6 +193,32 @@ export class UsersService {
 		return channel;
 	}
 
+	sendMSGToChannel(login42: string, sendMSGToChannelDto: SendMSGToChannelDto): Channel {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+
+		const channel: Channel | undefined = this.channels.find(
+			(curChannel) => curChannel.id === sendMSGToChannelDto.channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${sendMSGToChannelDto.channelId}" not found`);
+		}
+
+		if (channel.banned.includes(login42)) {
+			throw new ForbiddenException(`You are banned from this channel`);
+		}
+
+		if (!channel.users.find((curUser) => curUser.login42 === login42)) {
+			throw new ForbiddenException(`You are not in this channel`);
+		}
+
+		channel.messages.push(sendMSGToChannelDto.message);
+
+		return channel;
+	}
+
 	channel(login42: string, channelId: string): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -237,6 +264,7 @@ export class UsersService {
 		);
 		return joinedChannels;
 	}
+
   createDM(
     login42: string,
     sendFriendRequestDto: SendFriendRequestDto,

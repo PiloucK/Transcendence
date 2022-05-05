@@ -20,7 +20,10 @@ export const registerUserHandlers = (io: Server, socket: Socket) => {
 		io.emit("update-public-channels");
 	};
 	const userJoinedChannelUpdate = () => {
-		io.emit("update-channels");
+		io.emit("update-channels-list");
+	};
+	const channelContentUpdate = () => {
+		io.emit("update-channel-content");
 	};
 
   socket.on("user:new", newUser);
@@ -30,4 +33,5 @@ export const registerUserHandlers = (io: Server, socket: Socket) => {
 	socket.on("user:update-direct-messages", userDMUpdate);
 	socket.on("user:update-public-channels", userPublicChannelUpdate);
 	socket.on("user:update-joined-channel", userJoinedChannelUpdate);
+	socket.on("user:update-channel-content", channelContentUpdate);
 };

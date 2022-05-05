@@ -63,23 +63,39 @@ const createChannel = (login: string, channelInfos: ChannelCreation) => {
 };
 
 const joinChannel = (login: string, channelId: string) => {
-	const request = axios.patch(`${baseUrl}/${login}/joinChannel`, {
-		channelId,
-	});
-	return request
-		.then((response) => response.data)
-		.catch((e) => {
-			console.error(e);
-		});
+  const request = axios.patch(`${baseUrl}/${login}/joinChannel`, {
+    channelId,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const sendMSGToChannel = (
+  login: string,
+  channelId: string,
+  message: IMessage
+) => {
+  const request = axios.patch(`${baseUrl}/${login}/sendMSGToChannel`, {
+    channelId,
+    message,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
 };
 
 const getChannelById = (login: string, channelId: string) => {
-	const request = axios.get(`${baseUrl}/${login}/channel/${channelId}`);
-	return request
-		.then((response) => response.data)
-		.catch((e) => {
-			console.error(e);
-		});
+  const request = axios.get(`${baseUrl}/${login}/channel/${channelId}`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
 };
 
 const getPublicChannels = (login: string) => {
@@ -297,10 +313,11 @@ export default {
   addOne,
   deleteOne,
   createChannel,
-	joinChannel,
-	getChannelById,
+  joinChannel,
+	sendMSGToChannel,
+  getChannelById,
   getPublicChannels,
-	getJoinedChannels,
+  getJoinedChannels,
   createDM,
   sendDM,
   getOneDM,

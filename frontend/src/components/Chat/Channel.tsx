@@ -39,7 +39,7 @@ function Messages({ channel }: { channel: Channel }) {
 
   return (
     <div className={styles.messages_area}>
-      {dm.messages.map((message, index) => (
+      {channel.messages.map((message, index) => (
         <div className={getStyle(message.author)} key={index}>
           {message.content}
         </div>
@@ -53,7 +53,11 @@ function ChannelContent({ channel }: { channel: Channel }) {
 
   return (
     <div className={styles.chat_direct_message_content}>
-      <SendMessageField input={input} setInput={setInput} channel={channel?.id} />
+      <SendMessageField
+        input={input}
+        setInput={setInput}
+        channel={channel?.id}
+      />
       <Messages channel={channel} />
     </div>
   );
@@ -69,6 +73,14 @@ export function Channel({ id }: { id: string }) {
       .then((channel: Channel) => {
         setChannel(channel);
       });
+
+    socket.on("update-channel-content", () => {
+      userService
+        .getChannelById(loginContext.userLogin, id)
+        .then((channel: Channel) => {
+          setChannel(channel);
+        });
+    });
   }, [id]);
 
   return (

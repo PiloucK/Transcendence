@@ -20,6 +20,20 @@ export class JoinChannelDto {
 	channelId: string;
 }
 
+export class SendMSGToChannelDto {
+	constructor(channelId: string, message: IMessage) {
+		this.channelId = channelId;
+		this.message = message;
+	}
+
+	@IsNotEmpty()
+	@IsString()
+	channelId: string;
+
+	@IsNotEmpty()
+	message: IMessage;
+}
+
 export class SendDMDto {
 	constructor(login: string, message: IMessage) {
 		this.dest = login;
