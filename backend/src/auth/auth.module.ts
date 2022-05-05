@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { UsersModule } from 'src/users/users.module';
 import { AuthService } from './auth.service';
-import { LocalStrategy } from './local.strategy';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
@@ -30,7 +29,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       },
     }), // https://github.com/nestjs/jwt/blob/master/README.md#secret--encryption-key-options
   ],
-  providers: [AuthService, LocalStrategy, FortyTwoStrategy, JwtStrategy],
+  providers: [AuthService, FortyTwoStrategy, JwtStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

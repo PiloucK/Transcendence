@@ -6,7 +6,10 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class FortyTwoStrategy extends PassportStrategy(Strategy) {
-  constructor(configService: ConfigService, private authService: AuthService) {
+  constructor(
+    private configService: ConfigService,
+    private authService: AuthService,
+  ) {
     super({
       clientID:
         '9fd30dbda5494d34c21cab03ca64107947c5e629111d679ec2bea285f15e48f5',
@@ -18,14 +21,12 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
       // callbackURL: configService.get<string>('42_APP_CALLBACK_URL'),
     });
   }
+
   async validate(
     accessToken: string,
     refreshToken: string,
     profile: any, // no any
-    callback: any, // no any
   ) {
-    this.authService.register(profile.username);
-
-    callback(null, profile);
+    return this.authService.findOrCreate42UserInDatabase(profile.username);
   }
 }
