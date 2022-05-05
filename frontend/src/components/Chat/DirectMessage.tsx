@@ -10,6 +10,7 @@ import { CardUserDM } from "../Cards/CardUserDM";
 
 import Image from "next/image";
 import Rocket from "../../public/no_dm_content.png";
+import Blocked from "../../public/blocked.png";
 
 import { SendMessageField } from "../Inputs/SendMessageField";
 
@@ -95,7 +96,9 @@ function Messages({ dm }: { dm: DM }) {
   return (
     <div className={styles.messages_area}>
       {dm.messages.map((message, index) => (
-        <div className={getStyle(message.author)} key={index}>{message.content}</div>
+        <div className={getStyle(message.author)} key={index}>
+          {message.content}
+        </div>
       ))}
     </div>
   );
@@ -103,17 +106,30 @@ function Messages({ dm }: { dm: DM }) {
 
 function CurrentDirectMessage({ menu }: { menu: string }) {
   const loginContext = useLoginContext();
+  const [blockedList, setBlockedList] = React.useState<IUserPublicInfos[]>([]);
   const [input, setInput] = React.useState("");
   const [dms, setDms] = useState<DM[]>();
   const users = menu.split("|");
 
   React.useEffect(() => {
     userService
+      .getUserBlocked(loginContext.userLogin)
+      .then((blocked: IUserPublicInfos[]) => {
+        setBlockedList(blocked);
+      });
+    userService
       .getAllOpenedDM(loginContext.userLogin)
       .then((openedDMs: DM[]) => {
         setDms(openedDMs);
       });
 
+    socket.on("update-relations", () => {
+      userService
+        .getUserBlocked(loginContext.userLogin)
+        .then((blocked: IUserPublicInfos[]) => {
+          setBlockedList(blocked);
+        });
+    });
     socket.on("update-direct-messages", () => {
       userService
         .getAllOpenedDM(loginContext.userLogin)
@@ -123,8 +139,22 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
     });
   }, []);
 
+  const friend = users[0] === loginContext.userLogin ? users[1] : users[0];
+  const blockedFriend = blockedList.find(
+    (blocked) => blocked.login42 === friend
+  );
+  if (blockedFriend) {
+    return (
+      <div className={styles.chat_direct_message_content}>
+        <div className={styles.social_empty_page}>
+          <Image src={Blocked} />
+          {friend} is blocked and unable to annoy you anymore.
+        </div>
+      </div>
+    );
+  }
   const dm = dms?.find(
-    (currDm:DM) =>
+    (currDm: DM) =>
       (currDm.userOne.login42 === users[0] &&
         currDm.userTwo.login42 === users[1]) ||
       (currDm.userOne.login42 === users[1] &&
@@ -152,12 +182,18 @@ function DirectMessageContent({
 }
 
 export function DirectMessage() {
-	const loginContext = useLoginContext();
+  const loginContext = useLoginContext();
 
   return (
     <>
-      <DirectMessageMenu menu={loginContext.chatDM} setMenu={loginContext.setChatDM} />
-      <DirectMessageContent menu={loginContext.chatDM} setMenu={loginContext.setChatDM} />
+      <DirectMessageMenu
+        menu={loginContext.chatDM}
+        setMenu={loginContext.setChatDM}
+      />
+      <DirectMessageContent
+        menu={loginContext.chatDM}
+        setMenu={loginContext.setChatDM}
+      />
     </>
   );
 }
