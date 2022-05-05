@@ -946,6 +946,29 @@ and should display them in columns of three cards max */
   background: #163f5b;
 }
 
+.channel_menu .title {
+	position: absolute;
+	height: 55px;
+	left: 50%;
+	top: 23px;
+	
+	transform: translate(-50%, 0%);
+	/* Header 2 */
+	
+	font-family: 'Khand';
+	font-style: normal;
+	font-weight: 600;
+	font-size: 26px;
+	line-height: 40px;
+	display: flex;
+	align-items: center;
+	letter-spacing: -0.02em;
+	
+	/* White */
+	
+	color: #FFFFFF;
+}
+
 .channel_content {
 	position: absolute;
 	width: 83.5%;

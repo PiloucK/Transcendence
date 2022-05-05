@@ -128,11 +128,16 @@ export function DirectMessageMenu(props: {
 }
 
 export function ChannelMenu({ channel }: { channel: Channel }) {
-	return (
-		<div className={styles.channel_menu}>
-			{channel?.name}
-		</div>
-	);
+  return (
+    <div className={styles.channel_menu}>
+      <div
+        className={styles.title}
+        onClick={() => {}}
+      >
+        {channel?.name}
+      </div>
+    </div>
+  );
 }
 
 export function AddChannelMenu(props: {
@@ -182,7 +187,7 @@ function ChannelList({
   return channels?.map((channel) => {
     return (
       <div
-				key={channel.id}
+        key={channel.id}
         className={getStyle(channel.id)}
         onClick={() => {
           setMenu(channel.id);
