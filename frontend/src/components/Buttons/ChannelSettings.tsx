@@ -46,7 +46,6 @@ function MenuButtons({ channel, setAnchorEl }: { channel: Channel, setAnchorEl: 
 }
 
 export default function ChannelSettings({ channel }: { channel: Channel }) {
-  const loginContext = useLoginContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 

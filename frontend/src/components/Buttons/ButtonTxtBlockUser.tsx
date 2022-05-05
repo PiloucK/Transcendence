@@ -38,7 +38,9 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
       userServices
         .unblockUser(loginContext.userLogin, login)
         .then(() => {
-          socket.emit("user:update-relations");
+					socket.emit("user:update-relations");
+					socket.emit("user:update-direct-messages");
+					socket.emit("user:update-channel-content");
         });
     }
   };

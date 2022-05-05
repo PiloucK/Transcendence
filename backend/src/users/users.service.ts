@@ -294,7 +294,16 @@ export class UsersService {
 			throw new ForbiddenException(`You are not in this channel`);
 		}
 
-		return channel;
+		// Remove messages of the blocked users
+		const cleanedMessages: IMessage[] = channel.messages.filter((curMessage) => {
+			return !user.blockedUsers.includes(curMessage.author);
+		}
+		);
+		
+		return {
+			...channel,
+			messages: cleanedMessages,
+		}
 	}
 
 	publicChannels(login42: string): Channel[] {
