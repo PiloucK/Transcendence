@@ -8,7 +8,12 @@ import directMessage from "../../public/direct_message.png";
 import addChannel from "../../public/add_channel.png";
 
 import { useLoginContext } from "../../context/LoginContext";
-import { IUserPublicInfos, DM, Channel } from "../../interfaces/users";
+import {
+  IUserPublicInfos,
+  IUserForLeaderboard,
+  DM,
+  Channel,
+} from "../../interfaces/users";
 import userService from "../../services/users";
 
 import { ButtonTxtViewProfile } from "../Buttons/ButtonTxtViewProfile";
@@ -127,15 +132,67 @@ export function DirectMessageMenu(props: {
   );
 }
 
+function SelectedUserMenu({
+  userLogin,
+  setSelectedUser,
+}: {
+  userLogin: string;
+  setSelectedUser: (userLogin: string) => void;
+}) {
+  return (
+    <div className={styles.selected_user}>
+      <div className={styles.users} onClick={() => setSelectedUser("")}>
+        {userLogin}
+      </div>
+      <ButtonTxtViewProfile login={userLogin} />
+      <ButtonTxtUserStatus login={userLogin} />
+      <ButtonTxtBlockUser login={userLogin} />
+    </div>
+  );
+}
+
+function UserList({ users }: { users: IUserForLeaderboard[] }) {
+  const loginContext = useLoginContext();
+  const [selectedUser, setSelectedUser] = useState<String>("");
+
+  return users?.map((user) => {
+    if (user.login42 === loginContext.userLogin) {
+      return (
+        <div key={user.login42} className={styles.connected_user}>
+          {user.username}
+        </div>
+      );
+    } else if (user.login42 === selectedUser) {
+      return (
+        <SelectedUserMenu
+          key={user.login42}
+          userLogin={selectedUser}
+          setSelectedUser={setSelectedUser}
+        />
+      );
+    } else {
+      return (
+        <div
+          key={user.login42}
+          className={styles.users}
+          onClick={() => {
+            setSelectedUser(user.login42);
+          }}
+        >
+          {user.username}
+        </div>
+      );
+    }
+  });
+}
+
 export function ChannelMenu({ channel }: { channel: Channel }) {
   return (
     <div className={styles.channel_menu}>
-      <div
-        className={styles.title}
-        onClick={() => {}}
-      >
+      <div className={styles.title} onClick={() => {}}>
         {channel?.name}
       </div>
+      <UserList users={channel?.users} />
     </div>
   );
 }

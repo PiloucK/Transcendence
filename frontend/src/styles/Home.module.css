@@ -941,48 +941,157 @@ and should display them in columns of three cards max */
   left: 3.9%;
   top: 0px;
 
+	overflow-y: auto;
   /* Teal */
 
   background: #163f5b;
 }
 
 .channel_menu .title {
-	position: absolute;
-	height: 55px;
-	left: 50%;
-	top: 23px;
-	
-	transform: translate(-50%, 0%);
-	/* Header 2 */
-	
-	font-family: 'Khand';
-	font-style: normal;
-	font-weight: 600;
-	font-size: 26px;
-	line-height: 40px;
-	display: flex;
-	align-items: center;
-	letter-spacing: -0.02em;
-	
-	/* White */
-	
-	color: #FFFFFF;
+  position: absolute;
+  height: 55px;
+  left: 50%;
+  top: 23px;
+
+  transform: translate(-50%, 0%);
+  /* Header 2 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.channel_menu .users {
+  position: relative;
+  top: 10%;
+  /* transform: translate(-50%, 0%); */
+  /* Body */
+
+  margin: 0.3rem;
+  /* White */
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  column-gap: 10px;
+  justify-content: space-evenly;
+
+  display: flex;
+  align-items: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  text-align: center;
+
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.channel_menu .connected_user {
+	position: relative;
+  top: 10%;
+  /* transform: translate(-50%, 0%); */
+  /* Body */
+
+  margin: 0.3rem;
+  /* White */
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  column-gap: 10px;
+  justify-content: space-evenly;
+
+  display: flex;
+  align-items: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  text-align: center;
+
+  color: #FCA311;
+}
+
+.channel_menu .selected_user {
+  position: relative;
+  top: 10%;
+	width: 242px;
+  height: 131px;
+  /* transform: translate(-50%, 0%); */
+  /* Body */
+
+  margin: 0.3rem;
+  /* White */
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  column-gap: 10px;
+  justify-content: space-evenly;
+
+  display: flex;
+	flex-direction: column;
+  align-items: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* Dark grey */
+	background: #2b506a;
+	border-radius: 20px;
+	color: #ffffff;
+	cursor: default;
+}
+
+.channel_menu .selected_user .buttons {
+  width: 92px;
+  height: 19px;
+
+  /* Body */
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+  cursor: pointer;
 }
 
 .channel_content {
-	position: absolute;
-	width: 83.5%;
-	height: 100%;
-	left: 16.5%;
-	top: 0px;
+  position: absolute;
+  width: 83.5%;
+  height: 100%;
+  left: 16.5%;
+  top: 0px;
 
-	overflow-y: auto;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	/* Teal */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Teal */
 
-	background: #00213D;
+  background: #00213d;
 }
 
 .chat_direct_message_menu {
