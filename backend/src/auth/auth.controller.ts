@@ -1,4 +1,12 @@
-import { Controller, Get, Redirect, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Redirect,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { SkipJwtAuth } from 'src/skipJwtAuth.guard';
 import { AuthService } from './auth.service';
@@ -33,6 +41,14 @@ export class AuthController {
     const jwtToken = this.authService.issueJwtToken(request.user.login42);
     const cookie = this.authService.getCookieWithJwtToken(jwtToken);
     response.setHeader('Set-Cookie', cookie);
-    return response.send(request.user);
+    return response.send(request.user); // cannot write return request.user?
+  }
+
+  //@HttpCode(200)
+  @Post('logout') // why POST
+  logOut(@Req() request: RequestWithUser, @Res() response: Response) {
+    const cookie = this.authService.getCookieForLogOut();
+    response.setHeader('Set-Cookie', cookie);
+    return response.sendStatus(200);
   }
 }
