@@ -4,15 +4,35 @@ import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-export default function BasicMenu() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+import userService from "../../services/users";
+import { Channel } from "../../interfaces/users";
+import { useLoginContext } from "../../context/LoginContext";
+
+import io from "socket.io-client";
+
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
+export default function ChannelSettings({ channel }: { channel: Channel }) {
+  const loginContext = useLoginContext();
+	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+	const handleLeaveChannel = () => {
+		loginContext.setChatMenu("direct_message");
+    setAnchorEl(null);
+		userService.leaveChannel(loginContext.userLogin, channel.id)
+			.then(() => {
+				socket.emit("user:update-channel-content");
+				socket.emit("user:update-joined-channel");
+			});
+	}
 
   return (
     <div>
@@ -35,9 +55,10 @@ export default function BasicMenu() {
           'aria-labelledby': 'basic-button',
         }}
       >
+
         <MenuItem onClick={handleClose}>Invite friends</MenuItem>
         <MenuItem onClick={handleClose}>Admin settings</MenuItem>
-        <MenuItem onClick={handleClose}>Leave channel</MenuItem>
+        <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
       </Menu>
     </div>
   );

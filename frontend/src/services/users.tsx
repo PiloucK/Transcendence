@@ -73,12 +73,24 @@ const joinChannel = (login: string, channelId: string) => {
     });
 };
 
+const leaveChannel = (login: string, channelId: string) => {
+  const request = axios.patch(`${baseUrl}/${login}/leaveChannel`, {
+    channelId,
+  });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const sendMSGToChannel = (
   login: string,
   channelId: string,
   message: IMessage
 ) => {
   const request = axios.patch(`${baseUrl}/${login}/sendMSGToChannel`, {
+		leaveChannel,
     channelId,
     message,
   });
@@ -314,7 +326,8 @@ export default {
   deleteOne,
   createChannel,
   joinChannel,
-	sendMSGToChannel,
+	leaveChannel,
+  sendMSGToChannel,
   getChannelById,
   getPublicChannels,
   getJoinedChannels,

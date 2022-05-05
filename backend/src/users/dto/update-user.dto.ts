@@ -10,7 +10,7 @@ export class CreateChannelDto {
 	channelInfos: Channel;
 }
 
-export class JoinChannelDto {
+export class ChannelIdDto {
 	constructor(channelId: string) {
 		this.channelId = channelId;
 	}

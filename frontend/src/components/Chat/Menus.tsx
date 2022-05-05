@@ -21,7 +21,7 @@ import { ButtonTxtBlockUser } from "../Buttons/ButtonTxtBlockUser";
 import { ButtonTxtUserStatus } from "../Buttons/ButtonTxtUserStatus";
 
 import io from "socket.io-client";
-import BasicMenu from "../Buttons/BasicMenu";
+import ChannelSettings from "../Buttons/ChannelSettings";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
@@ -192,7 +192,7 @@ export function ChannelMenu({ channel }: { channel: Channel }) {
     <div className={styles.channel_menu}>
       <div className={styles.title} onClick={() => {}}>
         {channel?.name}
-				<BasicMenu />
+				<ChannelSettings channel={channel} />
       </div>
       <UserList users={channel?.users} />
     </div>

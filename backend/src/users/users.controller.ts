@@ -22,7 +22,7 @@ import { GetUsersDto } from './dto/get-users.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
 	CreateChannelDto,
-	JoinChannelDto,
+	ChannelIdDto,
 	SendMSGToChannelDto,
 	SendDMDto,
   UpdateUserEloDto,
@@ -81,9 +81,17 @@ export class UsersController {
 	@Patch('/:login42/joinChannel')
 	joinChannel(
 		@Param('login42') login42: string,
-		@Body() joinChannelDto: JoinChannelDto,
+		@Body() joinChannelDto: ChannelIdDto,
 	): Channel {
 		return this.usersService.joinChannel(login42, joinChannelDto);
+	}
+
+	@Patch('/:login42/leaveChannel')
+	leaveChannel(
+		@Param('login42') login42: string,
+		@Body() leaveChannelDto: ChannelIdDto,
+		): Channel {
+		return this.usersService.leaveChannel(login42, leaveChannelDto);
 	}
 
 	@Patch(`/:login42/sendMSGToChannel`)

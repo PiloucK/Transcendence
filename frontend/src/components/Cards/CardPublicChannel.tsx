@@ -22,7 +22,8 @@ export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
         .then((channel: Channel) => {
           loginContext.setChatMenu(channel.id);
           socket.emit("user:update-joined-channel");
-        });
+					socket.emit("user:update-channel-content");
+			});
     }
   };
 

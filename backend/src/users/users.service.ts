@@ -14,7 +14,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import {
 	CreateChannelDto,
-	JoinChannelDto,
+	ChannelIdDto,
 	SendMSGToChannelDto,
 	SendDMDto,
   UpdateUserEloDto,
@@ -167,7 +167,7 @@ export class UsersService {
 		return channel;
 	}
 
-	joinChannel(login42: string, joinChannelDto: JoinChannelDto): Channel {
+	joinChannel(login42: string, joinChannelDto: ChannelIdDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
 			throw new NotFoundException(`User with login42 "${login42}" not found`);
@@ -189,6 +189,60 @@ export class UsersService {
 		}
 
 		channel.users.push(this.createUserMinimalInfos(user));
+
+		return channel;
+	}
+
+	deleteChannel(channelIdDto: ChannelIdDto): Channel {
+		const channel: Channel | undefined = this.channels.find(	
+			(curChannel) => curChannel.id === channelIdDto.channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${channelIdDto.channelId}" not found`);
+		}
+
+		const index: number = this.channels.indexOf(channel);
+		if (index === -1) {
+			throw new NotFoundException(`Channel with id "${channelIdDto.channelId}" not found`);
+		}
+
+		this.channels.splice(index, 1);
+		
+		return channel;
+	}
+
+	leaveChannel(login42: string, leaveChannelDto: ChannelIdDto): Channel {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+
+		const channel: Channel | undefined = this.channels.find(
+			(curChannel) => curChannel.id === leaveChannelDto.channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${leaveChannelDto.channelId}" not found`);
+		}
+
+		
+		if (!channel.users.find((curUser) => curUser.login42 === login42)) {
+			throw new ForbiddenException(`You are not in this channel`);
+		}
+
+		channel.users = channel.users.filter((curUser) => curUser.login42 !== login42);
+		channel.admin = channel.admin.filter((curUser) => curUser !== login42);
+		channel.muted = channel.muted.filter((curUser) => curUser !== login42);
+
+		if (channel.owner === login42) {
+			if (channel.users.length > 0) {
+				channel.owner = channel.users[0].login42;
+				if (!channel.admin.includes(channel.owner)) {
+					channel.admin.push(channel.owner);
+				}
+			} else {
+				return this.deleteChannel(leaveChannelDto);
+			}
+		}
 
 		return channel;
 	}
