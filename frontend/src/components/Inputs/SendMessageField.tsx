@@ -35,35 +35,39 @@ export function SendMessageField({
 
   const handleSendMessage = () => {
     if (input.length > 0) {
-      const users = channel.split("|");
-      const otherLogin =
-        users[0] === loginContext.userLogin ? users[1] : users[0];
+      if (channel.length === 36) {
+				console.log(`Sending ${input} to ${channel}`);
+      } else {
+        const users = channel.split("|");
+        const otherLogin =
+          users[0] === loginContext.userLogin ? users[1] : users[0];
 
-      userServices
-        .sendDM(loginContext.userLogin, otherLogin, {
-          author: loginContext.userLogin,
-          content: input,
-        })
-        .then(() => {
-          socket.emit("user:update-direct-messages");
-          setInput("");
-        });
+        userServices
+          .sendDM(loginContext.userLogin, otherLogin, {
+            author: loginContext.userLogin,
+            content: input,
+          })
+          .then(() => {
+            socket.emit("user:update-direct-messages");
+            setInput("");
+          });
+      }
     }
   };
 
   return (
     <Input
       onSubmit={handleSendMessage}
-			autoFocus={true}
+      autoFocus={true}
       autoComplete="off"
-			disableUnderline={true}
-			multiline={true}
-			maxRows={4}
+      disableUnderline={true}
+      multiline={true}
+      maxRows={4}
       sx={{
-				border: "5px solid #E5E5E5",
-				top: "86%",
+        border: "5px solid #E5E5E5",
+        top: "86%",
         width: "1002px",
-				lineHeight: "27px",
+        lineHeight: "27px",
         borderRadius: "20px",
         backgroundColor: "#E5E5E5",
       }}
