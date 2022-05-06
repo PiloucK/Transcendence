@@ -14,6 +14,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import {
 	CreateChannelDto,
+	PasswordChannelDto,
 	ChannelIdDto,
 	SendMSGToChannelDto,
 	SendDMDto,
@@ -167,6 +168,36 @@ export class UsersService {
 		return channel;
 	}
 
+	joinProtectedChannel(login42: string, passwordChannelDto: PasswordChannelDto): Channel {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+
+		const channel: Channel | undefined = this.channels.find(
+			(curChannel) => curChannel.id === passwordChannelDto.channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${passwordChannelDto.channelId}" not found`);
+		}
+
+		if (channel.banned.includes(login42)) {
+			throw new ForbiddenException(`You are banned from this channel`);
+		}
+
+		if (channel.users.find((curUser) => curUser.login42 === login42)) {
+			return channel;
+		}
+
+		if (passwordChannelDto.password === channel.password) {
+		channel.users.push(this.createUserMinimalInfos(user));
+		} else {
+			throw new ForbiddenException(`Wrong password`);
+		}
+		
+		return channel;
+	}
+	
 	joinChannel(login42: string, joinChannelDto: ChannelIdDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {

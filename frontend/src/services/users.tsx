@@ -62,6 +62,18 @@ const createChannel = (login: string, channelInfos: ChannelCreation) => {
     });
 };
 
+const joinProtectedChannel = (login: string, channelId: string, password: string) => {
+	const request = axios.patch(`${baseUrl}/${login}/joinProtectedChannel`, {
+		channelId,
+		password,
+	});
+	return request
+		.then((response) => response.data)
+		.catch((e) => {
+			console.error(e);
+		});
+}
+
 const joinChannel = (login: string, channelId: string) => {
   const request = axios.patch(`${baseUrl}/${login}/joinChannel`, {
     channelId,
@@ -325,6 +337,7 @@ export default {
   addOne,
   deleteOne,
   createChannel,
+	joinProtectedChannel,
   joinChannel,
 	leaveChannel,
   sendMSGToChannel,

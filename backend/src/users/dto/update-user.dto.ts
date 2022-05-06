@@ -10,6 +10,21 @@ export class CreateChannelDto {
 	channelInfos: Channel;
 }
 
+export class PasswordChannelDto {
+	constructor(channelId: string, password: string) {
+		this.channelId = channelId;
+		this.password = password;
+	}
+
+	@IsNotEmpty()
+	@IsString()
+	channelId: string;
+	
+	@IsNotEmpty()
+	@IsString()
+	password: string;
+}	
+
 export class ChannelIdDto {
 	constructor(channelId: string) {
 		this.channelId = channelId;
