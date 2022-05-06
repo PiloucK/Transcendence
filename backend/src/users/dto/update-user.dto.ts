@@ -35,6 +35,41 @@ export class ChannelIdDto {
 	channelId: string;
 }
 
+export class ChannelAdminInteractionsDto {
+	constructor(channelId: string, userLogin42: string) {
+		this.channelId = channelId;
+		this.userLogin42 = userLogin42;
+	}
+
+	@IsNotEmpty()
+	@IsString()
+	channelId: string;
+
+	@IsNotEmpty()
+	@IsString()
+	userLogin42: string;
+}
+
+export class ChannelRestrictionDto {
+	constructor(channelId: string, userLogin42: string, duration: number) {
+		this.channelId = channelId;
+		this.userLogin42 = userLogin42;
+		this.duration = duration;
+	}
+
+	@IsNotEmpty()
+	@IsString()
+	channelId: string;
+
+	@IsNotEmpty()
+	@IsString()
+	userLogin42: string;
+
+	@IsNotEmpty()
+	@IsNumber()
+	duration: number;
+}
+
 export class SendMSGToChannelDto {
 	constructor(channelId: string, message: IMessage) {
 		this.channelId = channelId;

@@ -24,6 +24,8 @@ import {
 	CreateChannelDto,
 	PasswordChannelDto,
 	ChannelIdDto,
+	ChannelAdminInteractionsDto,
+	ChannelRestrictionDto,
 	SendMSGToChannelDto,
 	SendDMDto,
   UpdateUserEloDto,
@@ -102,6 +104,39 @@ export class UsersController {
 		): Channel {
 		return this.usersService.leaveChannel(login42, leaveChannelDto);
 	}
+
+	@Patch(`/:login42/muteAChannelUser`)
+	muteAChannelUser(
+		@Param('login42') login42: string,
+		@Body() channelRestrictionDto: ChannelRestrictionDto,
+	): Channel {
+		return this.usersService.muteAChannelUser(login42, channelRestrictionDto);
+	}
+
+	@Patch(`/:login42/banAChannelUser`)
+	banAChannelUser(
+		@Param('login42') login42: string,
+		@Body() channelRestrictionDto: ChannelRestrictionDto,
+	): Channel {
+		return this.usersService.banAChannelUser(login42, channelRestrictionDto);
+	}
+
+	@Patch('/:login42/setAChannelUserAsAdmin')
+	setAChannelUserAsAdmin(
+		@Param('login42') login42: string,
+		@Body() channelAdminInteractionsDto: ChannelAdminInteractionsDto,
+	): Channel {
+		return this.usersService.setAChannelUserAsAdmin(login42, channelAdminInteractionsDto);
+	}
+
+	@Patch('/:login42/unsetAChannelUserAdmin')
+	unsetAChannelUserAsAdmin(
+		@Param('login42') login42: string,
+		@Body() channelAdminInteractionsDto: ChannelAdminInteractionsDto,
+	): Channel {
+		return this.usersService.unsetAChannelUserAsAdmin(login42, channelAdminInteractionsDto);
+	}
+
 
 	@Patch(`/:login42/sendMSGToChannel`)
 	sendMSGToChannel(

@@ -16,6 +16,8 @@ import {
 	CreateChannelDto,
 	PasswordChannelDto,
 	ChannelIdDto,
+	ChannelAdminInteractionsDto,
+	ChannelRestrictionDto,
 	SendMSGToChannelDto,
 	SendDMDto,
   UpdateUserEloDto,
