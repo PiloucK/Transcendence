@@ -44,6 +44,9 @@ export function SendMessageField({
           .then(() => {
             socket.emit("user:update-channel-content");
             setInput("");
+          })
+          .catch((err) => {
+            console.log(err);
           });
       } else {
         const users = channel.split("|");

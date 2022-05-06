@@ -15,16 +15,40 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-export function ButtonTxtMuteUser({ login, channel }: { login: string, channel: Channel }) {
-  const [open, setOpen] = React.useState(false);
-  const [age, setAge] = React.useState<number | string>("");
+import { useLoginContext } from "../../context/LoginContext";
+import userServices from "../../services/users";
 
-  const handleChange = (event: SelectChangeEvent<typeof age>) => {
-    setAge(Number(event.target.value) || "");
+import io from "socket.io-client";
+
+const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+
+export function ButtonTxtMuteUser({
+  login,
+  channel,
+}: {
+  login: string;
+  channel: Channel;
+}) {
+  const loginContext = useLoginContext();
+  const [open, setOpen] = React.useState(false);
+  const [time, setTime] = React.useState<number | string>("");
+
+  const handleChange = (event: SelectChangeEvent<typeof time>) => {
+    setTime(Number(event.target.value) || "");
   };
 
   const handleClickOpen = () => {
     setOpen(true);
+  };
+
+  const handleMuteUser = () => {
+    setOpen(false);
+    userServices
+      .muteAChannelUser(loginContext.userLogin, channel.id, login, time)
+      .then(() => {})
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleClose = (
@@ -42,14 +66,14 @@ export function ButtonTxtMuteUser({ login, channel }: { login: string, channel: 
         Mute
       </div>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-        <DialogTitle>Timed mute</DialogTitle>
+        <DialogTitle>Mute duration</DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ display: "flex", flexWrap: "wrap" }}>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
               <InputLabel htmlFor="input-time">Time</InputLabel>
               <Select
                 native
-                value={age}
+                value={time}
                 onChange={handleChange}
                 input={<OutlinedInput label="Time" id="input-time" />}
               >
@@ -62,7 +86,7 @@ export function ButtonTxtMuteUser({ login, channel }: { login: string, channel: 
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Ok</Button>
+          <Button onClick={handleMuteUser}>Ok</Button>
         </DialogActions>
       </Dialog>
     </div>
