@@ -10,22 +10,32 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useLoginContext } from "../../context/LoginContext";
 import userService from "../../services/users";
 import { Channel } from "../../interfaces/users";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export function ChannelPasswordDialog({
-	channelId,
+  channelId,
   open,
   setOpen,
 }: {
-	channelId: string;
+  channelId: string;
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
   const loginContext = useLoginContext();
-	const [input, setInput] = React.useState("");
+  const [input, setInput] = React.useState("");
+  const [error, setError] = React.useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -39,6 +49,9 @@ export function ChannelPasswordDialog({
         loginContext.setChatMenu(channel.id);
         socket.emit("user:update-joined-channel");
         socket.emit("user:update-channel-content");
+      })
+      .catch((err: Error) => {
+        setError(true);
       });
   };
   return (
@@ -58,8 +71,8 @@ export function ChannelPasswordDialog({
             type="password"
             fullWidth
             variant="standard"
-						value={input}
-						onChange={(e) => setInput(e.target.value)}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
@@ -67,6 +80,24 @@ export function ChannelPasswordDialog({
           <Button onClick={handleSubmit}>Enter</Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={error}
+        autoHideDuration={6000}
+        onClose={() => {
+          setError(false);
+        }}
+      >
+        <Alert
+          onClose={() => {
+            setError(false);
+          }}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Wrong password.
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
