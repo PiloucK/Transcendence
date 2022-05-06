@@ -19,6 +19,7 @@ import userService from "../../services/users";
 import { ButtonTxtViewProfile } from "../Buttons/ButtonTxtViewProfile";
 import { ButtonTxtBlockUser } from "../Buttons/ButtonTxtBlockUser";
 import { ButtonTxtUserStatus } from "../Buttons/ButtonTxtUserStatus";
+import { ButtonTxtMuteUser } from "../Buttons/ButtonTxtMuteUser";
 
 import io from "socket.io-client";
 import ChannelSettings from "../Buttons/ChannelSettings";
@@ -141,27 +142,68 @@ export function DirectMessageMenu(props: {
 function SelectedUserMenu({
   userLogin,
   setSelectedUser,
+	channel,
 }: {
   userLogin: string;
   setSelectedUser: (userLogin: string) => void;
+	channel: Channel;
 }) {
-  return (
-    <div className={styles.selected_user}>
-      <div className={styles.users} onClick={() => setSelectedUser("")}>
-        {userLogin}
-      </div>
-      <ButtonTxtViewProfile login={userLogin} />
-      <ButtonTxtUserStatus login={userLogin} />
-      <ButtonTxtBlockUser login={userLogin} />
-    </div>
-  );
+	const loginContext = useLoginContext();
+
+	if (loginContext.userLogin === channel?.owner) {
+		return (
+			<div className={styles.selected_user}>
+				<div className={styles.users} onClick={() => setSelectedUser("")}>
+					{userLogin}
+				</div>
+				<ButtonTxtViewProfile login={userLogin} />
+				<ButtonTxtUserStatus login={userLogin} />
+				<ButtonTxtBlockUser login={userLogin} />
+				<ButtonTxtMuteUser login={userLogin} />
+				Ban<br/>
+				Set as admin
+			</div>
+		);
+	} else if (channel?.admin.includes(loginContext.userLogin)) {
+		return (
+			<div className={styles.selected_user}>
+				<div className={styles.users} onClick={() => setSelectedUser("")}>
+					{userLogin}
+				</div>
+				<ButtonTxtViewProfile login={userLogin} />
+				<ButtonTxtUserStatus login={userLogin} />
+				<ButtonTxtBlockUser login={userLogin} />
+			</div>
+		);
+	} else {
+		return (
+			<div className={styles.selected_user}>
+				<div className={styles.users} onClick={() => setSelectedUser("")}>
+					{userLogin}
+				</div>
+				<ButtonTxtViewProfile login={userLogin} />
+				<ButtonTxtUserStatus login={userLogin} />
+				<ButtonTxtBlockUser login={userLogin} />
+			</div>
+		);
+	}
 }
 
-function UserList({ users }: { users: IUserForLeaderboard[] }) {
+function UserList({ channel }: { channel: Channel }) {
   const loginContext = useLoginContext();
   const [selectedUser, setSelectedUser] = useState<String>("");
 
-  return users?.map((user) => {
+	const getUnselectedUserStyle = (userLogin: string) => {
+		if (userLogin === channel?.owner) {
+			return styles.user_owner;
+		} else if (channel?.admin.includes(userLogin)) {
+			return styles.user_admin;
+		} else {
+			return styles.users;
+		}
+	}
+
+  return channel?.users?.map((user) => {
     if (user.login42 === loginContext.userLogin) {
       return (
         <div key={user.login42} className={styles.connected_user}>
@@ -174,6 +216,7 @@ function UserList({ users }: { users: IUserForLeaderboard[] }) {
           key={user.login42}
           userLogin={selectedUser}
           setSelectedUser={setSelectedUser}
+					channel={channel}
         />
       );
     } else {
@@ -247,10 +290,10 @@ export function ChannelMenu({ channel }: { channel: Channel }) {
         </Box>
       </div>
       <TabPanel value={value} index={0}>
-        <UserList users={channel?.users} />
+        <UserList channel={channel} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <UserList users={channel?.users} />
+        <UserList channel={channel} />
       </TabPanel>
     </div>
   );

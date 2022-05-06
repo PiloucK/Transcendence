@@ -1038,8 +1038,9 @@ and should display them in columns of three cards max */
 .channel_menu .selected_user {
   position: relative;
 	width: 100%;
-  height: 131px;
-
+  /* height: 131px; */
+	min-height: 131px;
+	
   margin: 0.3rem;
   /* White */
   font-family: "Khand";
