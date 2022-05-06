@@ -23,6 +23,11 @@ import { ButtonTxtUserStatus } from "../Buttons/ButtonTxtUserStatus";
 import io from "socket.io-client";
 import ChannelSettings from "../Buttons/ChannelSettings";
 
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 function SelectedDMMenu({
@@ -187,14 +192,66 @@ function UserList({ users }: { users: IUserForLeaderboard[] }) {
   });
 }
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
 export function ChannelMenu({ channel }: { channel: Channel }) {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
   return (
     <div className={styles.channel_menu}>
       <div className={styles.title} onClick={() => {}}>
         {channel?.name}
-				<ChannelSettings channel={channel} />
+        <ChannelSettings channel={channel} />
       </div>
-      <UserList users={channel?.users} />
+      <div className={styles.tabs}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs value={value} onChange={handleChange} aria-label="users tab">
+            <Tab label="Online" {...a11yProps(0)} />
+            <Tab label="Offline" {...a11yProps(1)} />
+          </Tabs>
+        </Box>
+      </div>
+      <TabPanel value={value} index={0}>
+        <UserList users={channel?.users} />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <UserList users={channel?.users} />
+      </TabPanel>
     </div>
   );
 }
