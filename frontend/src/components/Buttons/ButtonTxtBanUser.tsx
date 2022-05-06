@@ -15,7 +15,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-export function ButtonTxtMuteUser({ login, channel }: { login: string, channel: Channel }) {
+export function ButtonTxtBanUser({ login, channel }: { login: string, channel: Channel }) {
   const [open, setOpen] = React.useState(false);
   const [age, setAge] = React.useState<number | string>("");
 
@@ -39,10 +39,10 @@ export function ButtonTxtMuteUser({ login, channel }: { login: string, channel: 
   return (
     <div>
       <div className={styles.buttons} onClick={handleClickOpen}>
-        Mute
+        Ban
       </div>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-        <DialogTitle>Timed mute</DialogTitle>
+        <DialogTitle>Timed ban</DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ display: "flex", flexWrap: "wrap" }}>
             <FormControl sx={{ m: 1, minWidth: 120 }}>

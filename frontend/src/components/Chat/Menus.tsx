@@ -20,6 +20,8 @@ import { ButtonTxtViewProfile } from "../Buttons/ButtonTxtViewProfile";
 import { ButtonTxtBlockUser } from "../Buttons/ButtonTxtBlockUser";
 import { ButtonTxtUserStatus } from "../Buttons/ButtonTxtUserStatus";
 import { ButtonTxtMuteUser } from "../Buttons/ButtonTxtMuteUser";
+import { ButtonTxtBanUser } from "../Buttons/ButtonTxtBanUser";
+import { ButtonTxtSetAsAdmin } from "../Buttons/ButtonTxtSetAsAdmin";
 
 import io from "socket.io-client";
 import ChannelSettings from "../Buttons/ChannelSettings";
@@ -159,9 +161,9 @@ function SelectedUserMenu({
 				<ButtonTxtViewProfile login={userLogin} />
 				<ButtonTxtUserStatus login={userLogin} />
 				<ButtonTxtBlockUser login={userLogin} />
-				<ButtonTxtMuteUser login={userLogin} />
-				Ban<br/>
-				Set as admin
+				<ButtonTxtMuteUser login={userLogin} channel={channel} />
+				<ButtonTxtBanUser login={userLogin} channel={channel} />
+				<ButtonTxtSetAsAdmin login={userLogin} channel={channel} />
 			</div>
 		);
 	} else if (channel?.admin.includes(loginContext.userLogin)) {
@@ -173,6 +175,8 @@ function SelectedUserMenu({
 				<ButtonTxtViewProfile login={userLogin} />
 				<ButtonTxtUserStatus login={userLogin} />
 				<ButtonTxtBlockUser login={userLogin} />
+				<ButtonTxtMuteUser login={userLogin} channel={channel} />
+				<ButtonTxtBanUser login={userLogin} channel={channel} />
 			</div>
 		);
 	} else {
