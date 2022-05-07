@@ -121,20 +121,20 @@ export class UsersController {
 		return this.usersService.banAChannelUser(login42, channelRestrictionDto);
 	}
 
-	@Patch('/:login42/setAChannelUserAsAdmin')
-	setAChannelUserAsAdmin(
+	@Patch('/:login42/setAChannelAdmin')
+	setAChannelAdmin(
 		@Param('login42') login42: string,
 		@Body() channelAdminInteractionsDto: ChannelAdminInteractionsDto,
 	): Channel {
-		return this.usersService.setAChannelUserAsAdmin(login42, channelAdminInteractionsDto);
+		return this.usersService.setAChannelAdmin(login42, channelAdminInteractionsDto);
 	}
 
-	@Patch('/:login42/unsetAChannelUserAdmin')
-	unsetAChannelUserAsAdmin(
+	@Patch('/:login42/unsetAChannelAdmin')
+	unsetAChannelAdmin(
 		@Param('login42') login42: string,
 		@Body() channelAdminInteractionsDto: ChannelAdminInteractionsDto,
 	): Channel {
-		return this.usersService.unsetAChannelUserAsAdmin(login42, channelAdminInteractionsDto);
+		return this.usersService.unsetAChannelAdmin(login42, channelAdminInteractionsDto);
 	}
 
 

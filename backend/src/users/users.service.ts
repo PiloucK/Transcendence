@@ -280,6 +280,139 @@ export class UsersService {
 		return channel;
 	}
 
+	muteAChannelUser(login42: string, channelRestrictionDto: ChannelRestrictionDto): Channel {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+
+		const channel: Channel | undefined = this.channels.find(
+			(curChannel) => curChannel.id === channelRestrictionDto.channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${channelRestrictionDto.channelId}" not found`);
+		}
+
+		const userToMute: IUserForLeaderboard | undefined = channel.users.find(
+			(curUser) => curUser.login42 === channelRestrictionDto.userLogin42
+		);
+		if (!userToMute) {
+			throw new NotFoundException(`User with login42 "${channelRestrictionDto.userLogin42}" not found`);
+		}
+
+		if (!channel.admin.includes(login42)) {
+			throw new ForbiddenException(`You are not an admin of this channel`);
+		}
+
+		if (channel.muted.includes(channelRestrictionDto.userLogin42)) {
+			throw new ForbiddenException(`User is already muted`);
+		}
+
+		channel.muted.push(channelRestrictionDto.userLogin42);
+		return channel;
+	}
+
+	banAChannelUser(login42: string, channelRestrictionDto: ChannelRestrictionDto): Channel {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+
+		const channel: Channel | undefined = this.channels.find(
+			(curChannel) => curChannel.id === channelRestrictionDto.channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${channelRestrictionDto.channelId}" not found`);
+		}
+
+		const userToBan: IUserForLeaderboard | undefined = channel.users.find(
+			(curUser) => curUser.login42 === channelRestrictionDto.userLogin42
+		);
+		if (!userToBan) {
+			throw new NotFoundException(`User with login42 "${channelRestrictionDto.userLogin42}" not found`);
+		}
+
+		if (!channel.admin.includes(login42)) {
+			throw new ForbiddenException(`You are not an admin of this channel`);
+		}
+
+		if (channel.banned.includes(channelRestrictionDto.userLogin42)) {
+			throw new ForbiddenException(`User is already banned`);
+		}
+
+		channel.banned.push(channelRestrictionDto.userLogin42);
+		channel.admin = channel.admin.filter((curUser) => curUser !== channelRestrictionDto.userLogin42);
+		channel.users = channel.users.filter((curUser) => curUser.login42 !== channelRestrictionDto.userLogin42);
+		if (channel.owner === channelRestrictionDto.userLogin42) {
+			channel.owner = channel.admin[0];
+		}
+		return channel;
+	}
+
+	setAChannelAdmin(login42: string, channelAdminInteractionsDto: ChannelAdminInteractionsDto): Channel {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+
+		const channel: Channel | undefined = this.channels.find(
+			(curChannel) => curChannel.id === channelAdminInteractionsDto.channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${channelAdminInteractionsDto.channelId}" not found`);
+		}
+
+		const userToSetAdmin: IUserForLeaderboard | undefined = channel.users.find(
+			(curUser) => curUser.login42 === channelAdminInteractionsDto.userLogin42
+		);
+		if (!userToSetAdmin) {
+			throw new NotFoundException(`User with login42 "${channelAdminInteractionsDto.userLogin42}" not found`);
+		}
+
+		if (channel.owner !== login42) {
+			throw new ForbiddenException(`You are not the owner of this channel`);
+		}
+
+		if (channel.admin.includes(channelAdminInteractionsDto.userLogin42)) {
+			throw new ForbiddenException(`User is already an admin`);
+		}
+
+		channel.admin.push(channelAdminInteractionsDto.userLogin42);
+		return channel;
+	}
+
+	unsetAChannelAdmin(login42: string, channelAdminInteractionsDto: ChannelAdminInteractionsDto): Channel {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+
+		const channel: Channel | undefined = this.channels.find(
+			(curChannel) => curChannel.id === channelAdminInteractionsDto.channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${channelAdminInteractionsDto.channelId}" not found`);
+		}
+
+		const userToUnsetAdmin: IUserForLeaderboard | undefined = channel.users.find(
+			(curUser) => curUser.login42 === channelAdminInteractionsDto.userLogin42
+		);
+		if (!userToUnsetAdmin) {
+			throw new NotFoundException(`User with login42 "${channelAdminInteractionsDto.userLogin42}" not found`);
+		}
+
+		if (channel.owner !== login42) {
+			throw new ForbiddenException(`You are not the owner of this channel`);
+		}
+
+		if (!channel.admin.includes(channelAdminInteractionsDto.userLogin42)) {
+			throw new ForbiddenException(`User is not an admin`);
+		}
+
+		channel.admin.splice(channel.admin.indexOf(channelAdminInteractionsDto.userLogin42), 1);
+		return channel;
+	}
+
 	sendMSGToChannel(login42: string, sendMSGToChannelDto: SendMSGToChannelDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {

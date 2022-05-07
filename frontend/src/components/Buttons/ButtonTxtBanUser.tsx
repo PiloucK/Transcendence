@@ -25,7 +25,7 @@ const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 export function ButtonTxtBanUser({ login, channel }: { login: string, channel: Channel }) {
   const loginContext = useLoginContext();
   const [open, setOpen] = React.useState(false);
-  const [time, setTime] = React.useState<number | string>("");
+  const [time, setTime] = React.useState<number | string>(5);
 
   const handleChange = (event: SelectChangeEvent<typeof time>) => {
     setTime(Number(event.target.value) || "");
@@ -60,7 +60,7 @@ export function ButtonTxtBanUser({ login, channel }: { login: string, channel: C
         Ban
       </div>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-        <DialogTitle>TBan duration</DialogTitle>
+        <DialogTitle>Ban duration</DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ display: "flex", flexWrap: "wrap" }}>
             <FormControl sx={{ m: 1, minWidth: 120 }}>

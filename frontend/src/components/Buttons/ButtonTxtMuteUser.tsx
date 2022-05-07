@@ -31,7 +31,7 @@ export function ButtonTxtMuteUser({
 }) {
   const loginContext = useLoginContext();
   const [open, setOpen] = React.useState(false);
-  const [time, setTime] = React.useState<number | string>("");
+  const [time, setTime] = React.useState<number | string>(5);
 
   const handleChange = (event: SelectChangeEvent<typeof time>) => {
     setTime(Number(event.target.value) || "");
@@ -40,6 +40,15 @@ export function ButtonTxtMuteUser({
   const handleClickOpen = () => {
     setOpen(true);
   };
+
+	const handleUnmuteUser = () => {
+		userServices
+		.muteAChannelUser(loginContext.userLogin, channel.id, login, 0)
+		.then(() => {})
+		.catch((err) => {
+			console.log(err);
+		});
+	}
 
   const handleMuteUser = () => {
     setOpen(false);
@@ -60,6 +69,13 @@ export function ButtonTxtMuteUser({
     }
   };
 
+	if (channel.muted.includes(login)) {
+		return (
+			<div className={styles.buttons} onClick={handleUnmuteUser}>
+        Unmute
+      </div>
+		);
+	}
   return (
     <div>
       <div className={styles.buttons} onClick={handleClickOpen}>

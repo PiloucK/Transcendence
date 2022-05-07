@@ -22,7 +22,7 @@ export function ButtonTxtSetAsAdmin({
   const handleRemoveOnClick = () => {
     if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
       userServices
-        .unsetAChannelUserAdmin(loginContext.userLogin, channel.id, login)
+        .unsetAChannelAdmin(loginContext.userLogin, channel.id, login)
         .then(() => {
           // Update the content.
         })
@@ -35,7 +35,7 @@ export function ButtonTxtSetAsAdmin({
   const handleAddOnClick = () => {
     if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
       userServices
-        .setAChannelUserAsAdmin(loginContext.userLogin, channel.id, login)
+        .setAChannelAdmin(loginContext.userLogin, channel.id, login)
         .then(() => {
           // Update the content.
         })

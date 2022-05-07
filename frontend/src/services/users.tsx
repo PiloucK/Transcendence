@@ -136,12 +136,12 @@ const banAChannelUser = (
     });
 };
 
-const setAChannelUserAsAdmin = (
+const setAChannelAdmin = (
   login: string,
   channelId: string,
   userLogin42: string
 ) => {
-  const request = axios.patch(`${baseUrl}/${login}/setAChannelUserAsAdmin`, {
+  const request = axios.patch(`${baseUrl}/${login}/setAChannelAdmin`, {
     channelId,
     userLogin42,
   });
@@ -152,12 +152,12 @@ const setAChannelUserAsAdmin = (
     });
 };
 
-const unsetAChannelUserAdmin = (
+const unsetAChannelAdmin = (
   login: string,
   channelId: string,
   userLogin42: string
 ) => {
-  const request = axios.patch(`${baseUrl}/${login}/unsetAChannelUserAdmin`, {
+  const request = axios.patch(`${baseUrl}/${login}/unsetAChannelAdmin`, {
     channelId,
     userLogin42,
   });
@@ -414,8 +414,8 @@ export default {
   leaveChannel,
   muteAChannelUser,
   banAChannelUser,
-  setAChannelUserAsAdmin,
-	unsetAChannelUserAdmin,
+  setAChannelAdmin,
+	unsetAChannelAdmin,
   sendMSGToChannel,
   getChannelById,
   getPublicChannels,
