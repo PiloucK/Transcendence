@@ -7,7 +7,7 @@ import {
 } from "react";
 import { Dock } from "./Dock";
 import { IUserCredentials, IUser } from "../../interfaces/users";
-import userService from "../../services/users";
+import usersService from "../../services/users";
 
 import { useLoginContext } from "../../context/LoginContext";
 
@@ -15,6 +15,12 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
 import io from "socket.io-client";
+import Link from "next/link";
+import { IconButton } from "@mui/material";
+import Image from "next/image";
+
+import styles from "../../styles/Home.module.css";
+import FTLogo from "../../public/42logo.png"
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
@@ -30,7 +36,7 @@ export function DockGuest() {
       login42: username,
     };
 
-    userService.addOne(newUserCredentials).then((user:IUser) => {
+    usersService.addOne(newUserCredentials).then((user: IUser) => {
       loginContext.login(user.login42, "");
       socket.emit("user:new", username);
       setUsername("");
@@ -47,6 +53,11 @@ export function DockGuest() {
 
   return (
     <Dock>
+      <Link href="http://0.0.0.0:3001/auth">
+        <IconButton className={styles.icons} aria-label="Authentication">
+          <Image src={FTLogo} layout={"fill"} />
+        </IconButton>
+      </Link>
       <form onSubmit={addUser}>
         <TextField
           value={username}
