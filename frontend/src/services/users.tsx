@@ -1,7 +1,18 @@
 // https://stackoverflow.com/a/64940811
 import axios from "axios";
-const baseUrl = "http://0.0.0.0:3001/users";
+const baseUrl = "http://0.0.0.0:3001/users"; // use environment var for 0.0.0.0
 import { IUserCredentials } from "../interfaces/users";
+
+axios.defaults.withCredentials = true;
+
+const getLoggedInUser = () => {
+  const request = axios.get("http://0.0.0.0:3001/auth/getLoggedInUser"); // store the url in variable
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
 
 const getAll = () => {
   const request = axios.get(baseUrl);
@@ -208,6 +219,7 @@ const unblockUser = (login: string, friendLogin42: string) => {
 };
 
 export default {
+  getLoggedInUser,
   getAll,
   getAllForLeaderboard,
   getOne,

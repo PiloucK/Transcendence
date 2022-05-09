@@ -41,7 +41,21 @@ export class AuthController {
     const jwtToken = this.authService.issueJwtToken(request.user.login42);
     const cookie = this.authService.getCookieWithJwtToken(jwtToken);
     response.setHeader('Set-Cookie', cookie);
-    return response.send(request.user); // cannot write return request.user?
+    return response.redirect('http://0.0.0.0:3000'); // cannot write return request.user?
+  }
+  // res.cookie('access_token', token.access_token, {
+  //   httpOnly: false,
+  // });
+  // if (req.user.enableTwoFactorAuth === false) {
+  //   res.cookie('two_factor_auth', true, {
+  //     httpOnly: false,
+  //   });
+  // }
+  // res.status(302).redirect(`${process.env.HOST}:${process.env.CLIENT_PORT}`);
+
+  @Get('getLoggedInUser')
+  getLoggedInUser(@Req() request: RequestWithUser) {
+    return request.user;
   }
 
   //@HttpCode(200)

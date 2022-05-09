@@ -20,6 +20,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
       // clientID: configService.get<string>('42_APP_CLIENT_ID'),
       // clientSecret: configService.get<string>('42_APP_CLIENT_SECRET'),
       // callbackURL: configService.get<string>('42_APP_CALLBACK_URL'),
+      // `${process.env.HOST}:${process.env.PORT}/auth/redirect`
     });
   }
 
