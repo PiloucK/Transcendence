@@ -1,73 +1,45 @@
-import {
-  FormEventHandler,
-  ChangeEventHandler,
-  ReactElement,
-  useEffect,
-  useState,
-} from "react";
+import { useEffect } from "react";
 import { Dock } from "./Dock";
-import { IUserCredentials, IUser } from "../../interfaces/users";
-import userService from "../../services/users";
+import authService from "../../services/auth";
 
 import { useLoginContext } from "../../context/LoginContext";
 
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-
 import io from "socket.io-client";
+import Link from "next/link";
+import { IconButton } from "@mui/material";
+import Image from "next/image";
+
+import styles from "../../styles/Home.module.css";
+import FTLogo from "../../public/42logo.png";
+
+import Cookies from "js-cookie";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 export function DockGuest() {
   const loginContext = useLoginContext();
 
-  const [username, setUsername] = useState("");
-
-  const addUser: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-
-    const newUserCredentials: IUserCredentials = {
-      login42: username,
-    };
-
-    userService.addOne(newUserCredentials).then((user:IUser) => {
-      loginContext.login(user.login42, "");
-      socket.emit("user:new", username);
-      setUsername("");
-    });
-  };
-
-  const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    if (event.target.value) {
-      setUsername(event.target.value);
+  const authenticate = () => {
+    if (Cookies.get("transcendence_accessToken")) {
+      authService.getLoggedInUser().then((user) => {
+        loginContext.login(user.login42, "");
+        socket.emit("user:new", user.login42);
+      });
     }
   };
 
+  useEffect(() => {
+    authenticate();
+  }, []);
+
+  // store 0.0.0.0 as an environment var in .env file
   return (
     <Dock>
-      <form onSubmit={addUser}>
-        <TextField
-          value={username}
-          onChange={handleUsernameChange}
-          label="Login"
-        />
-        <Button type="submit">add</Button>
-      </form>
+      <Link href="http://0.0.0.0:3001/auth">
+        <IconButton className={styles.icons} aria-label="Authentication">
+          <Image src={FTLogo} layout={"fill"} />
+        </IconButton>
+      </Link>
     </Dock>
   );
 }
-
-// export default function DockGuest() {
-// 	return (
-// 	  <Dock>
-// 		<IconButton className={styles.icons} aria-label="Authentification">
-// 			<Image
-// 				src = {FTLogo}
-// 				layout = {'fill'}
-// 			/>
-// 		</IconButton>
-// 	  </Dock>
-// 	);
-//   }

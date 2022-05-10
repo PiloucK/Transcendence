@@ -7,23 +7,29 @@ import {
   Patch,
   Query,
   Delete,
+  Req,
+  UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import { GetUsersDto } from './dto/get-users.dto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { GetUsersDto } from './dto/getUsers.dto';
+import { CreateUserDto } from './dto/createUser.dto';
 import {
   UpdateUserEloDto,
   UpdateUserGamesLostDto,
   UpdateUserGamesWonDto,
   UpdateUserUsernameDto,
-} from './dto/update-user.dto';
-import { FriendLogin42Dto } from './dto/friend-login42.dto';
+} from './dto/updateUser.dto';
+import { FriendLogin42Dto } from './dto/friendLogin42.dto';
+import { RequestWithUser } from '../interfaces/requestWithUser.interface';
+import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
   getAllUsers(): Promise<User[]> {
@@ -58,8 +64,18 @@ export class UsersController {
   updateUserUsername(
     @Param('login42') login42: string,
     @Body() updateUserUsernameDto: UpdateUserUsernameDto,
+    @Req() request: RequestWithUser,
   ): Promise<User> {
-    return this.usersService.updateUserUsername(login42, updateUserUsernameDto);
+    if (request.user.login42 !== login42) {
+      throw new UnauthorizedException(
+        'You must own the profile of which you want to change the username',
+      );
+    } else {
+      return this.usersService.updateUserUsername(
+        login42,
+        updateUserUsernameDto,
+      );
+    }
   }
 
   @Patch('/:login42/elo')
