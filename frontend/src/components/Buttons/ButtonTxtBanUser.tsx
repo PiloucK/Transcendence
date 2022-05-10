@@ -25,7 +25,7 @@ const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 export function ButtonTxtBanUser({ login, channel }: { login: string, channel: Channel }) {
   const loginContext = useLoginContext();
   const [open, setOpen] = React.useState(false);
-  const [time, setTime] = React.useState<number | string>(5);
+  const [time, setTime] = React.useState<number | string>(300);
 
   const handleChange = (event: SelectChangeEvent<typeof time>) => {
     setTime(Number(event.target.value) || "");
