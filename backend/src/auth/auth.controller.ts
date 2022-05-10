@@ -30,18 +30,17 @@ export class AuthController {
     // Passport assigns the User object returned by the validate() method to the
     // Request object, as request.user
     const jwtToken = this.authService.issueJwtToken(request.user.login42);
-    const cookie = this.authService.getCookieWithJwtToken(jwtToken);
-    response.setHeader('Set-Cookie', cookie);
+    //const cookie = this.authService.getCookieWithJwtToken(jwtToken);
+    response.cookie('Authentication', jwtToken, {
+      sameSite: 'strict', // in .env?
+      path: '/', // idem
+      maxAge: 86400, // in devtools->Storage: Expires / Max-Age:"Session"
+    });
   }
-  // res.cookie('access_token', token.access_token, {
-  //   httpOnly: false,
-  // });
   // if (req.user.enableTwoFactorAuth === false) {
   //   res.cookie('two_factor_auth', true, {
   //     httpOnly: false,
   //   });
-  // }
-  // res.status(302).redirect(`${process.env.HOST}:${process.env.CLIENT_PORT}`);
 
   @Get('getLoggedInUser')
   getLoggedInUser(@Req() request: RequestWithUser) {
