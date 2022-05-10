@@ -21,7 +21,7 @@ export class AuthService {
   }
 
   getCookieWithJwtToken(jwtToken: string) {
-    return `Authentication=${jwtToken}; HttpOnly; Path=/; Max-Age=86400`;
+    return `Authentication=${jwtToken}; SameSite=Strict; Path=/; Max-Age=86400`;
     // Max-Age=${this.configService.get('JWT_EXPIRATION_TIME')}
 
     // Cookie “Authentication” will be soon rejected because it has the “SameSite” attribute set to “None” or an invalid value, without the “secure” attribute. To know more about the “SameSite“ attribute, read https://developer.mozilla.org/docs/Web/HTTP/Headers/Set-Cookie/SameSite

@@ -12,21 +12,24 @@ import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 import FTLogo from "../../public/42logo.png";
 
+import Cookies from "js-cookie";
+
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 export function DockGuest() {
   const loginContext = useLoginContext();
 
-  useEffect(() => {
-    usersService
-      .getLoggedInUser()
-      .then((user) => {
+  const authenticate = () => {
+    if (Cookies.get("Authentication")) {
+      usersService.getLoggedInUser().then((user) => {
         loginContext.login(user.login42, "");
         socket.emit("user:new", user.login42);
-      })
-      .catch((error) => {
-        console.log("Error! What could we do?");
       });
+    }
+  };
+
+  useEffect(() => {
+    authenticate();
   }, []);
 
   // store 0.0.0.0 as an environment var in .env file

@@ -17,8 +17,7 @@ import { RequestWithUser } from './requestWithUser.interface';
 export class AuthController {
   constructor(private authService: AuthService) {} // add readonly?
 
-  @SkipJwtAuth() // remove this? if a user is already logged on, do not query 42 api...
-  // "Verifying tokens" on https://wanago.io/2020/05/25/api-nestjs-authenticating-users-bcrypt-passport-jwt-cookies/
+  @SkipJwtAuth()
   @UseGuards(FortyTwoAuthGuard) // pass through FortyTwoStrategy
   @Get()
   fortyTwoAuth(): void {
@@ -30,7 +29,7 @@ export class AuthController {
 
   @SkipJwtAuth()
   @UseGuards(FortyTwoAuthGuard)
-  //@Redirect()
+  @Redirect('http://0.0.0.0:3000') // `${process.env.HOST}:${process.env.CLIENT_PORT}`
   @Get('42/callback')
   fortyTwoAuthRedirect(
     @Req() request: RequestWithUser,
@@ -41,7 +40,6 @@ export class AuthController {
     const jwtToken = this.authService.issueJwtToken(request.user.login42);
     const cookie = this.authService.getCookieWithJwtToken(jwtToken);
     response.setHeader('Set-Cookie', cookie);
-    return response.redirect('http://0.0.0.0:3000'); // cannot write return request.user?
   }
   // res.cookie('access_token', token.access_token, {
   //   httpOnly: false,

@@ -28,8 +28,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: TokenPayload) {
-    console.log('JwtStrategy validate: payload.login42 =', payload.login42);
-
     return { login42: payload.login42 };
     // Passport will build a user object based on the return value of our
     // validate() method, and attach it as a property on the Request object.
