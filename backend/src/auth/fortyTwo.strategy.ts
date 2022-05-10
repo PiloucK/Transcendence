@@ -24,8 +24,6 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  // Passport will call the verify function, implemented with this validate()
-  // method, using an appropriate strategy-specific set of parameters
   async validate(
     accessToken: string,
     refreshToken: string,

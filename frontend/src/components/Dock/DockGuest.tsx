@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Dock } from "./Dock";
-import usersService from "../../services/users";
+import authService from "../../services/auth";
 
 import { useLoginContext } from "../../context/LoginContext";
 
@@ -21,12 +21,16 @@ export function DockGuest() {
 
   const authenticate = () => {
     if (Cookies.get("Authentication")) {
-      usersService.getLoggedInUser().then((user) => {
+      authService.getLoggedInUser().then((user) => {
         loginContext.login(user.login42, "");
         socket.emit("user:new", user.login42);
       });
     }
   };
+
+  // const loginWith42 = () => {
+  //   authService.loginWith42();
+  // }
 
   useEffect(() => {
     authenticate();
