@@ -8,15 +8,28 @@ import userService from "../../services/users";
 import { Channel } from "../../interfaces/users";
 import { useLoginContext } from "../../context/LoginContext";
 
+import { ChannelSettingsDialog } from "../Inputs/ChannelSettingsDialog";
+
 import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-function MenuButtons({ channel, setAnchorEl }: { channel: Channel, setAnchorEl: (anchorEl: any) => void }) {
+function MenuButtons({
+  channel,
+  setAnchorEl,
+}: {
+  channel: Channel;
+  setAnchorEl: (anchorEl: any) => void;
+}) {
   const loginContext = useLoginContext();
+  const [open, setOpen] = React.useState(false);
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSettings = () => {
+    setOpen(true);
   };
 
   const handleLeaveChannel = () => {
@@ -32,17 +45,27 @@ function MenuButtons({ channel, setAnchorEl }: { channel: Channel, setAnchorEl: 
     return (
       <>
         <MenuItem onClick={handleClose}>Invite friends</MenuItem>
-        <MenuItem onClick={handleClose}>Admin settings</MenuItem>
+        <MenuItem onClick={handleSettings}>Admin settings</MenuItem>
         <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
+        <ChannelSettingsDialog
+          channelId={channel.id}
+          open={open}
+          setOpen={setOpen}
+        />
       </>
     );
   } else {
-		return (
-			<>
-				<MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
-			</>
-		);
-	}
+    return (
+      <>
+        <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
+        <ChannelSettingsDialog
+          channelId={channel.id}
+          open={open}
+          setOpen={setOpen}
+        />
+      </>
+    );
+  }
 }
 
 export default function ChannelSettings({ channel }: { channel: Channel }) {
@@ -77,8 +100,8 @@ export default function ChannelSettings({ channel }: { channel: Channel }) {
           "aria-labelledby": "basic-button",
         }}
       >
-				<MenuButtons channel={channel} setAnchorEl={setAnchorEl} />
-			</Menu>
+        <MenuButtons channel={channel} setAnchorEl={setAnchorEl} />
+      </Menu>
     </div>
   );
 }

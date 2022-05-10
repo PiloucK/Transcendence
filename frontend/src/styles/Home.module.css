@@ -1544,6 +1544,79 @@ and should display them in columns of three cards max */
   flex-flow: column wrap;
 }
 
+.channel_settings {
+}	
+
+.channel_settings_switch {
+  position: absolute;
+  left: 50%;
+	transform: translate(-50%, 0);
+
+  /* Make the text stand on one line */
+  white-space: nowrap;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  display: flex;
+  align-items: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.channel_settings_update,
+.channel_settings_update:hover {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  width: 119px;
+  height: 42px;
+  left: 50%;
+	transform: translate(-50%, 0);
+  top: 85%;
+
+  /* Green */
+
+  background: #25bf75;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+
+  /* Inside auto layout */
+
+  /* flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px 10px; */
+}
+
+.channel_settings_update:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    #25bf75;
+  cursor: pointer;
+}
+
 .channel_card {
   position: relative;
   /* left: 0%; */
