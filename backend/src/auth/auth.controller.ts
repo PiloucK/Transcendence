@@ -30,11 +30,11 @@ export class AuthController {
     // Passport assigns the User object returned by the validate() method to the
     // Request object, as request.user
     const jwtToken = this.authService.issueJwtToken(request.user.login42);
-    //const cookie = this.authService.getCookieWithJwtToken(jwtToken);
     response.cookie('Authentication', jwtToken, {
       sameSite: 'strict', // in .env?
       path: '/', // idem
       maxAge: 86400, // in devtools->Storage: Expires / Max-Age:"Session"
+      // Max-Age=${this.configService.get('JWT_EXPIRATION_TIME')}
     });
   }
   // if (req.user.enableTwoFactorAuth === false) {

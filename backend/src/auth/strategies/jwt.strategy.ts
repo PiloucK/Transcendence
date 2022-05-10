@@ -4,7 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { jwtConstants } from '../constants';
-import { TokenPayload } from '../interfaces/jwtTokenPayload.interface';
+import { JwtTokenPayloadDto } from '../dto/jwtTokenPayload.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -26,8 +26,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       // secretOrKey: configService.get('JWT_SECRET')
     }); // https://github.com/mikenicholson/passport-jwt#configure-strategy
   }
-
-  async validate(payload: TokenPayload) {
+  // modify token in cookies to see errors to remove
+  async validate(payload: JwtTokenPayloadDto) {
     return { login42: payload.login42 };
     // Passport will build a user object based on the return value of our
     // validate() method, and attach it as a property on the Request object.

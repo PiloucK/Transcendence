@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateUserDto {
+export class FortyTwoUserProfileDto {
   @IsNotEmpty()
   @IsString()
-  login42!: string;
+  username!: string;
 }

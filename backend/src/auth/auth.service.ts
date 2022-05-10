@@ -19,12 +19,4 @@ export class AuthService {
     return this.jwtService.sign(payload);
     // this sign() function comes from the @nestjs/jwt library
   }
-
-  getCookieWithJwtToken(jwtToken: string) {
-    return `Authentication=${jwtToken}; SameSite=Strict; Path=/; Max-Age=86400`;
-    // Max-Age=${this.configService.get('JWT_EXPIRATION_TIME')}
-
-    // Cookie “Authentication” will be soon rejected because it has the “SameSite” attribute set to “None” or an invalid value, without the “secure” attribute. To know more about the “SameSite“ attribute, read https://developer.mozilla.org/docs/Web/HTTP/Headers/Set-Cookie/SameSite
-  }
-  // https://wanago.io/2020/09/21/api-nestjs-refresh-tokens-jwt/
 }
