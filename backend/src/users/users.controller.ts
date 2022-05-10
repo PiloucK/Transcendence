@@ -7,6 +7,8 @@ import {
   Patch,
   Query,
   Delete,
+  Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 
 import { User } from './user.entity';
@@ -20,6 +22,7 @@ import {
   UpdateUserUsernameDto,
 } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
+import { RequestWithUser } from '../interfaces/requestWithUser.interface';
 
 @Controller('users')
 export class UsersController {
@@ -58,9 +61,18 @@ export class UsersController {
   updateUserUsername(
     @Param('login42') login42: string,
     @Body() updateUserUsernameDto: UpdateUserUsernameDto,
+    @Req() request: RequestWithUser,
   ): Promise<User> {
-    // verify if it's login42 that does this request (in request.user.login42 returned by jwt strategy)
-    return this.usersService.updateUserUsername(login42, updateUserUsernameDto);
+    if (request.user.login42 !== login42) {
+      throw new UnauthorizedException(
+        'You must own the profile of which you want to change the username',
+      );
+    } else {
+      return this.usersService.updateUserUsername(
+        login42,
+        updateUserUsernameDto,
+      );
+    }
   }
 
   @Patch('/:login42/elo')

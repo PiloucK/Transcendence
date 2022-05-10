@@ -28,10 +28,6 @@ export function DockGuest() {
     }
   };
 
-  // const loginWith42 = () => {
-  //   authService.loginWith42();
-  // }
-
   useEffect(() => {
     authenticate();
   }, []);

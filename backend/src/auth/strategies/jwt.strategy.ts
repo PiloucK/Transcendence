@@ -27,6 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }); // https://github.com/mikenicholson/passport-jwt#configure-strategy
   }
   // modify token in cookies to see errors to remove
+  // and what if the payload of the token is not of JwtTokenPayloadDto form? use an interface? https://www.udemy.com/course/nestjs-zero-to-hero/learn/lecture/26682262#overview
   async validate(payload: JwtTokenPayloadDto) {
     return { login42: payload.login42 };
     // Passport will build a user object based on the return value of our

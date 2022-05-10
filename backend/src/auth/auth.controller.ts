@@ -1,9 +1,9 @@
 import { Controller, Get, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { SkipJwtAuth } from 'src/skipJwtAuth.guard';
+import { SkipJwtAuth } from './guards/skipJwtAuth.guard';
 import { AuthService } from './auth.service';
 import { FortyTwoAuthGuard } from './guards/fortyTwoAuth.guard';
-import { RequestWithUser } from './interfaces/requestWithUser.interface';
+import { RequestWithUser } from '../interfaces/requestWithUser.interface';
 
 @Controller('auth')
 export class AuthController {
