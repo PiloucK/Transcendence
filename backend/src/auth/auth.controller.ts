@@ -1,15 +1,14 @@
 import { Controller, Get, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { SkipJwtAuth } from './guards/skipJwtAuth.guard';
 import { AuthService } from './auth.service';
 import { FortyTwoAuthGuard } from './guards/fortyTwoAuth.guard';
 import { RequestWithUser } from '../interfaces/requestWithUser.interface';
+import { JwtAuthGuard } from './guards/jwtAuth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @SkipJwtAuth()
   @UseGuards(FortyTwoAuthGuard) // pass through FortyTwoStrategy
   @Get()
   fortyTwoAuth(): void {
@@ -19,7 +18,6 @@ export class AuthController {
     return;
   }
 
-  @SkipJwtAuth()
   @UseGuards(FortyTwoAuthGuard)
   @Redirect('http://0.0.0.0:3000') // `${process.env.HOST}:${process.env.CLIENT_PORT}`
   @Get('42/callback')
@@ -42,6 +40,7 @@ export class AuthController {
   //     httpOnly: false,
   //   });
 
+  @UseGuards(JwtAuthGuard)
   @Get('getLoggedInUser')
   getLoggedInUser(@Req() request: RequestWithUser) {
     return request.user;

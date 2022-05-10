@@ -9,6 +9,7 @@ import {
   Delete,
   Req,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 
 import { User } from './user.entity';
@@ -23,8 +24,10 @@ import {
 } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 import { RequestWithUser } from '../interfaces/requestWithUser.interface';
+import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

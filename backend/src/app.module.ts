@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth/guards/jwtAuth.guard';
 
 @Module({
   imports: [
@@ -19,13 +17,6 @@ import { JwtAuthGuard } from './auth/guards/jwtAuth.guard';
       synchronize: true, // shouldn't be used in production https://docs.nestjs.com/techniques/database#typeorm-integration
     }),
     AuthModule,
-  ],
-  providers: [
-    {
-      // global authentication guard (on all Controller routes)
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
   ],
 })
 export class AppModule {}
