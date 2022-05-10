@@ -10,7 +10,7 @@ export function ButtonLogout() {
 
   const handleOnClick = () => {
     loginContext.logout?.();
-    Cookies.remove("Authentication", { path: "/", sameSite: "strict" }); // options in .env?
+    Cookies.remove("transcendence_accessToken", { path: "/", sameSite: "strict" }); // options in .env?
   };
 
   if (loginContext.userLogin === null) return null;

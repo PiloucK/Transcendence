@@ -7,14 +7,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from './user.entity';
 import { UsersRepository } from './users.repository';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/createUser.dto';
 import {
   UpdateUserEloDto,
   UpdateUserGamesLostDto,
   UpdateUserGamesWonDto,
   UpdateUserUsernameDto,
-} from './dto/update-user.dto';
-import { FriendLogin42Dto } from './dto/friend-login42.dto';
+} from './dto/updateUser.dto';
+import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 
 @Injectable()
 export class UsersService {

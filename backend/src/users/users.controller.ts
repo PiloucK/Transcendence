@@ -11,15 +11,15 @@ import {
 
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import { GetUsersDto } from './dto/get-users.dto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { GetUsersDto } from './dto/getUsers.dto';
+import { CreateUserDto } from './dto/createUser.dto';
 import {
   UpdateUserEloDto,
   UpdateUserGamesLostDto,
   UpdateUserGamesWonDto,
   UpdateUserUsernameDto,
-} from './dto/update-user.dto';
-import { FriendLogin42Dto } from './dto/friend-login42.dto';
+} from './dto/updateUser.dto';
+import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 
 @Controller('users')
 export class UsersController {

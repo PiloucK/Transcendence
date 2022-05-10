@@ -30,7 +30,7 @@ export class AuthController {
     // Passport assigns the User object returned by the validate() method to the
     // Request object, as request.user
     const jwtToken = this.authService.issueJwtToken(request.user.login42);
-    response.cookie('Authentication', jwtToken, {
+    response.cookie('transcendence_accessToken', jwtToken, {
       sameSite: 'strict', // in .env?
       path: '/', // idem
       maxAge: 86400, // in devtools->Storage: Expires / Max-Age:"Session"
