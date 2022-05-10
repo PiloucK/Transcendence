@@ -15,7 +15,7 @@ import { RequestWithUser } from './requestWithUser.interface';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {} // add readonly?
+  constructor(private readonly authService: AuthService) {} // add readonly?
 
   @SkipJwtAuth()
   @UseGuards(FortyTwoAuthGuard) // pass through FortyTwoStrategy

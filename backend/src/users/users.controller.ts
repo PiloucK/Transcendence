@@ -23,7 +23,7 @@ import { FriendLogin42Dto } from './dto/friend-login42.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
   getAllUsers(): Promise<User[]> {

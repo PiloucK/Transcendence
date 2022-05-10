@@ -20,7 +20,7 @@ import { FriendLogin42Dto } from './dto/friend-login42.dto';
 export class UsersService {
   constructor(
     @InjectRepository(UsersRepository)
-    private usersRepository: UsersRepository,
+    private readonly usersRepository: UsersRepository,
   ) {}
   // to split when using the db: UsersService and UsersFriendsService
 
