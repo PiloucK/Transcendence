@@ -1,28 +1,20 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Redirect,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { SkipJwtAuth } from 'src/skipJwtAuth.guard';
 import { AuthService } from './auth.service';
-import { FortyTwoAuthGuard } from './fortyTwoAuth.guard';
-import { RequestWithUser } from './requestWithUser.interface';
+import { FortyTwoAuthGuard } from './guards/fortyTwoAuth.guard';
+import { RequestWithUser } from './interfaces/requestWithUser.interface';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {} // add readonly?
+  constructor(private readonly authService: AuthService) {}
 
   @SkipJwtAuth()
   @UseGuards(FortyTwoAuthGuard) // pass through FortyTwoStrategy
   @Get()
   fortyTwoAuth(): void {
     console.log(
-      'will never pass here (redirected to /auth/42/callback within FortyTwoAuthGuard)',
+      'will never reach this (redirected to /auth/42/callback within FortyTwoAuthGuard)',
     );
     return;
   }

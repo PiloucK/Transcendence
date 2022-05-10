@@ -6,8 +6,8 @@ import { UsersService } from 'src/users/users.service';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService, // readonly? https://wanago.io/2020/05/25/api-nestjs-authenticating-users-bcrypt-passport-jwt-cookies/
-    private readonly jwtService: JwtService, // readonly? https://github.com/nestjs/jwt/blob/master/README.md#usage
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async findOrCreate42UserInDatabase(login42: string): Promise<User> {

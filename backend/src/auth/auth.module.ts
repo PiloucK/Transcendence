@@ -5,8 +5,8 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
-import { JwtStrategy } from './jwt.strategy';
-import { FortyTwoStrategy } from './fortyTwo.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { FortyTwoStrategy } from './strategies/fortyTwo.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({

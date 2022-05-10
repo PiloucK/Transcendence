@@ -3,7 +3,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth/jwtAuth.guard';
+import { JwtAuthGuard } from './auth/guards/jwtAuth.guard';
 
 @Module({
   imports: [

@@ -3,7 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-42';
 import { User } from 'src/users/user.entity';
-import { AuthService } from './auth.service';
+import { AuthService } from '../auth.service';
+import { FortyTwoUserProfile } from '../interfaces/fortyTwoUserProfile.interface';
 
 @Injectable()
 export class FortyTwoStrategy extends PassportStrategy(Strategy) {
@@ -27,7 +28,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
   async validate(
     accessToken: string,
     refreshToken: string,
-    profile: any, // no any
+    profile: FortyTwoUserProfile,
   ): Promise<User> {
     return this.authService.findOrCreate42UserInDatabase(profile.username);
   }
