@@ -434,6 +434,10 @@ export class UsersService {
 			throw new ForbiddenException(`You are not in this channel`);
 		}
 
+		if (channel.muted.includes(login42)) {
+			throw new ForbiddenException(`You are muted from this channel`);
+		}
+
 		channel.messages.push(sendMSGToChannelDto.message);
 
 		return channel;

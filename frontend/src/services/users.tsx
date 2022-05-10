@@ -181,7 +181,10 @@ const sendMSGToChannel = (
   return request
     .then((response) => response.data)
     .catch((e) => {
-      console.error(e);
+			if (e.response.status !== 403) {
+				console.error(e);
+			}
+			throw e;
     });
 };
 
