@@ -55,12 +55,4 @@ export class AuthController {
   getLoggedInUser(@Req() request: RequestWithUser) {
     return request.user;
   }
-
-  //@HttpCode(200)
-  @Post('logout') // why POST
-  logOut(@Req() request: RequestWithUser, @Res() response: Response) {
-    const cookie = this.authService.getCookieForLogOut();
-    response.setHeader('Set-Cookie', cookie);
-    return response.sendStatus(200);
-  }
 }
