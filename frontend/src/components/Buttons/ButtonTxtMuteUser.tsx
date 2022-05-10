@@ -69,7 +69,7 @@ export function ButtonTxtMuteUser({
     }
   };
 
-	if (channel.muted.includes(login)) {
+	if (channel.muted.find((muted) => muted.login === login)) {
 		return (
 			<div className={styles.buttons} onClick={handleUnmuteUser}>
         Unmute
@@ -93,9 +93,9 @@ export function ButtonTxtMuteUser({
                 onChange={handleChange}
                 input={<OutlinedInput label="Time" id="input-time" />}
               >
-                <option value={5}>5min</option>
-                <option value={30}>30min</option>
-                <option value={60}>1h</option>
+                <option value={300}>5min</option>
+                <option value={1800}>30min</option>
+                <option value={3600}>1h</option>
               </Select>
             </FormControl>
           </Box>

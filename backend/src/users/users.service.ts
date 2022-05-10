@@ -146,6 +146,23 @@ export class UsersService {
 		return dm;
 	}
 
+	private resolveChannelRestrictions(channel: Channel): void {
+		channel.muted.forEach(({login, until}) => {
+			if (until < Date.now()) {
+				channel.muted = channel.muted.filter(
+					(curMuted) => curMuted.login !== login
+				);
+			}
+		});
+		channel.banned.forEach(({login, until}) => {
+			if (until < Date.now()) {
+				channel.banned = channel.banned.filter(
+					(curBanned) => curBanned.login !== login
+				);
+			}
+		});
+	}
+
 	createChannel(login42: string, createChannelDto: CreateChannelDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -182,8 +199,9 @@ export class UsersService {
 		if (!channel) {
 			throw new NotFoundException(`Channel with id "${passwordChannelDto.channelId}" not found`);
 		}
+		this.resolveChannelRestrictions(channel);
 
-		if (channel.banned.includes(login42)) {
+		if (channel.banned.find((curUser) => curUser.login === login42)) {
 			throw new ForbiddenException(`You are banned from this channel`);
 		}
 
@@ -212,8 +230,9 @@ export class UsersService {
 		if (!channel) {
 			throw new NotFoundException(`Channel with id "${joinChannelDto.channelId}" not found`);
 		}
+		this.resolveChannelRestrictions(channel);
 
-		if (channel.banned.includes(login42)) {
+		if (channel.banned.find((curUser) => curUser.login === login42)) {
 			throw new ForbiddenException(`You are banned from this channel`);
 		}
 
@@ -264,7 +283,7 @@ export class UsersService {
 
 		channel.users = channel.users.filter((curUser) => curUser.login42 !== login42);
 		channel.admin = channel.admin.filter((curUser) => curUser !== login42);
-		channel.muted = channel.muted.filter((curUser) => curUser !== login42);
+		channel.muted = channel.muted.filter((curUser) => curUser.login !== login42);
 
 		if (channel.owner === login42) {
 			if (channel.users.length > 0) {
@@ -292,6 +311,7 @@ export class UsersService {
 		if (!channel) {
 			throw new NotFoundException(`Channel with id "${channelRestrictionDto.channelId}" not found`);
 		}
+		this.resolveChannelRestrictions(channel);
 
 		const userToMute: IUserForLeaderboard | undefined = channel.users.find(
 			(curUser) => curUser.login42 === channelRestrictionDto.userLogin42
@@ -304,11 +324,11 @@ export class UsersService {
 			throw new ForbiddenException(`You are not an admin of this channel`);
 		}
 
-		if (channel.muted.includes(channelRestrictionDto.userLogin42)) {
+		if (channel.muted.find((curUser) => curUser.login === channelRestrictionDto.userLogin42)) {
 			throw new ForbiddenException(`User is already muted`);
 		}
 
-		channel.muted.push(channelRestrictionDto.userLogin42);
+		channel.muted.push({login:channelRestrictionDto.userLogin42, until:Date.now() + (channelRestrictionDto.duration * 1000)});
 		return channel;
 	}
 
@@ -324,6 +344,7 @@ export class UsersService {
 		if (!channel) {
 			throw new NotFoundException(`Channel with id "${channelRestrictionDto.channelId}" not found`);
 		}
+		this.resolveChannelRestrictions(channel);
 
 		const userToBan: IUserForLeaderboard | undefined = channel.users.find(
 			(curUser) => curUser.login42 === channelRestrictionDto.userLogin42
@@ -336,11 +357,11 @@ export class UsersService {
 			throw new ForbiddenException(`You are not an admin of this channel`);
 		}
 
-		if (channel.banned.includes(channelRestrictionDto.userLogin42)) {
+		if (channel.banned.find((curUser) => curUser.login === channelRestrictionDto.userLogin42)) {
 			throw new ForbiddenException(`User is already banned`);
 		}
 
-		channel.banned.push(channelRestrictionDto.userLogin42);
+		channel.banned.push({login:channelRestrictionDto.userLogin42, until:Date.now() + (channelRestrictionDto.duration * 1000)});
 		channel.admin = channel.admin.filter((curUser) => curUser !== channelRestrictionDto.userLogin42);
 		channel.users = channel.users.filter((curUser) => curUser.login42 !== channelRestrictionDto.userLogin42);
 		if (channel.owner === channelRestrictionDto.userLogin42) {
@@ -361,6 +382,7 @@ export class UsersService {
 		if (!channel) {
 			throw new NotFoundException(`Channel with id "${channelAdminInteractionsDto.channelId}" not found`);
 		}
+		this.resolveChannelRestrictions(channel);
 
 		const userToSetAdmin: IUserForLeaderboard | undefined = channel.users.find(
 			(curUser) => curUser.login42 === channelAdminInteractionsDto.userLogin42
@@ -393,6 +415,7 @@ export class UsersService {
 		if (!channel) {
 			throw new NotFoundException(`Channel with id "${channelAdminInteractionsDto.channelId}" not found`);
 		}
+		this.resolveChannelRestrictions(channel);
 
 		const userToUnsetAdmin: IUserForLeaderboard | undefined = channel.users.find(
 			(curUser) => curUser.login42 === channelAdminInteractionsDto.userLogin42
@@ -425,8 +448,9 @@ export class UsersService {
 		if (!channel) {
 			throw new NotFoundException(`Channel with id "${sendMSGToChannelDto.channelId}" not found`);
 		}
+		this.resolveChannelRestrictions(channel);
 
-		if (channel.banned.includes(login42)) {
+		if (channel.banned.find((curUser) => curUser.login === login42)) {
 			throw new ForbiddenException(`You are banned from this channel`);
 		}
 
@@ -434,7 +458,7 @@ export class UsersService {
 			throw new ForbiddenException(`You are not in this channel`);
 		}
 
-		if (channel.muted.includes(login42)) {
+		if (channel.muted.find((curUser) => curUser.login === login42)) {
 			throw new ForbiddenException(`You are muted from this channel`);
 		}
 
@@ -455,8 +479,9 @@ export class UsersService {
 		if (!channel) {
 			throw new NotFoundException(`Channel with id "${channelId}" not found`);
 		}
+		this.resolveChannelRestrictions(channel);
 
-		if (channel.banned.includes(login42)) {
+		if (channel.banned.find((curUser) => curUser.login === login42)) {
 			throw new ForbiddenException(`You are banned from this channel`);
 		}
 
@@ -481,9 +506,10 @@ export class UsersService {
 		if (!user) {
 			throw new NotFoundException(`User with login42 "${login42}" not found`);
 		}
-		const publicChannels: Channel[] = this.channels.filter(
-			(curChannel) => !curChannel.isPrivate && curChannel.banned.indexOf(login42) === -1
-		);
+		const publicChannels: Channel[] = this.channels.filter((curChannel) => {
+			this.resolveChannelRestrictions(curChannel);
+			return !curChannel.isPrivate && !curChannel.banned.find((curUser) => curUser.login === login42);
+		});
 		return publicChannels;
 	}
 	
@@ -492,9 +518,10 @@ export class UsersService {
 		if (!user) {
 			throw new NotFoundException(`User with login42 "${login42}" not found`);
 		}
-		const joinedChannels: Channel[] = this.channels.filter(
-			(curChannel) => curChannel.users.find((curUser) => curUser.login42 === login42)
-		);
+		const joinedChannels: Channel[] = this.channels.filter((curChannel) => {
+			this.resolveChannelRestrictions(curChannel);
+			return curChannel.users.find((curUser) => curUser.login42 === login42)
+		});
 		return joinedChannels;
 	}
 

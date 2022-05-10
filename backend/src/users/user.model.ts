@@ -27,6 +27,7 @@ export type FriendRequestsReceived = Array<string>;
 export type BlockedUsers = Array<string>;
 export type IMessage = {author: string, content: string};
 export type DM = {userOne: IUser, userTwo: IUser, messages: Array<IMessage>};
+export type restriction = {login: string, until: number}; // login, end of the restriction in ms.
 export type Channel = {
 	name: string,
 	id: string,
@@ -34,8 +35,8 @@ export type Channel = {
 	isPrivate: boolean,
 	owner: string,
 	admin: Array<string>,
-	muted: Array<string>,
-	banned: Array<string>,
+	muted: Array<restriction>,
+	banned: Array<restriction>,
 	users: Array<IUserForLeaderboard>,
 	messages: Array<IMessage>,
 }

@@ -71,9 +71,9 @@ export function ButtonTxtBanUser({ login, channel }: { login: string, channel: C
                 onChange={handleChange}
                 input={<OutlinedInput label="Time" id="input-time" />}
               >
-                <option value={5}>5min</option>
-                <option value={30}>30min</option>
-                <option value={60}>1h</option>
+                <option value={300}>5min</option>
+                <option value={1800}>30min</option>
+                <option value={3600}>1h</option>
               </Select>
             </FormControl>
           </Box>
