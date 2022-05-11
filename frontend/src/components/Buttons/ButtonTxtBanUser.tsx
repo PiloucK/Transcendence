@@ -22,7 +22,13 @@ import io from "socket.io-client";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-export function ButtonTxtBanUser({ login, channel }: { login: string, channel: Channel }) {
+export function ButtonTxtBanUser({
+  login,
+  channel,
+}: {
+  login: string;
+  channel: Channel;
+}) {
   const loginContext = useLoginContext();
   const [open, setOpen] = React.useState(false);
   const [time, setTime] = React.useState<number | string>(300);
@@ -39,7 +45,11 @@ export function ButtonTxtBanUser({ login, channel }: { login: string, channel: C
     setOpen(false);
     userServices
       .banAChannelUser(loginContext.userLogin, channel.id, login, time)
-      .then(() => {})
+      .then(() => {
+        socket.emit("user:update-public-channels");
+        socket.emit("user:update-joined-channel");
+        socket.emit("user:update-channel-content");
+      })
       .catch((err) => {
         console.log(err);
       });

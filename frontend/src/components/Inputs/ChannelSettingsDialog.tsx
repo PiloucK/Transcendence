@@ -80,6 +80,7 @@ export function ChannelSettingsDialog({
         .then((res) => {
           socket.emit("user:update-public-channels");
           socket.emit("user:update-joined-channel");
+          socket.emit("user:update-channel-content");
         });
     }
   };
