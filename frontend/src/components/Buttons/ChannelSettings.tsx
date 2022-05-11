@@ -9,6 +9,7 @@ import { Channel } from "../../interfaces/users";
 import { useLoginContext } from "../../context/LoginContext";
 
 import { ChannelSettingsDialog } from "../Inputs/ChannelSettingsDialog";
+import { ChannelInviteDialog } from "../Inputs/ChannelInviteDialog";
 
 import io from "socket.io-client";
 
@@ -22,14 +23,15 @@ function MenuButtons({
   setAnchorEl: (anchorEl: any) => void;
 }) {
   const loginContext = useLoginContext();
-  const [open, setOpen] = React.useState(false);
+  const [settingsOpen, setSettingsOpen] = React.useState(false);
+  const [invitationOpen, setInvitationOpen] = React.useState(false);
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleInvitation = () => {
+    setInvitationOpen(true);
   };
 
   const handleSettings = () => {
-    setOpen(true);
+    setSettingsOpen(true);
   };
 
   const handleLeaveChannel = () => {
@@ -44,13 +46,18 @@ function MenuButtons({
   if (loginContext.userLogin === channel.owner) {
     return (
       <>
-        <MenuItem onClick={handleClose}>Invite friends</MenuItem>
+        <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
         <MenuItem onClick={handleSettings}>Admin settings</MenuItem>
         <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
         <ChannelSettingsDialog
           channel={channel}
-          open={open}
-          setOpen={setOpen}
+          open={settingsOpen}
+          setOpen={setSettingsOpen}
+        />
+				<ChannelInviteDialog
+          channel={channel}
+          open={invitationOpen}
+          setOpen={setInvitationOpen}
         />
       </>
     );
@@ -58,11 +65,6 @@ function MenuButtons({
     return (
       <>
         <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
-        <ChannelSettingsDialog
-          channel={channel}
-          open={open}
-          setOpen={setOpen}
-        />
       </>
     );
   }
