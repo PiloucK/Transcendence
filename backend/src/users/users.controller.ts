@@ -81,6 +81,15 @@ export class UsersController {
 		return this.usersService.createChannel(login42, createChannel);
 	}
 
+	@Patch('/:login42/updateChannel/:channelId')
+	updateChannel(
+		@Param('login42') login42: string,
+		@Param('channelId') channelId: string,
+		@Body() updateChannel: CreateChannelDto,
+	): Channel {
+		return this.usersService.updateChannel(login42, channelId, updateChannel);
+	}
+
 	@Patch('/:login42/joinProtectedChannel')
 	joinProtectedChannel(
 		@Param('login42') login42: string,

@@ -187,6 +187,30 @@ export class UsersService {
 		return channel;
 	}
 
+	updateChannel(login42: string, channelId: string, updateChannelDto: CreateChannelDto): Channel {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+		const channel: Channel | undefined = this.channels.find(
+			(curChannel) => curChannel.id === channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${channelId}" not found`);
+		}
+		this.resolveChannelRestrictions(channel);
+
+		if (channel.owner !== login42) {
+			throw new ForbiddenException(`You are not the owner of this channel`);
+		}
+		
+		channel.name = updateChannelDto.channelInfos.name;
+		channel.password = updateChannelDto.channelInfos.password;
+		channel.isPrivate = updateChannelDto.channelInfos.isPrivate;
+
+		return channel;
+	};
+
 	joinProtectedChannel(login42: string, passwordChannelDto: PasswordChannelDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {

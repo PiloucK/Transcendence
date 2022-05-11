@@ -57,7 +57,7 @@ export function ChannelSettingsDialog({
   };
 
   const updateChannel = () => {
-    const channel: ChannelCreation = {
+    const channelInfos: ChannelCreation = {
       name: channelName,
       password: channelPassword.password,
       isPrivate: isPrivate,
@@ -65,23 +65,22 @@ export function ChannelSettingsDialog({
     let error = false; // Needed due to to async nature of the useState.
     setTextFieldError("");
     setConfirmationFieldError("");
-    if (channel.name === "") {
+    if (channelInfos.name === "") {
       setTextFieldError("Channel name is required.");
       error = true;
     }
-    if (channel.password !== confirmation.password) {
+    if (channelInfos.password !== confirmation.password) {
       setConfirmationFieldError("Passwords do not match.");
       error = true;
     }
     if (error === false) {
 			setOpen(false);
-      // userServices
-      //   .updateChannel(loginContext.userLogin, channel)
-      //   .then((res) => {
-      //     socket.emit("user:update-public-channels");
-      //     socket.emit("user:update-joined-channel");
-      //     loginContext.setChatMenu(res.id);
-      //   });
+      userServices
+        .updateChannel(loginContext.userLogin, channel.id, channelInfos)
+        .then((res) => {
+          socket.emit("user:update-public-channels");
+          socket.emit("user:update-joined-channel");
+        });
     }
   };
 

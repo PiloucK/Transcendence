@@ -62,6 +62,17 @@ const createChannel = (login: string, channelInfos: ChannelCreation) => {
     });
 };
 
+const updateChannel = (login: string, channelId: string, channelInfos: ChannelCreation) => {
+	const request = axios.patch(`${baseUrl}/${login}/updateChannel/${channelId}`, {
+		channelInfos,
+	});
+	return request
+		.then((response) => response.data)
+		.catch((e) => {
+			console.error(e);
+		});
+};
+
 const joinProtectedChannel = (
   login: string,
   channelId: string,
@@ -412,6 +423,7 @@ export default {
   addOne,
   deleteOne,
   createChannel,
+	updateChannel,
   joinProtectedChannel,
   joinChannel,
   leaveChannel,
