@@ -48,7 +48,7 @@ function MenuButtons({
         <MenuItem onClick={handleSettings}>Admin settings</MenuItem>
         <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
         <ChannelSettingsDialog
-          channelId={channel.id}
+          channel={channel}
           open={open}
           setOpen={setOpen}
         />
@@ -59,7 +59,7 @@ function MenuButtons({
       <>
         <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
         <ChannelSettingsDialog
-          channelId={channel.id}
+          channel={channel}
           open={open}
           setOpen={setOpen}
         />

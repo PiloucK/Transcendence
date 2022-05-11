@@ -25,31 +25,25 @@ import io from "socket.io-client";
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
 export function ChannelSettingsDialog({
-  channelId,
+  channel,
   open,
   setOpen,
 }: {
-  channelId: string;
+  channel: Channel;
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
   const loginContext = useLoginContext();
-  const [channelName, setChannelName] = useState("");
+  const [channelName, setChannelName] = useState(channel.name);
   const [channelPassword, setChannelPassword] = useState<inputPFState>({
-    amount: "",
-    password: "",
-    weight: "",
-    weightRange: "",
+    password: channel.password,
     showPassword: false,
   });
   const [confirmation, setConfirmation] = useState<inputPFState>({
-    amount: "",
     password: "",
-    weight: "",
-    weightRange: "",
     showPassword: false,
   });
-  const [isPrivate, setIsPrivate] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(channel.isPrivate);
 
   const [textFieldError, setTextFieldError] = useState("");
   const [confirmationFieldError, setConfirmationFieldError] = useState("");

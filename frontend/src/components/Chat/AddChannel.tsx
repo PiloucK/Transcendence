@@ -74,17 +74,11 @@ function CreateChannelForm() {
   const loginContext = useLoginContext();
   const [channelName, setChannelName] = useState("");
   const [channelPassword, setChannelPassword] = useState<inputPFState>({
-    amount: "",
     password: "",
-    weight: "",
-    weightRange: "",
     showPassword: false,
   });
   const [confirmation, setConfirmation] = useState<inputPFState>({
-    amount: "",
     password: "",
-    weight: "",
-    weightRange: "",
     showPassword: false,
   });
   const [isPrivate, setIsPrivate] = useState(false);
