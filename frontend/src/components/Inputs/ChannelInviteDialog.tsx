@@ -117,7 +117,14 @@ export function ChannelInviteDialog({
   };
 
   const handleInvite = () => {
-    console.log(selectedFriends);
+    selectedFriends.forEach((friend: IUserPublicInfos) => {
+      userServices
+        .inviteToChannel(loginContext.userLogin, channel.id, friend.login42)
+        .then()
+        .catch((err: Error) => {
+          console.log(err);
+        });
+    });
   };
 
   return (

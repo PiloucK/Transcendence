@@ -39,4 +39,5 @@ export type Channel = {
 	banned: Array<restriction>,
 	users: Array<IUserForLeaderboard>,
 	messages: Array<IMessage>,
+	invitations: Array<string>,
 }

@@ -1293,6 +1293,7 @@ and should display them in columns of three cards max */
 
 .message,
 .message_author,
+.message_system,
 .message_friend {
   display: flex;
   flex-direction: row;
@@ -1331,6 +1332,11 @@ and should display them in columns of three cards max */
 .message_author {
   right: 10%;
   background: #fca311;
+}
+
+.message_system {
+	left: 10%;
+	background: #25BF75;
 }
 
 .message_friend {

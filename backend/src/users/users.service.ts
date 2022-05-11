@@ -180,6 +180,7 @@ export class UsersService {
 			banned: [],
 			users: [this.createUserMinimalInfos(user),],
 			messages: [],
+			invitations: [],
 		};
 
 		this.channels.push(channel);
@@ -211,6 +212,49 @@ export class UsersService {
 		return channel;
 	};
 
+	inviteToChannel(login42: string, inviteToChannelDto: ChannelAdminInteractionsDto): Channel {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+
+		const channel: Channel | undefined = this.channels.find(
+			(curChannel) => curChannel.id === inviteToChannelDto.channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${inviteToChannelDto.channelId}" not found`);
+		}
+		this.resolveChannelRestrictions(channel);
+
+		if (channel.owner !== login42) {
+			throw new ForbiddenException(`You are not the owner of this channel`);
+		}
+
+		const invitedUser: IUser | undefined = this.searchUser(inviteToChannelDto.userLogin42);
+		if (!invitedUser) {
+			throw new NotFoundException(`User with login42 "${inviteToChannelDto.userLogin42}" not found`);
+		}
+
+		if (channel.users.find((curUser) => curUser.login42 === invitedUser.login42)) {
+			throw new ForbiddenException(`User with login42 "${inviteToChannelDto.userLogin42}" is already in this channel`);
+		}
+
+		if (channel.invitations.find((curInvitation) => curInvitation === invitedUser.login42)) {
+			return channel;
+		}
+
+		channel.invitations.push(invitedUser.login42);
+
+		const msg: IMessage = {
+			author: "system",
+			content: `You have been invited to the channel "${channel.name}"`,
+		};
+
+		this.sendDM(user.login42, {dest: invitedUser.login42, message: msg});
+		
+		return channel;
+	}
+
 	joinProtectedChannel(login42: string, passwordChannelDto: PasswordChannelDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -239,6 +283,10 @@ export class UsersService {
 			throw new ForbiddenException(`Wrong password`);
 		}
 		
+		if (channel.invitations.includes(user.login42)) {
+			channel.invitations = channel.invitations.filter((curLogin) => curLogin !== user.login42);
+		}
+
 		return channel;
 	}
 	
@@ -262,6 +310,10 @@ export class UsersService {
 
 		if (channel.users.find((curUser) => curUser.login42 === login42)) {
 			return channel;
+		}
+
+		if (channel.invitations.includes(user.login42)) {
+			channel.invitations = channel.invitations.filter((curLogin) => curLogin !== user.login42);
 		}
 
 		channel.users.push(this.createUserMinimalInfos(user));

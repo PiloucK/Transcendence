@@ -100,6 +100,18 @@ const joinChannel = (login: string, channelId: string) => {
     });
 };
 
+const inviteToChannel = (login: string, channelId: string, userLogin42: string) => {
+	const request = axios.patch(`${baseUrl}/${login}/inviteToChannel`, {
+		channelId,
+		userLogin42,
+	});
+	return request
+		.then((response) => response.data)
+		.catch((e) => {
+			console.error(e);
+		});
+}
+
 const leaveChannel = (login: string, channelId: string) => {
   const request = axios.patch(`${baseUrl}/${login}/leaveChannel`, {
     channelId,
@@ -426,6 +438,7 @@ export default {
 	updateChannel,
   joinProtectedChannel,
   joinChannel,
+	inviteToChannel,
   leaveChannel,
   muteAChannelUser,
   banAChannelUser,

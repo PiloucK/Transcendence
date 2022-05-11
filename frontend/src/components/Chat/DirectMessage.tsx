@@ -88,7 +88,9 @@ function Messages({ dm }: { dm: DM }) {
   const getStyle = (author: string) => {
     if (author === loginContext.userLogin) {
       return styles.message_author;
-    } else {
+    } else if (author === "system") {
+			return styles.message_system;
+		} else {
       return styles.message_friend;
     }
   };

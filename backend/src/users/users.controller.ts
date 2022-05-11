@@ -90,6 +90,14 @@ export class UsersController {
 		return this.usersService.updateChannel(login42, channelId, updateChannel);
 	}
 
+	@Patch('/:login42/inviteToChannel')
+	inviteToChannel(
+		@Param('login42') login42: string,
+		@Body() inviteToChannelDto: ChannelAdminInteractionsDto,
+	): Channel {
+		return this.usersService.inviteToChannel(login42, inviteToChannelDto);
+	}
+	
 	@Patch('/:login42/joinProtectedChannel')
 	joinProtectedChannel(
 		@Param('login42') login42: string,
