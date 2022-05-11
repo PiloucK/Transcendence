@@ -20,7 +20,9 @@ export function DockGuest() {
   const loginContext = useLoginContext();
 
   const authenticate = () => {
+    console.log("authenticate");
     if (Cookies.get("transcendence_accessToken")) {
+      console.log("authenticate and get cookie");
       authService.getLoggedInUser().then((user) => {
         loginContext.login(user.login42, "");
         socket.emit("user:new", user.login42);

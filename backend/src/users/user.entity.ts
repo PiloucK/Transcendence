@@ -6,9 +6,6 @@ export class User {
   login42!: string;
 
   @Column()
-  token42!: string;
-
-  @Column()
   username!: string;
   // https://stackoverflow.com/questions/25300821/difference-between-varchar-and-text-in-mysql
   // https://typeorm.io/#column-data-types
@@ -23,7 +20,7 @@ export class User {
   gamesLost!: number;
 
   @Column({ default: false })
-  twoFa!: boolean;
+  twoFa!: boolean; // make it private
 
   @ManyToMany(() => User)
   @JoinTable()

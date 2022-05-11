@@ -2,18 +2,14 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from './user.entity';
 import { UsersRepository } from './users.repository';
 import { CreateUserDto } from './dto/createUser.dto';
-import {
-  UpdateUserEloDto,
-  UpdateUserGamesLostDto,
-  UpdateUserGamesWonDto,
-  UpdateUserUsernameDto,
-} from './dto/updateUser.dto';
+import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 
 @Injectable()
@@ -22,54 +18,28 @@ export class UsersService {
     @InjectRepository(UsersRepository)
     private readonly usersRepository: UsersRepository,
   ) {}
-  // to split when using the db: UsersService and UsersFriendsService
 
-  // private createUserPublicInfos(user: IUser): IUserPublicInfos {
-  //   const ret: IUserPublicInfos = {
-  //     login42: user.login42,
-  //     username: user.username,
-  //     elo: user.elo,
-  //     gamesWon: user.gamesWon,
-  //     gamesLost: user.gamesLost,
-  //   };
-  //   return ret;
-  // }
+  private restrictToReqUser(reqUser: User, login42: string): void {
+    if (reqUser.login42 !== login42) {
+      throw new UnauthorizedException(
+        `You must have the login42 "${login42}" to make this request.`,
+      );
+    }
+  }
 
   async getAllUsers(): Promise<User[]> {
-    const users = await this.usersRepository.find({
-      relations: [
-        'friends',
-        'friendRequestsSent',
-        'friendRequestsReceived',
-        'blockedUsers',
-      ],
-    });
+    const users = await this.usersRepository.find();
     return users;
   }
 
-  // getUsersForLeaderboard(): IUserForLeaderboard[] {
-  //   return this.users
-  //     .map((user) => {
-  //       const ret: IUserForLeaderboard = {
-  //         login42: user.login42,
-  //         username: user.username,
-  //         elo: user.elo,
-  //       };
-  //       return ret;
-  //     })
-  //     .sort((a, b) => a.elo - b.elo);
-  // }
-
-  // private searchUser(login42: string): IUser | undefined {
-  //   return this.users.find((user) => user.login42 == login42);
-  // }
-
-  // returns an user if called with undefined as argument
-  getUserByLogin(login42: string): Promise<User> {
-    return this.usersRepository.getUserByLoginWithAllRelations(login42); // all relations?
+  // returns a user if called with undefined as argument
+  getUserByLogin42(login42: string): Promise<User> {
+    return this.usersRepository.getUserWithRelations(login42, []); // all relations?
   }
 
   createUser(createUserDto: CreateUserDto): Promise<User> {
+    // this.restrictToReqUser(reqUser, login42);
+
     return this.usersRepository.createUser(createUserDto);
   }
 
@@ -78,7 +48,9 @@ export class UsersService {
     await this.usersRepository.remove(users);
   }
 
-  async deleteUser(login42: string): Promise<void> {
+  async deleteUser(reqUser: User, login42: string): Promise<void> {
+    this.restrictToReqUser(reqUser, login42);
+
     const result = await this.usersRepository.delete(login42);
 
     if (result.affected === 0) {
@@ -86,65 +58,68 @@ export class UsersService {
     }
   }
 
-  async updateUserUsername(
+  async updateUsername(
+    reqUser: User,
     login42: string,
-    updateUserUsernameDto: UpdateUserUsernameDto,
+    updateUsernameDto: UpdateUsernameDto,
   ): Promise<User> {
-    const { username } = updateUserUsernameDto;
-    const user = await this.getUserByLogin(login42);
+    this.restrictToReqUser(reqUser, login42);
+
+    const { username } = updateUsernameDto;
+    const user = await this.getUserByLogin42(login42);
     user.username = username;
     await this.usersRepository.save(user);
     return user;
   }
 
-  async updateUserElo(
-    login42: string,
-    updateUserEloDto: UpdateUserEloDto,
-  ): Promise<User> {
-    const { elo } = updateUserEloDto;
-    const user = await this.getUserByLogin(login42);
+  async updateUserElo(login42: string, elo: number): Promise<User> {
+    const user = await this.getUserByLogin42(login42);
     user.elo = elo;
     await this.usersRepository.save(user);
     return user;
   }
 
-  async updateUserGamesWon(
-    login42: string,
-    updateUserGamesWonDto: UpdateUserGamesWonDto,
-  ): Promise<User> {
-    const { gamesWon } = updateUserGamesWonDto;
-    const user = await this.getUserByLogin(login42);
+  async updateUserGamesWon(login42: string, gamesWon: number): Promise<User> {
+    const user = await this.getUserByLogin42(login42);
     user.gamesWon = gamesWon;
     await this.usersRepository.save(user);
     return user;
   }
 
-  async updateUserGamesLost(
-    login42: string,
-    updateUserGamesLostDto: UpdateUserGamesLostDto,
-  ): Promise<User> {
-    const { gamesLost } = updateUserGamesLostDto;
-    const user = await this.getUserByLogin(login42);
+  async updateUserGamesLost(login42: string, gamesLost: number): Promise<User> {
+    const user = await this.getUserByLogin42(login42);
     user.gamesLost = gamesLost;
     await this.usersRepository.save(user);
     return user;
   }
 
-  async getUserFriends(login42: string): Promise<User[]> {
+  async getUserFriends(reqUser: User, login42: string): Promise<User[]> {
+    this.restrictToReqUser(reqUser, login42);
+
     const user = await this.usersRepository.getUserWithRelations(login42, [
       'friends',
     ]);
     return user.friends;
   }
 
-  async getUserFriendRequestsSent(login42: string): Promise<User[]> {
+  async getUserFriendRequestsSent(
+    reqUser: User,
+    login42: string,
+  ): Promise<User[]> {
+    this.restrictToReqUser(reqUser, login42);
+
     const user = await this.usersRepository.getUserWithRelations(login42, [
       'friendRequestsSent',
     ]);
     return user.friendRequestsSent;
   }
 
-  async getUserFriendRequestsReceived(login42: string): Promise<User[]> {
+  async getUserFriendRequestsReceived(
+    reqUser: User,
+    login42: string,
+  ): Promise<User[]> {
+    this.restrictToReqUser(reqUser, login42);
+
     const user = await this.usersRepository.getUserWithRelations(login42, [
       'friendRequestsReceived',
     ]);
@@ -152,9 +127,12 @@ export class UsersService {
   }
 
   async sendFriendRequest(
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
+    this.restrictToReqUser(reqUser, login42);
+
     const { friendLogin42 } = friendLogin42Dto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
@@ -173,7 +151,7 @@ export class UsersService {
       user.friends.find((friend) => friend.login42 === friendLogin42)
     ) {
       throw new ConflictException(
-        `User with login42 ${friendLogin42} is already in your friendlist`,
+        `User with login42 "${friendLogin42}" is already in your friendlist`,
       );
     } else if (
       user.friendRequestsReceived.find(
@@ -181,7 +159,7 @@ export class UsersService {
       )
     ) {
       throw new ConflictException(
-        `User with login42 ${friendLogin42} has already sent you a friend request`,
+        `User with login42 "${friendLogin42}" has already sent you a friend request`,
       );
     }
 
@@ -193,9 +171,12 @@ export class UsersService {
   }
 
   async cancelFriendRequest(
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
+    this.restrictToReqUser(reqUser, login42);
+
     const { friendLogin42 } = friendLogin42Dto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
@@ -209,7 +190,7 @@ export class UsersService {
 
     if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
       throw new ConflictException(
-        `User with login42 ${friendLogin42} is already in your friendlist`,
+        `User with login42 "${friendLogin42}" is already in your friendlist`,
       );
     }
 
@@ -223,9 +204,12 @@ export class UsersService {
   }
 
   async acceptFriendRequest(
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
+    this.restrictToReqUser(reqUser, login42);
+
     const { friendLogin42 } = friendLogin42Dto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
@@ -251,9 +235,12 @@ export class UsersService {
   }
 
   async declineFriendRequest(
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
+    this.restrictToReqUser(reqUser, login42);
+
     const { friendLogin42 } = friendLogin42Dto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
@@ -267,7 +254,7 @@ export class UsersService {
 
     if (user.friends.find((friend) => friend.login42 === friendLogin42)) {
       throw new ConflictException(
-        `User with login42 ${friendLogin42} is already in your friendlist`,
+        `User with login42 "${friendLogin42}" is already in your friendlist`,
       );
     }
 
@@ -281,9 +268,12 @@ export class UsersService {
   }
 
   async removeFriend(
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
+    this.restrictToReqUser(reqUser, login42);
+
     const { friendLogin42 } = friendLogin42Dto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
@@ -300,7 +290,9 @@ export class UsersService {
     return user.friends;
   }
 
-  async getUserBlockedUsers(login42: string): Promise<User[]> {
+  async getUserBlockedUsers(reqUser: User, login42: string): Promise<User[]> {
+    this.restrictToReqUser(reqUser, login42);
+
     const user = await this.usersRepository.getUserWithRelations(login42, [
       'blockedUsers',
     ]);
@@ -308,9 +300,12 @@ export class UsersService {
   }
 
   async blockUser(
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
+    this.restrictToReqUser(reqUser, login42);
+
     const { friendLogin42 } = friendLogin42Dto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
@@ -331,9 +326,12 @@ export class UsersService {
   }
 
   async unblockUser(
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
+    this.restrictToReqUser(reqUser, login42);
+
     const { friendLogin42 } = friendLogin42Dto;
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
