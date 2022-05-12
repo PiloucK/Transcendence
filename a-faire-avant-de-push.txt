@@ -1,0 +1,3 @@
+changer les CMD des 3 Dockerfile
+retirer les volumes dans docker-compose.yml
+retirer le gitignore a la racine du repo
