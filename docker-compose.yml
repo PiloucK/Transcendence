@@ -1,41 +1,46 @@
 services:
   frontend:
-      build: ./frontend
-      ports:
-        - "3000:3000"
-      container_name: frontend-transcendence
-      volumes: #remove when development is finished
-        - ./frontend/src:/usr/src/app/frontend/src
-      restart: unless-stopped
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    container_name: frontend-transcendence
+    env_file:
+      - .env
+      - .env.private
+    volumes: #remove when development is finished
+      - ./frontend/src:/usr/src/app/frontend/src
+    restart: unless-stopped
 
   websocks:
-      build: ./websocks
-      ports:
-        - "3002:3002"
-      container_name: websocks-transcendence
-      volumes: #remove when development is finished
-        - ./websocks/src:/usr/src/app/websocks/src
-      restart: unless-stopped
+    build: ./websocks
+    ports:
+      - "3002:3002"
+    container_name: websocks-transcendence
+    env_file:
+      - .env
+      - .env.private
+    volumes: #remove when development is finished
+      - ./websocks/src:/usr/src/app/websocks/src
+    restart: unless-stopped
 
   backend:
-      build: ./backend
-      ports:
-        - "3001:3001"
-      container_name: backend-transcendence
-      volumes: #remove when development is finished
-        - ./backend/src:/usr/src/app/backend/src
-      restart: unless-stopped
+    build: ./backend
+    ports:
+      - "3001:3001"
+    container_name: backend-transcendence
+    env_file:
+      - .env
+      - .env.private
+    volumes: #remove when development is finished
+      - ./backend/src:/usr/src/app/backend/src
+    restart: unless-stopped
 
   database:
-      image: postgres:14
-      ports:
-        - "5432:5432"
-      container_name: database-transcendence
-      environment:
-        POSTGRES_USER: postgres_user
-        POSTGRES_PASSWORD: postgres_pass
-        POSTGRES_DB: pong_db
-      restart: unless-stopped
-
-    # volumes:
-    #   - data:/var/lib/postgresql/data
+    image: postgres:14
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+    container_name: ${DATABASE_CONTAINER_NAME}
+    env_file:
+      - .env
+      - .env.private
+    restart: unless-stopped

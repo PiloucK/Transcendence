@@ -13,15 +13,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   imports: [
     UsersModule,
     PassportModule,
-    ConfigModule, // not needed?
-    // ConfigModule.forRoot({
-    //   validationSchema: Joi.object({
-    //     //...
-    //     JWT_SECRET: Joi.string().required(),
-    //     JWT_EXPIRATION_TIME: Joi.string().required(),
-    //   }),
-    // }),
-    // https://wanago.io/2020/05/25/api-nestjs-authenticating-users-bcrypt-passport-jwt-cookies/
+    ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule], // not needed?
       inject: [ConfigService],
