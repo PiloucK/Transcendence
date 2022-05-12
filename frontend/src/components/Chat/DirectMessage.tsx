@@ -4,7 +4,12 @@ import { EmptyFriendList } from "../Social/emptyPages";
 
 import { DirectMessageMenu } from "./Menus";
 import { useLoginContext } from "../../context/LoginContext";
-import { IUserPublicInfos, DM, IMessage } from "../interfaces/users";
+import {
+  IUserPublicInfos,
+  DM,
+  IMessage,
+  Invitation,
+} from "../../interfaces/users";
 import userService from "../../services/users";
 import { CardUserDM } from "../Cards/CardUserDM";
 
@@ -13,6 +18,8 @@ import Rocket from "../../public/no_dm_content.png";
 import Blocked from "../../public/blocked.png";
 
 import { SendMessageField } from "../Inputs/SendMessageField";
+
+import { ButtonAcceptChannelInvite } from "../Buttons/ButtonAcceptChannelInvite";
 
 import io from "socket.io-client";
 
@@ -73,6 +80,19 @@ function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
   );
 }
 
+function MessageContent({ message }: { message: IMessage | Invitation }) {
+  if (typeof message.content === "string") {
+    return <>{message.content}</>;
+  } else {
+    return (
+      <>
+        You are invited to join my channel!
+        <ButtonAcceptChannelInvite channelId={message.channelId} />
+      </>
+    );
+  }
+}
+
 function Messages({ dm }: { dm: DM }) {
   const loginContext = useLoginContext();
 
@@ -88,9 +108,7 @@ function Messages({ dm }: { dm: DM }) {
   const getStyle = (author: string) => {
     if (author === loginContext.userLogin) {
       return styles.message_author;
-    } else if (author === "system") {
-			return styles.message_system;
-		} else {
+    } else {
       return styles.message_friend;
     }
   };
@@ -99,7 +117,7 @@ function Messages({ dm }: { dm: DM }) {
     <div className={styles.messages_area}>
       {dm.messages.map((message, index) => (
         <div className={getStyle(message.author)} key={index}>
-          {message.content}
+          <MessageContent message={message} />
         </div>
       ))}
     </div>

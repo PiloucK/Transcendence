@@ -10,6 +10,7 @@ import {
   IUser,
   IUserForLeaderboard,
   IUserPublicInfos,
+	Invitation,
 } from './user.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
@@ -245,12 +246,13 @@ export class UsersService {
 
 		channel.invitations.push(invitedUser.login42);
 
-		const msg: IMessage = {
-			author: "system",
-			content: `You have been invited to the channel "${channel.name}"`,
+		const invitation: Invitation = {
+			author: login42,
+			channelId: channel.id,
 		};
 
-		this.sendDM(user.login42, {dest: invitedUser.login42, message: msg});
+		const dm = this.createDM(user.login42, {friendLogin42: invitedUser.login42});
+		dm.messages.push(invitation);
 		
 		return channel;
 	}

@@ -96,7 +96,8 @@ const joinChannel = (login: string, channelId: string) => {
   return request
     .then((response) => response.data)
     .catch((e) => {
-      console.error(e);
+			throw e;
+      // console.error(e);
     });
 };
 
