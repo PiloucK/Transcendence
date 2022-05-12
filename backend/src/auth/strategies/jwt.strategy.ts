@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { jwtConstants } from '../constants';
 import { JwtTokenPayloadDto } from '../dto/jwtTokenPayload.dto';
 
 @Injectable()
@@ -22,8 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       // has not expired. If our route is supplied with an expired JWT, the
       // request will be denied and a 401 Unauthorized response sent. Passport
       // conveniently handles this automatically for us.
-      secretOrKey: jwtConstants.secret,
-      // secretOrKey: configService.get('JWT_SECRET')
+      secretOrKey: configService.get('JWT_SECRET'),
     }); // https://github.com/mikenicholson/passport-jwt#configure-strategy
   }
   // modify token in cookies to see errors to remove

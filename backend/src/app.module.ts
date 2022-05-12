@@ -18,7 +18,7 @@ import { configValidationSchema } from './config.schema';
         type: 'postgres',
         autoLoadEntities: true, // load entities from *.entity.ts files
         synchronize: true, // shouldn't be used in production https://docs.nestjs.com/techniques/database#typeorm-integration
-        host: configService.get('DATABASE_CONTAINER_NAME'), // container name in docker-compose.yml
+        host: configService.get('DATABASE_HOST'), // container name in docker-compose.yml
         port: configService.get('DATABASE_PORT'),
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),

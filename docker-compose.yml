@@ -2,7 +2,7 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     container_name: frontend-transcendence
     env_file:
       - .env
@@ -14,7 +14,7 @@ services:
   websocks:
     build: ./websocks
     ports:
-      - "3002:3002"
+      - "${WEBSOCKETS_PORT}:${WEBSOCKETS_PORT}"
     container_name: websocks-transcendence
     env_file:
       - .env
@@ -26,7 +26,7 @@ services:
   backend:
     build: ./backend
     ports:
-      - "3001:3001"
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
     container_name: backend-transcendence
     env_file:
       - .env
@@ -39,7 +39,7 @@ services:
     image: postgres:14
     ports:
       - "${DATABASE_PORT}:${DATABASE_PORT}"
-    container_name: ${DATABASE_CONTAINER_NAME}
+    container_name: ${DATABASE_HOST}
     env_file:
       - .env
       - .env.private

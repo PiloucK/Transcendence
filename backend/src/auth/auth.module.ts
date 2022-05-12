@@ -4,7 +4,6 @@ import { UsersModule } from 'src/users/users.module';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { FortyTwoStrategy } from './strategies/fortyTwo.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -15,16 +14,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     PassportModule,
     ConfigModule,
     JwtModule.registerAsync({
-      imports: [ConfigModule], // not needed?
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         return {
-          secret: jwtConstants.secret,
+          secret: configService.get('JWT_SECRET'),
           signOptions: { expiresIn: '86400s' },
-          // secret: configService.get('JWT_SECRET'),
-          // signOptions: {
-          //   expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}s`,
-          // },
+          // expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}s`,
         };
       },
     }), // https://github.com/nestjs/jwt/blob/master/README.md#secret--encryption-key-options
