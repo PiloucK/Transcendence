@@ -4,7 +4,8 @@
 import { Server, Socket } from "socket.io";
 import { registerUserHandlers } from "./userHandler";
 
-const io = new Server(3002, {});
+const port = Number(process.env.WEBSOCKETS_PORT);
+const io = new Server(port, {});
 
 const onConnection = (socket: Socket) => {
   registerUserHandlers(io, socket);

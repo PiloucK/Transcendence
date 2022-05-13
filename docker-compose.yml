@@ -6,7 +6,6 @@ services:
     container_name: frontend-transcendence
     env_file:
       - .env
-      - .env.private
     volumes: #remove when development is finished
       - ./frontend/src:/usr/src/app/frontend/src
     restart: unless-stopped
@@ -18,7 +17,6 @@ services:
     container_name: websocks-transcendence
     env_file:
       - .env
-      - .env.private
     volumes: #remove when development is finished
       - ./websocks/src:/usr/src/app/websocks/src
     restart: unless-stopped

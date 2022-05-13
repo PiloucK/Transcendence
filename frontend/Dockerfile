@@ -15,7 +15,7 @@ RUN     npm install
 COPY    . .
 
 # Set the server access on port 3000
-EXPOSE  3000
+EXPOSE ${FRONTEND_PORT}
 
 # Set the command to run the app at start
 CMD     [ "npm", "run", "dev" ]
