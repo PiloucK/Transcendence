@@ -17,6 +17,7 @@ import authService from "../../services/auth";
 import io from "socket.io-client";
 import { IUser, IUserCredentials } from "../../interfaces/users";
 import { Button, TextField } from "@mui/material";
+import Cookies from "js-cookie";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
@@ -55,6 +56,17 @@ function NavigationDock({
             console.log("new token for", login42, "stored in cookie");
           });
       });
+  };
+
+  const deleteAllUsers = () => {
+    usersService.deleteAll().then(() => {
+      console.log("all users deleted");
+      loginContext.logout?.();
+      Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
+        path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
+        sameSite: publicRuntimeConfig.ACCESSTOKEN_COOKIE_SAMESITE,
+      });
+    });
   };
 
   const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
@@ -101,7 +113,7 @@ function NavigationDock({
         </IconButton>
       </Dock>
 
-      <Dock>
+      <div>
         <form onSubmit={addUser}>
           <TextField
             value={username}
@@ -110,7 +122,8 @@ function NavigationDock({
           />
           <Button type="submit">add</Button>
         </form>
-      </Dock>
+        <Button onClick={deleteAllUsers}>remove all users and logout</Button>
+      </div>
     </>
   );
 }

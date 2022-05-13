@@ -1,6 +1,6 @@
 import axios from "axios";
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig()
+const { publicRuntimeConfig } = getConfig();
 const baseUrl = `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/users`;
 import { IUserCredentials } from "../interfaces/users";
 
@@ -42,8 +42,8 @@ const addOne = (newUser: IUserCredentials) => {
     });
 };
 
+// dev
 const deleteAll = () => {
-  // dev
   const request = axios.delete(baseUrl);
   return request
     .then((response) => response.data)
