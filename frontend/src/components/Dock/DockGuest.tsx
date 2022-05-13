@@ -22,9 +22,8 @@ export function DockGuest() {
   const loginContext = useLoginContext();
 
   const authenticate = () => {
-    console.log("authenticate");
     if (Cookies.get(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME)) {
-      console.log("authenticate and get cookie");
+      console.log("authentication cookie detected");
       authService.getLoggedInUser().then((user) => {
         loginContext.login(user.login42, "");
         socket.emit("user:new", user.login42);

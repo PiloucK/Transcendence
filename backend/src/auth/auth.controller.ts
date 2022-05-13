@@ -29,16 +29,20 @@ export class AuthController {
     // Passport assigns the User object returned by the validate() method to the
     // Request object, as request.user
     const jwtToken = this.authService.issueJwtToken(reqUser.login42);
-    response.cookie(
-      `${this.configService.get('ACCESSTOKEN_COOKIE_NAME')}`,
-      jwtToken,
-      {
-        sameSite: this.configService.get('ACCESSTOKEN_COOKIE_SAMESITE'),
-        path: this.configService.get('ACCESSTOKEN_COOKIE_PATH'),
-        maxAge: 86400, // in devtools->Storage: Expires / Max-Age:"Session"
-        // Max-Age=${this.configService.get('JWT_EXPIRATION_TIME')}
-      },
-    );
+    // response.cookie(
+    //   `${this.configService.get('ACCESSTOKEN_COOKIE_NAME')}`,
+    //   jwtToken,
+    //   {
+    //     sameSite: this.configService.get('ACCESSTOKEN_COOKIE_SAMESITE'),
+    //     path: this.configService.get('ACCESSTOKEN_COOKIE_PATH'),
+    //     maxAge: 3600, // in devtools->Storage: Expires / Max-Age:"Session"
+    //     // Max-Age=${this.configService.get('JWT_EXPIRATION_TIME')}
+    //   },
+    // );
+    const cookie = `${this.configService.get(
+      'ACCESSTOKEN_COOKIE_NAME',
+    )}=${jwtToken}; SameSite=Strict; Path=/; Max-Age=3600`;
+    response.setHeader('Set-Cookie', cookie);
     response.redirect(
       `http://${this.configService.get('HOST')}:${this.configService.get(
         'FRONTEND_PORT',
