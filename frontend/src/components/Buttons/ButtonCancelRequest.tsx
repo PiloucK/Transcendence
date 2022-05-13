@@ -3,7 +3,7 @@ import styles from "../../styles/Home.module.css";
 
 import { IUserPublicInfos } from "../../interfaces/users";
 
-import userServices from "../../services/users";
+import usersService from "../../services/users";
 
 import { useLoginContext } from "../../context/LoginContext";
 
@@ -25,7 +25,7 @@ export function ButtonCancelRequest({
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userServices
+      usersService
         .cancelFriendRequest(loginContext.userLogin, userInfos.login42)
         .then(() => {
           socket.emit("user:update-relations");

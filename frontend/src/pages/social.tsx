@@ -4,7 +4,7 @@ import { DockGuest } from "../components/Dock/DockGuest";
 import React, { useState } from "react";
 
 import { IUserPublicInfos } from "../interfaces/users";
-import userService from "../services/users";
+import usersService from "../services/users";
 
 import { SocialMenu } from "../components/Social/menu";
 import {
@@ -26,38 +26,38 @@ function SocialPage({ menu }: { menu: string }) {
   const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
 
   React.useEffect(() => {
-    userService
+    usersService
       .getUserFriends(loginContext.userLogin)
       .then((friends: IUserPublicInfos[]) => {
         setFriends(friends);
       });
 
-    userService
+    usersService
       .getUserBlockedUsers(loginContext.userLogin)
       .then((users: IUserPublicInfos[]) => {
         setBlocked(users);
       });
 
-    userService
+    usersService
       .getUserFriendRequestsReceived(loginContext.userLogin)
       .then((notifications: IUserPublicInfos[]) => {
         setNotifications(notifications);
       });
 
     socket.on("update-leaderboard", () => {
-      userService
+      usersService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
         });
 
-      userService
+      usersService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((users: IUserPublicInfos[]) => {
           setBlocked(users);
         });
 
-      userService
+      usersService
         .getUserFriendRequestsReceived(loginContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
@@ -65,19 +65,19 @@ function SocialPage({ menu }: { menu: string }) {
     });
 
     socket.on("update-relations", () => {
-      userService
+      usersService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
         });
 
-      userService
+      usersService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((users: IUserPublicInfos[]) => {
           setBlocked(users);
         });
 
-      userService
+      usersService
         .getUserFriendRequestsReceived(loginContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);

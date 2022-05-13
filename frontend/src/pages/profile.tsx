@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 
 import React, { useEffect } from "react";
 import { FormEventHandler, ChangeEventHandler, useState } from "react";
-import userService from "../services/users";
+import usersService from "../services/users";
 import { IUser } from "../interfaces/users";
 
 import io from "socket.io-client";
@@ -38,7 +38,7 @@ function MyUserName({ userInfos }: { userInfos: IUser }) {
     setIsInModification(false);
 
     if (tmpUsername !== "") {
-      userService
+      usersService
         .updateUserUsername(loginContext.userLogin, tmpUsername)
         .then(() => {
           setTmpUsername("");
@@ -134,7 +134,7 @@ function Profile({
 
   React.useEffect(() => {
     socket.on("update-leaderboard", () => {
-      userService.getOne(loginContext.userLogin).then((user: IUser) => {
+      usersService.getOne(loginContext.userLogin).then((user: IUser) => {
         state.setUserInfos(user);
       });
     });
@@ -181,7 +181,7 @@ export default function ProfilePage() {
       userInfos !== undefined &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userService.getOne(loginContext.userLogin).then((user: IUser) => {
+      usersService.getOne(loginContext.userLogin).then((user: IUser) => {
         setUserInfos(user);
       });
     }

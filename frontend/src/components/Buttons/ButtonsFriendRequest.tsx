@@ -3,7 +3,7 @@ import styles from "../../styles/Home.module.css";
 
 import { IUserPublicInfos } from "../../interfaces/users";
 import { useLoginContext } from "../../context/LoginContext";
-import userServices from "../../services/users";
+import usersService from "../../services/users";
 
 import io from "socket.io-client";
 
@@ -23,7 +23,7 @@ export function ButtonsFriendRequest({
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userServices
+      usersService
         .acceptFriendRequest(loginContext.userLogin, userInfos.login42)
         .then(() => {
           socket.emit("user:update-relations");
@@ -36,7 +36,7 @@ export function ButtonsFriendRequest({
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userServices
+      usersService
         .declineFriendRequest(loginContext.userLogin, userInfos.login42)
         .then(() => {
           socket.emit("user:update-relations");

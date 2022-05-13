@@ -3,7 +3,7 @@ import styles from "../../styles/Home.module.css";
 
 import { IUserPublicInfos } from "../../interfaces/users";
 
-import userServices from "../../services/users";
+import usersService from "../../services/users";
 
 import { useLoginContext } from "../../context/LoginContext";
 
@@ -21,7 +21,7 @@ export function ButtonUnblock({ userInfos }: { userInfos: IUserPublicInfos }) {
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userServices
+      usersService
         .unblockUser(loginContext.userLogin, userInfos.login42)
         .then(() => {
           socket.emit("user:update-relations");
