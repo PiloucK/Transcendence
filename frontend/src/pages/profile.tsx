@@ -21,7 +21,9 @@ import { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import PublicProfile from "../components/Profile/publicprofile";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
 
 function MyUserName({ userInfos }: { userInfos: IUser }) {
   const loginContext = useLoginContext();

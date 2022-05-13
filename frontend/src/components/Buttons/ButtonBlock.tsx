@@ -9,7 +9,9 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
 
 export function ButtonBlock({ userInfos }: { userInfos: IUserPublicInfos }) {
   const loginContext = useLoginContext();

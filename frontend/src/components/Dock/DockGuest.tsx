@@ -14,14 +14,16 @@ import FTLogo from "../../public/42logo.png";
 
 import Cookies from "js-cookie";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
 
 export function DockGuest() {
   const loginContext = useLoginContext();
 
   const authenticate = () => {
     console.log("authenticate");
-    if (Cookies.get("transcendence_accessToken")) {
+    if (Cookies.get(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME)) {
       console.log("authenticate and get cookie");
       authService.getLoggedInUser().then((user) => {
         loginContext.login(user.login42, "");
@@ -37,7 +39,7 @@ export function DockGuest() {
   // store 0.0.0.0 as an environment var in .env file
   return (
     <Dock>
-      <Link href="http://0.0.0.0:3001/auth">
+      <Link href={`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/auth`}>
         <IconButton className={styles.icons} aria-label="Authentication">
           <Image src={FTLogo} layout={"fill"} />
         </IconButton>

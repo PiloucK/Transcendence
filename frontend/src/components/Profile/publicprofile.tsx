@@ -22,7 +22,9 @@ import { ButtonUnblock } from "../Buttons/ButtonUnblock";
 
 import { useLoginContext } from "../../context/LoginContext";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
 
 function UserName({ userInfos }: { userInfos: IUserPublicInfos }) {
   return (
