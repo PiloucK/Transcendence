@@ -13,13 +13,17 @@ import styles from "../../styles/Home.module.css";
 import { useLoginContext } from "../../context/LoginContext";
 
 import usersService from "../../services/users";
+import authService from "../../services/auth";
 import io from "socket.io-client";
 import { IUser, IUserCredentials } from "../../interfaces/users";
 import { Button, TextField } from "@mui/material";
 
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig()
-const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 function NavigationDock({
   setIsInNavigation,
@@ -37,11 +41,20 @@ function NavigationDock({
       login42: username,
     };
 
-    usersService.addOne(newUserCredentials).then((user: IUser) => {
-      loginContext.login(user.login42, "");
-      socket.emit("user:new", username);
-      setUsername("");
-    });
+    usersService
+      .addOne(newUserCredentials)
+      .then((user: IUser) => {
+        loginContext.login(user.login42, "");
+        socket.emit("user:new", username);
+        setUsername("");
+      })
+      .then(() => {
+        authService
+          .getToken(newUserCredentials.login42)
+          .then((login42: string) => {
+            console.log("new token for", login42, "stored in cookie");
+          });
+      });
   };
 
   const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (

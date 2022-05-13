@@ -5,8 +5,18 @@ const baseUrl = `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEN
 
 axios.defaults.withCredentials = true;
 
+// dev
+const getToken = (login42: string) => {
+  const request = axios.get(`${baseUrl}/getToken/${login42}`);
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const getLoggedInUser = () => {
-  const request = axios.get(`${baseUrl}/getLoggedInUser`); // store the url in variable
+  const request = axios.get(`${baseUrl}/getLoggedInUser`);
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -15,5 +25,6 @@ const getLoggedInUser = () => {
 };
 
 export default {
+  getToken,
   getLoggedInUser,
 };

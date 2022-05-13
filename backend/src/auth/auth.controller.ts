@@ -1,10 +1,11 @@
-import { Controller, Get, Redirect, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { FortyTwoAuthGuard } from './guards/fortyTwoAuth.guard';
-import { RequestWithUser } from '../interfaces/requestWithUser.interface';
 import { JwtAuthGuard } from './guards/jwtAuth.guard';
 import { ConfigService } from '@nestjs/config';
+import { User } from 'src/users/user.entity';
+import { GetReqUser } from './getReqUser.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -24,13 +25,10 @@ export class AuthController {
 
   @UseGuards(FortyTwoAuthGuard)
   @Get('42/callback')
-  fortyTwoAuthRedirect(
-    @Req() request: RequestWithUser,
-    @Res() response: Response,
-  ) {
+  fortyTwoAuthRedirect(@GetReqUser() reqUser: User, @Res() response: Response) {
     // Passport assigns the User object returned by the validate() method to the
     // Request object, as request.user
-    const jwtToken = this.authService.issueJwtToken(request.user.login42);
+    const jwtToken = this.authService.issueJwtToken(reqUser.login42);
     response.cookie(
       `${this.configService.get('ACCESSTOKEN_COOKIE_NAME')}`,
       jwtToken,
@@ -52,9 +50,29 @@ export class AuthController {
   //     httpOnly: false,
   //   });
 
+  // dev
+  @Get('getToken/:login42')
+  getTokenForUser(
+    @Param('login42') login42: string,
+    @Res() response: Response,
+  ) {
+    const jwtToken = this.authService.issueJwtToken(login42);
+    response.cookie(
+      `${this.configService.get('ACCESSTOKEN_COOKIE_NAME')}`,
+      jwtToken,
+      {
+        sameSite: this.configService.get('ACCESSTOKEN_COOKIE_SAMESITE'),
+        path: this.configService.get('ACCESSTOKEN_COOKIE_PATH'),
+        maxAge: 86400,
+      },
+    );
+
+    return response.send(login42);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('getLoggedInUser')
-  getLoggedInUser(@Req() request: RequestWithUser) {
-    return request.user;
+  getLoggedInUser(@GetReqUser() user: User) {
+    return user;
   }
 }
