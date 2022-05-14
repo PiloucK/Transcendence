@@ -1,1 +1,11 @@
 .env.private
+
+# npm modules (dependencies)
+node_modules/
+
+# macos garbage
+.DS_Store
+
+# vim utils
+*.swp
+*.vim

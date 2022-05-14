@@ -5,4 +5,4 @@ retirer l'export et l'import de AuthService dans auth.module et users.module,
   l'injection et le set du cookie token du createUser dans users.controller
 changer les CMD des 3 Dockerfile
 retirer les volumes dans docker-compose.yml
-retirer le gitignore a la racine du repo
+retirer .env.private du gitignore a la racine du repo
