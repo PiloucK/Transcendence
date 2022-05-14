@@ -13,11 +13,18 @@ import styles from "../../styles/Home.module.css";
 import { useLoginContext } from "../../context/LoginContext";
 
 import usersService from "../../services/users";
+import authService from "../../services/auth";
 import io from "socket.io-client";
 import { IUser, IUserCredentials } from "../../interfaces/users";
 import { Button, TextField } from "@mui/material";
+import Cookies from "js-cookie";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 function NavigationDock({
   setIsInNavigation,
@@ -35,10 +42,30 @@ function NavigationDock({
       login42: username,
     };
 
-    usersService.addOne(newUserCredentials).then((user: IUser) => {
-      loginContext.login(user.login42, "");
-      socket.emit("user:new", username);
-      setUsername("");
+    usersService
+      .addOne(newUserCredentials)
+      .then((user: IUser) => {
+        loginContext.login(user.login42, "");
+        socket.emit("user:new", username);
+        setUsername("");
+      })
+      .then(() => {
+        authService
+          .getToken(newUserCredentials.login42)
+          .then((login42: string) => {
+            console.log("new token for", login42, "stored in cookie");
+          });
+      });
+  };
+
+  const deleteAllUsers = () => {
+    usersService.deleteAll().then(() => {
+      console.log("all users deleted");
+      loginContext.logout?.();
+      Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
+        path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
+        sameSite: publicRuntimeConfig.ACCESSTOKEN_COOKIE_SAMESITE,
+      });
     });
   };
 
@@ -86,7 +113,7 @@ function NavigationDock({
         </IconButton>
       </Dock>
 
-      <Dock>
+      <div>
         <form onSubmit={addUser}>
           <TextField
             value={username}
@@ -95,7 +122,8 @@ function NavigationDock({
           />
           <Button type="submit">add</Button>
         </form>
-      </Dock>
+        <Button onClick={deleteAllUsers}>remove all users and logout</Button>
+      </div>
     </>
   );
 }

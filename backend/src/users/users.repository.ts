@@ -6,21 +6,6 @@ import { CreateUserDto } from './dto/createUser.dto';
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
-  async getUserByLoginWithAllRelations(login42: string): Promise<User> {
-    const user = await this.findOne(login42, {
-      relations: [
-        'friends',
-        'friendRequestsSent',
-        'friendRequestsReceived',
-        'blockedUsers',
-      ],
-    });
-    if (!user) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-    return user;
-  }
-
   async getUserWithRelations(
     login42: string,
     relations: Array<string>,
@@ -41,7 +26,6 @@ export class UsersRepository extends Repository<User> {
     if (!user) {
       user = this.create({
         login42,
-        token42: '', // to fill
         username: login42,
       });
 

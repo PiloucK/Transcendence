@@ -7,9 +7,9 @@ import CreateIcon from "@mui/icons-material/Create";
 import CheckIcon from "@mui/icons-material/Check";
 import TextField from "@mui/material/TextField";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { FormEventHandler, ChangeEventHandler, useState } from "react";
-import userService from "../services/users";
+import usersService from "../services/users";
 import { IUser } from "../interfaces/users";
 
 import io from "socket.io-client";
@@ -21,7 +21,12 @@ import { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import PublicProfile from "../components/Profile/publicprofile";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 function MyUserName({ userInfos }: { userInfos: IUser }) {
   const loginContext = useLoginContext();
@@ -33,7 +38,7 @@ function MyUserName({ userInfos }: { userInfos: IUser }) {
     setIsInModification(false);
 
     if (tmpUsername !== "") {
-      userService
+      usersService
         .updateUserUsername(loginContext.userLogin, tmpUsername)
         .then(() => {
           setTmpUsername("");
@@ -129,7 +134,7 @@ function Profile({
 
   React.useEffect(() => {
     socket.on("update-leaderboard", () => {
-      userService.getOne(loginContext.userLogin).then((user: IUser) => {
+      usersService.getOne(loginContext.userLogin).then((user: IUser) => {
         state.setUserInfos(user);
       });
     });
@@ -148,13 +153,17 @@ function Profile({
 }
 
 export default function ProfilePage() {
-	const router = useRouter();
+  const router = useRouter();
   const { login } = router.query;
   const loginContext = useLoginContext();
 
-	if (login !== undefined && loginContext.userLogin !== null && login !== loginContext.userLogin) {
-		return <PublicProfile login={login} />;
-	}
+  if (
+    login !== undefined &&
+    loginContext.userLogin !== null &&
+    login !== loginContext.userLogin
+  ) {
+    return <PublicProfile login={login} />;
+  }
   const [userInfos, setUserInfos] = useState<IUser>({
     id: "",
     login42: "",
@@ -166,15 +175,17 @@ export default function ProfilePage() {
     gamesLost: 0,
   });
 
-  if (
-    loginContext.userLogin !== null &&
-		userInfos !== undefined &&
-    loginContext.userLogin !== userInfos.login42
-  ) {
-    userService.getOne(loginContext.userLogin).then((user: IUser) => {
-      setUserInfos(user);
-    });
-  }
+  useEffect(() => {
+    if (
+      loginContext.userLogin !== null &&
+      userInfos !== undefined &&
+      loginContext.userLogin !== userInfos.login42
+    ) {
+      usersService.getOne(loginContext.userLogin).then((user: IUser) => {
+        setUserInfos(user);
+      });
+    }
+  }, []);
 
   if (loginContext.userLogin === null) return <DockGuest />;
   return (

@@ -3,11 +3,13 @@ import styles from "../../styles/Home.module.css";
 
 import { useLoginContext } from "../../context/LoginContext";
 import { IUserPublicInfos } from "../../interfaces/users";
-import userService from "../../services/users";
+import usersService from "../../services/users";
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
 
 export function NotificationChip() {
   const loginContext = useLoginContext();
@@ -15,24 +17,24 @@ export function NotificationChip() {
   const [blockedUsers, setBlockedUsers] = useState<IUserPublicInfos[]>([]);
 
   React.useEffect(() => {
-    userService
+    usersService
       .getUserFriendRequestsReceived(loginContext.userLogin)
       .then((notifications: IUserPublicInfos[]) => {
         setNotifications(notifications);
       });
-    userService
+    usersService
       .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedUsers(blocked);
       });
 
     socket.on("update-relations", () => {
-      userService
+      usersService
         .getUserFriendRequestsReceived(loginContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
         });
-      userService
+      usersService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedUsers(blocked);

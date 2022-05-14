@@ -9,7 +9,7 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3002
+EXPOSE ${WEBSOCKETS_PORT}
 
 CMD [ "npm", "run", "dev"]
 # change for "npm run start" when development is finished

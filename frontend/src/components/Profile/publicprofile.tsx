@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/Home.module.css";
-import userService from "../../services/users";
+import usersService from "../../services/users";
 import { IUserPublicInfos } from "../../interfaces/users";
 
 import Link from "next/link";
@@ -22,7 +22,9 @@ import { ButtonUnblock } from "../Buttons/ButtonUnblock";
 
 import { useLoginContext } from "../../context/LoginContext";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
 
 function UserName({ userInfos }: { userInfos: IUserPublicInfos }) {
   return (
@@ -79,34 +81,34 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
   const [blockedList, setBlockedList] = React.useState<[]>([]);
 
   React.useEffect(() => {
-    userService
+    usersService
       .getUserFriends(loginContext.userLogin)
       .then((friends: IUserPublicInfos[]) => {
         setFriendList(friends);
       });
-    userService
+    usersService
       .getUserFriendRequestsSent(loginContext.userLogin)
       .then((requests: IUserPublicInfos[]) => {
         setSentRList(requests);
       });
-    userService
+    usersService
       .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       });
 
     socket.on("update-relations", () => {
-      userService
+      usersService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriendList(friends);
         });
-      userService
+      usersService
         .getUserFriendRequestsSent(loginContext.userLogin)
         .then((requests: IUserPublicInfos[]) => {
           setSentRList(requests);
         });
-      userService
+      usersService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
@@ -163,7 +165,7 @@ function Profile({
 }) {
   React.useEffect(() => {
     socket.on("update-leaderboard", () => {
-      userService
+      usersService
         .getOne(state.usrInfo.username)
         .then((user: IUserPublicInfos) => {
           state.setUsrInfo(user);
@@ -197,7 +199,7 @@ export default function PublicProfile({ login }: { login: string }) {
     userInfos !== undefined &&
     userInfos.username !== login
   ) {
-    userService.getOne(login).then((user: IUserPublicInfos) => {
+    usersService.getOne(login).then((user: IUserPublicInfos) => {
       setUserInfos(user);
     });
   }

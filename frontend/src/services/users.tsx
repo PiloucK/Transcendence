@@ -1,5 +1,7 @@
 import axios from "axios";
-const baseUrl = "http://0.0.0.0:3001/users"; // use environment var for 0.0.0.0
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+const baseUrl = `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/users`;
 import { IUserCredentials } from "../interfaces/users";
 
 axios.defaults.withCredentials = true;
@@ -40,8 +42,8 @@ const addOne = (newUser: IUserCredentials) => {
     });
 };
 
+// dev
 const deleteAll = () => {
-  // dev
   const request = axios.delete(baseUrl);
   return request
     .then((response) => response.data)

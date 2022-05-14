@@ -3,11 +3,13 @@ import { useLoginContext } from "../context/LoginContext";
 import React from "react";
 import { DockGuest } from "../components/Dock/DockGuest";
 import { Ball } from "../components/Game/Ball";
-import userService from "../services/users";
+import usersService from "../services/users";
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
 
 // Needed to update the user rank because you can't use the context in the function
 let currentUser = "";
@@ -27,7 +29,7 @@ function DisplayBallForUser() {
 // Emit on the websocket the user:update-elo event for the real time leaderboard.
 function updateUserElo(eloModification: number) {
   if (currentUser !== "") {
-    userService
+    usersService
       .updateUserElo(currentUser, eloModification)
       .then(() => {
         socket.emit("user:update-elo");

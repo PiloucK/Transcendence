@@ -3,11 +3,13 @@ import styles from "../../styles/Home.module.css";
 
 import { IUserPublicInfos } from "../../interfaces/users";
 import { useLoginContext } from "../../context/LoginContext";
-import userServices from "../../services/users";
+import usersService from "../../services/users";
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
 
 export function ButtonsFriendRequest({
   userInfos,
@@ -21,7 +23,7 @@ export function ButtonsFriendRequest({
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userServices
+      usersService
         .acceptFriendRequest(loginContext.userLogin, userInfos.login42)
         .then(() => {
           socket.emit("user:update-relations");
@@ -34,7 +36,7 @@ export function ButtonsFriendRequest({
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userServices
+      usersService
         .declineFriendRequest(loginContext.userLogin, userInfos.login42)
         .then(() => {
           socket.emit("user:update-relations");

@@ -1,10 +1,13 @@
 import axios from "axios";
-const baseUrl = "http://0.0.0.0:3001/auth"; // use environment var for 0.0.0.0
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const baseUrl = `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/auth`;
 
 axios.defaults.withCredentials = true;
 
-const loginWith42 = () => {
-  const request = axios.get(baseUrl); // store the url in variable
+// dev
+const getToken = (login42: string) => {
+  const request = axios.get(`${baseUrl}/getToken/${login42}`);
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -13,7 +16,7 @@ const loginWith42 = () => {
 };
 
 const getLoggedInUser = () => {
-  const request = axios.get(`${baseUrl}/getLoggedInUser`); // store the url in variable
+  const request = axios.get(`${baseUrl}/getLoggedInUser`);
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -22,6 +25,6 @@ const getLoggedInUser = () => {
 };
 
 export default {
-  loginWith42,
+  getToken,
   getLoggedInUser,
 };
