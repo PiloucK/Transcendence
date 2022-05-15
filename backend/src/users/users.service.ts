@@ -579,6 +579,29 @@ export class UsersService {
 		}
 	}
 
+	invitableFriends(login42: string, channelId: string) : IUserForLeaderboard[] {
+		const user: IUser | undefined = this.searchUser(login42);
+		if (!user) {
+			throw new NotFoundException(`User with login42 "${login42}" not found`);
+		}
+
+		const channel: Channel | undefined = this.channels.find(
+			(curChannel) => curChannel.id === channelId
+		);
+		if (!channel) {
+			throw new NotFoundException(`Channel with id "${channelId}" not found`);
+		}
+		this.resolveChannelRestrictions(channel);
+
+		const users: IUserForLeaderboard[] = this.users.filter((curUser) => {
+			return !channel.users.find((curChannelUser) => curChannelUser.login42 === curUser.login42)
+				&& !channel.banned.find((curChannelBannedUser) => curChannelBannedUser.login === curUser.login42)
+				&& !channel.invitations.find((curInvitation) => curInvitation === curUser.login42);
+		});
+
+		return users;
+	}
+
 	publicChannels(login42: string): Channel[] {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {

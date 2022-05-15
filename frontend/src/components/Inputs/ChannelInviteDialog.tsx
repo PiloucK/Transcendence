@@ -8,7 +8,7 @@ import { inputPFState } from "../../interfaces/inputPasswordField";
 import Switch from "@mui/material/Switch";
 
 import { ButtonChannelInvite } from "../Buttons/ButtonChannelInvite";
-import { Channel, IUserPublicInfos } from "../../interfaces/users";
+import { Channel, IUserForLeaderboard } from "../../interfaces/users";
 
 import userServices from "../../services/users";
 import { useLoginContext } from "../../context/LoginContext";
@@ -30,8 +30,8 @@ function FriendList({
   friends,
   setSelectedFriends,
 }: {
-  friends: IUserPublicInfos[];
-  setSelectedFriends: (friends: IUserPublicInfos) => void;
+  friends: IUserForLeaderboard[];
+  setSelectedFriends: (friends: IUserForLeaderboard) => void;
 }) {
   return (
     <div className={styles.social_content}>
@@ -46,8 +46,8 @@ export function FriendContent({
   friends,
   setSelectedFriends,
 }: {
-  friends: IUserPublicInfos[];
-  setSelectedFriends: (friends: IUserPublicInfos) => void;
+  friends: IUserForLeaderboard[];
+  setSelectedFriends: (friends: IUserForLeaderboard) => void;
 }) {
   if (typeof friends === "undefined" || friends.length === 0) {
     return <EmptyFriendList />;
@@ -68,29 +68,29 @@ export function ChannelInviteDialog({
   setOpen: (open: boolean) => void;
 }) {
   const loginContext = useLoginContext();
-  const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
-  const [selectedFriends, setSelectedFriends] = useState<IUserPublicInfos[]>(
+  const [friends, setFriends] = useState<IUserForLeaderboard[]>([]);
+  const [selectedFriends, setSelectedFriends] = useState<IUserForLeaderboard[]>(
     []
   );
 
   React.useEffect(() => {
     userServices
-      .getUserFriends(loginContext.userLogin)
-      .then((friends: IUserPublicInfos[]) => {
+      .getChannelInvitableFriends(loginContext.userLogin, channel.id)
+      .then((friends: IUserForLeaderboard[]) => {
         setFriends(friends);
       });
 
     socket.on("update-leaderboard", () => {
       userServices
-        .getUserFriends(loginContext.userLogin)
-        .then((friends: IUserPublicInfos[]) => {
+        .getChannelInvitableFriends(loginContext.userLogin, channel.id)
+        .then((friends: IUserForLeaderboard[]) => {
           setFriends(friends);
         });
     });
     socket.on("update-relations", () => {
       userServices
-        .getUserFriends(loginContext.userLogin)
-        .then((friends: IUserPublicInfos[]) => {
+        .getChannelInvitableFriends(loginContext.userLogin, channel.id)
+        .then((friends: IUserForLeaderboard[]) => {
           setFriends(friends);
         });
     });
@@ -100,15 +100,15 @@ export function ChannelInviteDialog({
     setOpen(false);
   };
 
-  const addSelectedFriend = (friend: IUserPublicInfos) => {
+  const addSelectedFriend = (friend: IUserForLeaderboard) => {
     if (
       selectedFriends.find(
-        (f: IUserPublicInfos) => f.login42 === friend.login42
+        (f: IUserForLeaderboard) => f.login42 === friend.login42
       )
     ) {
       setSelectedFriends(
         selectedFriends.filter(
-          (f: IUserPublicInfos) => f.login42 !== friend.login42
+          (f: IUserForLeaderboard) => f.login42 !== friend.login42
         )
       );
     } else {
@@ -117,7 +117,8 @@ export function ChannelInviteDialog({
   };
 
   const handleInvite = () => {
-    selectedFriends.forEach((friend: IUserPublicInfos) => {
+    setOpen(false);
+    selectedFriends.forEach((friend: IUserForLeaderboard) => {
       userServices
         .inviteToChannel(loginContext.userLogin, channel.id, friend.login42)
         .then()

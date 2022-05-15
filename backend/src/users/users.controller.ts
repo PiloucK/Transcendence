@@ -171,6 +171,14 @@ export class UsersController {
 		return this.usersService.channel(login42, channelId);
 	}
 
+	@Get('/:login42/channel/:channelId/invitableFriends')
+	invitableFriends(
+		@Param('login42') login42: string,
+		@Param('channelId') channelId: string,
+	): IUserForLeaderboard[] {
+		return this.usersService.invitableFriends(login42, channelId);
+	}
+
 	@Get('/:login42/publicChannels')
 	publicChannels(
 		@Param('login42') login42: string,

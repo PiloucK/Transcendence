@@ -221,6 +221,15 @@ const getChannelById = (login: string, channelId: string) => {
     });
 };
 
+const getChannelInvitableFriends = (login: string, channelId: string) => {
+	const request = axios.get(`${baseUrl}/${login}/channel/${channelId}/invitableFriends`);
+	return request
+		.then((response) => response.data)
+		.catch((e) => {
+			console.error(e);
+		});
+}
+
 const getPublicChannels = (login: string) => {
   const request = axios.get(`${baseUrl}/${login}/publicChannels`);
   return request
@@ -447,6 +456,7 @@ export default {
 	unsetAChannelAdmin,
   sendMSGToChannel,
   getChannelById,
+	getChannelInvitableFriends,
   getPublicChannels,
   getJoinedChannels,
   createDM,
