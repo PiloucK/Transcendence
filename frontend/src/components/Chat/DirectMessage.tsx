@@ -86,7 +86,7 @@ function MessageContent({ message }: { message: IMessage | Invitation }) {
   } else {
     return (
       <>
-        You are invited to join my channel!
+        Hey! Join this channel!
         <ButtonAcceptChannelInvite channelId={message.channelId} />
       </>
     );

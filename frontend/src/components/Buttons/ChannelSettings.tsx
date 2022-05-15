@@ -61,7 +61,19 @@ function MenuButtons({
         />
       </>
     );
-  } else {
+  } else if (channel.admin.includes(loginContext.userLogin)) { 
+		return (
+      <>
+        <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
+        <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
+				<ChannelInviteDialog
+          channel={channel}
+          open={invitationOpen}
+          setOpen={setInvitationOpen}
+        />
+      </>
+    );
+	} else {
     return (
       <>
         <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>

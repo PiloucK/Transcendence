@@ -24,7 +24,7 @@ export function ButtonTxtSetAsAdmin({
       userServices
         .unsetAChannelAdmin(loginContext.userLogin, channel.id, login)
         .then(() => {
-          // Update the content.
+					socket.emit("user:update-channel-content")
         })
         .catch((err) => {
           console.log(err);
@@ -37,7 +37,7 @@ export function ButtonTxtSetAsAdmin({
       userServices
         .setAChannelAdmin(loginContext.userLogin, channel.id, login)
         .then(() => {
-          // Update the content.
+					socket.emit("user:update-channel-content")
         })
         .catch((err) => {
           console.log(err);

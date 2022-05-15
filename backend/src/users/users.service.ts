@@ -227,8 +227,8 @@ export class UsersService {
 		}
 		this.resolveChannelRestrictions(channel);
 
-		if (channel.owner !== login42) {
-			throw new ForbiddenException(`You are not the owner of this channel`);
+		if (channel.owner !== login42 && !channel.admin.includes(login42)) {
+			throw new ForbiddenException(`You are not the owner or an admin of this channel`);
 		}
 
 		const invitedUser: IUser | undefined = this.searchUser(inviteToChannelDto.userLogin42);
@@ -593,13 +593,19 @@ export class UsersService {
 		}
 		this.resolveChannelRestrictions(channel);
 
-		const users: IUserForLeaderboard[] = this.users.filter((curUser) => {
-			return !channel.users.find((curChannelUser) => curChannelUser.login42 === curUser.login42)
-				&& !channel.banned.find((curChannelBannedUser) => curChannelBannedUser.login === curUser.login42)
-				&& !channel.invitations.find((curInvitation) => curInvitation === curUser.login42);
+		const users: string[] = user.friends.filter((curUser) => {
+			return !channel.users.find((curChannelUser) => curChannelUser.login42 === curUser)
+				&& !channel.banned.find((curChannelBannedUser) => curChannelBannedUser.login === curUser)
+				&& !channel.invitations.find((curInvitation) => curInvitation === curUser);
 		});
 
-		return users;
+		return users.map((curUser) => {
+			const curUserForLeaderboard: IUserForLeaderboard | undefined = this.searchUser(curUser);
+			if (!curUserForLeaderboard) {
+				throw new NotFoundException(`User with login42 "${curUser}" not found`);
+			}
+			return curUserForLeaderboard;
+		});
 	}
 
 	publicChannels(login42: string): Channel[] {
