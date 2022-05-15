@@ -20,7 +20,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import { CardUserChannelInvite } from "../Cards/CardUserChannelInvite";
 
-import { EmptyFriendList } from "../Social/emptyPages";
+import { EmptyInvitableFriendList } from "../Social/emptyPages";
 
 import io from "socket.io-client";
 
@@ -50,7 +50,7 @@ export function FriendContent({
   setSelectedFriends: (friends: IUserForLeaderboard) => void;
 }) {
   if (typeof friends === "undefined" || friends.length === 0) {
-    return <EmptyFriendList />;
+    return <EmptyInvitableFriendList />;
   } else {
     return (
       <FriendList friends={friends} setSelectedFriends={setSelectedFriends} />
@@ -80,7 +80,7 @@ export function ChannelInviteDialog({
         setFriends(friends);
       });
 
-    socket.on("update-leaderboard", () => {
+    socket.on("update-channel-content", () => {
       userServices
         .getChannelInvitableFriends(loginContext.userLogin, channel.id)
         .then((friends: IUserForLeaderboard[]) => {
@@ -121,7 +121,9 @@ export function ChannelInviteDialog({
     selectedFriends.forEach((friend: IUserForLeaderboard) => {
       userServices
         .inviteToChannel(loginContext.userLogin, channel.id, friend.login42)
-        .then()
+        .then(
+					socket.emit("user:update-channel-content")
+				)
         .catch((err: Error) => {
           console.log(err);
         });

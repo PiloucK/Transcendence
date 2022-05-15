@@ -15,6 +15,15 @@ export function EmptyFriendList() {
   );
 }
 
+export function EmptyInvitableFriendList() {
+  return (
+    <div className={styles.social_empty_page}>
+      <Image src={Ghost} />
+      No more friends to invite!
+    </div>
+  );
+}
+
 export function EmptyBlockedList() {
   return (
     <div className={styles.social_empty_page}>
