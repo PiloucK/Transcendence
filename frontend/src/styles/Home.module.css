@@ -1014,7 +1014,9 @@ and should display them in columns of three cards max */
   display: flex;
 }
 
-.channel_menu .users {
+.channel_menu .users,
+.channel_menu .owner,
+.channel_menu .admins {
   position: relative;
   top: 10%;
   /* transform: translate(-50%, 0%); */
@@ -1040,6 +1042,14 @@ and should display them in columns of three cards max */
 
   color: #ffffff;
   cursor: pointer;
+}
+
+.channel_menu .owner {
+  color: #a01515;
+}
+
+.channel_menu .admins {
+	color: #a01597;
 }
 
 .channel_menu .connected_user {

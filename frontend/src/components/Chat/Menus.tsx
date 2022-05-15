@@ -143,10 +143,12 @@ export function DirectMessageMenu(props: {
 
 function SelectedUserMenu({
   userLogin,
+	getUserStyle,
   setSelectedUser,
 	channel,
 }: {
   userLogin: string;
+	getUserStyle: (userLogin: string) => any;
   setSelectedUser: (userLogin: string) => void;
 	channel: Channel;
 }) {
@@ -155,7 +157,7 @@ function SelectedUserMenu({
 	if (loginContext.userLogin === channel?.owner) {
 		return (
 			<div className={styles.selected_user}>
-				<div className={styles.users} onClick={() => setSelectedUser("")}>
+				<div className={getUserStyle(userLogin)} onClick={() => setSelectedUser("")}>
 					{userLogin}
 				</div>
 				<ButtonTxtViewProfile login={userLogin} />
@@ -169,7 +171,7 @@ function SelectedUserMenu({
 	} else if (channel?.admin.includes(loginContext.userLogin)) {
 		return (
 			<div className={styles.selected_user}>
-				<div className={styles.users} onClick={() => setSelectedUser("")}>
+				<div className={getUserStyle(userLogin)} onClick={() => setSelectedUser("")}>
 					{userLogin}
 				</div>
 				<ButtonTxtViewProfile login={userLogin} />
@@ -182,7 +184,7 @@ function SelectedUserMenu({
 	} else {
 		return (
 			<div className={styles.selected_user}>
-				<div className={styles.users} onClick={() => setSelectedUser("")}>
+				<div className={getUserStyle(userLogin)} onClick={() => setSelectedUser("")}>
 					{userLogin}
 				</div>
 				<ButtonTxtViewProfile login={userLogin} />
@@ -197,11 +199,11 @@ function UserList({ channel }: { channel: Channel }) {
   const loginContext = useLoginContext();
   const [selectedUser, setSelectedUser] = useState<String>("");
 
-	const getUnselectedUserStyle = (userLogin: string) => {
+	const getUserStyle = (userLogin: string) => {
 		if (userLogin === channel?.owner) {
-			return styles.user_owner;
+			return styles.owner;
 		} else if (channel?.admin.includes(userLogin)) {
-			return styles.user_admin;
+			return styles.admins;
 		} else {
 			return styles.users;
 		}
@@ -219,6 +221,7 @@ function UserList({ channel }: { channel: Channel }) {
         <SelectedUserMenu
           key={user.login42}
           userLogin={selectedUser}
+					getUserStyle={getUserStyle}
           setSelectedUser={setSelectedUser}
 					channel={channel}
         />
@@ -227,7 +230,7 @@ function UserList({ channel }: { channel: Channel }) {
       return (
         <div
           key={user.login42}
-          className={styles.users}
+          className={getUserStyle(user.login42)}
           onClick={() => {
             setSelectedUser(user.login42);
           }}
