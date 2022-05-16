@@ -2,7 +2,10 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier",
+    // took this line from "npx create-next-app --typescript [project-name]"
+    "next/core-web-vitals"
   ],
   "plugins": ["@typescript-eslint"],
   "env": {
