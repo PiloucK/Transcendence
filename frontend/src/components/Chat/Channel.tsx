@@ -37,14 +37,26 @@ function Messages({ channel }: { channel: Channel }) {
     }
   };
 
+  const setScroll = () => {
+    if (typeof window !== "undefined") {
+			var elem = document.getElementById("channelMsgArea");
+			if (elem) {
+				elem.scrollTop = elem.scrollHeight;
+			}
+    }
+  };
+
   return (
-    <div className={styles.messages_area}>
-      {channel.messages.map((message, index) => (
-        <div className={getStyle(message.author)} key={index}>
-          {message.content}
-        </div>
-      ))}
-    </div>
+    <>
+      <div className={styles.messages_area} id="channelMsgArea">
+        {channel.messages.map((message, index) => (
+          <div className={getStyle(message.author)} key={index}>
+            {message.content}
+          </div>
+        ))}
+      </div>
+      {setScroll()}
+    </>
   );
 }
 
@@ -81,7 +93,7 @@ export function Channel({ id }: { id: string }) {
           setChannel(channel);
         });
     });
-  }, [id]);
+  }, []);
 
   return (
     <>

@@ -85,10 +85,10 @@ function MessageContent({ message }: { message: IMessage | Invitation }) {
     return <>{message.content}</>;
   } else {
     return (
-      <>
+      <div className={styles.message_system}>
         Hey! Join this channel!
         <ButtonAcceptChannelInvite channelId={message.channelId} />
-      </>
+      </div>
     );
   }
 }
@@ -113,8 +113,14 @@ function Messages({ dm }: { dm: DM }) {
     }
   };
 
+	if (typeof window !== "undefined") {
+		var messageBody = document.querySelector('#directMessageMsgArea');
+		if (messageBody) {
+			messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+		}
+	}
   return (
-    <div className={styles.messages_area}>
+    <div className={styles.messages_area} id='directMessageMsgArea'>
       {dm.messages.map((message, index) => (
         <div className={getStyle(message.author)} key={index}>
           <MessageContent message={message} />
