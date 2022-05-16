@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
-import usersService from "../services/users";
+import userService from "../services/user";
 import IconButton from "@mui/material/IconButton";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
@@ -52,12 +52,12 @@ export default function Leaderboard() {
   const [users, setUsers] = useState<IUserForLeaderboard[]>([]);
 
   useEffect(() => {
-    usersService.getAll().then((users: IUserForLeaderboard[]) => {
+    userService.getAll().then((users: IUserForLeaderboard[]) => {
       setUsers(users);
     });
 
     socket.on("update-leaderboard", () => {
-      usersService.getAll().then((users: IUserForLeaderboard[]) => {
+      userService.getAll().then((users: IUserForLeaderboard[]) => {
         setUsers(users);
       });
     });

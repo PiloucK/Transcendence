@@ -3,7 +3,7 @@ import styles from "../../styles/Home.module.css";
 
 import { useLoginContext } from "../../context/LoginContext";
 import { IUserPublicInfos } from "../../interfaces/users";
-import usersService from "../../services/users";
+import userService from "../../services/user";
 
 import io from "socket.io-client";
 
@@ -17,24 +17,24 @@ export function NotificationChip() {
   const [blockedUsers, setBlockedUsers] = useState<IUserPublicInfos[]>([]);
 
   React.useEffect(() => {
-    usersService
+    userService
       .getUserFriendRequestsReceived(loginContext.userLogin)
       .then((notifications: IUserPublicInfos[]) => {
         setNotifications(notifications);
       });
-    usersService
+    userService
       .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedUsers(blocked);
       });
 
     socket.on("update-relations", () => {
-      usersService
+      userService
         .getUserFriendRequestsReceived(loginContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
         });
-      usersService
+      userService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedUsers(blocked);
