@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { SendPrivateMessageDto } from './dto/privateConv.dto';
 import { PrivateConv } from './privateConv.entity';
 import { PrivateConvRepository } from './privateConv.repository';
 
@@ -38,6 +39,27 @@ export class PrivateConvService {
       userTwo,
       messages: [],
     });
+
+    await this.privateConvRepository.save(privateConv);
+
+    return privateConv;
+  }
+
+  async sendPrivateMessage(
+    sendPrivateMessageDto: SendPrivateMessageDto,
+  ): Promise<PrivateConv> {
+    let privateConv = await this.privateConvRepository.getPrivateConv(
+      sendPrivateMessageDto.sender,
+      sendPrivateMessageDto.receiver,
+    );
+
+    if (typeof privateConv === 'undefined') {
+      privateConv = await this.createPrivateConv(
+        sendPrivateMessageDto.sender,
+        sendPrivateMessageDto.receiver,
+      );
+    }
+    privateConv.messages.push(sendPrivateMessageDto.message);
 
     await this.privateConvRepository.save(privateConv);
 

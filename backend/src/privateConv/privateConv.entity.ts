@@ -1,5 +1,6 @@
 import { User } from 'src/users/user.entity';
 import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Invitation, Message } from './dto/privateConv.dto';
 
 @Entity()
 export class PrivateConv {
@@ -13,5 +14,5 @@ export class PrivateConv {
   userTwo!: User;
 
   @Column()
-  messages!: { author: string; content: string }[];
+  messages!: Array<Message | Invitation>;
 }
