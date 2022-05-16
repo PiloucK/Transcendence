@@ -35,7 +35,10 @@ import {
 export class UsersService {
   // to split when using the db: UsersService and UsersFriendsService
   private users: IUser[] = [];
+
+	// DM RELATED <===============================================================
 	private directConversations: DM[] = [];
+	// CHANNEL RELATED <==========================================================
 	private channels: Channel[] = [];
 
   private createUserPublicInfos(user: IUser): IUserPublicInfos {
@@ -138,6 +141,7 @@ export class UsersService {
 		return user.friends.includes(friend.login42);
 	}
 
+	// DM RELATED <===============================================================
 	private getUsersDM(user: IUser, friend: IUser) : DM | undefined {
 		const dm: DM | undefined = this.directConversations.find(
 			(curDM) =>
@@ -147,6 +151,7 @@ export class UsersService {
 		return dm;
 	}
 
+	// Channel RELATED <==========================================================
 	private resolveChannelRestrictions(channel: Channel): void {
 		channel.muted.forEach(({login, until}) => {
 			if (until < Date.now()) {
@@ -164,6 +169,7 @@ export class UsersService {
 		});
 	}
 
+	// Channel RELATED <==========================================================
 	createChannel(login42: string, createChannelDto: CreateChannelDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -189,6 +195,7 @@ export class UsersService {
 		return channel;
 	}
 
+	// Channel RELATED <==========================================================
 	updateChannel(login42: string, channelId: string, updateChannelDto: CreateChannelDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -213,6 +220,7 @@ export class UsersService {
 		return channel;
 	};
 
+	// Channel RELATED <==========================================================
 	inviteToChannel(login42: string, inviteToChannelDto: ChannelAdminInteractionsDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -257,6 +265,7 @@ export class UsersService {
 		return channel;
 	}
 
+	// Channel RELATED <==========================================================
 	joinProtectedChannel(login42: string, passwordChannelDto: PasswordChannelDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -292,6 +301,7 @@ export class UsersService {
 		return channel;
 	}
 	
+	// Channel RELATED <==========================================================
 	joinChannel(login42: string, joinChannelDto: ChannelIdDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -323,6 +333,7 @@ export class UsersService {
 		return channel;
 	}
 
+	// Channel RELATED <==========================================================
 	deleteChannel(channelIdDto: ChannelIdDto): Channel {
 		const channel: Channel | undefined = this.channels.find(	
 			(curChannel) => curChannel.id === channelIdDto.channelId
@@ -341,6 +352,7 @@ export class UsersService {
 		return channel;
 	}
 
+	// Channel RELATED <==========================================================
 	leaveChannel(login42: string, leaveChannelDto: ChannelIdDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -377,6 +389,7 @@ export class UsersService {
 		return channel;
 	}
 
+	// Channel RELATED <==========================================================
 	muteAChannelUser(login42: string, channelRestrictionDto: ChannelRestrictionDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -410,6 +423,7 @@ export class UsersService {
 		return channel;
 	}
 
+	// Channel RELATED <==========================================================
 	banAChannelUser(login42: string, channelRestrictionDto: ChannelRestrictionDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -448,6 +462,7 @@ export class UsersService {
 		return channel;
 	}
 
+	// Channel RELATED <==========================================================
 	setAChannelAdmin(login42: string, channelAdminInteractionsDto: ChannelAdminInteractionsDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -481,6 +496,7 @@ export class UsersService {
 		return channel;
 	}
 
+	// Channel RELATED <==========================================================
 	unsetAChannelAdmin(login42: string, channelAdminInteractionsDto: ChannelAdminInteractionsDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -514,6 +530,7 @@ export class UsersService {
 		return channel;
 	}
 
+	// Channel RELATED <==========================================================
 	sendMSGToChannel(login42: string, sendMSGToChannelDto: SendMSGToChannelDto): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -545,6 +562,7 @@ export class UsersService {
 		return channel;
 	}
 
+	// Channel RELATED <==========================================================
 	channel(login42: string, channelId: string): Channel {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -579,6 +597,7 @@ export class UsersService {
 		}
 	}
 
+	// Channel RELATED <==========================================================
 	invitableFriends(login42: string, channelId: string) : IUserForLeaderboard[] {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -608,6 +627,7 @@ export class UsersService {
 		});
 	}
 
+	// Channel RELATED <==========================================================
 	publicChannels(login42: string): Channel[] {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -620,6 +640,7 @@ export class UsersService {
 		return publicChannels;
 	}
 	
+	// Channel RELATED <==========================================================
 	joinedChannels(login42: string): Channel[] {
 		const user: IUser | undefined = this.searchUser(login42);
 		if (!user) {
@@ -632,6 +653,7 @@ export class UsersService {
 		return joinedChannels;
 	}
 
+	// DM RELATED <===============================================================
   createDM(
     login42: string,
     sendFriendRequestDto: SendFriendRequestDto,
@@ -671,6 +693,7 @@ export class UsersService {
 		return this.directConversations[this.directConversations.length - 1];
   }
 
+	// DM RELATED <===============================================================
   sendDM(
     login42: string,
     sendDMDto: SendDMDto,
@@ -700,6 +723,7 @@ export class UsersService {
 		return dm;
   }
 
+	// DM RELATED <===============================================================
   getOneDM(
     login42: string,
     fLogin42: string,
@@ -727,6 +751,7 @@ export class UsersService {
 		}
   }
 
+	// DM RELATED <===============================================================
 	getAllOpenedDM(
     login42: string,
   ): DM[] {
