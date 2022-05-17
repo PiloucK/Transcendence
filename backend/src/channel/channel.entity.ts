@@ -4,7 +4,7 @@ import { Message } from './dto/channel.dto';
 
 @Entity()
 export class Channel {
-  @PrimaryColumn()
+  @PrimaryColumn('uuid')
   id!: string;
 
   @Column()
@@ -19,19 +19,19 @@ export class Channel {
   @Column()
   owner!: string;
 
-  @Column()
+  @Column('text', { array: true })
   admins!: string[];
 
-  @Column()
+  @Column('text', { array: true })
   muted!: string[];
 
-  @Column()
+  @Column('text', { array: true })
   banned!: string[];
 
-  @Column()
+  @Column('json', { array: true })
   messages!: Array<Message>;
 
-  @Column()
+  @Column('text', { array: true })
   invitations!: string[];
 
   // A many to many relation owned by the users.

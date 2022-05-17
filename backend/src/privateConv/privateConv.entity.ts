@@ -13,6 +13,6 @@ export class PrivateConv {
   @ManyToOne(() => User, (user) => user.privateConvs)
   userTwo!: User;
 
-  @Column()
-  messages!: Array<Message | Invitation>;
+  @Column('json', { array: true })
+  messages!: (Message | Invitation)[];
 }

@@ -1,4 +1,4 @@
-import { Channel } from 'diagnostics_channel';
+import { Channel } from 'src/channel/channel.entity';
 import { PrivateConv } from 'src/privateConv/privateConv.entity';
 import {
   Column,
