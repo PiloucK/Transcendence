@@ -8,7 +8,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import { useLoginContext } from "../../context/LoginContext";
-import userService from "../../services/users";
+import userService from "../../services/user";
 import { Channel } from "../../interfaces/users";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";

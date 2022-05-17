@@ -6,7 +6,7 @@ import { Channel, ChannelCreation } from "../../interfaces/users";
 import Avatar from "@mui/material/Avatar";
 // import profileIcon from "../../public/profile_icon.png";
 import { useLoginContext } from "../../context/LoginContext";
-import userService from "../../services/users";
+import userService from "../../services/user";
 
 import { ChannelPasswordDialog } from "../Inputs/ChannelPasswordDialog";
 

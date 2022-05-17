@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/Home.module.css";
-import userService from "../../services/users";
+import userService from "../../services/user";
 import { IUserPublicInfos } from "../../interfaces/users";
 
 import Link from "next/link";
@@ -23,7 +23,12 @@ import { ButtonUnblock } from "../Buttons/ButtonUnblock";
 
 import { useLoginContext } from "../../context/LoginContext";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 function UserName({ userInfos }: { userInfos: IUserPublicInfos }) {
   return (
@@ -91,7 +96,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         setSentRList(requests);
       });
     userService
-      .getUserBlocked(loginContext.userLogin)
+      .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       });
@@ -108,7 +113,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
           setSentRList(requests);
         });
       userService
-        .getUserBlocked(loginContext.userLogin)
+        .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
         });

@@ -3,13 +3,19 @@ import styles from "../../styles/Home.module.css";
 
 import { useLoginContext } from "../../context/LoginContext";
 import { IUserPublicInfos } from "../../interfaces/users";
-import userService from "../../services/users";
 
 import Badge from "@mui/material/Badge";
 
+import userService from "../../services/user";
+
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
   const loginContext = useLoginContext();
@@ -23,7 +29,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
         setNotifications(notifications);
       });
     userService
-      .getUserBlocked(loginContext.userLogin)
+      .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedUsers(blocked);
       });
@@ -35,7 +41,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
           setNotifications(notifications);
         });
       userService
-        .getUserBlocked(loginContext.userLogin)
+        .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedUsers(blocked);
         });
@@ -53,7 +59,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
     return children;
   }
   return (
-    <Badge badgeContent={requests.length} color='primary'>
+    <Badge badgeContent={requests.length} color="primary">
       {children}
     </Badge>
   );

@@ -3,11 +3,13 @@ import { useLoginContext } from "../context/LoginContext";
 import React from "react";
 import { DockGuest } from "../components/Dock/DockGuest";
 import { Ball } from "../components/Game/Ball";
-import userService from "../services/users";
+import userService from "../services/user";
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
 
 // Needed to update the user rank because you can't use the context in the function
 let currentUser = "";

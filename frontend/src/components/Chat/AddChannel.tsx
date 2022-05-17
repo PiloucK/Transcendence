@@ -17,7 +17,7 @@ import { ButtonCreateChannel } from "../Buttons/ButtonCreateChannel";
 import { Channel, ChannelCreation } from "../../interfaces/users";
 import { CardPublicChannel } from "../Cards/CardPublicChannel";
 
-import userServices from "../../services/users";
+import userService from "../../services/user";
 import { useLoginContext } from "../../context/LoginContext";
 
 import io from "socket.io-client";
@@ -52,14 +52,14 @@ function PublicChannels() {
   const [channels, setChannels] = useState<Channel[]>([]);
 
   React.useEffect(() => {
-    userServices
+    userService
       .getPublicChannels(loginContext.userLogin)
       .then((channels: Channel[]) => {
         setChannels(channels);
       });
 
     socket.on("update-public-channels", () => {
-    	userServices
+    	userService
     		.getPublicChannels(loginContext.userLogin)
     		.then((channels: ChannelCreation[]) => {
     			setChannels(channels);
@@ -108,7 +108,7 @@ function CreateChannelForm() {
       error = true;
     }
     if (error === false) {
-      userServices
+      userService
         .createChannel(loginContext.userLogin, channel)
         .then((res) => {
 					socket.emit("user:update-public-channels");

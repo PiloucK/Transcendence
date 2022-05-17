@@ -3,7 +3,7 @@ import React from "react";
 import styles from "../../styles/Home.module.css";
 
 import { IUserPublicInfos, Channel } from "../../interfaces/users";
-import userServices from "../../services/users";
+import userService from "../../services/user";
 import { useLoginContext } from "../../context/LoginContext";
 
 import io from "socket.io-client";
@@ -21,7 +21,7 @@ export function ButtonTxtSetAsAdmin({
 
   const handleRemoveOnClick = () => {
     if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
-      userServices
+      userService
         .unsetAChannelAdmin(loginContext.userLogin, channel.id, login)
         .then(() => {
 					socket.emit("user:update-channel-content")
@@ -34,7 +34,7 @@ export function ButtonTxtSetAsAdmin({
 
   const handleAddOnClick = () => {
     if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
-      userServices
+      userService
         .setAChannelAdmin(loginContext.userLogin, channel.id, login)
         .then(() => {
 					socket.emit("user:update-channel-content")

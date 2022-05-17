@@ -14,7 +14,7 @@ import {
   DM,
   Channel,
 } from "../../interfaces/users";
-import userService from "../../services/users";
+import userService from "../../services/user";
 
 import { ButtonTxtViewProfile } from "../Buttons/ButtonTxtViewProfile";
 import { ButtonTxtBlockUser } from "../Buttons/ButtonTxtBlockUser";

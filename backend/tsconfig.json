@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    // generated with "npx nest new [project-name]"
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true, // required by TypeORM https://typeorm.io/#installation
+    "experimentalDecorators": true, // idem
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+
+    // picked up from https://www.npmjs.com/package/@tsconfig/recommended
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // other options
+    "noImplicitReturns": true,
+  },
+  "include": ["src/**/*"],
+}

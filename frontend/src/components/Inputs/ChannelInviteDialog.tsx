@@ -10,7 +10,7 @@ import Switch from "@mui/material/Switch";
 import { ButtonChannelInvite } from "../Buttons/ButtonChannelInvite";
 import { Channel, IUserForLeaderboard } from "../../interfaces/users";
 
-import userServices from "../../services/users";
+import userService from "../../services/user";
 import { useLoginContext } from "../../context/LoginContext";
 
 import Dialog from "@mui/material/Dialog";
@@ -74,21 +74,21 @@ export function ChannelInviteDialog({
   );
 
   React.useEffect(() => {
-    userServices
+    userService
       .getChannelInvitableFriends(loginContext.userLogin, channel.id)
       .then((friends: IUserForLeaderboard[]) => {
         setFriends(friends);
       });
 
     socket.on("update-channel-content", () => {
-      userServices
+      userService
         .getChannelInvitableFriends(loginContext.userLogin, channel.id)
         .then((friends: IUserForLeaderboard[]) => {
           setFriends(friends);
         });
     });
     socket.on("update-relations", () => {
-      userServices
+      userService
         .getChannelInvitableFriends(loginContext.userLogin, channel.id)
         .then((friends: IUserForLeaderboard[]) => {
           setFriends(friends);
@@ -119,7 +119,7 @@ export function ChannelInviteDialog({
   const handleInvite = () => {
     setOpen(false);
     selectedFriends.forEach((friend: IUserForLeaderboard) => {
-      userServices
+      userService
         .inviteToChannel(loginContext.userLogin, channel.id, friend.login42)
         .then(
 					socket.emit("user:update-channel-content")

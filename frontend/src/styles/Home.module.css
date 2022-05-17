@@ -512,7 +512,7 @@ and should display them in columns of three cards max */
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
 
-  background: #2B506A;
+  background: #2b506a;
   color: #ffffff;
 }
 
@@ -975,7 +975,7 @@ and should display them in columns of three cards max */
   left: 3.9%;
   top: 0px;
 
-	overflow-y: auto;
+  overflow-y: auto;
   /* Teal */
 
   background: #163f5b;
@@ -1005,11 +1005,11 @@ and should display them in columns of three cards max */
 }
 
 .channel_menu .tabs {
-	position: relative;
+  position: relative;
   /* top: 7%; */
 
-	margin-top: 30%;
-	justify-content: space-evenly;
+  margin-top: 30%;
+  justify-content: space-evenly;
 
   display: flex;
 }
@@ -1049,11 +1049,11 @@ and should display them in columns of three cards max */
 }
 
 .channel_menu .admins {
-	color: #a01597;
+  color: #a01597;
 }
 
 .channel_menu .connected_user {
-	position: relative;
+  position: relative;
   top: 10%;
   /* transform: translate(-50%, 0%); */
   /* Body */
@@ -1076,15 +1076,15 @@ and should display them in columns of three cards max */
 
   text-align: center;
 
-  color: #FCA311;
+  color: #fca311;
 }
 
 .channel_menu .selected_user {
   position: relative;
-	width: 100%;
+  width: 100%;
   /* height: 131px; */
-	min-height: 131px;
-	
+  min-height: 131px;
+
   margin: 0.3rem;
   /* White */
   font-family: "Khand";
@@ -1098,15 +1098,15 @@ and should display them in columns of three cards max */
   justify-content: space-evenly;
 
   display: flex;
-	flex-direction: column;
+  flex-direction: column;
   align-items: center;
   font-feature-settings: "tnum" on, "lnum" on;
 
   /* Dark grey */
-	background: #2b506a;
-	border-radius: 20px;
-	color: #ffffff;
-	cursor: default;
+  background: #2b506a;
+  border-radius: 20px;
+  color: #ffffff;
+  cursor: default;
 }
 
 .channel_menu .selected_user .buttons {
@@ -1293,7 +1293,7 @@ and should display them in columns of three cards max */
 
 .messages_area {
   overflow-y: auto;
-	overflow-x: hidden;
+  overflow-x: hidden;
 
   position: absolute;
   width: 100%;
@@ -1342,36 +1342,36 @@ and should display them in columns of three cards max */
   flex-grow: 0;
   margin: 1rem;
   /* margin: 0px 10px; */
-	word-break: break-word;
+  word-break: break-word;
 }
 
 .message_author {
-	box-sizing: border-box;
-	float: left;
-	width: auto;
-	max-width: 80%;
-	position: relative;
-	clear: both;
-	
-	background: #fca311;
+  box-sizing: border-box;
+  float: left;
+  width: auto;
+  max-width: 80%;
+  position: relative;
+  clear: both;
+
+  background: #fca311;
 }
 
 .message_system {
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	row-gap: 10px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 10px;
 }
 
 .message_friend {
-	box-sizing: border-box;
-	float: right;
-	width: auto;
-	max-width: 80%;
-	position: relative;
-	clear: both;
- 
-	background: #1985a1;
+  box-sizing: border-box;
+  float: right;
+  width: auto;
+  max-width: 80%;
+  position: relative;
+  clear: both;
+
+  background: #1985a1;
 }
 
 .chat_add_channel {
@@ -1615,12 +1615,12 @@ and should display them in columns of three cards max */
 }
 
 .channel_settings {
-}	
+}
 
 .channel_settings_switch {
   position: absolute;
   left: 50%;
-	transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
 
   /* Make the text stand on one line */
   white-space: nowrap;
@@ -1641,7 +1641,7 @@ and should display them in columns of three cards max */
 
 .channel_accept_invitation_button,
 .channel_accept_invitation_button:hover {
-	display: flex;
+  display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -1685,7 +1685,7 @@ and should display them in columns of three cards max */
   width: 119px;
   height: 42px;
   left: 50%;
-	transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
   top: 85%;
 
   /* Green */

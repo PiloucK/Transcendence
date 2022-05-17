@@ -4,7 +4,7 @@ import Router from "next/router";
 
 import { IUserPublicInfos, DM } from "../../interfaces/users";
 
-import userServices from "../../services/users";
+import userService from "../../services/user";
 
 import { useLoginContext } from "../../context/LoginContext";
 
@@ -24,7 +24,7 @@ export function ButtonSendDM({
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userServices
+      userService
         .createDM(loginContext.userLogin, userInfos.login42)
         .then((dm:DM) => {
 					loginContext.setChatDM(dm.userOne.login42 + '|' + dm.userTwo.login42);

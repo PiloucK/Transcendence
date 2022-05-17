@@ -16,7 +16,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import { useLoginContext } from "../../context/LoginContext";
-import userServices from "../../services/users";
+import userService from "../../services/user";
 
 import io from "socket.io-client";
 
@@ -42,7 +42,7 @@ export function ButtonTxtMuteUser({
   };
 
 	const handleUnmuteUser = () => {
-		userServices
+		userService
 		.muteAChannelUser(loginContext.userLogin, channel.id, login, 0)
 		.then(() => {})
 		.catch((err) => {
@@ -52,7 +52,7 @@ export function ButtonTxtMuteUser({
 
   const handleMuteUser = () => {
     setOpen(false);
-    userServices
+    userService
       .muteAChannelUser(loginContext.userLogin, channel.id, login, time)
       .then(() => {})
       .catch((err) => {

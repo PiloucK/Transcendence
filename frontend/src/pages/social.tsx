@@ -4,7 +4,7 @@ import { DockGuest } from "../components/Dock/DockGuest";
 import React, { useState } from "react";
 
 import { IUserPublicInfos } from "../interfaces/users";
-import userService from "../services/users";
+import userService from "../services/user";
 
 import { SocialMenu } from "../components/Social/menu";
 import {
@@ -15,7 +15,12 @@ import {
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 function SocialPage({ menu }: { menu: string }) {
   const loginContext = useLoginContext();
@@ -31,7 +36,7 @@ function SocialPage({ menu }: { menu: string }) {
       });
 
     userService
-      .getUserBlocked(loginContext.userLogin)
+      .getUserBlockedUsers(loginContext.userLogin)
       .then((users: IUserPublicInfos[]) => {
         setBlocked(users);
       });
@@ -50,7 +55,7 @@ function SocialPage({ menu }: { menu: string }) {
         });
 
       userService
-        .getUserBlocked(loginContext.userLogin)
+        .getUserBlockedUsers(loginContext.userLogin)
         .then((users: IUserPublicInfos[]) => {
           setBlocked(users);
         });
@@ -70,7 +75,7 @@ function SocialPage({ menu }: { menu: string }) {
         });
 
       userService
-        .getUserBlocked(loginContext.userLogin)
+        .getUserBlockedUsers(loginContext.userLogin)
         .then((users: IUserPublicInfos[]) => {
           setBlocked(users);
         });
@@ -88,7 +93,12 @@ function SocialPage({ menu }: { menu: string }) {
   } else if (menu === "blocked") {
     return <BlockedContent users={blocked} />;
   } else if (menu === "notifications") {
-    return <NotificationContent blockedUsers={blocked} notifications={notifications} />;
+    return (
+      <NotificationContent
+        blockedUsers={blocked}
+        notifications={notifications}
+      />
+    );
   }
 }
 

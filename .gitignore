@@ -1,5 +1,7 @@
+.env.private
+
 # npm modules (dependencies)
-/node_modules
+node_modules/
 
 # macos garbage
 .DS_Store

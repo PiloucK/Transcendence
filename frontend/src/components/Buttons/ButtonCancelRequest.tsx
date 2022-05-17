@@ -3,13 +3,15 @@ import styles from "../../styles/Home.module.css";
 
 import { IUserPublicInfos } from "../../interfaces/users";
 
-import userServices from "../../services/users";
+import userService from "../../services/user";
 
 import { useLoginContext } from "../../context/LoginContext";
 
 import io from "socket.io-client";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
 
 export function ButtonCancelRequest({
   userInfos,
@@ -23,7 +25,7 @@ export function ButtonCancelRequest({
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userServices
+      userService
         .cancelFriendRequest(loginContext.userLogin, userInfos.login42)
         .then(() => {
           socket.emit("user:update-relations");

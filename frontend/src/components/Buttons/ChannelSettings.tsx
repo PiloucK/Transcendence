@@ -4,7 +4,7 @@ import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-import userService from "../../services/users";
+import userService from "../../services/user";
 import { Channel } from "../../interfaces/users";
 import { useLoginContext } from "../../context/LoginContext";
 

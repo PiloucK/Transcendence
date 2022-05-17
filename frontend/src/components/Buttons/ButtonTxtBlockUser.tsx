@@ -3,7 +3,7 @@ import React from "react";
 import styles from "../../styles/Home.module.css";
 
 import { IUserPublicInfos } from "../../interfaces/users";
-import userServices from "../../services/users";
+import userService from "../../services/user";
 import { useLoginContext } from "../../context/LoginContext";
 
 import io from "socket.io-client";
@@ -15,14 +15,14 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
   const [blockedList, setBlockedList] = React.useState<[]>([]);
 
 	React.useEffect(() => {
-    userServices
+    userService
       .getUserBlocked(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       });
 
     socket.on("update-relations", () => {
-      userServices
+      userService
         .getUserBlocked(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
@@ -35,7 +35,7 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
       loginContext.userLogin !== null &&
       loginContext.userLogin !== login
     ) {
-      userServices
+      userService
         .unblockUser(loginContext.userLogin, login)
         .then(() => {
 					socket.emit("user:update-relations");
@@ -50,7 +50,7 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
       loginContext.userLogin !== null &&
       loginContext.userLogin !== login
     ) {
-      userServices
+      userService
         .blockUser(loginContext.userLogin, login)
         .then(() => {
           socket.emit("user:update-relations");

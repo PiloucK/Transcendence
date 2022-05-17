@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../../styles/Home.module.css";
 
 import { useLoginContext } from "../../context/LoginContext";
-import userServices from "../../services/users";
+import userService from "../../services/user";
 
 import { Channel } from "../../interfaces/users";
 
@@ -29,7 +29,7 @@ export function ButtonAcceptChannelInvite({
   const [error, setError] = React.useState(false);
 
   const joinChannel = () => {
-    userServices
+    userService
       .joinChannel(loginContext.userLogin, channelId)
       .then((channel: Channel) => {
         loginContext.setChatMenu(channel.id);

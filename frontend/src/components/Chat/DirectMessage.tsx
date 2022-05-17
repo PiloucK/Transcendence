@@ -10,7 +10,7 @@ import {
   IMessage,
   Invitation,
 } from "../../interfaces/users";
-import userService from "../../services/users";
+import userService from "../../services/user";
 import { CardUserDM } from "../Cards/CardUserDM";
 
 import Image from "next/image";

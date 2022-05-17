@@ -10,7 +10,7 @@ import Switch from "@mui/material/Switch";
 import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
 import { Channel, ChannelCreation } from "../../interfaces/users";
 
-import userServices from "../../services/users";
+import userService from "../../services/user";
 import { useLoginContext } from "../../context/LoginContext";
 
 import Button from "@mui/material/Button";
@@ -75,7 +75,7 @@ export function ChannelSettingsDialog({
     }
     if (error === false) {
 			setOpen(false);
-      userServices
+      userService
         .updateChannel(loginContext.userLogin, channel.id, channelInfos)
         .then((res) => {
           socket.emit("user:update-public-channels");
