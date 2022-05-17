@@ -1,3 +1,4 @@
+import { Channel } from 'diagnostics_channel';
 import { PrivateConv } from 'src/privateConv/privateConv.entity';
 import {
   Column,
@@ -58,6 +59,10 @@ export class User {
     },
   )
   privateConvs!: PrivateConv[];
+
+  @ManyToMany(() => Channel)
+  @JoinTable()
+  channels!: Channel[];
 }
 
 // photo
