@@ -1,4 +1,12 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
+import { PrivateConv } from 'src/privateConv/privateConv.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -37,6 +45,19 @@ export class User {
   @ManyToMany(() => User)
   @JoinTable()
   blockedUsers!: User[];
+
+  // Need to deeply test this part.
+  @OneToMany(
+    () => PrivateConv,
+    (privateConv) => {
+      if (privateConv.userOne === this) {
+        return privateConv.userOne;
+      } else {
+        return privateConv.userTwo;
+      }
+    },
+  )
+  privateConvs!: PrivateConv[];
 }
 
 // photo
