@@ -1,5 +1,9 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-import { SendPrivateMessageDto } from './dto/privateConv.dto';
+import {
+  GetPrivateConvDto,
+  GetPrivateConvsDto,
+  SendPrivateMessageDto,
+} from './dto/privateConv.dto';
 import { PrivateConv } from './privateConv.entity';
 import { PrivateConvService } from './privateConv.service';
 
@@ -25,16 +29,17 @@ export class PrivateConvController {
     return this.privateConvService.sendPrivateMessage(sendPrivateMessageDto);
   }
 
-  @Get('/:login42/:fLogin42/getPrivateConv')
+  @Get('/getPrivateConv')
   getPrivateConv(
-    @Param('login42') login42: string,
-    @Param('fLogin42') fLogin42: string,
-  ): PrivateConv {
-    return this.privateConvService.getPrivateConv(login42, fLogin42);
+    @Body() getPrivateConvDto: GetPrivateConvDto,
+  ): Promise<PrivateConv> {
+    return this.privateConvService.getPrivateConv(getPrivateConvDto);
   }
 
-  @Get('/:login42/getPrivateConvs')
-  getPrivateConvs(@Param('login42') login42: string): PrivateConv[] {
-    return this.privateConvService.getPrivateConvs(login42);
+  @Get('/getPrivateConvs')
+  getPrivateConvs(
+    @Body() getPrivateConvsDto: GetPrivateConvsDto,
+  ): Promise<PrivateConv[]> {
+    return this.privateConvService.getPrivateConvs(getPrivateConvsDto);
   }
 }

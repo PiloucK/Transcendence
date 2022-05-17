@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
-import { SendPrivateMessageDto } from './dto/privateConv.dto';
+import {
+  GetPrivateConvDto,
+  GetPrivateConvsDto,
+  SendPrivateMessageDto,
+} from './dto/privateConv.dto';
 import { PrivateConv } from './privateConv.entity';
 import { PrivateConvRepository } from './privateConv.repository';
 
@@ -64,5 +68,29 @@ export class PrivateConvService {
     await this.privateConvRepository.save(privateConv);
 
     return privateConv;
+  }
+
+  async getPrivateConv(
+    getPrivateConvDto: GetPrivateConvDto,
+  ): Promise<PrivateConv> {
+    const privateConv = await this.privateConvRepository.getPrivateConv(
+      getPrivateConvDto.login42,
+      getPrivateConvDto.fLogin42,
+    );
+
+    if (typeof privateConv === 'undefined') {
+      throw new Error('Private conversation not found');
+    }
+    return privateConv;
+  }
+
+  async getPrivateConvs(
+    getPrivateConvsDto: GetPrivateConvsDto,
+  ): Promise<PrivateConv[]> {
+    const privateConvs = await this.privateConvRepository.getPrivateConvs(
+      getPrivateConvsDto.login42,
+    );
+
+    return privateConvs;
   }
 }

@@ -26,3 +26,28 @@ export class SendPrivateMessageDto {
   @IsNotEmpty()
   message!: Message;
 }
+
+export class GetPrivateConvDto {
+  constructor(login42: string, fLogin42: string) {
+    this.login42 = login42;
+    this.fLogin42 = fLogin42;
+  }
+
+  @IsNotEmpty()
+  @IsString()
+  login42!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  fLogin42!: string;
+}
+
+export class GetPrivateConvsDto {
+  constructor(login42: string) {
+    this.login42 = login42;
+  }
+
+  @IsNotEmpty()
+  @IsString()
+  login42!: string;
+}

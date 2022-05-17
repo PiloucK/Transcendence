@@ -21,4 +21,20 @@ export class PrivateConvRepository extends Repository<PrivateConv> {
       },
     });
   }
+
+  async getPrivateConvs(login42: string): Promise<PrivateConv[]> {
+    let privateConvs = await this.find({
+      where: {
+        id: `${login42}|.*`,
+      },
+    });
+    privateConvs = privateConvs.concat(
+      await this.find({
+        where: {
+          id: `.*|${login42}`,
+        },
+      }),
+    );
+    return privateConvs;
+  }
 }
