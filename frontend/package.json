@@ -3,6 +3,8 @@
   "license": "ISC",
   "scripts": {
     "dev": "next dev",
+    "dev:ts": "npm run dev & npm run ts:watch",
+    "ts:watch": "tsc --noEmit --incremental --watch",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
