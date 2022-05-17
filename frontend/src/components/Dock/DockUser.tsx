@@ -12,7 +12,7 @@ import { Dock } from "./Dock";
 import styles from "../../styles/Home.module.css";
 import { useLoginContext } from "../../context/LoginContext";
 
-import usersService from "../../services/users";
+import userService from "../../services/user";
 import authService from "../../services/auth";
 import io from "socket.io-client";
 import { IUser, IUserCredentials } from "../../interfaces/users";
@@ -42,7 +42,7 @@ function NavigationDock({
       login42: username,
     };
 
-    usersService
+    userService
       .addOne(newUserCredentials)
       .then((user: IUser) => {
         loginContext.login(user.login42, "");
@@ -59,7 +59,7 @@ function NavigationDock({
   };
 
   const deleteAllUsers = () => {
-    usersService.deleteAll().then(() => {
+    userService.deleteAll().then(() => {
       console.log("all users deleted");
       loginContext.logout?.();
       Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {

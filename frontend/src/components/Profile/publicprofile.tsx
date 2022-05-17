@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/Home.module.css";
-import usersService from "../../services/users";
+import userService from "../../services/user";
 import { IUserPublicInfos } from "../../interfaces/users";
 
 import Link from "next/link";
@@ -81,34 +81,34 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
   const [blockedList, setBlockedList] = React.useState<[]>([]);
 
   React.useEffect(() => {
-    usersService
+    userService
       .getUserFriends(loginContext.userLogin)
       .then((friends: IUserPublicInfos[]) => {
         setFriendList(friends);
       });
-    usersService
+    userService
       .getUserFriendRequestsSent(loginContext.userLogin)
       .then((requests: IUserPublicInfos[]) => {
         setSentRList(requests);
       });
-    usersService
+    userService
       .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       });
 
     socket.on("update-relations", () => {
-      usersService
+      userService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriendList(friends);
         });
-      usersService
+      userService
         .getUserFriendRequestsSent(loginContext.userLogin)
         .then((requests: IUserPublicInfos[]) => {
           setSentRList(requests);
         });
-      usersService
+      userService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
@@ -165,7 +165,7 @@ function Profile({
 }) {
   React.useEffect(() => {
     socket.on("update-leaderboard", () => {
-      usersService
+      userService
         .getOne(state.usrInfo.username)
         .then((user: IUserPublicInfos) => {
           state.setUsrInfo(user);
@@ -199,7 +199,7 @@ export default function PublicProfile({ login }: { login: string }) {
     userInfos !== undefined &&
     userInfos.username !== login
   ) {
-    usersService.getOne(login).then((user: IUserPublicInfos) => {
+    userService.getOne(login).then((user: IUserPublicInfos) => {
       setUserInfos(user);
     });
   }

@@ -3,7 +3,7 @@ import { useLoginContext } from "../context/LoginContext";
 import React from "react";
 import { DockGuest } from "../components/Dock/DockGuest";
 import { Ball } from "../components/Game/Ball";
-import usersService from "../services/users";
+import userService from "../services/user";
 
 import io from "socket.io-client";
 
@@ -29,7 +29,7 @@ function DisplayBallForUser() {
 // Emit on the websocket the user:update-elo event for the real time leaderboard.
 function updateUserElo(eloModification: number) {
   if (currentUser !== "") {
-    usersService
+    userService
       .updateUserElo(currentUser, eloModification)
       .then(() => {
         socket.emit("user:update-elo");
