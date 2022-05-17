@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { PrivateConvModule } from './privateConv/privateConv.module';
+import { ChannelModule } from './channel/channel.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { PrivateConvModule } from './privateConv/privateConv.module';
     }),
     AuthModule,
     PrivateConvModule,
+    ChannelModule,
   ],
 })
 export class AppModule {}
