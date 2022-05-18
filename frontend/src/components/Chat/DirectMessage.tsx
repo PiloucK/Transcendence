@@ -6,8 +6,8 @@ import { DirectMessageMenu } from "./Menus";
 import { useLoginContext } from "../../context/LoginContext";
 import {
   IUserPublicInfos,
-  DM,
-  IMessage,
+  PrivateConv,
+  Message,
   Invitation,
 } from "../../interfaces/users";
 import userService from "../../services/user";
@@ -80,7 +80,7 @@ function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
   );
 }
 
-function MessageContent({ message }: { message: IMessage | Invitation }) {
+function MessageContent({ message }: { message: Message | Invitation }) {
   if (typeof message.content === "string") {
     return <>{message.content}</>;
   } else {
@@ -93,7 +93,7 @@ function MessageContent({ message }: { message: IMessage | Invitation }) {
   }
 }
 
-function Messages({ dm }: { dm: DM }) {
+function Messages({ dm }: { dm: PrivateConv }) {
   const loginContext = useLoginContext();
 
   if (typeof dm === "undefined" || dm.messages.length === 0) {
@@ -134,7 +134,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
   const loginContext = useLoginContext();
   const [blockedList, setBlockedList] = React.useState<IUserPublicInfos[]>([]);
   const [input, setInput] = React.useState("");
-  const [dms, setDms] = useState<DM[]>();
+  const [dms, setDms] = useState<PrivateConv[]>();
   const users = menu.split("|");
 
   React.useEffect(() => {
@@ -144,8 +144,8 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
         setBlockedList(blocked);
       });
     userService
-      .getAllOpenedDM(loginContext.userLogin)
-      .then((openedDMs: DM[]) => {
+      .getPrivateConvs(loginContext.userLogin)
+      .then((openedDMs: PrivateConv[]) => {
         setDms(openedDMs);
       });
 
@@ -158,8 +158,8 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
     });
     socket.on("update-direct-messages", () => {
       userService
-        .getAllOpenedDM(loginContext.userLogin)
-        .then((openedDMs: DM[]) => {
+        .getPrivateConvs(loginContext.userLogin)
+        .then((openedDMs: PrivateConv[]) => {
           setDms(openedDMs);
         });
     });
@@ -180,7 +180,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
     );
   }
   const dm = dms?.find(
-    (currDm: DM) =>
+    (currDm: PrivateConv) =>
       (currDm.userOne.login42 === users[0] &&
         currDm.userTwo.login42 === users[1]) ||
       (currDm.userOne.login42 === users[1] &&

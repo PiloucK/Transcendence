@@ -11,7 +11,7 @@ import { useLoginContext } from "../../context/LoginContext";
 import {
   IUserPublicInfos,
   IUserForLeaderboard,
-  DM,
+  PrivateConv,
   Channel,
 } from "../../interfaces/users";
 import userService from "../../services/user";
@@ -55,7 +55,7 @@ function DMList({
   menu,
   setMenu,
 }: {
-  openedDMs: DM[];
+  openedDMs: PrivateConv[];
   menu: string;
   setMenu: (menu: string) => void;
 }) {
@@ -96,19 +96,19 @@ export function DirectMessageMenu(props: {
   setMenu: (menu: string) => void;
 }) {
   const loginContext = useLoginContext();
-  const [openedDMs, setOpenedDMs] = React.useState<DM[]>([]);
+  const [openedDMs, setOpenedDMs] = React.useState<PrivateConv[]>([]);
 
   React.useEffect(() => {
     userService
-      .getAllOpenedDM(loginContext.userLogin)
-      .then((currentDMs: DM[]) => {
+      .getPrivateConvs(loginContext.userLogin)
+      .then((currentDMs: PrivateConv[]) => {
         setOpenedDMs(currentDMs);
       });
 
     socket.on("update-direct-messages", () => {
       userService
-        .getAllOpenedDM(loginContext.userLogin)
-        .then((currentDMs: DM[]) => {
+        .getPrivateConvs(loginContext.userLogin)
+        .then((currentDMs: PrivateConv[]) => {
           setOpenedDMs(currentDMs);
         });
     });
@@ -373,19 +373,19 @@ export function ChatMenu(props: {
   const loginContext = useLoginContext();
 
   React.useEffect(() => {
-    userService
-      .getJoinedChannels(loginContext.userLogin)
-      .then((currentChannels: Channel[]) => {
-        setChannels(currentChannels);
-      });
+    // userService
+    //   .getJoinedChannels(loginContext.userLogin)
+    //   .then((currentChannels: Channel[]) => {
+    //     setChannels(currentChannels);
+    //   });
 
-    socket.on("update-channels-list", () => {
-      userService
-        .getJoinedChannels(loginContext.userLogin)
-        .then((currentChannels: Channel[]) => {
-          setChannels(currentChannels);
-        });
-    });
+    // socket.on("update-channels-list", () => {
+    //   userService
+    //     .getJoinedChannels(loginContext.userLogin)
+    //     .then((currentChannels: Channel[]) => {
+    //       setChannels(currentChannels);
+    //     });
+    // });
   }, []);
 
   const getStyle = (key: string) => {

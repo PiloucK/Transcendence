@@ -48,7 +48,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
     });
   }, []);
 
-  const requests = notifications.filter(
+  const requests = notifications?.filter(
     (notification) =>
       !blockedUsers?.some(
         (blockedUser) => blockedUser.login42 === notification.login42

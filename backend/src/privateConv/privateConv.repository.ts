@@ -3,6 +3,7 @@ import { PrivateConv } from './privateConv.entity';
 
 @EntityRepository(PrivateConv)
 export class PrivateConvRepository extends Repository<PrivateConv> {
+	// Why when this function is call the userOne and userTwo are undefined?
   getPrivateConv(
     senderLogin42: string,
     receiverLogin42: string,

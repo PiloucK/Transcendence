@@ -22,12 +22,12 @@ export interface IUserCredentials {
   login42: string;
 }
 
-export type IMessage = { author: string; content: string };
+export type Message = { author: string; content: string };
 export type Invitation = { author: string; channelId: string };
-export type DM = {
+export type PrivateConv = {
   userOne: IUser;
   userTwo: IUser;
-  messages: Array<IMessage | Invitation>;
+  messages: Array<Message | Invitation>;
 };
 export type restriction = { login: string; until: number }; // login, end of the restriction in ms.
 export type Channel = {
@@ -40,7 +40,7 @@ export type Channel = {
   muted: Array<restriction>;
   banned: Array<restriction>;
   users: Array<IUserForLeaderboard>;
-  messages: Array<IMessage>;
+  messages: Array<Message>;
 };
 
 export type ChannelCreation = {

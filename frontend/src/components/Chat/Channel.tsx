@@ -4,7 +4,7 @@ import { EmptyFriendList } from "../Social/emptyPages";
 
 import { ChannelMenu } from "./Menus";
 import { useLoginContext } from "../../context/LoginContext";
-import { IUserPublicInfos, Channel, IMessage } from "../interfaces/users";
+import { IUserPublicInfos, Channel, Message } from "../interfaces/users";
 import userService from "../../services/user";
 import { CardUserDM } from "../Cards/CardUserDM";
 

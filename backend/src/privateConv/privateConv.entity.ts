@@ -13,6 +13,7 @@ export class PrivateConv {
   @ManyToOne(() => User, (user) => user.privateConvs)
   userTwo!: User;
 
-  @Column('json', { array: true })
+	// I had to remove the {array: true} because it was causing an error
+  @Column('json')
   messages!: (Message | Invitation)[];
 }

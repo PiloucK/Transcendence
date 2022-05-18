@@ -2,9 +2,10 @@ import axios from "axios";
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/users`;
+const privateConvUrl = `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/privateConv`;
 import {
   IUserCredentials,
-  IMessage,
+  Message,
   ChannelCreation,
 } from "../interfaces/users";
 axios.defaults.withCredentials = true;
@@ -228,7 +229,7 @@ const unsetAChannelAdmin = (
 const sendMSGToChannel = (
   login: string,
   channelId: string,
-  message: IMessage
+  message: Message
 ) => {
   const request = axios.patch(`${baseUrl}/${login}/sendMSGToChannel`, {
     leaveChannel,
@@ -301,10 +302,8 @@ const updateUserGamesLost = (login: string, gamesLost: string) => {
     });
 };
 
-const createDM = (login: string, friendLogin42: string) => {
-  const request = axios.patch(`${baseUrl}/${login}/createDM`, {
-    friendLogin42,
-  });
+const createPrivateConv = (login: string, friendLogin42: string) => {
+  const request = axios.post(`${privateConvUrl}/${login}/${friendLogin42}`);
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -312,9 +311,10 @@ const createDM = (login: string, friendLogin42: string) => {
     });
 };
 
-const sendDM = (login: string, dest: string, message: IMessage) => {
-  const request = axios.patch(`${baseUrl}/${login}/sendDM`, {
-    dest,
+const sendPrivateMessage = (login: string, dest: string, message: Message) => {
+  const request = axios.patch(`${privateConvUrl}/sendPrivateMessage`, {
+    senderLogin42: login,
+    receiverLogin42: dest,
     message,
   });
   return request
@@ -324,17 +324,22 @@ const sendDM = (login: string, dest: string, message: IMessage) => {
     });
 };
 
-const getOneDM = (login: string, friendLogin42: string) => {
-  const request = axios.get(`${baseUrl}/${login}/${friendLogin42}/getOneDM`);
+const getPrivateConv = (login: string, friendLogin42: string) => {
+  const request = axios.get(`${privateConvUrl}/getPrivateConv`, {
+    login42: login,
+    fLogin42: friendLogin42,
+  });
   return request
     .then((response) => response.data)
     .catch((e) => {
-      console.error("getOneDM", e);
+      console.error("getPrivateConv", e);
     });
 };
 
-const getAllOpenedDM = (login: string) => {
-  const request = axios.get(`${baseUrl}/${login}/getAllOpenedDM`);
+const getPrivateConvs = (login: string) => {
+  const request = axios.get(`${privateConvUrl}/getPrivateConvs`, {
+    login42: login,
+  });
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -495,10 +500,10 @@ export default {
   getChannelInvitableFriends,
   getPublicChannels,
   getJoinedChannels,
-  createDM,
-  sendDM,
-  getOneDM,
-  getAllOpenedDM,
+  createPrivateConv,
+  sendPrivateMessage,
+  getPrivateConv,
+  getPrivateConvs,
   blockUser,
   unblockUser,
   sendFriendRequest,

@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../../styles/Home.module.css";
 import Router from "next/router";
 
-import { IUserPublicInfos, DM } from "../../interfaces/users";
+import { IUserPublicInfos, PrivateConv } from "../../interfaces/users";
 
 import userService from "../../services/user";
 
@@ -19,14 +19,14 @@ export function ButtonSendDM({
 }) {
   const loginContext = useLoginContext();
 
-  const sendDM = () => {
+  const sendPrivateMessage = () => {
     if (
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
       userService
-        .createDM(loginContext.userLogin, userInfos.login42)
-        .then((dm:DM) => {
+        .createPrivateConv(loginContext.userLogin, userInfos.login42)
+        .then((dm:PrivateConv) => {
 					loginContext.setChatDM(dm.userOne.login42 + '|' + dm.userTwo.login42);
           socket.emit("user:update-direct-messages");
 					Router.push('/chat');
@@ -35,8 +35,8 @@ export function ButtonSendDM({
   };
 
   return (
-    <div className={styles.send_dm_button} onClick={sendDM}>
-      Send DM
+    <div className={styles.send_dm_button} onClick={sendPrivateMessage}>
+      Send PrivateConv
     </div>
   );
 }

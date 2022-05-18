@@ -66,7 +66,7 @@ export function SendMessageField({
           users[0] === loginContext.userLogin ? users[1] : users[0];
 
         userService
-          .sendDM(loginContext.userLogin, otherLogin, {
+          .sendPrivateMessage(loginContext.userLogin, otherLogin, {
             author: loginContext.userLogin,
             content: input,
           })
