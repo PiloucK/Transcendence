@@ -11,6 +11,7 @@ import {
   Invitation,
 } from "../../interfaces/users";
 import userService from "../../services/user";
+import privateConvService from "../../services/privateConv";
 import { CardUserDM } from "../Cards/CardUserDM";
 
 import Image from "next/image";
@@ -143,7 +144,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       });
-    userService
+		privateConvService
       .getPrivateConvs(loginContext.userLogin)
       .then((openedDMs: PrivateConv[]) => {
         setDms(openedDMs);
@@ -157,7 +158,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
         });
     });
     socket.on("update-direct-messages", () => {
-      userService
+      privateConvService
         .getPrivateConvs(loginContext.userLogin)
         .then((openedDMs: PrivateConv[]) => {
           setDms(openedDMs);

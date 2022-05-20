@@ -6,7 +6,7 @@ import { IUserPublicInfos, PrivateConv } from "../../interfaces/users";
 import Avatar from "@mui/material/Avatar";
 // import profileIcon from "../../public/profile_icon.png";
 import { useLoginContext } from "../../context/LoginContext";
-import userService from "../../services/user";
+import privateConvService from "../../services/privateConv";
 
 import io from "socket.io-client";
 
@@ -31,7 +31,7 @@ export function CardUserDM({
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userService
+      privateConvService
         .createPrivateConv(loginContext.userLogin, userInfos.login42)
         .then((privateConv: PrivateConv) => {
           console.log(privateConv);

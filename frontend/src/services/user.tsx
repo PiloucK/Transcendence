@@ -302,51 +302,6 @@ const updateUserGamesLost = (login: string, gamesLost: string) => {
     });
 };
 
-const createPrivateConv = (login: string, friendLogin42: string) => {
-  const request = axios.post(`${privateConvUrl}/${login}/${friendLogin42}`);
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
-};
-
-const sendPrivateMessage = (login: string, dest: string, message: Message) => {
-  const request = axios.patch(`${privateConvUrl}/sendPrivateMessage`, {
-    senderLogin42: login,
-    receiverLogin42: dest,
-    message,
-  });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
-};
-
-const getPrivateConv = (login: string, friendLogin42: string) => {
-  const request = axios.get(`${privateConvUrl}/getPrivateConv`, {
-    login42: login,
-    fLogin42: friendLogin42,
-  });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error("getPrivateConv", e);
-    });
-};
-
-const getPrivateConvs = (login: string) => {
-  const request = axios.get(`${privateConvUrl}/getPrivateConvs`, {
-    login42: login,
-  });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
-};
-
 const sendFriendRequest = (login: string, friendLogin42: string) => {
   const request = axios.patch(`${baseUrl}/${login}/sendFriendRequest`, {
     friendLogin42,
@@ -500,10 +455,6 @@ export default {
   getChannelInvitableFriends,
   getPublicChannels,
   getJoinedChannels,
-  createPrivateConv,
-  sendPrivateMessage,
-  getPrivateConv,
-  getPrivateConvs,
   blockUser,
   unblockUser,
   sendFriendRequest,

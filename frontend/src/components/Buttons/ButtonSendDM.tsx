@@ -4,7 +4,7 @@ import Router from "next/router";
 
 import { IUserPublicInfos, PrivateConv } from "../../interfaces/users";
 
-import userService from "../../services/user";
+import privateConvService from "../../services/privateConv";
 
 import { useLoginContext } from "../../context/LoginContext";
 
@@ -24,7 +24,7 @@ export function ButtonSendDM({
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userService
+      privateConvService
         .createPrivateConv(loginContext.userLogin, userInfos.login42)
         .then((dm:PrivateConv) => {
 					loginContext.setChatDM(dm.userOne.login42 + '|' + dm.userTwo.login42);

@@ -15,6 +15,7 @@ import {
   Channel,
 } from "../../interfaces/users";
 import userService from "../../services/user";
+import privateConvService from "../../services/privateConv";
 
 import { ButtonTxtViewProfile } from "../Buttons/ButtonTxtViewProfile";
 import { ButtonTxtBlockUser } from "../Buttons/ButtonTxtBlockUser";
@@ -99,14 +100,14 @@ export function DirectMessageMenu(props: {
   const [openedDMs, setOpenedDMs] = React.useState<PrivateConv[]>([]);
 
   React.useEffect(() => {
-    userService
+    privateConvService
       .getPrivateConvs(loginContext.userLogin)
       .then((currentDMs: PrivateConv[]) => {
         setOpenedDMs(currentDMs);
       });
 
     socket.on("update-direct-messages", () => {
-      userService
+      privateConvService
         .getPrivateConvs(loginContext.userLogin)
         .then((currentDMs: PrivateConv[]) => {
           setOpenedDMs(currentDMs);

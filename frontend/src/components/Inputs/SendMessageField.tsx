@@ -14,6 +14,7 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { useLoginContext } from "../../context/LoginContext";
 
 import userService from "../../services/user";
+import privateConvService from "../../services/privateConv";
 
 import io from "socket.io-client";
 
@@ -65,7 +66,7 @@ export function SendMessageField({
         const otherLogin =
           users[0] === loginContext.userLogin ? users[1] : users[0];
 
-        userService
+        privateConvService
           .sendPrivateMessage(loginContext.userLogin, otherLogin, {
             author: loginContext.userLogin,
             content: input,
