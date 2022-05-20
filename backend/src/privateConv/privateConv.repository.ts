@@ -1,22 +1,23 @@
-import { EntityRepository, Repository } from 'typeorm';
-import { PrivateConv } from './privateConv.entity';
+import { EntityRepository, Repository } from "typeorm";
+import { PrivateConv } from "./privateConv.entity";
 
 @EntityRepository(PrivateConv)
 export class PrivateConvRepository extends Repository<PrivateConv> {
-	// Why when this function is call the userOne and userTwo are undefined?
   getPrivateConv(
     senderLogin42: string,
-    receiverLogin42: string,
+    receiverLogin42: string
   ): Promise<PrivateConv | undefined> {
     const privateConv = this.findOne({
+      relations: ["userOne", "userTwo"],
       where: {
         id: `${senderLogin42}|${receiverLogin42}`,
       },
     });
-    if (typeof privateConv !== 'undefined') {
+    if (typeof privateConv !== "undefined") {
       return privateConv;
     }
     return this.findOne({
+      relations: ["userOne", "userTwo"],
       where: {
         id: `${receiverLogin42}|${senderLogin42}`,
       },
@@ -25,16 +26,18 @@ export class PrivateConvRepository extends Repository<PrivateConv> {
 
   async getPrivateConvs(login42: string): Promise<PrivateConv[]> {
     let privateConvs = await this.find({
+      relations: ["userOne", "userTwo"],
       where: {
         id: `${login42}|.*`,
       },
     });
     privateConvs = privateConvs.concat(
       await this.find({
+        relations: ["userOne", "userTwo"],
         where: {
           id: `.*|${login42}`,
         },
-      }),
+      })
     );
     return privateConvs;
   }
