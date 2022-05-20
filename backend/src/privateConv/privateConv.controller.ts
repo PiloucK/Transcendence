@@ -1,45 +1,46 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from "@nestjs/common";
 import {
   GetPrivateConvDto,
   GetPrivateConvsDto,
   SendPrivateMessageDto,
-} from './dto/privateConv.dto';
-import { PrivateConv } from './privateConv.entity';
-import { PrivateConvService } from './privateConv.service';
+} from "./dto/privateConv.dto";
+import { PrivateConv } from "./privateConv.entity";
+import { PrivateConvService } from "./privateConv.service";
 
-@Controller('privateConv')
+@Controller("privateConv")
 export class PrivateConvController {
   constructor(private privateConvService: PrivateConvService) {}
 
-  @Post('/:senderLogin42/:receiverLogin42')
+  @Post("/:senderLogin42/:receiverLogin42")
   createPrivateConv(
-    @Param('senderLogin42') senderLogin42: string,
-    @Param('receiverLogin42') receiverLogin42: string,
+    @Param("senderLogin42") senderLogin42: string,
+    @Param("receiverLogin42") receiverLogin42: string
   ): Promise<PrivateConv> {
     return this.privateConvService.createPrivateConv(
       senderLogin42,
-      receiverLogin42,
+      receiverLogin42
     );
   }
 
-  @Patch('/sendPrivateMessage')
+  @Patch("/sendPrivateMessage")
   sendPrivateMessage(
-    @Body() sendPrivateMessageDto: SendPrivateMessageDto,
+    @Body() sendPrivateMessageDto: SendPrivateMessageDto
   ): Promise<PrivateConv> {
     return this.privateConvService.sendPrivateMessage(sendPrivateMessageDto);
   }
 
-  @Get('/getPrivateConv')
+  @Get("/:login42/:fLogin42")
   getPrivateConv(
-    @Body() getPrivateConvDto: GetPrivateConvDto,
+    @Param("login42") login42: string,
+    @Param("fLogin42") fLogin42: string
   ): Promise<PrivateConv> {
+    const getPrivateConvDto = new GetPrivateConvDto(login42, fLogin42);
     return this.privateConvService.getPrivateConv(getPrivateConvDto);
   }
 
-  @Get('/getPrivateConvs')
-  getPrivateConvs(
-    @Body() getPrivateConvsDto: GetPrivateConvsDto,
-  ): Promise<PrivateConv[]> {
+  @Get("/:login42")
+  getPrivateConvs(@Param("login42") login42: string): Promise<PrivateConv[]> {
+    const getPrivateConvsDto = new GetPrivateConvsDto(login42);
     return this.privateConvService.getPrivateConvs(getPrivateConvsDto);
   }
 }

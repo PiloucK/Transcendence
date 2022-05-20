@@ -28,14 +28,20 @@ export class PrivateConvRepository extends Repository<PrivateConv> {
     let privateConvs = await this.find({
       relations: ["userOne", "userTwo"],
       where: {
-        id: `${login42}|.*`,
+        // id: `${login42}|.*`,
+				userOne: {
+					login42: login42,
+				}
       },
     });
     privateConvs = privateConvs.concat(
       await this.find({
         relations: ["userOne", "userTwo"],
         where: {
-          id: `.*|${login42}`,
+          // id: `.*|${login42}`,
+					userTwo: {
+						login42: login42,
+					}
         },
       })
     );

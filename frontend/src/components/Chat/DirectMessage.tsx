@@ -135,9 +135,10 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
   const loginContext = useLoginContext();
   const [blockedList, setBlockedList] = React.useState<IUserPublicInfos[]>([]);
   const [input, setInput] = React.useState("");
-  const [dms, setDms] = useState<PrivateConv[]>();
+  const [privateConv, setPrivateConv] = useState<PrivateConv>();
   const users = menu.split("|");
-
+	
+  const friend = users[0] === loginContext.userLogin ? users[1] : users[0];
   React.useEffect(() => {
     userService
       .getUserBlocked(loginContext.userLogin)
@@ -145,9 +146,9 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
         setBlockedList(blocked);
       });
 		privateConvService
-      .getPrivateConvs(loginContext.userLogin)
-      .then((openedDMs: PrivateConv[]) => {
-        setDms(openedDMs);
+      .getPrivateConv(loginContext.userLogin, friend)
+      .then((privateConv: PrivateConv) => {
+        setPrivateConv(privateConv);
       });
 
     socket.on("update-relations", () => {
@@ -159,14 +160,13 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
     });
     socket.on("update-direct-messages", () => {
       privateConvService
-        .getPrivateConvs(loginContext.userLogin)
-        .then((openedDMs: PrivateConv[]) => {
-          setDms(openedDMs);
+        .getPrivateConv(loginContext.userLogin, friend)
+        .then((privateConv: PrivateConv) => {
+          setPrivateConv(privateConv);
         });
     });
-  }, []);
+  }, [friend]);
 
-  const friend = users[0] === loginContext.userLogin ? users[1] : users[0];
   const blockedFriend = blockedList.find(
     (blocked) => blocked.login42 === friend
   );
@@ -180,17 +180,10 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
       </div>
     );
   }
-  const dm = dms?.find(
-    (currDm: PrivateConv) =>
-      (currDm.userOne.login42 === users[0] &&
-        currDm.userTwo.login42 === users[1]) ||
-      (currDm.userOne.login42 === users[1] &&
-        currDm.userTwo.login42 === users[0])
-  );
   return (
     <div className={styles.chat_direct_message_content}>
       <SendMessageField input={input} setInput={setInput} channel={menu} />
-      <Messages dm={dm} />
+      <Messages dm={privateConv} />
     </div>
   );
 }

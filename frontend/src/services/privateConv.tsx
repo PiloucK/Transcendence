@@ -16,8 +16,8 @@ const createPrivateConv = (login: string, friendLogin42: string) => {
 
 const sendPrivateMessage = (login: string, dest: string, message: Message) => {
   const request = axios.patch(`${baseUrl}/sendPrivateMessage`, {
-    senderLogin42: login,
-    receiverLogin42: dest,
+    sender: login,
+    receiver: dest,
     message,
   });
   return request
@@ -28,10 +28,7 @@ const sendPrivateMessage = (login: string, dest: string, message: Message) => {
 };
 
 const getPrivateConv = (login: string, friendLogin42: string) => {
-  const request = axios.get(`${baseUrl}/getPrivateConv`, {
-    login42: login,
-    fLogin42: friendLogin42,
-  });
+  const request = axios.get(`${baseUrl}/${login}/${friendLogin42}`);
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -40,9 +37,7 @@ const getPrivateConv = (login: string, friendLogin42: string) => {
 };
 
 const getPrivateConvs = (login: string) => {
-  const request = axios.get(`${baseUrl}/getPrivateConvs`, {
-    login42: login,
-  });
+  const request = axios.get(`${baseUrl}/${login}`);
   return request
     .then((response) => response.data)
     .catch((e) => {
