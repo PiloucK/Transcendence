@@ -34,7 +34,6 @@ export class PrivateConvService {
       receiverLogin42
     );
     if (typeof privateConv !== "undefined") {
-      console.log("PrivateConv found:", privateConv);
       return privateConv;
     }
 
@@ -46,7 +45,6 @@ export class PrivateConvService {
       messages: [],
     });
 
-    console.log("PrivateConv created:", privateConv);
     await this.privateConvRepository.save(privateConv);
 
     return privateConv;
@@ -94,7 +92,6 @@ export class PrivateConvService {
       getPrivateConvsDto.login42
     );
 
-		console.log("PrivateConvs fetch:", privateConvs);
     return privateConvs;
   }
 }

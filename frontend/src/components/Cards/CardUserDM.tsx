@@ -34,7 +34,6 @@ export function CardUserDM({
       privateConvService
         .createPrivateConv(loginContext.userLogin, userInfos.login42)
         .then((privateConv: PrivateConv) => {
-          console.log(privateConv);
           setMenu(
             privateConv.userOne.login42 + "|" + privateConv.userTwo.login42
           );
