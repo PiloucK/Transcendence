@@ -16,7 +16,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import { useLoginContext } from "../../context/LoginContext";
-import userService from "../../services/user";
+import channelService from "../../services/channel";
 
 import io from "socket.io-client";
 
@@ -41,18 +41,18 @@ export function ButtonTxtMuteUser({
     setOpen(true);
   };
 
-	const handleUnmuteUser = () => {
-		userService
-		.muteAChannelUser(loginContext.userLogin, channel.id, login, 0)
-		.then(() => {})
-		.catch((err) => {
-			console.log(err);
-		});
-	}
+  const handleUnmuteUser = () => {
+    channelService
+      .muteAChannelUser(loginContext.userLogin, channel.id, login, 0)
+      .then(() => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleMuteUser = () => {
     setOpen(false);
-    userService
+    channelService
       .muteAChannelUser(loginContext.userLogin, channel.id, login, time)
       .then(() => {})
       .catch((err) => {
@@ -69,13 +69,13 @@ export function ButtonTxtMuteUser({
     }
   };
 
-	if (channel.muted.find((muted) => muted.login === login)) {
-		return (
-			<div className={styles.buttons} onClick={handleUnmuteUser}>
+  if (channel.muted.find((muted) => muted.login === login)) {
+    return (
+      <div className={styles.buttons} onClick={handleUnmuteUser}>
         Unmute
       </div>
-		);
-	}
+    );
+  }
   return (
     <div>
       <div className={styles.buttons} onClick={handleClickOpen}>

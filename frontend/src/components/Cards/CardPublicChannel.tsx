@@ -6,7 +6,7 @@ import { Channel, ChannelCreation } from "../../interfaces/users";
 import Avatar from "@mui/material/Avatar";
 // import profileIcon from "../../public/profile_icon.png";
 import { useLoginContext } from "../../context/LoginContext";
-import userService from "../../services/user";
+import channelService from "../../services/channel";
 
 import { ChannelPasswordDialog } from "../Inputs/ChannelPasswordDialog";
 
@@ -23,7 +23,7 @@ export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
       if (channelInfos.password !== "") {
         setOpen(true);
       } else {
-        userService
+        channelService
           .joinChannel(loginContext.userLogin, channelInfos.id)
           .then((channel: Channel) => {
             loginContext.setChatMenu(channel.id);
@@ -40,7 +40,11 @@ export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
         {/* Channel Avatar here */}
         <div className={styles.channel_name}>{channelInfos.name}</div>
       </div>
-      <ChannelPasswordDialog channelId={channelInfos.id} open={open} setOpen={setOpen} />
+      <ChannelPasswordDialog
+        channelId={channelInfos.id}
+        open={open}
+        setOpen={setOpen}
+      />
     </div>
   );
 }

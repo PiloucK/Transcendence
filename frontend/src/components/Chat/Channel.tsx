@@ -5,7 +5,7 @@ import { EmptyFriendList } from "../Social/emptyPages";
 import { ChannelMenu } from "./Menus";
 import { useLoginContext } from "../../context/LoginContext";
 import { IUserPublicInfos, Channel, Message } from "../interfaces/users";
-import userService from "../../services/user";
+import channelService from "../../services/channel";
 import { CardUserDM } from "../Cards/CardUserDM";
 
 import Image from "next/image";
@@ -39,10 +39,10 @@ function Messages({ channel }: { channel: Channel }) {
 
   const setScroll = () => {
     if (typeof window !== "undefined") {
-			var elem = document.getElementById("channelMsgArea");
-			if (elem) {
-				elem.scrollTop = elem.scrollHeight;
-			}
+      var elem = document.getElementById("channelMsgArea");
+      if (elem) {
+        elem.scrollTop = elem.scrollHeight;
+      }
     }
   };
 
@@ -80,14 +80,14 @@ export function Channel({ id }: { id: string }) {
   const [channel, setChannel] = useState<Channel>();
 
   React.useEffect(() => {
-    userService
+    channelService
       .getChannelById(loginContext.userLogin, id)
       .then((channel: Channel) => {
         setChannel(channel);
       });
 
     socket.on("update-channel-content", () => {
-      userService
+      channelService
         .getChannelById(loginContext.userLogin, id)
         .then((channel: Channel) => {
           setChannel(channel);

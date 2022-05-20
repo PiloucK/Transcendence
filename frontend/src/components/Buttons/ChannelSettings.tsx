@@ -4,7 +4,7 @@ import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-import userService from "../../services/user";
+import channelService from "../../services/channel";
 import { Channel } from "../../interfaces/users";
 import { useLoginContext } from "../../context/LoginContext";
 
@@ -37,7 +37,7 @@ function MenuButtons({
   const handleLeaveChannel = () => {
     loginContext.setChatMenu("direct_message");
     setAnchorEl(null);
-    userService.leaveChannel(loginContext.userLogin, channel.id).then(() => {
+    channelService.leaveChannel(loginContext.userLogin, channel.id).then(() => {
       socket.emit("user:update-channel-content");
       socket.emit("user:update-joined-channel");
     });
@@ -54,26 +54,26 @@ function MenuButtons({
           open={settingsOpen}
           setOpen={setSettingsOpen}
         />
-				<ChannelInviteDialog
+        <ChannelInviteDialog
           channel={channel}
           open={invitationOpen}
           setOpen={setInvitationOpen}
         />
       </>
     );
-  } else if (channel.admin.includes(loginContext.userLogin)) { 
-		return (
+  } else if (channel.admin.includes(loginContext.userLogin)) {
+    return (
       <>
         <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
         <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
-				<ChannelInviteDialog
+        <ChannelInviteDialog
           channel={channel}
           open={invitationOpen}
           setOpen={setInvitationOpen}
         />
       </>
     );
-	} else {
+  } else {
     return (
       <>
         <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>

@@ -13,7 +13,7 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 import { useLoginContext } from "../../context/LoginContext";
 
-import userService from "../../services/user";
+import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
 
 import io from "socket.io-client";
@@ -47,7 +47,7 @@ export function SendMessageField({
   const handleSendMessage = () => {
     if (input.length > 0) {
       if (channel.length === 36) {
-        userService
+        channelService
           .sendMSGToChannel(loginContext.userLogin, channel, {
             author: loginContext.userLogin,
             content: input,

@@ -14,7 +14,7 @@ import {
   PrivateConv,
   Channel,
 } from "../../interfaces/users";
-import userService from "../../services/user";
+import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
 
 import { ButtonTxtViewProfile } from "../Buttons/ButtonTxtViewProfile";
@@ -144,71 +144,80 @@ export function DirectMessageMenu(props: {
 
 function SelectedUserMenu({
   userLogin,
-	getUserStyle,
+  getUserStyle,
   setSelectedUser,
-	channel,
+  channel,
 }: {
   userLogin: string;
-	getUserStyle: (userLogin: string) => any;
+  getUserStyle: (userLogin: string) => any;
   setSelectedUser: (userLogin: string) => void;
-	channel: Channel;
+  channel: Channel;
 }) {
-	const loginContext = useLoginContext();
+  const loginContext = useLoginContext();
 
-	if (loginContext.userLogin === channel?.owner) {
-		return (
-			<div className={styles.selected_user}>
-				<div className={getUserStyle(userLogin)} onClick={() => setSelectedUser("")}>
-					{userLogin}
-				</div>
-				<ButtonTxtViewProfile login={userLogin} />
-				<ButtonTxtUserStatus login={userLogin} />
-				<ButtonTxtBlockUser login={userLogin} />
-				<ButtonTxtMuteUser login={userLogin} channel={channel} />
-				<ButtonTxtBanUser login={userLogin} channel={channel} />
-				<ButtonTxtSetAsAdmin login={userLogin} channel={channel} />
-			</div>
-		);
-	} else if (channel?.admin.includes(loginContext.userLogin)) {
-		return (
-			<div className={styles.selected_user}>
-				<div className={getUserStyle(userLogin)} onClick={() => setSelectedUser("")}>
-					{userLogin}
-				</div>
-				<ButtonTxtViewProfile login={userLogin} />
-				<ButtonTxtUserStatus login={userLogin} />
-				<ButtonTxtBlockUser login={userLogin} />
-				<ButtonTxtMuteUser login={userLogin} channel={channel} />
-				<ButtonTxtBanUser login={userLogin} channel={channel} />
-			</div>
-		);
-	} else {
-		return (
-			<div className={styles.selected_user}>
-				<div className={getUserStyle(userLogin)} onClick={() => setSelectedUser("")}>
-					{userLogin}
-				</div>
-				<ButtonTxtViewProfile login={userLogin} />
-				<ButtonTxtUserStatus login={userLogin} />
-				<ButtonTxtBlockUser login={userLogin} />
-			</div>
-		);
-	}
+  if (loginContext.userLogin === channel?.owner) {
+    return (
+      <div className={styles.selected_user}>
+        <div
+          className={getUserStyle(userLogin)}
+          onClick={() => setSelectedUser("")}
+        >
+          {userLogin}
+        </div>
+        <ButtonTxtViewProfile login={userLogin} />
+        <ButtonTxtUserStatus login={userLogin} />
+        <ButtonTxtBlockUser login={userLogin} />
+        <ButtonTxtMuteUser login={userLogin} channel={channel} />
+        <ButtonTxtBanUser login={userLogin} channel={channel} />
+        <ButtonTxtSetAsAdmin login={userLogin} channel={channel} />
+      </div>
+    );
+  } else if (channel?.admin.includes(loginContext.userLogin)) {
+    return (
+      <div className={styles.selected_user}>
+        <div
+          className={getUserStyle(userLogin)}
+          onClick={() => setSelectedUser("")}
+        >
+          {userLogin}
+        </div>
+        <ButtonTxtViewProfile login={userLogin} />
+        <ButtonTxtUserStatus login={userLogin} />
+        <ButtonTxtBlockUser login={userLogin} />
+        <ButtonTxtMuteUser login={userLogin} channel={channel} />
+        <ButtonTxtBanUser login={userLogin} channel={channel} />
+      </div>
+    );
+  } else {
+    return (
+      <div className={styles.selected_user}>
+        <div
+          className={getUserStyle(userLogin)}
+          onClick={() => setSelectedUser("")}
+        >
+          {userLogin}
+        </div>
+        <ButtonTxtViewProfile login={userLogin} />
+        <ButtonTxtUserStatus login={userLogin} />
+        <ButtonTxtBlockUser login={userLogin} />
+      </div>
+    );
+  }
 }
 
 function UserList({ channel }: { channel: Channel }) {
   const loginContext = useLoginContext();
   const [selectedUser, setSelectedUser] = useState<String>("");
 
-	const getUserStyle = (userLogin: string) => {
-		if (userLogin === channel?.owner) {
-			return styles.owner;
-		} else if (channel?.admin.includes(userLogin)) {
-			return styles.admins;
-		} else {
-			return styles.users;
-		}
-	}
+  const getUserStyle = (userLogin: string) => {
+    if (userLogin === channel?.owner) {
+      return styles.owner;
+    } else if (channel?.admin.includes(userLogin)) {
+      return styles.admins;
+    } else {
+      return styles.users;
+    }
+  };
 
   return channel?.users?.map((user) => {
     if (user.login42 === loginContext.userLogin) {
@@ -222,9 +231,9 @@ function UserList({ channel }: { channel: Channel }) {
         <SelectedUserMenu
           key={user.login42}
           userLogin={selectedUser}
-					getUserStyle={getUserStyle}
+          getUserStyle={getUserStyle}
           setSelectedUser={setSelectedUser}
-					channel={channel}
+          channel={channel}
         />
       );
     } else {
@@ -374,14 +383,13 @@ export function ChatMenu(props: {
   const loginContext = useLoginContext();
 
   React.useEffect(() => {
-    // userService
+    // channelService
     //   .getJoinedChannels(loginContext.userLogin)
     //   .then((currentChannels: Channel[]) => {
     //     setChannels(currentChannels);
     //   });
-
     // socket.on("update-channels-list", () => {
-    //   userService
+    //   channelService
     //     .getJoinedChannels(loginContext.userLogin)
     //     .then((currentChannels: Channel[]) => {
     //       setChannels(currentChannels);

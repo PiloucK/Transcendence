@@ -10,7 +10,7 @@ import Switch from "@mui/material/Switch";
 import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
 import { Channel, ChannelCreation } from "../../interfaces/users";
 
-import userService from "../../services/user";
+import channelService from "../../services/channel";
 import { useLoginContext } from "../../context/LoginContext";
 
 import Button from "@mui/material/Button";
@@ -74,8 +74,8 @@ export function ChannelSettingsDialog({
       error = true;
     }
     if (error === false) {
-			setOpen(false);
-      userService
+      setOpen(false);
+      channelService
         .updateChannel(loginContext.userLogin, channel.id, channelInfos)
         .then((res) => {
           socket.emit("user:update-public-channels");
@@ -91,10 +91,10 @@ export function ChannelSettingsDialog({
         PaperProps={{
           style: {
             backgroundColor: "#163F5B",
-						width: "779px",
-						minWidth: "779px",
-						height: "657px",
-						minHeight: "657px",
+            width: "779px",
+            minWidth: "779px",
+            height: "657px",
+            minHeight: "657px",
           },
         }}
         open={open}
@@ -133,9 +133,9 @@ export function ChannelSettingsDialog({
             <Switch checked={isPrivate} onChange={handleSwitchChange} />
           </div>
         </DialogContent>
-				<DialogActions>
+        <DialogActions>
           <ButtonUpdateChannel updateChannel={updateChannel} />
-				</DialogActions>
+        </DialogActions>
       </Dialog>
     </div>
   );

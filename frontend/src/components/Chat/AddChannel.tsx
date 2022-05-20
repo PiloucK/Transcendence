@@ -17,7 +17,7 @@ import { ButtonCreateChannel } from "../Buttons/ButtonCreateChannel";
 import { Channel, ChannelCreation } from "../../interfaces/users";
 import { CardPublicChannel } from "../Cards/CardPublicChannel";
 
-import userService from "../../services/user";
+import channelService from "../../services/channel";
 import { useLoginContext } from "../../context/LoginContext";
 
 import io from "socket.io-client";
@@ -40,9 +40,7 @@ function PublicChannelsList({ channels }: { channels: Channel[] }) {
 
   return (
     <div className={styles.public_channels_list}>
-      {channels.map((channel) =>
-        CardPublicChannel({ channelInfos: channel})
-      )}
+      {channels.map((channel) => CardPublicChannel({ channelInfos: channel }))}
     </div>
   );
 }
@@ -52,18 +50,18 @@ function PublicChannels() {
   const [channels, setChannels] = useState<Channel[]>([]);
 
   React.useEffect(() => {
-    userService
+    channelService
       .getPublicChannels(loginContext.userLogin)
       .then((channels: Channel[]) => {
         setChannels(channels);
       });
 
     socket.on("update-public-channels", () => {
-    	userService
-    		.getPublicChannels(loginContext.userLogin)
-    		.then((channels: ChannelCreation[]) => {
-    			setChannels(channels);
-    		});
+      channelService
+        .getPublicChannels(loginContext.userLogin)
+        .then((channels: ChannelCreation[]) => {
+          setChannels(channels);
+        });
     });
   }, []);
 
@@ -108,12 +106,12 @@ function CreateChannelForm() {
       error = true;
     }
     if (error === false) {
-      userService
+      channelService
         .createChannel(loginContext.userLogin, channel)
         .then((res) => {
-					socket.emit("user:update-public-channels");
+          socket.emit("user:update-public-channels");
           socket.emit("user:update-joined-channel");
-					loginContext.setChatMenu(res.id);
+          loginContext.setChatMenu(res.id);
         });
     }
   };

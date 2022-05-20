@@ -16,7 +16,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import { useLoginContext } from "../../context/LoginContext";
-import userService from "../../services/user";
+import channelService from "../../services/channel";
 
 import io from "socket.io-client";
 
@@ -43,7 +43,7 @@ export function ButtonTxtBanUser({
 
   const handleBanUser = () => {
     setOpen(false);
-    userService
+    channelService
       .banAChannelUser(loginContext.userLogin, channel.id, login, time)
       .then(() => {
         socket.emit("user:update-public-channels");

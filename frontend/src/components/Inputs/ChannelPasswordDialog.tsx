@@ -8,7 +8,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import { useLoginContext } from "../../context/LoginContext";
-import userService from "../../services/user";
+import channelService from "../../services/channel";
 import { Channel } from "../../interfaces/users";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
@@ -43,7 +43,7 @@ export function ChannelPasswordDialog({
 
   const handleSubmit = () => {
     setOpen(false);
-    userService
+    channelService
       .joinProtectedChannel(loginContext.userLogin, channelId, input)
       .then((channel: Channel) => {
         loginContext.setChatMenu(channel.id);
