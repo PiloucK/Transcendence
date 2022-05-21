@@ -6,8 +6,11 @@ import { Message, ChannelCreation } from "../interfaces/users";
 axios.defaults.withCredentials = true;
 
 const createChannel = (login: string, channelInfos: ChannelCreation) => {
+  console.log("Create channel: ", channelInfos);
   const request = axios.patch(`${baseUrl}/${login}/createChannel`, {
-    channelInfos,
+    name: channelInfos.name,
+    password: channelInfos.password,
+    isPrivate: channelInfos.isPrivate,
   });
   return request
     .then((response) => response.data)
@@ -24,7 +27,9 @@ const updateChannel = (
   const request = axios.patch(
     `${baseUrl}/${login}/updateChannel/${channelId}`,
     {
-      channelInfos,
+      name: channelInfos.name,
+      password: channelInfos.password,
+      isPrivate: channelInfos.isPrivate,
     }
   );
   return request

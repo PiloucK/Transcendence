@@ -37,6 +37,11 @@ export class ChannelRepository extends Repository<Channel> {
       ...createChannelDto,
       owner: user.login42,
       admins: [user.login42],
+      muted: [],
+      banned: [],
+      messages: [],
+      invitations: [],
+      users: [user],
     });
     await this.save(channel);
     return channel;
@@ -245,8 +250,11 @@ export class ChannelRepository extends Repository<Channel> {
 
   async getChannel(user: User, channelId: string): Promise<Channel> {
     const channel = await this.findOne({
-      id: channelId,
-      owner: user.login42,
+      relations: ["users"],
+      where: {
+        id: channelId,
+        owner: user.login42,
+      },
     });
 
     if (!channel) {
@@ -279,9 +287,9 @@ export class ChannelRepository extends Repository<Channel> {
   }
 
   async getJoinedChannels(user: User): Promise<Channel[]> {
-		return await this.createQueryBuilder("channel")
-			.leftJoin("channel.users", "user")
-			.where("user.login42 = :login", { login: user.login42 })
-			.getMany();
+    return await this.createQueryBuilder("channel")
+      .leftJoin("channel.users", "user")
+      .where("user.login42 = :login", { login: user.login42 })
+      .getMany();
   }
 }
