@@ -163,7 +163,6 @@ const sendMSGToChannel = (
   message: Message
 ) => {
   const request = axios.patch(`${baseUrl}/${login}/sendMSGToChannel`, {
-    leaveChannel,
     channelId,
     message,
   });
