@@ -243,62 +243,45 @@ export class ChannelRepository extends Repository<Channel> {
     return channel;
   }
 
-	async getChannel(
-		user: User,
-		channelId: string
-	): Promise<Channel> {
-		const channel = await this.findOne({
-			id: channelId,
-			owner: user.login42,
-		});
+  async getChannel(user: User, channelId: string): Promise<Channel> {
+    const channel = await this.findOne({
+      id: channelId,
+      owner: user.login42,
+    });
 
-		if (!channel) {
-			throw new Error("Channel not found");
-		}
+    if (!channel) {
+      throw new Error("Channel not found");
+    }
 
-		return channel;
-	}
+    return channel;
+  }
 
-	async getInvitableFriends(
-		user: User,
-		channelId: string
-	): Promise<User[]> {
-		const channel = await this.findOne({
-			id: channelId,
-			owner: user.login42,
-		});
+  async getInvitableFriends(user: User, channelId: string): Promise<User[]> {
+    const channel = await this.findOne({
+      id: channelId,
+      owner: user.login42,
+    });
 
-		if (!channel) {
-			throw new Error("Channel not found");
-		}
+    if (!channel) {
+      throw new Error("Channel not found");
+    }
 
-		return channel.users;
-	}
+    return channel.users;
+  }
 
-	async getPublicChannels(
-		user: User
-	): Promise<Channel[]> {
-		const channels = await this.find({
-			isPrivate: false,
-		});
+  async getPublicChannels(user: User): Promise<Channel[]> {
+    const channels = await this.find({
+      isPrivate: false,
+    });
 
-		// Remove the channel if the user is banned (or in maybe)
-		return channels;
-	}
+    // Remove the channel if the user is banned (or in maybe)
+    return channels;
+  }
 
-	async getJoinedChannels(
-		user: User
-	): Promise<Channel[]> {
-		const channels = await this.find({
-			relations: ["users"],
-			where: {
-				users: {
-					login42: user.login42,
-				},
-			},
-		});
-
-		return channels;
-	}
-
+  async getJoinedChannels(user: User): Promise<Channel[]> {
+		return await this.createQueryBuilder("channel")
+			.leftJoin("channel.users", "user")
+			.where("user.login42 = :login", { login: user.login42 })
+			.getMany();
+  }
 }

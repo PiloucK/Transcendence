@@ -56,6 +56,8 @@ export class User {
   privateConvs!: PrivateConv[];
 
   // There is a many to many relation owned by the channel.
+  @ManyToMany(() => Channel)
+  users!: Channel[];
 }
 
 // photo

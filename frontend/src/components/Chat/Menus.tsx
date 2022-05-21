@@ -383,18 +383,18 @@ export function ChatMenu(props: {
   const loginContext = useLoginContext();
 
   React.useEffect(() => {
-    // channelService
-    //   .getJoinedChannels(loginContext.userLogin)
-    //   .then((currentChannels: Channel[]) => {
-    //     setChannels(currentChannels);
-    //   });
-    // socket.on("update-channels-list", () => {
-    //   channelService
-    //     .getJoinedChannels(loginContext.userLogin)
-    //     .then((currentChannels: Channel[]) => {
-    //       setChannels(currentChannels);
-    //     });
-    // });
+    channelService
+      .getJoinedChannels(loginContext.userLogin)
+      .then((currentChannels: Channel[]) => {
+        setChannels(currentChannels);
+      });
+    socket.on("update-channels-list", () => {
+      channelService
+        .getJoinedChannels(loginContext.userLogin)
+        .then((currentChannels: Channel[]) => {
+          setChannels(currentChannels);
+        });
+    });
   }, []);
 
   const getStyle = (key: string) => {
