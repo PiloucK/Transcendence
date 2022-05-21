@@ -1,11 +1,11 @@
 import { User } from 'src/users/user.entity';
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
-import { Message } from './dto/channel.dto';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Message, restriction } from './dto/channel.dto';
 
 @Entity()
 export class Channel {
-  @PrimaryColumn('uuid')
-  id!: string;
+	@PrimaryGeneratedColumn('uuid')
+	id!: string;
 
   @Column()
   name!: string;
@@ -22,17 +22,19 @@ export class Channel {
   @Column('text', { array: true })
   admins!: string[];
 
-  @Column('text', { array: true })
-  muted!: string[];
+  @Column('text')
+  muted!: restriction[];
 
-  @Column('text', { array: true })
-  banned!: string[];
+  @Column('text')
+  banned!: restriction[];
 
-  @Column('json', { array: true })
+  @Column('json')
   messages!: Array<Message>;
 
   @Column('text', { array: true })
   invitations!: string[];
 
-  // A many to many relation owned by the users.
+  @ManyToMany(() => User)
+  @JoinTable()
+  users!: User[];
 }

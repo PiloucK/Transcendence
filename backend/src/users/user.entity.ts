@@ -55,9 +55,7 @@ export class User {
   )
   privateConvs!: PrivateConv[];
 
-  @ManyToMany(() => Channel)
-  @JoinTable()
-  channels!: Channel[];
+  // There is a many to many relation owned by the channel.
 }
 
 // photo
