@@ -42,7 +42,6 @@ export class PrivateConvService {
       id: `${userOne.login42}|${userTwo.login42}`,
       userOne: userOne,
       userTwo: userTwo,
-      // Create an empty array of messages that postgres will accept
       messages: [],
     });
 
@@ -101,6 +100,7 @@ export class PrivateConvService {
       getPrivateConvDto.fLogin42
     );
 
+		console.log("privateConv: ", privateConv);
     if (typeof privateConv === "undefined") {
       throw new Error("Private conversation not found");
     }

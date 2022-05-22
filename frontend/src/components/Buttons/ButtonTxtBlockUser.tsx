@@ -59,7 +59,7 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
   };
 
 	if (
-		blockedList.find(
+		blockedList?.find(
 			(blocked: IUserPublicInfos) => blocked.login42 === login
 		)
 	) {

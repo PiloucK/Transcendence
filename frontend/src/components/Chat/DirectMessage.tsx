@@ -167,7 +167,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
     });
   }, [friend]);
 
-  const blockedFriend = blockedList.find(
+  const blockedFriend = blockedList?.find(
     (blocked) => blocked.login42 === friend
   );
   if (blockedFriend) {
