@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { PrivateConvService } from "src/privateConv/privateConv.service";
 import { User } from "src/users/user.entity";
 import { UsersService } from "src/users/users.service";
 import { threadId } from "worker_threads";
@@ -19,7 +20,8 @@ export class ChannelService {
   constructor(
     @InjectRepository(ChannelRepository)
     private readonly channelRepository: ChannelRepository,
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    private readonly privateConvService: PrivateConvService
   ) {}
 
   async createChannel(
@@ -67,7 +69,44 @@ export class ChannelService {
     inviteToChannelDto: InteractionDto
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
-    return this.channelRepository.inviteToChannel(user, inviteToChannelDto);
+    const channel = await this.channelRepository.findOne({
+      relations: ["users"],
+      where: {
+        id: inviteToChannelDto.channelId,
+        owner: user.login42,
+      },
+    });
+
+    if (!channel) {
+      throw new Error("Channel not found");
+    }
+    this.channelRepository.resolveChannelRestrictions(channel);
+
+    if (channel.invitations.includes(inviteToChannelDto.userLogin42)) {
+      return channel;
+    }
+    if (
+      channel.users.find(
+        ({ login42 }) => login42 === inviteToChannelDto.userLogin42
+      )
+    ) {
+      return channel;
+    }
+    channel.invitations.push(inviteToChannelDto.userLogin42);
+
+    const invitation = {
+      author: login42,
+      channelId: channel.id,
+    };
+
+    this.privateConvService.sendChannelInvite({
+      sender: login42,
+      receiver: inviteToChannelDto.userLogin42,
+      invitation,
+    });
+
+    await this.channelRepository.save(channel);
+    return channel;
   }
 
   async leaveChannel(

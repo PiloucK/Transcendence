@@ -9,5 +9,6 @@ import { PrivateConvService } from './privateConv.service';
   imports: [TypeOrmModule.forFeature([PrivateConvRepository]), UsersModule],
   controllers: [PrivateConvController],
   providers: [PrivateConvService],
+	exports: [PrivateConvService],
 })
 export class PrivateConvModule {}

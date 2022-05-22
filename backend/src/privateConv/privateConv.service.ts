@@ -5,6 +5,7 @@ import { UsersService } from "src/users/users.service";
 import {
   GetPrivateConvDto,
   GetPrivateConvsDto,
+  SendChannelInvitationDto,
   SendPrivateMessageDto,
 } from "./dto/privateConv.dto";
 import { PrivateConv } from "./privateConv.entity";
@@ -65,6 +66,27 @@ export class PrivateConvService {
       );
     }
     privateConv.messages.push(sendPrivateMessageDto.message);
+
+    await this.privateConvRepository.save(privateConv);
+
+    return privateConv;
+  }
+
+  async sendChannelInvite(
+    sendChannelInvitationDto: SendChannelInvitationDto
+  ): Promise<PrivateConv> {
+    let privateConv = await this.privateConvRepository.getPrivateConv(
+      sendChannelInvitationDto.sender,
+      sendChannelInvitationDto.receiver
+    );
+
+    if (typeof privateConv === "undefined") {
+      privateConv = await this.createPrivateConv(
+        sendChannelInvitationDto.sender,
+        sendChannelInvitationDto.receiver
+      );
+    }
+    privateConv.messages.push(sendChannelInvitationDto.invitation);
 
     await this.privateConvRepository.save(privateConv);
 

@@ -15,7 +15,7 @@ import {
 
 @EntityRepository(Channel)
 export class ChannelRepository extends Repository<Channel> {
-  private resolveChannelRestrictions(channel: Channel): void {
+  resolveChannelRestrictions(channel: Channel): void {
     channel.muted?.forEach(({ login, until }) => {
       if (until < Date.now()) {
         channel.muted = channel.muted?.filter(
@@ -135,38 +135,6 @@ export class ChannelRepository extends Repository<Channel> {
     channel.invitations = channel.invitations.filter(
       (invitedUser) => invitedUser !== user.login42
     );
-    await this.save(channel);
-    return channel;
-  }
-
-  async inviteToChannel(
-    user: User,
-    inviteToChannelDto: InteractionDto
-  ): Promise<Channel> {
-    const channel = await this.findOne({
-      relations: ["users"],
-      where: {
-        id: inviteToChannelDto.channelId,
-        owner: user.login42,
-      },
-    });
-
-    if (!channel) {
-      throw new Error("Channel not found");
-    }
-    this.resolveChannelRestrictions(channel);
-
-    if (channel.invitations.includes(inviteToChannelDto.userLogin42)) {
-      return channel;
-    }
-    if (
-      channel.users.find(
-        ({ login42 }) => login42 === inviteToChannelDto.userLogin42
-      )
-    ) {
-      return channel;
-    }
-    channel.invitations.push(inviteToChannelDto.userLogin42);
     await this.save(channel);
     return channel;
   }

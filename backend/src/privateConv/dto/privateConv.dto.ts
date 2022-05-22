@@ -17,6 +17,19 @@ export class SendPrivateMessageDto {
   message!: Message;
 }
 
+export class SendChannelInvitationDto {
+  @IsNotEmpty()
+  @IsString()
+  sender!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  receiver!: string;
+
+  @IsNotEmpty()
+  invitation!: Invitation;
+}
+
 export class GetPrivateConvDto {
   constructor(login42: string, fLogin42: string) {
     this.login42 = login42;
