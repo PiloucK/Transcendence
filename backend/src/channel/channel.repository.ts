@@ -16,16 +16,16 @@ import {
 @EntityRepository(Channel)
 export class ChannelRepository extends Repository<Channel> {
   private resolveChannelRestrictions(channel: Channel): void {
-    channel.muted.forEach(({ login, until }) => {
+    channel.muted?.forEach(({ login, until }) => {
       if (until < Date.now()) {
-        channel.muted = channel.muted.filter(
+        channel.muted = channel.muted?.filter(
           (curMuted) => curMuted.login !== login
         );
       }
     });
-    channel.banned.forEach(({ login, until }) => {
+    channel.banned?.forEach(({ login, until }) => {
       if (until < Date.now()) {
-        channel.banned = channel.banned.filter(
+        channel.banned = channel.banned?.filter(
           (curBanned) => curBanned.login !== login
         );
       }
@@ -91,7 +91,7 @@ export class ChannelRepository extends Repository<Channel> {
     this.resolveChannelRestrictions(channel);
 
     if (
-      channel.banned.find((bannedUser) => bannedUser.login === user.login42)
+      channel.banned?.find((bannedUser) => bannedUser.login === user.login42)
     ) {
       throw new Error("You are banned from this channel");
     }
@@ -124,7 +124,7 @@ export class ChannelRepository extends Repository<Channel> {
     this.resolveChannelRestrictions(channel);
 
     if (
-      channel.banned.find((bannedUser) => bannedUser.login === user.login42)
+      channel.banned?.find((bannedUser) => bannedUser.login === user.login42)
     ) {
       throw new Error("You are banned from this channel");
     }
@@ -190,13 +190,13 @@ export class ChannelRepository extends Repository<Channel> {
     }
 
     if (
-      channel.muted.find(
+      channel.muted?.find(
         ({ login }) => login === muteAChannelUserDto.userLogin42
       )
     ) {
       return channel;
     }
-    channel.muted.push({
+    channel.muted?.push({
       login: muteAChannelUserDto.userLogin42,
       until: muteAChannelUserDto.duration * 1000 + Date.now(),
     });
@@ -223,13 +223,13 @@ export class ChannelRepository extends Repository<Channel> {
     }
 
     if (
-      channel.banned.find(
+      channel.banned?.find(
         ({ login }) => login === banAChannelUserDto.userLogin42
       )
     ) {
       return channel;
     }
-    channel.banned.push({
+    channel.banned?.push({
       login: banAChannelUserDto.userLogin42,
       until: banAChannelUserDto.duration * 1000 + Date.now(),
     });
@@ -306,10 +306,10 @@ export class ChannelRepository extends Repository<Channel> {
     }
     this.resolveChannelRestrictions(channel);
 
-    if (channel.banned.find(({ login }) => login === user.login42)) {
+    if (channel.banned?.find(({ login }) => login === user.login42)) {
       throw new ForbiddenException("You are banned from this channel");
     }
-    if (channel.muted.find(({ login }) => login === user.login42)) {
+    if (channel.muted?.find(({ login }) => login === user.login42)) {
       throw new ForbiddenException("You are muted from this channel");
     }
     if (!channel.users.find(({ login42 }) => login42 === user.login42)) {
@@ -359,7 +359,7 @@ export class ChannelRepository extends Repository<Channel> {
       (friend) =>
         !channel.users.find(({ login42 }) => login42 === friend.login42) &&
         !channel.invitations.includes(friend.login42) &&
-        !channel.banned.find(({ login }) => login === friend.login42)
+        !channel.banned?.find(({ login }) => login === friend.login42)
     );
 
     return invitableFriends;
@@ -372,7 +372,7 @@ export class ChannelRepository extends Repository<Channel> {
 
     return channels.filter((channel) => {
       this.resolveChannelRestrictions(channel);
-      !channel.banned.find(({ login }) => login === user.login42);
+      !channel.banned?.find(({ login }) => login === user.login42);
     });
   }
 
