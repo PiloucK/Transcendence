@@ -45,7 +45,7 @@ export function ButtonTxtSetAsAdmin({
     }
   };
 
-  if (channel.admin.find((admin: string) => admin === login)) {
+  if (channel?.admin?.find((admin: string) => admin === login)) {
     return (
       <div className={styles.buttons} onClick={handleRemoveOnClick}>
         Unset admin

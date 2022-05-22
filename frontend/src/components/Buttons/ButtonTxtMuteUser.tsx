@@ -69,7 +69,7 @@ export function ButtonTxtMuteUser({
     }
   };
 
-  if (channel.muted.find((muted) => muted.login === login)) {
+  if (channel?.muted?.find((muted) => muted.login === login)) {
     return (
       <div className={styles.buttons} onClick={handleUnmuteUser}>
         Unmute

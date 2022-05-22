@@ -212,7 +212,7 @@ function UserList({ channel }: { channel: Channel }) {
   const getUserStyle = (userLogin: string) => {
     if (userLogin === channel?.owner) {
       return styles.owner;
-    } else if (channel?.admin.includes(userLogin)) {
+    } else if (channel?.admin?.includes(userLogin)) {
       return styles.admins;
     } else {
       return styles.users;

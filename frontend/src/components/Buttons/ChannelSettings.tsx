@@ -61,7 +61,7 @@ function MenuButtons({
         />
       </>
     );
-  } else if (channel.admin.includes(loginContext.userLogin)) {
+  } else if (channel?.admin?.includes(loginContext.userLogin)) {
     return (
       <>
         <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
