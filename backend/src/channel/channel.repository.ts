@@ -114,7 +114,6 @@ export class ChannelRepository extends Repository<Channel> {
       relations: ["users"],
       where: {
         id: joinChannelDto.channelId,
-        owner: user.login42,
       },
     });
 
@@ -145,7 +144,6 @@ export class ChannelRepository extends Repository<Channel> {
   ): Promise<Channel> {
     const channel = await this.findOne({
       id: muteAChannelUserDto.channelId,
-      owner: user.login42,
     });
 
     if (!channel) {
@@ -178,7 +176,6 @@ export class ChannelRepository extends Repository<Channel> {
   ): Promise<Channel> {
     const channel = await this.findOne({
       id: banAChannelUserDto.channelId,
-      owner: user.login42,
     });
 
     if (!channel) {
@@ -265,7 +262,6 @@ export class ChannelRepository extends Repository<Channel> {
       relations: ["users"],
       where: {
         id: sendMSGToChannelDto.channelId,
-        owner: user.login42,
       },
     });
 
@@ -293,7 +289,6 @@ export class ChannelRepository extends Repository<Channel> {
       relations: ["users"],
       where: {
         id: channelId,
-        owner: user.login42,
       },
     });
 
@@ -314,7 +309,6 @@ export class ChannelRepository extends Repository<Channel> {
       relations: ["users"],
       where: {
         id: channelId,
-        owner: user.login42,
       },
     });
 
