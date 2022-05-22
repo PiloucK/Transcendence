@@ -73,7 +73,6 @@ export class ChannelService {
       relations: ["users"],
       where: {
         id: inviteToChannelDto.channelId,
-        owner: user.login42,
       },
     });
 
@@ -118,7 +117,6 @@ export class ChannelService {
       relations: ["users"],
       where: {
         id: leaveChannelDto.channelId,
-        owner: user.login42,
       },
     });
 
