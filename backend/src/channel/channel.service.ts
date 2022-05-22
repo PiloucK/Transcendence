@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/users/user.entity";
 import { UsersService } from "src/users/users.service";
+import { threadId } from "worker_threads";
 import { Channel } from "./channel.entity";
 import { ChannelRepository } from "./channel.repository";
 import {
@@ -74,7 +75,37 @@ export class ChannelService {
     leaveChannelDto: ChannelIdDto
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
-    return this.channelRepository.leaveChannel(user, leaveChannelDto);
+    const channel = await this.channelRepository.findOne({
+      relations: ["users"],
+      where: {
+        id: leaveChannelDto.channelId,
+        owner: user.login42,
+      },
+    });
+
+    if (!channel) {
+      throw new Error("Channel not found");
+    }
+
+    channel.users = channel.users.filter(
+      (channelUser) => channelUser.login42 !== user.login42
+    );
+    channel.admins = channel.admins.filter(
+      (channelAdmin) => channelAdmin !== user.login42
+    );
+    if (channel.owner === user.login42) {
+      if (channel.admins.length > 0) {
+        const firstAdmin = await this.usersService.getUserByLogin42(
+          channel.admins[0]
+        );
+        channel.owner = firstAdmin.login42;
+      } else {
+        this.channelRepository.delete(channel.id);
+        return channel;
+      }
+    }
+    await this.channelRepository.save(channel);
+    return channel;
   }
 
   async muteAChannelUser(
@@ -130,7 +161,15 @@ export class ChannelService {
     channelId: string
   ): Promise<User[]> {
     const user = await this.usersService.getUserByLogin42(login42);
-    return this.channelRepository.getInvitableFriends(user, channelId);
+    const userFriends = await this.usersService.getUserFriends(
+      user,
+      user.login42
+    );
+    return this.channelRepository.getInvitableFriends(
+      user,
+      userFriends,
+      channelId
+    );
   }
 
   async getPublicChannels(login42: string): Promise<Channel[]> {

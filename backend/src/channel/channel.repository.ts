@@ -1,3 +1,4 @@
+import { ForbiddenException } from "@nestjs/common";
 import { User } from "src/users/user.entity";
 import { EntityRepository, Repository } from "typeorm";
 import { Channel } from "./channel.entity";
@@ -8,26 +9,28 @@ import {
   JoinProtectedChannelDto,
   RestrictionDto,
   SendMessageDto,
+  Message,
+  restriction,
 } from "./dto/channel.dto";
 
 @EntityRepository(Channel)
 export class ChannelRepository extends Repository<Channel> {
-  // private resolveChannelRestrictions(channel: Channel): void {
-  // 	channel.muted.forEach(({login, until}) => {
-  // 		if (until < Date.now()) {
-  // 			channel.muted = channel.muted.filter(
-  // 				(curMuted) => curMuted.login !== login
-  // 			);
-  // 		}
-  // 	});
-  // 	channel.banned.forEach(({login, until}) => {
-  // 		if (until < Date.now()) {
-  // 			channel.banned = channel.banned.filter(
-  // 				(curBanned) => curBanned.login !== login
-  // 			);
-  // 		}
-  // 	});
-  // }
+  private resolveChannelRestrictions(channel: Channel): void {
+    channel.muted.forEach(({ login, until }) => {
+      if (until < Date.now()) {
+        channel.muted = channel.muted.filter(
+          (curMuted) => curMuted.login !== login
+        );
+      }
+    });
+    channel.banned.forEach(({ login, until }) => {
+      if (until < Date.now()) {
+        channel.banned = channel.banned.filter(
+          (curBanned) => curBanned.login !== login
+        );
+      }
+    });
+  }
 
   async createChannel(
     user: User,
@@ -60,6 +63,7 @@ export class ChannelRepository extends Repository<Channel> {
     if (!channel) {
       throw new Error("Channel not found");
     }
+    this.resolveChannelRestrictions(channel);
 
     channel.name = updateChannelDto.name;
     channel.password = updateChannelDto.password;
@@ -74,17 +78,30 @@ export class ChannelRepository extends Repository<Channel> {
     joinProtectedChannelDto: JoinProtectedChannelDto
   ): Promise<Channel> {
     const channel = await this.findOne({
-      id: joinProtectedChannelDto.channelId,
-      password: joinProtectedChannelDto.password,
+      relations: ["users"],
+      where: {
+        id: joinProtectedChannelDto.channelId,
+        password: joinProtectedChannelDto.password,
+      },
     });
 
     if (!channel) {
       throw new Error("Channel not found");
     }
+    this.resolveChannelRestrictions(channel);
 
-    // Throw if banned
+    if (
+      channel.banned.find((bannedUser) => bannedUser.login === user.login42)
+    ) {
+      throw new Error("You are banned from this channel");
+    }
+    if (channel.users.find(({ login42 }) => login42 === user.login42)) {
+      return channel;
+    }
     channel.users.push(user);
-    // Remove the invitation if it exists
+    channel.invitations = channel.invitations.filter(
+      (invitedUser) => invitedUser !== user.login42
+    );
     await this.save(channel);
     return channel;
   }
@@ -94,17 +111,30 @@ export class ChannelRepository extends Repository<Channel> {
     joinChannelDto: ChannelIdDto
   ): Promise<Channel> {
     const channel = await this.findOne({
-      id: joinChannelDto.channelId,
-      owner: user.login42,
+      relations: ["users"],
+      where: {
+        id: joinChannelDto.channelId,
+        owner: user.login42,
+      },
     });
 
     if (!channel) {
       throw new Error("Channel not found");
     }
+    this.resolveChannelRestrictions(channel);
 
-    // Throw if banned
+    if (
+      channel.banned.find((bannedUser) => bannedUser.login === user.login42)
+    ) {
+      throw new Error("You are banned from this channel");
+    }
+    if (channel.users.find(({ login42 }) => login42 === user.login42)) {
+      return channel;
+    }
     channel.users.push(user);
-    // Remove the invitation if it exists
+    channel.invitations = channel.invitations.filter(
+      (invitedUser) => invitedUser !== user.login42
+    );
     await this.save(channel);
     return channel;
   }
@@ -114,38 +144,29 @@ export class ChannelRepository extends Repository<Channel> {
     inviteToChannelDto: InteractionDto
   ): Promise<Channel> {
     const channel = await this.findOne({
-      id: inviteToChannelDto.channelId,
-      owner: user.login42,
+      relations: ["users"],
+      where: {
+        id: inviteToChannelDto.channelId,
+        owner: user.login42,
+      },
     });
 
     if (!channel) {
       throw new Error("Channel not found");
     }
+    this.resolveChannelRestrictions(channel);
 
-    // Return if the user is already in or is already invited
+    if (channel.invitations.includes(inviteToChannelDto.userLogin42)) {
+      return channel;
+    }
+    if (
+      channel.users.find(
+        ({ login42 }) => login42 === inviteToChannelDto.userLogin42
+      )
+    ) {
+      return channel;
+    }
     channel.invitations.push(inviteToChannelDto.userLogin42);
-    await this.save(channel);
-    return channel;
-  }
-
-  async leaveChannel(
-    user: User,
-    leaveChannelDto: ChannelIdDto
-  ): Promise<Channel> {
-    const channel = await this.findOne({
-      id: leaveChannelDto.channelId,
-      owner: user.login42,
-    });
-
-    if (!channel) {
-      throw new Error("Channel not found");
-    }
-
-    channel.users = channel.users.filter(
-      (channelUser) => channelUser.login42 !== user.login42
-    );
-    // Remove the user from admins if he is
-    // Remove the user from owner and set a new owner if he is
     await this.save(channel);
     return channel;
   }
@@ -162,7 +183,19 @@ export class ChannelRepository extends Repository<Channel> {
     if (!channel) {
       throw new Error("Channel not found");
     }
+    this.resolveChannelRestrictions(channel);
 
+    if (!channel.admins.includes(user.login42)) {
+      throw new Error("You are not an admin of this channel");
+    }
+
+    if (
+      channel.muted.find(
+        ({ login }) => login === muteAChannelUserDto.userLogin42
+      )
+    ) {
+      return channel;
+    }
     channel.muted.push({
       login: muteAChannelUserDto.userLogin42,
       until: muteAChannelUserDto.duration * 1000 + Date.now(),
@@ -183,7 +216,19 @@ export class ChannelRepository extends Repository<Channel> {
     if (!channel) {
       throw new Error("Channel not found");
     }
+    this.resolveChannelRestrictions(channel);
 
+    if (!channel.admins.includes(user.login42)) {
+      throw new Error("You are not an admin of this channel");
+    }
+
+    if (
+      channel.banned.find(
+        ({ login }) => login === banAChannelUserDto.userLogin42
+      )
+    ) {
+      return channel;
+    }
     channel.banned.push({
       login: banAChannelUserDto.userLogin42,
       until: banAChannelUserDto.duration * 1000 + Date.now(),
@@ -204,7 +249,14 @@ export class ChannelRepository extends Repository<Channel> {
     if (!channel) {
       throw new Error("Channel not found");
     }
+    this.resolveChannelRestrictions(channel);
 
+    if (channel.owner !== user.login42) {
+      throw new Error("You are not the owner of this channel");
+    }
+    if (channel.admins.includes(setAChannelAdminDto.userLogin42)) {
+      return channel;
+    }
     channel.admins.push(setAChannelAdminDto.userLogin42);
     await this.save(channel);
     return channel;
@@ -222,7 +274,14 @@ export class ChannelRepository extends Repository<Channel> {
     if (!channel) {
       throw new Error("Channel not found");
     }
+    this.resolveChannelRestrictions(channel);
 
+    if (channel.owner !== user.login42) {
+      throw new Error("You are not the owner of this channel");
+    }
+    if (!channel.admins.includes(unsetAChannelAdminDto.userLogin42)) {
+      return channel;
+    }
     channel.admins = channel.admins.filter(
       (channelAdmin) => channelAdmin !== unsetAChannelAdminDto.userLogin42
     );
@@ -235,14 +294,27 @@ export class ChannelRepository extends Repository<Channel> {
     sendMSGToChannelDto: SendMessageDto
   ): Promise<Channel> {
     const channel = await this.findOne({
-      id: sendMSGToChannelDto.channelId,
-      owner: user.login42,
+      relations: ["users"],
+      where: {
+        id: sendMSGToChannelDto.channelId,
+        owner: user.login42,
+      },
     });
 
     if (!channel) {
       throw new Error("Channel not found");
     }
+    this.resolveChannelRestrictions(channel);
 
+    if (channel.banned.find(({ login }) => login === user.login42)) {
+      throw new ForbiddenException("You are banned from this channel");
+    }
+    if (channel.muted.find(({ login }) => login === user.login42)) {
+      throw new ForbiddenException("You are muted from this channel");
+    }
+    if (!channel.users.find(({ login42 }) => login42 === user.login42)) {
+      throw new ForbiddenException("You are not in this channel");
+    }
     channel.messages.push(sendMSGToChannelDto.message);
     await this.save(channel);
     return channel;
@@ -260,21 +332,37 @@ export class ChannelRepository extends Repository<Channel> {
     if (!channel) {
       throw new Error("Channel not found");
     }
+    this.resolveChannelRestrictions(channel);
 
     return channel;
   }
 
-  async getInvitableFriends(user: User, channelId: string): Promise<User[]> {
+  async getInvitableFriends(
+    user: User,
+    userFriends: User[],
+    channelId: string
+  ): Promise<User[]> {
     const channel = await this.findOne({
-      id: channelId,
-      owner: user.login42,
+      relations: ["users"],
+      where: {
+        id: channelId,
+        owner: user.login42,
+      },
     });
 
     if (!channel) {
       throw new Error("Channel not found");
     }
+    this.resolveChannelRestrictions(channel);
 
-    return channel.users;
+    const invitableFriends: User[] = userFriends.filter(
+      (friend) =>
+        !channel.users.find(({ login42 }) => login42 === friend.login42) &&
+        !channel.invitations.includes(friend.login42) &&
+        !channel.banned.find(({ login }) => login === friend.login42)
+    );
+
+    return invitableFriends;
   }
 
   async getPublicChannels(user: User): Promise<Channel[]> {
@@ -282,8 +370,10 @@ export class ChannelRepository extends Repository<Channel> {
       isPrivate: false,
     });
 
-    // Remove the channel if the user is banned (or in maybe)
-    return channels;
+    return channels.filter((channel) => {
+      this.resolveChannelRestrictions(channel);
+      !channel.banned.find(({ login }) => login === user.login42);
+    });
   }
 
   async getJoinedChannels(user: User): Promise<Channel[]> {
