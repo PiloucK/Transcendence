@@ -18,9 +18,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         return {
-          secret: configService.get('JWT_SECRET'),
-          signOptions: { expiresIn: '3600s' },
-          // expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}s`,
+          secret: configService.get('JWT_ACCESSTOKEN_SECRET'),
+          signOptions: {
+            expiresIn: `${configService.get(
+              'JWT_ACCESSTOKEN_EXPIRATION_TIME',
+            )}s`,
+          },
         };
       },
     }), // https://github.com/nestjs/jwt/blob/master/README.md#secret--encryption-key-options

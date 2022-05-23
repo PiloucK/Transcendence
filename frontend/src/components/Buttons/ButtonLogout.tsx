@@ -15,7 +15,6 @@ export function ButtonLogout() {
     loginContext.logout?.();
     Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
       path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
-      sameSite: publicRuntimeConfig.ACCESSTOKEN_COOKIE_SAMESITE,
     });
   };
 
