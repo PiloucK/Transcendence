@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
@@ -19,9 +20,6 @@ export class User {
   @Column({ default: 0 })
   gamesLost!: number;
 
-  @Column({ default: false })
-  twoFa!: boolean; // make it private
-
   @ManyToMany(() => User)
   @JoinTable()
   friends!: User[];
@@ -37,6 +35,10 @@ export class User {
   @ManyToMany(() => User)
   @JoinTable()
   blockedUsers!: User[];
+
+  @Column({ default: false })
+  @Exclude()
+  twoFa!: boolean;
 }
 
 // photo
