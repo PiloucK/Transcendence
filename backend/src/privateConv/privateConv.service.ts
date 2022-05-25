@@ -100,7 +100,6 @@ export class PrivateConvService {
       getPrivateConvDto.fLogin42
     );
 
-		console.log("privateConv: ", privateConv);
     if (typeof privateConv === "undefined") {
       throw new Error("Private conversation not found");
     }
