@@ -22,10 +22,10 @@ export class Channel {
   @Column('text', { array: true })
   admins!: string[];
 
-  @Column('json', { array: true, nullable: true })
+  @Column('json')
   muted!: Array<restriction>;
 
-  @Column('json', { array: true, nullable: true })
+  @Column('json')
   banned!: Array<restriction>;
 
   @Column('json')

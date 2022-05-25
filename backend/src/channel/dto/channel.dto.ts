@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 // I don't know where to define this type.
 export type Message = { author: string; content: string };
@@ -54,7 +54,7 @@ export class RestrictionDto {
   userLogin42!: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
   duration!: number;
 }
 
