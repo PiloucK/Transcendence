@@ -44,6 +44,7 @@ function MenuButtons({
   };
 
   if (loginContext.userLogin === channel.owner) {
+    console.log("owner");
     return (
       <>
         <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
@@ -61,7 +62,8 @@ function MenuButtons({
         />
       </>
     );
-  } else if (channel?.admin?.includes(loginContext.userLogin)) {
+  } else if (channel?.admins?.includes(loginContext.userLogin)) {
+    console.log("admin");
     return (
       <>
         <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
@@ -74,6 +76,7 @@ function MenuButtons({
       </>
     );
   } else {
+    console.log("basic user");
     return (
       <>
         <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
@@ -93,6 +96,7 @@ export default function ChannelSettings({ channel }: { channel: Channel }) {
     setAnchorEl(null);
   };
 
+  console.log("channel cs: ", channel);
   return (
     <div>
       <IconButton

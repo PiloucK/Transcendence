@@ -95,6 +95,7 @@ export function Channel({ id }: { id: string }) {
     });
   }, []);
 
+  console.log("channel: ", channel);
   return (
     <>
       <ChannelMenu channel={channel} />
