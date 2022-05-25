@@ -79,7 +79,7 @@ export class ChannelController {
     return this.channelService.muteAChannelUser(login42, muteAChannelUserDto);
   }
 
-  @Patch("/login42/banAChannelUser")
+  @Patch("/:login42/banAChannelUser")
   banAChannelUser(
     @Param("login42") login42: string,
     @Body() banAChannelUserDto: RestrictionDto
@@ -132,6 +132,7 @@ export class ChannelController {
 
   @Get("/:login42/publicChannels")
   getPublicChannels(@Param("login42") login42: string): Promise<Channel[]> {
+    console.log("getPublicChannels");
     return this.channelService.getPublicChannels(login42);
   }
 

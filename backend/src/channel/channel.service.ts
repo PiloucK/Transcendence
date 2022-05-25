@@ -158,7 +158,10 @@ export class ChannelService {
     banAChannelUserDto: RestrictionDto
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
-    return this.channelRepository.banAChannelUser(user, banAChannelUserDto);
+    this.channelRepository.banAChannelUser(user, banAChannelUserDto);
+	return this.leaveChannel(banAChannelUserDto.userLogin42, {
+		channelId: banAChannelUserDto.channelId,
+		});
   }
 
   async setAChannelAdmin(
