@@ -3,6 +3,9 @@
 # npm modules (dependencies)
 node_modules/
 
+# tsc build info (typescript compilation)
+tsconfig.tsbuildinfo
+
 # macos garbage
 .DS_Store
 

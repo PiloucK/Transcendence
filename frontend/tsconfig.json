@@ -1,24 +1,26 @@
 {
   "compilerOptions": {
+    // generated with "npx create-next-app --typescript [project-name]"
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
     "allowJs": true,
     "skipLibCheck": true,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "noImplicitAny": true,
-    "incremental": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "incremental": true,
+
+    // picked up from https://fullstackopen.com/en/part9/react_with_types#create-react-app-with-type-script
+    "allowSyntheticDefaultImports": true,
+
+    // other options
+    "noImplicitReturns": true,
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

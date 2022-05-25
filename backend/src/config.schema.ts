@@ -10,10 +10,10 @@ export const configValidationSchema = Joi.object({
   FORTYTWO_APP_CLIENT_ID: Joi.string().required(),
   FORTYTWO_APP_CLIENT_SECRET: Joi.string().required(),
   FORTYTWO_APP_REDIRECT_URI: Joi.string().required(),
+  JWT_ACCESSTOKEN_SECRET: Joi.string().required(),
+  JWT_ACCESSTOKEN_EXPIRATION_TIME: Joi.number().required(),
   ACCESSTOKEN_COOKIE_NAME: Joi.string().required(),
-  ACCESSTOKEN_COOKIE_SAMESITE: Joi.string().required(),
   ACCESSTOKEN_COOKIE_PATH: Joi.string().required(),
-  JWT_SECRET: Joi.string().required(),
 
   FRONTEND_PORT: Joi.number().required(),
   BACKEND_PORT: Joi.number().required(),

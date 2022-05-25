@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
@@ -7,6 +8,7 @@ import { UsersService } from 'src/users/users.service';
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -18,5 +20,13 @@ export class AuthService {
     const payload = { login42 };
     return this.jwtService.sign(payload);
     // this sign() function comes from the @nestjs/jwt library
+  }
+
+  getAccessTokenCookie(token: string): string {
+    return `${this.configService.get(
+      'ACCESSTOKEN_COOKIE_NAME',
+    )}=${token}; Path=${this.configService.get(
+      'ACCESSTOKEN_COOKIE_PATH',
+    )}; Max-Age=${this.configService.get('JWT_ACCESSTOKEN_EXPIRATION_TIME')}`;
   }
 }
