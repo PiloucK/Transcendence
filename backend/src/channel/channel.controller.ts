@@ -131,9 +131,11 @@ export class ChannelController {
   }
 
   @Get("/:login42/publicChannels")
-  getPublicChannels(@Param("login42") login42: string): Promise<Channel[]> {
-    console.log("getPublicChannels");
-    return this.channelService.getPublicChannels(login42);
+  async getPublicChannels(
+    @Param("login42") login42: string
+  ): Promise<Channel[]> {
+    const channels = await this.channelService.getPublicChannels(login42);
+    return channels;
   }
 
   @Get("/:login42/joinedChannels")

@@ -212,7 +212,7 @@ export class ChannelRepository extends Repository<Channel> {
     });
 
     if (!channel) {
-      throw new Error("Channel not found");
+		throw new Error("Channel not found");
     }
     this.resolveChannelRestrictions(channel);
 
@@ -329,13 +329,17 @@ export class ChannelRepository extends Repository<Channel> {
 
   async getPublicChannels(user: User): Promise<Channel[]> {
     const channels = await this.find({
-      isPrivate: false,
+      where: {
+        isPrivate: false,
+      },
     });
 
-    return channels.filter((channel) => {
+	console.log("channels before filter: ", channels);
+    const publicChannels =  channels.filter((channel) => {
       this.resolveChannelRestrictions(channel);
-      !channel.banned?.find(({ login }) => login === user.login42);
+      return !channel.banned.find(({ login }) => login === user.login42);
     });
+	return publicChannels;
   }
 
   async getJoinedChannels(user: User): Promise<Channel[]> {
