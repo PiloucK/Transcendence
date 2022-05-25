@@ -10,18 +10,24 @@ import Link from "next/link";
 
 import io from "socket.io-client";
 
+import { errorHandler } from "../services/errorHandler";
+import { useLoginContext } from "../context/LoginContext";
+
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig()
-const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 function LeaderboardUserCard(props: {
   user: IUserForLeaderboard;
   index: number;
 }) {
-	let userStyle = styles.leaderboard_user;
-	if (props.index === 0) {
-		userStyle = styles.leaderboard_firstuser;
-	}
+  let userStyle = styles.leaderboard_user;
+  if (props.index === 0) {
+    userStyle = styles.leaderboard_firstuser;
+  }
 
   return (
     <Link href={`/profile?login=${props.user.login42}`} key={props.index}>
@@ -41,7 +47,7 @@ function createLeaderboard(users: IUserForLeaderboard[]): ReactElement {
   return (
     <div className={styles.leaderboard}>
       {users.map((user, index) => {
-        return LeaderboardUserCard({user, index});
+        return LeaderboardUserCard({ user, index });
       })}
     </div>
   );
@@ -49,17 +55,29 @@ function createLeaderboard(users: IUserForLeaderboard[]): ReactElement {
 
 // Will print the list of users in the leaderboard.
 export default function Leaderboard() {
+  const loginContext = useLoginContext();
+
   const [users, setUsers] = useState<IUserForLeaderboard[]>([]);
 
   useEffect(() => {
-    userService.getAll().then((users: IUserForLeaderboard[]) => {
-      setUsers(users);
-    });
+    userService
+      .getAll()
+      .then((users: IUserForLeaderboard[]) => {
+        setUsers(users);
+      })
+      .catch((error) => {
+        errorHandler(error, loginContext);
+      });
 
     socket.on("update-leaderboard", () => {
-      userService.getAll().then((users: IUserForLeaderboard[]) => {
-        setUsers(users);
-      });
+      userService
+        .getAll()
+        .then((users: IUserForLeaderboard[]) => {
+          setUsers(users);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
+        });
     });
   }, []);
 

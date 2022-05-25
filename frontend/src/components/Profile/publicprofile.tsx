@@ -22,9 +22,14 @@ import { ButtonUnblock } from "../Buttons/ButtonUnblock";
 
 import { useLoginContext } from "../../context/LoginContext";
 
+import { errorHandler } from "../../services/errorHandler";
+
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig()
-const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 function UserName({ userInfos }: { userInfos: IUserPublicInfos }) {
   return (
@@ -85,16 +90,25 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
       .getUserFriends(loginContext.userLogin)
       .then((friends: IUserPublicInfos[]) => {
         setFriendList(friends);
+      })
+      .catch((error) => {
+        errorHandler(error, loginContext);
       });
     userService
       .getUserFriendRequestsSent(loginContext.userLogin)
       .then((requests: IUserPublicInfos[]) => {
         setSentRList(requests);
+      })
+      .catch((error) => {
+        errorHandler(error, loginContext);
       });
     userService
       .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
+      })
+      .catch((error) => {
+        errorHandler(error, loginContext);
       });
 
     socket.on("update-relations", () => {
@@ -102,16 +116,25 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriendList(friends);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
       userService
         .getUserFriendRequestsSent(loginContext.userLogin)
         .then((requests: IUserPublicInfos[]) => {
           setSentRList(requests);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
       userService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
     });
   }, []);
@@ -134,17 +157,17 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
     }
   };
 
-	const blockButton = () => {
-		if (
-			blockedList.find(
-				(blocked: IUserPublicInfos) => blocked.login42 === userInfos.login42
-			)
-		) {
-			return <ButtonUnblock userInfos={userInfos} />;
-		} else {
-			return <ButtonBlock userInfos={userInfos} />;
-		}
-	};
+  const blockButton = () => {
+    if (
+      blockedList.find(
+        (blocked: IUserPublicInfos) => blocked.login42 === userInfos.login42
+      )
+    ) {
+      return <ButtonUnblock userInfos={userInfos} />;
+    } else {
+      return <ButtonBlock userInfos={userInfos} />;
+    }
+  };
 
   return (
     <div className={styles.public_profile_buttons}>
@@ -163,12 +186,17 @@ function Profile({
     setUsrInfo: (usrInfos: IUserPublicInfos) => void;
   };
 }) {
+  const loginContext = useLoginContext();
+
   React.useEffect(() => {
     socket.on("update-leaderboard", () => {
       userService
         .getOne(state.usrInfo.username)
         .then((user: IUserPublicInfos) => {
           state.setUsrInfo(user);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
     });
   }, []);
@@ -186,6 +214,8 @@ function Profile({
 }
 
 export default function PublicProfile({ login }: { login: string }) {
+  const loginContext = useLoginContext();
+
   const [userInfos, setUserInfos] = React.useState<IUserPublicInfos>({
     login42: "",
     username: "",
@@ -199,9 +229,14 @@ export default function PublicProfile({ login }: { login: string }) {
     userInfos !== undefined &&
     userInfos.username !== login
   ) {
-    userService.getOne(login).then((user: IUserPublicInfos) => {
-      setUserInfos(user);
-    });
+    userService
+      .getOne(login)
+      .then((user: IUserPublicInfos) => {
+        setUserInfos(user);
+      })
+      .catch((error) => {
+        errorHandler(error, loginContext);
+      });
   }
 
   if (

@@ -48,16 +48,6 @@ export class UsersService {
     await this.usersRepository.remove(users);
   }
 
-  async deleteUser(reqUser: User, login42: string): Promise<void> {
-    this.restrictToReqUser(reqUser, login42);
-
-    const result = await this.usersRepository.delete(login42);
-
-    if (result.affected === 0) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-  }
-
   async updateUsername(
     reqUser: User,
     login42: string,

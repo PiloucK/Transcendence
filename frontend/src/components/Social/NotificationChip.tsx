@@ -7,9 +7,14 @@ import userService from "../../services/user";
 
 import io from "socket.io-client";
 
+import { errorHandler } from "../../services/errorHandler";
+
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig()
-const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 export function NotificationChip() {
   const loginContext = useLoginContext();
@@ -21,11 +26,17 @@ export function NotificationChip() {
       .getUserFriendRequestsReceived(loginContext.userLogin)
       .then((notifications: IUserPublicInfos[]) => {
         setNotifications(notifications);
+      })
+      .catch((error) => {
+        errorHandler(error, loginContext);
       });
     userService
       .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedUsers(blocked);
+      })
+      .catch((error) => {
+        errorHandler(error, loginContext);
       });
 
     socket.on("update-relations", () => {
@@ -33,11 +44,17 @@ export function NotificationChip() {
         .getUserFriendRequestsReceived(loginContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
       userService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedUsers(blocked);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
     });
   }, []);

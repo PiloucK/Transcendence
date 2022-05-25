@@ -11,7 +11,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
-          return request?.cookies?.transcendence_accessToken; // what are these question marks
+          return request?.cookies?.transcendence_accessToken;
           // sign cookies? https://docs.nestjs.com/techniques/cookies#use-with-express-default
         },
       ]),

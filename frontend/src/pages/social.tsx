@@ -15,9 +15,14 @@ import {
 
 import io from "socket.io-client";
 
+import { errorHandler } from "../services/errorHandler";
+
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig()
-const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 function SocialPage({ menu }: { menu: string }) {
   const loginContext = useLoginContext();
@@ -30,18 +35,27 @@ function SocialPage({ menu }: { menu: string }) {
       .getUserFriends(loginContext.userLogin)
       .then((friends: IUserPublicInfos[]) => {
         setFriends(friends);
+      })
+      .catch((error) => {
+        errorHandler(error, loginContext);
       });
 
     userService
       .getUserBlockedUsers(loginContext.userLogin)
       .then((users: IUserPublicInfos[]) => {
         setBlocked(users);
+      })
+      .catch((error) => {
+        errorHandler(error, loginContext);
       });
 
     userService
       .getUserFriendRequestsReceived(loginContext.userLogin)
       .then((notifications: IUserPublicInfos[]) => {
         setNotifications(notifications);
+      })
+      .catch((error) => {
+        errorHandler(error, loginContext);
       });
 
     socket.on("update-leaderboard", () => {
@@ -49,18 +63,27 @@ function SocialPage({ menu }: { menu: string }) {
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
 
       userService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((users: IUserPublicInfos[]) => {
           setBlocked(users);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
 
       userService
         .getUserFriendRequestsReceived(loginContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
     });
 
@@ -69,18 +92,27 @@ function SocialPage({ menu }: { menu: string }) {
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
 
       userService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((users: IUserPublicInfos[]) => {
           setBlocked(users);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
 
       userService
         .getUserFriendRequestsReceived(loginContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
     });
   }, []);
@@ -90,7 +122,12 @@ function SocialPage({ menu }: { menu: string }) {
   } else if (menu === "blocked") {
     return <BlockedContent users={blocked} />;
   } else if (menu === "notifications") {
-    return <NotificationContent blockedUsers={blocked} notifications={notifications} />;
+    return (
+      <NotificationContent
+        blockedUsers={blocked}
+        notifications={notifications}
+      />
+    );
   }
 }
 

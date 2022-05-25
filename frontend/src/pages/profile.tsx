@@ -21,6 +21,8 @@ import { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import PublicProfile from "../components/Profile/publicprofile";
 
+import { errorHandler } from "../services/errorHandler";
+
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
@@ -43,6 +45,9 @@ function MyUserName({ userInfos }: { userInfos: IUser }) {
         .then(() => {
           setTmpUsername("");
           socket.emit("user:update-username");
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
     }
   };
@@ -134,9 +139,14 @@ function Profile({
 
   React.useEffect(() => {
     socket.on("update-leaderboard", () => {
-      userService.getOne(loginContext.userLogin).then((user: IUser) => {
-        state.setUserInfos(user);
-      });
+      userService
+        .getOne(loginContext.userLogin)
+        .then((user: IUser) => {
+          state.setUserInfos(user);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
+        });
     });
   }, []);
 
@@ -181,9 +191,14 @@ export default function ProfilePage() {
       userInfos !== undefined &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userService.getOne(loginContext.userLogin).then((user: IUser) => {
-        setUserInfos(user);
-      });
+      userService
+        .getOne(loginContext.userLogin)
+        .then((user: IUser) => {
+          setUserInfos(user);
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
+        });
     }
   }, []);
 

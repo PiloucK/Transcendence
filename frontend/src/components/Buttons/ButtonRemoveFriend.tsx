@@ -7,10 +7,13 @@ import userService from "../../services/user";
 
 import { useLoginContext } from "../../context/LoginContext";
 
+import { errorHandler } from "../../services/errorHandler";
+
 import io from "socket.io-client";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig()
+
 const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
 
 export function ButtonRemoveFriend({
@@ -28,7 +31,10 @@ export function ButtonRemoveFriend({
       userService.removeFriend(loginContext.userLogin, userInfos.login42)
 			.then(() => {
 				socket.emit("user:update-relations");
-			});
+			})
+          .catch((error) => {
+            errorHandler(error, loginContext);
+          });
     }
   };
 

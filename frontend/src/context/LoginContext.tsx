@@ -2,6 +2,11 @@ import { createContext, useContext, useState } from 'react'
 import React from 'react'
 import Router from "next/router";
 
+import Cookies from "js-cookie";
+
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
+
 interface ILoginContext {
 	userLogin: string | null;
 	userSecret: string | null;
@@ -29,6 +34,9 @@ export const LoginProvider: React.FC = ( {children}: React.ReactNode ) => {
 		setUserLogin(null)
 		setUserSecret(null)
 		Router.push("/");
+    Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
+      path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
+    });
 	}
 
 	return (

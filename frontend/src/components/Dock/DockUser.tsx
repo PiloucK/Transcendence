@@ -19,6 +19,8 @@ import { IUser, IUserCredentials } from "../../interfaces/users";
 import { Button, TextField } from "@mui/material";
 import Cookies from "js-cookie";
 
+import { errorHandler } from "../../services/errorHandler";
+
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
@@ -45,28 +47,38 @@ function NavigationDock({
     userService
       .addOne(newUserCredentials)
       .then((user: IUser) => {
-        loginContext.login(user.login42, "");
+        loginContext.login?.(user.login42, "");
         socket.emit("user:new", username);
         setUsername("");
-      })
-      .then(() => {
+
         authService
           .getToken(newUserCredentials.login42)
           .then((login42: string) => {
             console.log("new token for", login42, "stored in cookie");
+          })
+          .catch((error) => {
+            errorHandler(error, loginContext);
           });
+      })
+      .catch((error) => {
+        errorHandler(error, loginContext);
       });
   };
 
   const deleteAllUsers = () => {
-    userService.deleteAll().then(() => {
-      console.log("all users deleted");
-      loginContext.logout?.();
-      Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
-        path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
-        sameSite: publicRuntimeConfig.ACCESSTOKEN_COOKIE_SAMESITE,
+    userService
+      .deleteAll()
+      .then(() => {
+        console.log("all users deleted");
+        loginContext.logout?.();
+        Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
+          path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
+          sameSite: publicRuntimeConfig.ACCESSTOKEN_COOKIE_SAMESITE,
+        });
+      })
+      .catch((error) => {
+        errorHandler(error, loginContext);
       });
-    });
   };
 
   const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (

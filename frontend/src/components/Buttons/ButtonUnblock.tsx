@@ -9,9 +9,14 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import io from "socket.io-client";
 
+import { errorHandler } from "../../services/errorHandler";
+
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig()
-const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 export function ButtonUnblock({ userInfos }: { userInfos: IUserPublicInfos }) {
   const loginContext = useLoginContext();
@@ -25,6 +30,9 @@ export function ButtonUnblock({ userInfos }: { userInfos: IUserPublicInfos }) {
         .unblockUser(loginContext.userLogin, userInfos.login42)
         .then(() => {
           socket.emit("user:update-relations");
+        })
+        .catch((error) => {
+          errorHandler(error, loginContext);
         });
     }
   };
