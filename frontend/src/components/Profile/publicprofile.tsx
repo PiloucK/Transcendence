@@ -13,6 +13,7 @@ import Avatar from "@mui/material/Avatar";
 import { UserGameHistory } from "./UserGameHistory";
 
 import { ButtonAddFriend } from "../Buttons/ButtonAddFriend";
+import { ButtonSendDM } from "../Buttons/ButtonSendDM";
 import { ButtonRemoveFriend } from "../Buttons/ButtonRemoveFriend";
 import { ButtonCancelRequest } from "../Buttons/ButtonCancelRequest";
 
@@ -23,8 +24,11 @@ import { ButtonUnblock } from "../Buttons/ButtonUnblock";
 import { useLoginContext } from "../../context/LoginContext";
 
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig()
-const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 function UserName({ userInfos }: { userInfos: IUserPublicInfos }) {
   return (
@@ -122,7 +126,12 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         (friend: IUserPublicInfos) => friend.login42 === userInfos.login42
       )
     ) {
-      return <ButtonRemoveFriend userInfos={userInfos} />;
+      return (
+        <>
+          <ButtonSendDM userInfos={userInfos} />
+          <ButtonRemoveFriend userInfos={userInfos} />
+        </>
+      );
     } else if (
       sentRList.find(
         (friend: IUserPublicInfos) => friend.login42 === userInfos.login42
@@ -134,17 +143,17 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
     }
   };
 
-	const blockButton = () => {
-		if (
-			blockedList.find(
-				(blocked: IUserPublicInfos) => blocked.login42 === userInfos.login42
-			)
-		) {
-			return <ButtonUnblock userInfos={userInfos} />;
-		} else {
-			return <ButtonBlock userInfos={userInfos} />;
-		}
-	};
+  const blockButton = () => {
+    if (
+      blockedList.find(
+        (blocked: IUserPublicInfos) => blocked.login42 === userInfos.login42
+      )
+    ) {
+      return <ButtonUnblock userInfos={userInfos} />;
+    } else {
+      return <ButtonBlock userInfos={userInfos} />;
+    }
+  };
 
   return (
     <div className={styles.public_profile_buttons}>

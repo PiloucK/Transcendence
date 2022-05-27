@@ -60,7 +60,7 @@ export function NotificationContent({
   blockedUsers: IUserPublicInfos[];
   notifications: IUserPublicInfos[];
 }) {
-	const requests = notifications.filter(
+	const requests = notifications?.filter(
 		(notification) => !blockedUsers?.some((blockedUser) => blockedUser.login42 === notification.login42)
 	);
 

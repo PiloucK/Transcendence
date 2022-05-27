@@ -4,6 +4,9 @@ import { ChatMenu } from "../components/Chat/Menus";
 
 import { DirectMessage } from "../components/Chat/DirectMessage";
 import { AddChannel } from "../components/Chat/AddChannel";
+import { Channel } from "../components/Chat/Channel";
+import { useLoginContext } from "../context/LoginContext";
+import { DockGuest } from "../components/Dock/DockGuest";
 
 function ChatContent({ menu }: { menu: string }) {
   if (menu === "direct_message") {
@@ -11,17 +14,18 @@ function ChatContent({ menu }: { menu: string }) {
   } else if (menu === "add_channel") {
     return <AddChannel />;
   } else {
-    return <div>Channel</div>;
+    return <Channel id={menu}/>;
   }
 }
 
 export default function Chat() {
-  const [menu, setMenu] = React.useState("direct_message");
+	const loginContext = useLoginContext();
 
+  if (loginContext.userLogin === null) return <DockGuest />;
   return (
     <>
-      <ChatMenu menu={menu} setMenu={setMenu} />
-      <ChatContent menu={menu} />
+      <ChatMenu menu={loginContext.chatMenu} setMenu={loginContext.setChatMenu} />
+      <ChatContent menu={loginContext.chatMenu} />
     </>
   );
 }

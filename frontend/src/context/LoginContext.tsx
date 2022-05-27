@@ -5,6 +5,10 @@ import Router from "next/router";
 interface ILoginContext {
 	userLogin: string | null;
 	userSecret: string | null;
+	chatMenu: string;
+	setChatMenu: (menu: string) => void;
+	chatDM: string;
+	setChatDM: (dm: string) => void;
 	login?: (userLogin: string, userSecret: string) => void;
 	logout?: () => void;
 }
@@ -12,13 +16,17 @@ interface ILoginContext {
 const defaultLoginState = {
 	userLogin: null,
 	userSecret: null,
+	chatMenu: "direct_message",
+	chatDM: "new_message",
 };
 
-const LoginContext = React.createContext<ILoginContext>(defaultLoginState)
+const LoginContext = createContext<ILoginContext>(defaultLoginState)
 
 export const LoginProvider: React.FC = ( {children}: React.ReactNode ) => {
 	const [userLogin, setUserLogin] = useState(defaultLoginState.userLogin)
 	const [userSecret, setUserSecret] = useState(defaultLoginState.userSecret)
+	const [chatMenu, setChatMenu] = useState(defaultLoginState.chatMenu)
+	const [chatDM, setChatDM] = useState(defaultLoginState.chatDM)
 
 	const login = (userLogin: string, userSecret: string) => {
 		setUserLogin(userLogin)
@@ -36,6 +44,10 @@ export const LoginProvider: React.FC = ( {children}: React.ReactNode ) => {
 			value={{
 				userLogin,
 				userSecret,
+				chatMenu,
+				setChatMenu,
+				chatDM,
+				setChatDM,
 				login,
 				logout,
 			}}

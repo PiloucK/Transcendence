@@ -1,4 +1,13 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
+import { Channel } from "src/channel/channel.entity";
+import { PrivateConv } from "src/privateConv/privateConv.entity";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryColumn,
+} from "typeorm";
 
 @Entity()
 export class User {
@@ -37,6 +46,18 @@ export class User {
   @ManyToMany(() => User)
   @JoinTable()
   blockedUsers!: User[];
+
+  // Need to deeply test this part.
+  @OneToMany(
+    () => PrivateConv,
+    (privateConv) =>
+      privateConv.userOne === this ? privateConv.userOne : privateConv.userTwo
+  )
+  privateConvs!: PrivateConv[];
+
+  // There is a many to many relation owned by the channel.
+  @ManyToMany(() => Channel)
+  users!: Channel[];
 }
 
 // photo
