@@ -19,7 +19,6 @@ export class AuthService {
   issueJwtToken(login42: string): string {
     const payload = { login42 };
     return this.jwtService.sign(payload);
-    // this sign() function comes from the @nestjs/jwt library
   }
 
   getAccessTokenCookie(token: string): string {

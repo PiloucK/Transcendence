@@ -31,14 +31,11 @@ export class UsersService {
     return users;
   }
 
-  // returns a user if called with undefined as argument
   getUserByLogin42(login42: string): Promise<User> {
     return this.usersRepository.getUserWithRelations(login42, []);
   }
 
   createUser(createUserDto: CreateUserDto): Promise<User> {
-    // this.restrictToReqUser(reqUser, login42);
-
     return this.usersRepository.createUser(createUserDto);
   }
 
