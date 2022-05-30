@@ -14,8 +14,9 @@ import FTLogo from "../../public/42logo.png";
 
 import Cookies from "js-cookie";
 
-import getConfig from "next/config";
 import { errorHandler } from "../../services/errorHandler";
+
+import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -27,7 +28,6 @@ export function DockGuest() {
 
   const authenticate = () => {
     if (Cookies.get(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME)) {
-      console.log("authentication cookie detected");
       authService
         .getLoggedInUser()
         .then((user) => {
