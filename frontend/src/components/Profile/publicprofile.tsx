@@ -13,6 +13,7 @@ import Avatar from "@mui/material/Avatar";
 import { UserGameHistory } from "./UserGameHistory";
 
 import { ButtonAddFriend } from "../Buttons/ButtonAddFriend";
+import { ButtonSendDM } from "../Buttons/ButtonSendDM";
 import { ButtonRemoveFriend } from "../Buttons/ButtonRemoveFriend";
 import { ButtonCancelRequest } from "../Buttons/ButtonCancelRequest";
 
@@ -145,7 +146,12 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         (friend: IUserPublicInfos) => friend.login42 === userInfos.login42
       )
     ) {
-      return <ButtonRemoveFriend userInfos={userInfos} />;
+      return (
+        <>
+          <ButtonSendDM userInfos={userInfos} />
+          <ButtonRemoveFriend userInfos={userInfos} />
+        </>
+      );
     } else if (
       sentRList.find(
         (friend: IUserPublicInfos) => friend.login42 === userInfos.login42
