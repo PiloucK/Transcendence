@@ -22,7 +22,7 @@ import Cookies from "js-cookie";
 import { errorHandler } from "../../services/errorHandler";
 
 import getConfig from "next/config";
-import axios from "axios";
+//import axios from "axios";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -38,15 +38,15 @@ function NavigationDock({
 
   const [username, setUsername] = useState("");
 
-  axios
-    .get("http://0.0.0.0:3001/j")
-    .then((response) => response.data)
-    .then((user) => {
-      console.log(user);
-    })
-    .catch((error) => {
-      errorHandler(error, loginContext);
-    });
+//  axios
+//    .get("http://0.0.0.0:3001/j")
+//    .then((response) => response.data)
+//    .then((user) => {
+//      console.log(user);
+//    })
+//    .catch((error) => {
+//      errorHandler(error, loginContext);
+//    });
 
   const addUser: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
