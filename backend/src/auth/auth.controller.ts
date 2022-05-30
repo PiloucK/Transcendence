@@ -12,8 +12,8 @@ import { FortyTwoAuthGuard } from './guards/fortyTwoAuth.guard';
 import { JwtAuthGuard } from './guards/jwtAuth.guard';
 import { ConfigService } from '@nestjs/config';
 import { User } from 'src/users/user.entity';
-import { GetReqUser } from './getReqUser.decorator';
-import { FortyTwoAuthFilter } from './fortyTwoAuth.filter';
+import { GetReqUser } from './decorators/getReqUser.decorator';
+import { FortyTwoAuthFilter } from './filters/fortyTwoAuth.filter';
 
 @Controller('auth')
 export class AuthController {

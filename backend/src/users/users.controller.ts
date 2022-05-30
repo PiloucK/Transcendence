@@ -16,7 +16,7 @@ import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
-import { GetReqUser } from 'src/auth/getReqUser.decorator';
+import { GetReqUser } from 'src/auth/decorators/getReqUser.decorator';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
