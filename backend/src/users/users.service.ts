@@ -26,6 +26,18 @@ export class UsersService {
     }
   }
 
+  async turnOnTwoFactorAuth(login42: string) {
+    const user = await this.getUserByLogin42(login42);
+    user.isTwoFactorAuthEnabled = true;
+    await this.usersRepository.save(user);
+  }
+
+  async setTwoFactorAuthSecret(secret: string, login42: string) {
+    const user = await this.getUserByLogin42(login42);
+    user.twoFactorAuthSecret = secret;
+    await this.usersRepository.save(user);
+  }
+
   async getAllUsers(): Promise<User[]> {
     const users = await this.usersRepository.find();
     return users;

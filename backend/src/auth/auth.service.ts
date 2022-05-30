@@ -16,8 +16,8 @@ export class AuthService {
     return await this.usersService.createUser({ login42 });
   }
 
-  issueJwtToken(login42: string): string {
-    const payload = { login42 };
+  issueJwtToken(login42: string, isSecondFactorAuthenticated = false): string {
+    const payload = { login42, isSecondFactorAuthenticated };
     return this.jwtService.sign(payload);
   }
 

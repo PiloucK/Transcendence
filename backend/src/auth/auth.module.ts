@@ -10,9 +10,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule,
     UsersModule,
     PassportModule,
-    ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -30,5 +30,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   ],
   providers: [AuthService, FortyTwoStrategy, JwtStrategy],
   controllers: [AuthController],
+  exports: [AuthService], // to import in TwoFactorAuthModule
 })
 export class AuthModule {}

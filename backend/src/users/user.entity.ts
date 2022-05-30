@@ -56,21 +56,12 @@ export class User {
   // There is a many to many relation owned by the channel.
   @ManyToMany(() => Channel)
   users!: Channel[];
+
   @Column({ default: false })
   @Exclude()
-  twoFa!: boolean;
+  isTwoFactorAuthEnabled!: boolean;
+
+  @Column({ nullable: true })
+  @Exclude()
+  twoFactorAuthSecret!: string;
 }
-
-// photo
-
-// export enum UserState {
-//   IN_GAME = "IN_GAME",
-//   IN_QUEUE = "IN_QUEUE",
-//   IS_ONLINE = "IN_ONLINE",
-//   IS_OFFLINE = "IS_OFFLINE"
-// }
-
-// export type Friends = Array<string>;
-// export type FriendRequestsSent = Array<string>;
-// export type FriendRequestsReceived = Array<string>;
-// export type BlockedUsers = Array<string>;
