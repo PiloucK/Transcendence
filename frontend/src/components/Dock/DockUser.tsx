@@ -69,6 +69,7 @@ function NavigationDock({
           })
           .catch((error) => {
             errorHandler(error, loginContext);
+            // errorContext.newError(errorParse)
           });
       })
       .catch((error) => {

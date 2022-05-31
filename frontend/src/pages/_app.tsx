@@ -5,6 +5,7 @@ import type { AppProps } from "next/app";
 import { LoginProvider } from "../context/LoginContext";
 import { MainLayout } from "../layouts/mainLayout";
 import { ErrorProvider } from "../context/ErrorContext";
+import { ErrorSnackbar } from "../components/Alerts/ErrorSnackbar";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -22,7 +23,10 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return getLayout(
     <ErrorProvider>
       <LoginProvider>
-        <Component {...pageProps} />
+        <>
+          <ErrorSnackbar/>
+          <Component {...pageProps} />
+        </>
       </LoginProvider>
     </ErrorProvider>
   );

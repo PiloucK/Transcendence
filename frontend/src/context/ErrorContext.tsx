@@ -28,7 +28,7 @@ const defaultErrorState: IErrorContext = {
 
 const ErrorContext = createContext<IErrorContext>(defaultErrorState)
 
-export const ErrorProvider = (children: React.ReactNode) => {
+export const ErrorProvider = ({children}: {children :React.ReactNode}) => {
     const [errorData, setErrorData] = useState(defaultErrorState.errorData)
 
     const newError = (errorData: IErrorData) => {
