@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 
 import { LoginProvider } from "../context/LoginContext";
 import { MainLayout } from "../layouts/mainLayout";
+import { ErrorProvider } from "../context/ErrorContext";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -19,8 +20,10 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
 
   return getLayout(
-    <LoginProvider>
-      <Component {...pageProps} />
-    </LoginProvider>
+    <ErrorProvider>
+      <LoginProvider>
+        <Component {...pageProps} />
+      </LoginProvider>
+    </ErrorProvider>
   );
 }
