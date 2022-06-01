@@ -1,32 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import React from "react";
-import getConfig from "next/config";
-
-const { publicRuntimeConfig } = getConfig();
-
-interface IErrorData {
-  error: string;
-  message: string;
-  statusCode: number;
-}
-
-interface IErrorContext {
-  errorData: IErrorData;
-  newError?: (errorData: IErrorData) => void;
-  hideError?: () => void;
-  showError: boolean;
-}
-
-const defaultErrorData: IErrorData = {
-  error: "no error",
-  message: "no error",
-  statusCode: 0,
-};
-
-const defaultErrorState: IErrorContext = {
-  errorData: defaultErrorData,
-  showError: false,
-};
+import { IErrorData } from "../interfaces/IErrorData";
+import { defaultErrorState, IErrorContext } from "../interfaces/IErrorContext";
 
 const ErrorContext = createContext<IErrorContext>(defaultErrorState);
 

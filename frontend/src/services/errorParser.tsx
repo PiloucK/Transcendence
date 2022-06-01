@@ -1,21 +1,10 @@
 import axios, { AxiosError } from "axios";
+import { defaultErrorData, IErrorData } from "../interfaces/IErrorData";
 
 const UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
 const CONFLICT = 409;
 const UNKNOWN_ERROR = 520;
-
-interface IErrorData { // Move the interface definition in 'interfaces' folder
-  error: string;
-  message: string;
-  statusCode: number;
-}
-
-const defaultErrorData: IErrorData = {
-  error: 'no error',
-  message: 'no error',
-  statusCode: 0,
-};
 
 export function errorParser(error: Error | AxiosError): IErrorData {
   let errorData: IErrorData = defaultErrorData;
