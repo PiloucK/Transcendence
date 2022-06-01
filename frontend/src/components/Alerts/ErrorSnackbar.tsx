@@ -1,18 +1,14 @@
 import { Snackbar } from "@mui/material";
+import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useLoginContext } from "../../context/LoginContext";
-
-const UNAUTHORIZED = 401;
-const NOT_FOUND = 404;
-const CONFLICT = 409;
-const UNKNOWN_ERROR = 520;
 
 export const ErrorSnackbar = () => {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   const handleOpen = () => {
-    if (errorContext.errorData.statusCode === UNAUTHORIZED) {
+    if (errorContext.errorData.statusCode === HttpStatusCodes.UNAUTHORIZED) {
       loginContext.logout?.();
       // } else if (error.response.status === NOT_FOUND) { ?????
       // } else if (error.response.status === CONFLICT) { ?????

@@ -1,10 +1,6 @@
 import axios, { AxiosError } from "axios";
+import { HttpStatusCodes } from "../constants/httpStatusCodes";
 import { defaultErrorData, IErrorData } from "../interfaces/IErrorData";
-
-const UNAUTHORIZED = 401;
-const NOT_FOUND = 404;
-const CONFLICT = 409;
-const UNKNOWN_ERROR = 520;
 
 export function errorParser(error: Error | AxiosError): IErrorData {
   let errorData: IErrorData = defaultErrorData;
@@ -19,14 +15,14 @@ export function errorParser(error: Error | AxiosError): IErrorData {
       console.error("Error in HTTP request:", error.request);
       errorData.error = 'HTTP request failure';
       errorData.message = 'Request made but no response received.';
-      errorData.statusCode = UNKNOWN_ERROR;
+      errorData.statusCode = HttpStatusCodes.UNKNOWN_ERROR;
     }
   } else {
     // Something happened in setting up the request that triggered an Error
     console.error("Error setting up the request. Message:", error.message);
     errorData.error = 'Error setting up the HTTP request';
     errorData.message = error.message;
-    errorData.statusCode = UNKNOWN_ERROR;
+    errorData.statusCode = HttpStatusCodes.UNKNOWN_ERROR;
   }
 
   return (errorData);
