@@ -17,7 +17,7 @@ const defaultErrorData: IErrorData = {
   statusCode: 0,
 };
 
-export function errorParser(error: Error | AxiosError, loginContext: any): IErrorData { // TODO: loginContext define the type
+export function errorParser(error: Error | AxiosError): IErrorData {
   let errorData: IErrorData = defaultErrorData;
 
   if (axios.isAxiosError(error)) {
@@ -25,13 +25,6 @@ export function errorParser(error: Error | AxiosError, loginContext: any): IErro
       // Request made and server responded
       console.error("HTTP response status code:", error.response.status);
       errorData = error.response.data as IErrorData;
-      console.log(errorData);
-      if (error.response.status === UNAUTHORIZED) {
-        // and for restrictToReqUser?
-        loginContext.logout?.();
-        // } else if (error.response.status === NOT_FOUND) {
-        // } else if (error.response.status === CONFLICT) {
-      }
     } else if (error.request) {
       // Request made but no response received
       console.error("Error in HTTP request:", error.request);

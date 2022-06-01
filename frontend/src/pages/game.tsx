@@ -35,7 +35,6 @@ function DisplayBallForUser() {
 // Emit on the websocket the user:update-elo event for the real time leaderboard.
 function updateUserElo(eloModification: number) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
 
   if (currentUser !== "") {
     userService
@@ -44,7 +43,7 @@ function updateUserElo(eloModification: number) {
         socket.emit("user:update-elo");
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorParser(error));
       });
   }
 }

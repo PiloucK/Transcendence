@@ -1,9 +1,6 @@
 import { ReactElement, useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import userService from "../services/user";
-import IconButton from "@mui/material/IconButton";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 import { IUserForLeaderboard } from "../interfaces/users";
 
 import Link from "next/link";
@@ -11,7 +8,6 @@ import Link from "next/link";
 import io from "socket.io-client";
 
 import { errorParser } from "../services/errorParser";
-import { useLoginContext } from "../context/LoginContext";
 
 import getConfig from "next/config";
 import { useErrorContext } from "../context/ErrorContext";
@@ -57,7 +53,6 @@ function createLeaderboard(users: IUserForLeaderboard[]): ReactElement {
 // Will print the list of users in the leaderboard.
 export default function Leaderboard() {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
 
   const [users, setUsers] = useState<IUserForLeaderboard[]>([]);
 
@@ -68,7 +63,7 @@ export default function Leaderboard() {
         setUsers(users);
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorParser(error));
       });
 
     socket.on("update-leaderboard", () => {
@@ -78,7 +73,7 @@ export default function Leaderboard() {
           setUsers(users);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorParser(error));
         });
     });
   }, []);

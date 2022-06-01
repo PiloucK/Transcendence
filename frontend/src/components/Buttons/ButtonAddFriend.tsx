@@ -38,7 +38,7 @@ export function ButtonAddFriend({
           socket.emit("user:update-relations");
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorParser(error));
         });
     }
   };

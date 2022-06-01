@@ -95,7 +95,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         setFriendList(friends);
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorParser(error));
       });
     userService
       .getUserFriendRequestsSent(loginContext.userLogin)
@@ -103,7 +103,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         setSentRList(requests);
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorParser(error));
       });
     userService
       .getUserBlockedUsers(loginContext.userLogin)
@@ -111,7 +111,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         setBlockedList(blocked);
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorParser(error));
       });
 
     socket.on("update-relations", () => {
@@ -121,7 +121,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
           setFriendList(friends);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorParser(error));
         });
       userService
         .getUserFriendRequestsSent(loginContext.userLogin)
@@ -129,7 +129,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
           setSentRList(requests);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorParser(error));
         });
       userService
         .getUserBlockedUsers(loginContext.userLogin)
@@ -137,7 +137,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
           setBlockedList(blocked);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorParser(error));
         });
     });
   }, []);
@@ -205,7 +205,7 @@ function Profile({
           state.setUsrInfo(user);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorParser(error));
         });
     });
   }, []);
@@ -245,7 +245,7 @@ export default function PublicProfile({ login }: { login: string }) {
         setUserInfos(user);
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorParser(error));
       });
   }
 
