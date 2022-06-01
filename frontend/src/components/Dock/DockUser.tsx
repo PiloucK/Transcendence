@@ -19,7 +19,7 @@ import { IUser, IUserCredentials } from "../../interfaces/users";
 import { Button, TextField } from "@mui/material";
 import Cookies from "js-cookie";
 
-import { errorParser } from "../../services/errorParser";
+import { errorParser } from "../../services/parsing/errorParser";
 
 import getConfig from "next/config";
 import axios from "axios";

@@ -15,7 +15,7 @@ import {
 
 import io from "socket.io-client";
 
-import { errorParser } from "../services/errorParser";
+import { errorParser } from "../services/parsing/errorParser";
 
 import getConfig from "next/config";
 import { useErrorContext } from "../context/ErrorContext";

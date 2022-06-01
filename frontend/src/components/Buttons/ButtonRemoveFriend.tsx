@@ -7,7 +7,7 @@ import userService from "../../services/user";
 
 import { useLoginContext } from "../../context/LoginContext";
 
-import { errorParser } from "../../services/errorParser";
+import { errorParser } from "../../services/parsing/errorParser";
 
 import io from "socket.io-client";
 

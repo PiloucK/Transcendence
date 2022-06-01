@@ -21,7 +21,7 @@ import { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import PublicProfile from "../components/Profile/publicprofile";
 
-import { errorParser } from "../services/errorParser";
+import { errorParser } from "../services/parsing/errorParser";
 
 import getConfig from "next/config";
 import { useErrorContext } from "../context/ErrorContext";

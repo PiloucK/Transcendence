@@ -14,7 +14,7 @@ import FTLogo from "../../public/42logo.png";
 
 import Cookies from "js-cookie";
 
-import { errorParser } from "../../services/errorParser";
+import { errorParser } from "../../services/parsing/errorParser";
 
 import getConfig from "next/config";
 import { useErrorContext } from "../../context/ErrorContext";
