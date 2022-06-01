@@ -10,9 +10,10 @@ import userService from "../../services/user";
 
 import io from "socket.io-client";
 
-import { errorHandler } from "../../services/errorHandler";
+import { errorParser } from "../../services/errorParser";
 
 import getConfig from "next/config";
+import { useErrorContext } from "../../context/ErrorContext";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -20,6 +21,7 @@ const socket = io(
 );
 
 export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
   const [blockedUsers, setBlockedUsers] = useState<IUserPublicInfos[]>([]);
@@ -31,7 +33,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
         setNotifications(notifications);
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorParser(error, loginContext));
       });
     userService
       .getUserBlockedUsers(loginContext.userLogin)
@@ -39,7 +41,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
         setBlockedUsers(blocked);
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorParser(error, loginContext));
       });
 
     socket.on("update-relations", () => {
@@ -49,7 +51,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
           setNotifications(notifications);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorParser(error, loginContext));
         });
       userService
         .getUserBlockedUsers(loginContext.userLogin)
@@ -57,7 +59,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
           setBlockedUsers(blocked);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     });
   }, []);

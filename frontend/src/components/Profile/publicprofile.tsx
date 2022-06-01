@@ -23,9 +23,10 @@ import { ButtonUnblock } from "../Buttons/ButtonUnblock";
 
 import { useLoginContext } from "../../context/LoginContext";
 
-import { errorHandler } from "../../services/errorHandler";
+import { errorParser } from "../../services/errorParser";
 
 import getConfig from "next/config";
+import { useErrorContext } from "../../context/ErrorContext";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -81,6 +82,7 @@ function UserStats({ userInfos }: { userInfos: IUserPublicInfos }) {
 }
 
 function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const [friendList, setFriendList] = React.useState<[]>([]);
   const [sentRList, setSentRList] = React.useState<[]>([]);
@@ -93,7 +95,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         setFriendList(friends);
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorParser(error, loginContext));
       });
     userService
       .getUserFriendRequestsSent(loginContext.userLogin)
@@ -101,7 +103,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         setSentRList(requests);
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorParser(error, loginContext));
       });
     userService
       .getUserBlockedUsers(loginContext.userLogin)
@@ -109,7 +111,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         setBlockedList(blocked);
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorParser(error, loginContext));
       });
 
     socket.on("update-relations", () => {
@@ -119,7 +121,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
           setFriendList(friends);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorParser(error, loginContext));
         });
       userService
         .getUserFriendRequestsSent(loginContext.userLogin)
@@ -127,7 +129,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
           setSentRList(requests);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorParser(error, loginContext));
         });
       userService
         .getUserBlockedUsers(loginContext.userLogin)
@@ -135,7 +137,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
           setBlockedList(blocked);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     });
   }, []);
@@ -192,6 +194,7 @@ function Profile({
     setUsrInfo: (usrInfos: IUserPublicInfos) => void;
   };
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   React.useEffect(() => {
@@ -202,7 +205,7 @@ function Profile({
           state.setUsrInfo(user);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     });
   }, []);
@@ -220,6 +223,7 @@ function Profile({
 }
 
 export default function PublicProfile({ login }: { login: string }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   const [userInfos, setUserInfos] = React.useState<IUserPublicInfos>({
@@ -241,7 +245,7 @@ export default function PublicProfile({ login }: { login: string }) {
         setUserInfos(user);
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorParser(error, loginContext));
       });
   }
 

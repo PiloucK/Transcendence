@@ -6,11 +6,12 @@ export const ErrorSnackbar = () => {
 
     return (
         <Snackbar
-            open={!!errorContext.errorData.statusCode}
+            open={errorContext.showError}
             autoHideDuration={6000}
-            onClose={errorContext.clearError}
+            onClose={errorContext.hideError}
             message={`Error: ${errorContext.errorData.statusCode} ${errorContext.errorData.error}\n${errorContext.errorData.message}`}
-            // action={action}
+        // action={action
         />
     )
+
 }

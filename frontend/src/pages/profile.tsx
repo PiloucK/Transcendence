@@ -21,9 +21,10 @@ import { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import PublicProfile from "../components/Profile/publicprofile";
 
-import { errorHandler } from "../services/errorHandler";
+import { errorParser } from "../services/errorParser";
 
 import getConfig from "next/config";
+import { useErrorContext } from "../context/ErrorContext";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -31,6 +32,7 @@ const socket = io(
 );
 
 function MyUserName({ userInfos }: { userInfos: IUser }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const [isInModification, setIsInModification] = useState(false);
   const [tmpUsername, setTmpUsername] = useState(""); // tmpUsername -> usernameInput?
@@ -47,7 +49,7 @@ function MyUserName({ userInfos }: { userInfos: IUser }) {
           socket.emit("user:update-username");
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     }
   };
@@ -135,6 +137,7 @@ function Profile({
 }: {
   state: { userInfos: IUser; setUserInfos: (userInfos: IUser) => void };
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   React.useEffect(() => {
@@ -145,7 +148,7 @@ function Profile({
           state.setUserInfos(user);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     });
   }, []);
@@ -165,6 +168,7 @@ function Profile({
 export default function ProfilePage() {
   const router = useRouter();
   const { login } = router.query;
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   if (
@@ -197,7 +201,7 @@ export default function ProfilePage() {
           setUserInfos(user);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     }
   }, []);

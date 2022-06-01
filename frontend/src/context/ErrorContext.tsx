@@ -13,7 +13,8 @@ interface IErrorData {
 interface IErrorContext {
     errorData: IErrorData;
     newError?: (errorData: IErrorData) => void;
-    clearError?: () => void;
+    hideError?: () => void;
+    showError: boolean;
 }
 
 const defaultErrorData: IErrorData = {
@@ -24,19 +25,22 @@ const defaultErrorData: IErrorData = {
 
 const defaultErrorState: IErrorContext = {
     errorData: defaultErrorData,
+    showError: false,
 };
 
 const ErrorContext = createContext<IErrorContext>(defaultErrorState)
 
-export const ErrorProvider = ({children}: {children :React.ReactNode}) => {
-    const [errorData, setErrorData] = useState(defaultErrorState.errorData)
+export const ErrorProvider = ({ children }: { children: React.ReactNode }) => {
+    const [errorData, setErrorData] = useState(defaultErrorState.errorData);
+    const [showError, setShowError] = useState(defaultErrorState.showError);
 
     const newError = (errorData: IErrorData) => {
-        setErrorData(errorData)
+        setErrorData(errorData);
+        setShowError(true);
     }
 
-    const clearError = () => {
-        setErrorData(defaultErrorData)
+    const hideError = () => {
+        setShowError(false);
     }
 
     return (
@@ -44,7 +48,8 @@ export const ErrorProvider = ({children}: {children :React.ReactNode}) => {
             value={{
                 errorData,
                 newError,
-                clearError
+                hideError,
+                showError,
             }}
         >
             {children}

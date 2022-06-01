@@ -14,9 +14,10 @@ import FTLogo from "../../public/42logo.png";
 
 import Cookies from "js-cookie";
 
-import { errorHandler } from "../../services/errorHandler";
+import { errorParser } from "../../services/errorParser";
 
 import getConfig from "next/config";
+import { useErrorContext } from "../../context/ErrorContext";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -25,6 +26,7 @@ const socket = io(
 
 export function DockGuest() {
   const loginContext = useLoginContext();
+  const errorContext = useErrorContext();
 
   const authenticate = () => {
     if (Cookies.get(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME)) {
@@ -35,7 +37,7 @@ export function DockGuest() {
           socket.emit("user:new", user.login42);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     }
   };
