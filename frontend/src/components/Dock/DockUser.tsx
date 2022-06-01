@@ -1,5 +1,10 @@
 import Link from "next/link";
-import React, { ChangeEventHandler, FormEventHandler, useEffect, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  FormEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -21,9 +26,9 @@ import Cookies from "js-cookie";
 
 import { errorParser } from "../../services/parsing/errorParser";
 
-import getConfig from "next/config";
-import axios from "axios";
 import { useErrorContext } from "../../context/ErrorContext";
+
+import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -40,19 +45,6 @@ function NavigationDock({
 
   const [username, setUsername] = useState("");
 
-  useEffect(() => {
-    axios
-    .get("http://0.0.0.0:3001/j")
-    .then((response) => response.data)
-    .then((user) => {
-      console.log(user);
-    })
-    .catch((error) => {
-      errorContext.newError?.(errorParser(error));
-    });
-
-  }, [])
-  
   const addUser: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
