@@ -16,8 +16,9 @@ import Cookies from "js-cookie";
 
 import { errorHandler } from "../../errors/errorHandler";
 
-import getConfig from "next/config";
 import { useErrorContext } from "../../context/ErrorContext";
+
+import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -46,7 +47,6 @@ export function DockGuest() {
     authenticate();
   }, []);
 
-  // store 0.0.0.0 as an environment var in .env file
   return (
     <Dock>
       <Link

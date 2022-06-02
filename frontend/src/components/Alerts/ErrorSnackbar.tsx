@@ -14,13 +14,24 @@ export const ErrorSnackbar = () => {
     errorContext.hideError?.();
   };
 
+  const displayMessage = () => {
+    if (errorContext.errorData.error) {
+      return `Error: ${errorContext.errorData.statusCode} \
+      ${errorContext.errorData.error}\n\
+      ${errorContext.errorData.message}`;
+    } else {
+      return `Error: ${errorContext.errorData.statusCode} \
+      ${errorContext.errorData.message}`
+    }
+  };
+
   return (
     <Snackbar
       open={errorContext.showError}
       autoHideDuration={6000}
       onClose={handleClose}
-      message={`Error: ${errorContext.errorData.statusCode} ${errorContext.errorData.error}\n${errorContext.errorData.message}`}
-      // action={action
+      message={displayMessage()}
+      // action={action}
     />
   );
 };

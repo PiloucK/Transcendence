@@ -1,5 +1,5 @@
 export interface IErrorData {
-  error: string;
+  error?: string;
   message: string;
   statusCode: number;
 }
