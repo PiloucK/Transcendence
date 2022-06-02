@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
-import { HttpStatusCodes } from "../../constants/httpStatusCodes";
-import { defaultErrorData, IErrorData } from "../../interfaces/IErrorData";
+import { HttpStatusCodes } from "../constants/httpStatusCodes";
+import { defaultErrorData, IErrorData } from "../interfaces/IErrorData";
 
 export function errorParser(error: Error | AxiosError, loginContext: any): IErrorData { // TODO: loginContext define the type
   let errorData: IErrorData = defaultErrorData;

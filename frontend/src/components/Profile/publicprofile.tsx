@@ -23,7 +23,7 @@ import { ButtonUnblock } from "../Buttons/ButtonUnblock";
 
 import { useLoginContext } from "../../context/LoginContext";
 
-import { errorParser } from "../../services/parsing/errorParser";
+import { errorParser } from "../../services/errorParser";
 
 import getConfig from "next/config";
 import { useErrorContext } from "../../context/ErrorContext";
