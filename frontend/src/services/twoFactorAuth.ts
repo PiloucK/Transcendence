@@ -6,14 +6,20 @@ const baseUrl = `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEN
   /two-factor-auth`;
 
 axios.defaults.withCredentials = true;
-console.log(baseUrl);
 
 const generateQrCode = () => {
   return axios
-    .get(`${baseUrl}/generate-qrcode`)
+    .post(`${baseUrl}/generate-qrcode`)
+    .then((response) => response.data);
+};
+
+const turnOn = (authCode: string) => {
+  return axios
+    .post(`${baseUrl}/turn-on`, { authCode })
     .then((response) => response.data);
 };
 
 export default {
   generateQrCode,
+  turnOn,
 };
