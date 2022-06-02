@@ -7,7 +7,7 @@ import userService from "../services/user";
 
 import io from "socket.io-client";
 
-import { errorParser } from "../services/errorParser";
+import { errorHandler } from "../errors/errorHandler";
 
 import getConfig from "next/config";
 import { useErrorContext } from "../context/ErrorContext";
@@ -44,7 +44,7 @@ function updateUserElo(eloModification: number) {
         socket.emit("user:update-elo");
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   }
 }

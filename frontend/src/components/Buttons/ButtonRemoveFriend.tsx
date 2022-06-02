@@ -7,7 +7,7 @@ import userService from "../../services/user";
 
 import { useLoginContext } from "../../context/LoginContext";
 
-import { errorParser } from "../../services/errorParser";
+import { errorHandler } from "../../errors/errorHandler";
 
 import io from "socket.io-client";
 
@@ -35,7 +35,7 @@ export function ButtonRemoveFriend({
 				socket.emit("user:update-relations");
 			})
           .catch((error) => {
-            errorContext.newError?.(errorParser(error, loginContext));
+            errorContext.newError?.(errorHandler(error, loginContext));
           });
     }
   };

@@ -9,7 +9,7 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import io from "socket.io-client";
 
-import { errorParser } from "../../services/errorParser";
+import { errorHandler } from "../../errors/errorHandler";
 
 import getConfig from "next/config";
 import { useErrorContext } from "../../context/ErrorContext";
@@ -34,7 +34,7 @@ export function ButtonBlock({ userInfos }: { userInfos: IUserPublicInfos }) {
           socket.emit("user:update-relations");
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     }
   };

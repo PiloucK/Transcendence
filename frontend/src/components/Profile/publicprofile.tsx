@@ -23,7 +23,7 @@ import { ButtonUnblock } from "../Buttons/ButtonUnblock";
 
 import { useLoginContext } from "../../context/LoginContext";
 
-import { errorParser } from "../../services/errorParser";
+import { errorHandler } from "../../errors/errorHandler";
 
 import getConfig from "next/config";
 import { useErrorContext } from "../../context/ErrorContext";
@@ -95,7 +95,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         setFriendList(friends);
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
     userService
       .getUserFriendRequestsSent(loginContext.userLogin)
@@ -103,7 +103,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         setSentRList(requests);
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
     userService
       .getUserBlockedUsers(loginContext.userLogin)
@@ -111,7 +111,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         setBlockedList(blocked);
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     socket.on("update-relations", () => {
@@ -121,7 +121,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
           setFriendList(friends);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
       userService
         .getUserFriendRequestsSent(loginContext.userLogin)
@@ -129,7 +129,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
           setSentRList(requests);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
       userService
         .getUserBlockedUsers(loginContext.userLogin)
@@ -137,7 +137,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
           setBlockedList(blocked);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   }, []);
@@ -205,7 +205,7 @@ function Profile({
           state.setUsrInfo(user);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   }, []);
@@ -245,7 +245,7 @@ export default function PublicProfile({ login }: { login: string }) {
         setUserInfos(user);
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   }
 

@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { HttpStatusCodes } from "../constants/httpStatusCodes";
 import { defaultErrorData, IErrorData } from "../interfaces/IErrorData";
 
-export function errorParser(error: Error | AxiosError, loginContext: any): IErrorData { // TODO: loginContext define the type
+export function errorHandler(error: Error | AxiosError, loginContext: any): IErrorData { // TODO: loginContext define the type
   let errorData: IErrorData = defaultErrorData;
 
   if (axios.isAxiosError(error)) {
@@ -11,7 +11,7 @@ export function errorParser(error: Error | AxiosError, loginContext: any): IErro
       console.error("HTTP response status code:", error.response.status);
       errorData = error.response.data as IErrorData;
       console.log(errorData);
-      if (error.response.status === UNAUTHORIZED) {
+      if (error.response.status === HttpStatusCodes.UNAUTHORIZED) {
         // and for restrictToReqUser?
         loginContext.logout?.();
         // } else if (error.response.status === NOT_FOUND) {

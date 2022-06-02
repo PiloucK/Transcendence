@@ -14,7 +14,7 @@ import FTLogo from "../../public/42logo.png";
 
 import Cookies from "js-cookie";
 
-import { errorParser } from "../../services/errorParser";
+import { errorHandler } from "../../errors/errorHandler";
 
 import getConfig from "next/config";
 import { useErrorContext } from "../../context/ErrorContext";
@@ -37,7 +37,7 @@ export function DockGuest() {
           socket.emit("user:new", user.login42);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     }
   };

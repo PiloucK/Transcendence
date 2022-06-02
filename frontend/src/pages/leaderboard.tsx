@@ -10,7 +10,7 @@ import Link from "next/link";
 
 import io from "socket.io-client";
 
-import { errorParser } from "../services/errorParser";
+import { errorHandler } from "../errors/errorHandler";
 import { useLoginContext } from "../context/LoginContext";
 
 import getConfig from "next/config";
@@ -68,7 +68,7 @@ export default function Leaderboard() {
         setUsers(users);
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     socket.on("update-leaderboard", () => {
@@ -78,7 +78,7 @@ export default function Leaderboard() {
           setUsers(users);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   }, []);

@@ -1,5 +1,4 @@
 import { Snackbar } from "@mui/material";
-import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 import { useErrorContext } from "../../context/ErrorContext";
 
 export const ErrorSnackbar = () => {

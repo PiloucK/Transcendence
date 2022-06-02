@@ -21,7 +21,7 @@ import { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import PublicProfile from "../components/Profile/publicprofile";
 
-import { errorParser } from "../services/errorParser";
+import { errorHandler } from "../errors/errorHandler";
 
 import getConfig from "next/config";
 import { useErrorContext } from "../context/ErrorContext";
@@ -49,7 +49,7 @@ function MyUserName({ userInfos }: { userInfos: IUser }) {
           socket.emit("user:update-username");
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     }
   };
@@ -148,7 +148,7 @@ function Profile({
           state.setUserInfos(user);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   }, []);
@@ -201,7 +201,7 @@ export default function ProfilePage() {
           setUserInfos(user);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error, loginContext));
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     }
   }, []);

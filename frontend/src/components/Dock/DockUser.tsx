@@ -2,7 +2,6 @@ import Link from "next/link";
 import React, {
   ChangeEventHandler,
   FormEventHandler,
-  useEffect,
   useState,
 } from "react";
 import IconButton from "@mui/material/IconButton";
@@ -24,7 +23,7 @@ import { IUser, IUserCredentials } from "../../interfaces/users";
 import { Button, TextField } from "@mui/material";
 import Cookies from "js-cookie";
 
-import { errorParser } from "../../services/errorParser";
+import { errorHandler } from "../../errors/errorHandler";
 
 import { useErrorContext } from "../../context/ErrorContext";
 
@@ -65,12 +64,12 @@ function NavigationDock({
             console.log("new token for", login42, "stored in cookie");
           })
           .catch((error) => {
-            errorContext.newError?.(errorParser(error, loginContext));
+            errorContext.newError?.(errorHandler(error, loginContext));
             // errorContext.newError(errorParse)
           });
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   };
 
@@ -86,7 +85,7 @@ function NavigationDock({
         });
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error, loginContext));
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   };
 
