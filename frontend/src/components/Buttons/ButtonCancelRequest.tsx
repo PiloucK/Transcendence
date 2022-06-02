@@ -38,7 +38,7 @@ export function ButtonCancelRequest({
           socket.emit("user:update-relations");
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error));
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     }
   };

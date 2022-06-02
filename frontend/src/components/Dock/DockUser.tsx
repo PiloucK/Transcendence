@@ -65,12 +65,12 @@ function NavigationDock({
             console.log("new token for", login42, "stored in cookie");
           })
           .catch((error) => {
-            errorContext.newError?.(errorParser(error));
+            errorContext.newError?.(errorParser(error, loginContext));
             // errorContext.newError(errorParse)
           });
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error));
+        errorContext.newError?.(errorParser(error, loginContext));
       });
   };
 
@@ -86,7 +86,7 @@ function NavigationDock({
         });
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error));
+        errorContext.newError?.(errorParser(error, loginContext));
       });
   };
 

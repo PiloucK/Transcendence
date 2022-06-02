@@ -34,7 +34,7 @@ export function ButtonUnblock({ userInfos }: { userInfos: IUserPublicInfos }) {
           socket.emit("user:update-relations");
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error));
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     }
   };

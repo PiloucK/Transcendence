@@ -37,7 +37,7 @@ export function DockGuest() {
           socket.emit("user:new", user.login42);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error));
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     }
   };
@@ -46,6 +46,7 @@ export function DockGuest() {
     authenticate();
   }, []);
 
+  // store 0.0.0.0 as an environment var in .env file
   return (
     <Dock>
       <Link

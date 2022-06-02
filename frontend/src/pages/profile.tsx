@@ -49,7 +49,7 @@ function MyUserName({ userInfos }: { userInfos: IUser }) {
           socket.emit("user:update-username");
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error));
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     }
   };
@@ -148,7 +148,7 @@ function Profile({
           state.setUserInfos(user);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error));
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     });
   }, []);
@@ -201,7 +201,7 @@ export default function ProfilePage() {
           setUserInfos(user);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error));
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     }
   }, []);

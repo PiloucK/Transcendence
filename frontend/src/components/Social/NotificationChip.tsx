@@ -33,7 +33,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
         setNotifications(notifications);
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error));
+        errorContext.newError?.(errorParser(error, loginContext));
       });
     userService
       .getUserBlockedUsers(loginContext.userLogin)
@@ -41,7 +41,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
         setBlockedUsers(blocked);
       })
       .catch((error) => {
-        errorContext.newError?.(errorParser(error));
+        errorContext.newError?.(errorParser(error, loginContext));
       });
 
     socket.on("update-relations", () => {
@@ -51,7 +51,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
           setNotifications(notifications);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error));
+          errorContext.newError?.(errorParser(error, loginContext));
         });
       userService
         .getUserBlockedUsers(loginContext.userLogin)
@@ -59,7 +59,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
           setBlockedUsers(blocked);
         })
         .catch((error) => {
-          errorContext.newError?.(errorParser(error));
+          errorContext.newError?.(errorParser(error, loginContext));
         });
     });
   }, []);
