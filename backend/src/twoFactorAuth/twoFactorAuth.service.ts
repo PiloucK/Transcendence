@@ -24,7 +24,7 @@ export class TwoFactorAuthService {
 
     await this.usersService.setTwoFactorAuthSecret(secret, user.login42);
 
-    return { secret, otpauthUrl };
+    return otpauthUrl;
   }
 
   async pipeQrCodeStream(stream: Response, otpauthUrl: string) {

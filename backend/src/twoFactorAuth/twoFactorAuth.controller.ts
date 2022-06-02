@@ -24,10 +24,10 @@ export class TwoFactorAuthController {
     private readonly authService: AuthService,
   ) {}
 
-  @Post('generate')
+  @Post('generate-qrcode')
   @UseGuards(JwtAuthGuard)
   async register(@GetReqUser() reqUser: User, @Res() response: Response) {
-    const { otpauthUrl } =
+    const otpauthUrl =
       await this.twoFactorAuthService.generateTwoFactorAuthSecret(reqUser);
 
     return this.twoFactorAuthService.pipeQrCodeStream(response, otpauthUrl);
