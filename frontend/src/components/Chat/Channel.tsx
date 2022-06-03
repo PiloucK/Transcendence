@@ -10,6 +10,7 @@ import { CardUserDM } from "../Cards/CardUserDM";
 
 import Image from "next/image";
 import Rocket from "../../public/no_dm_content.png";
+import Avatar from "@mui/material/Avatar";
 
 import { SendMessageField } from "../Inputs/SendMessageField";
 
@@ -37,6 +38,22 @@ function Messages({ channel }: { channel: Channel }) {
     }
   };
 
+  const GetAvatar = ({ author }: { author: string }) => {
+    if (author === loginContext.userLogin) {
+      return null;
+    } else {
+      return (
+        <Avatar
+          className={styles.chat_avatar}
+          src={
+            channel.users.find((member) => member.login42 === author)!.photo42
+          }
+          sx={{ width: "40px", height: "40px" }}
+        />
+      );
+    }
+  };
+
   const setScroll = () => {
     if (typeof window !== "undefined") {
       var elem = document.getElementById("channelMsgArea");
@@ -52,6 +69,7 @@ function Messages({ channel }: { channel: Channel }) {
         {channel.messages.map((message, index) => (
           <div className={getStyle(message.author)} key={index}>
             {message.content}
+            <GetAvatar author={message.author} />
           </div>
         ))}
       </div>
