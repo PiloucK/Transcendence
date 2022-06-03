@@ -141,7 +141,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
   const friend = users[0] === loginContext.userLogin ? users[1] : users[0];
   React.useEffect(() => {
     userService
-      .getUserBlocked(loginContext.userLogin)
+      .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       });
@@ -153,7 +153,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
 
     socket.on("update-relations", () => {
       userService
-        .getUserBlocked(loginContext.userLogin)
+        .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
         });

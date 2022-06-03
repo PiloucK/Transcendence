@@ -26,7 +26,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           },
         };
       },
-    }), // https://github.com/nestjs/jwt/blob/master/README.md#secret--encryption-key-options
+    }),
   ],
   providers: [AuthService, FortyTwoStrategy, JwtStrategy],
   controllers: [AuthController],

@@ -10,7 +10,10 @@ import userService from "../../services/user";
 
 import io from "socket.io-client";
 
+import { errorHandler } from "../../errors/errorHandler";
+
 import getConfig from "next/config";
+import { useErrorContext } from "../../context/ErrorContext";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -18,6 +21,7 @@ const socket = io(
 );
 
 export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
   const [blockedUsers, setBlockedUsers] = useState<IUserPublicInfos[]>([]);
@@ -27,11 +31,17 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
       .getUserFriendRequestsReceived(loginContext.userLogin)
       .then((notifications: IUserPublicInfos[]) => {
         setNotifications(notifications);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
     userService
       .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedUsers(blocked);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     socket.on("update-relations", () => {
@@ -39,11 +49,17 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
         .getUserFriendRequestsReceived(loginContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
       userService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedUsers(blocked);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   }, []);
