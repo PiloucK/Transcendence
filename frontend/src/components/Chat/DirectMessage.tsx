@@ -141,13 +141,20 @@ function Messages({ dm }: { dm: PrivateConv }) {
     }
   };
 
-  if (typeof window !== "undefined") {
-    var messageBody = document.querySelector("#directMessageMsgArea");
-    if (messageBody) {
-      messageBody.scrollTop =
-        messageBody.scrollHeight - messageBody.clientHeight;
+  const setScroll = () => {
+    if (typeof window !== "undefined") {
+      var messageBody = document.querySelector("#directMessageMsgArea");
+      if (messageBody) {
+        messageBody.scrollTop =
+          messageBody.scrollHeight - messageBody.clientHeight;
+      }
     }
-  }
+  };
+
+  React.useEffect(() => {
+    setScroll();
+  }, []);
+
   return (
     <div className={styles.messages_area} id="directMessageMsgArea">
       {dm.messages.map((message, index) => (

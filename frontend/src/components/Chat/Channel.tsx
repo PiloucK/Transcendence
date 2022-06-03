@@ -39,12 +39,17 @@ function Messages({ channel }: { channel: Channel }) {
 
   const setScroll = () => {
     if (typeof window !== "undefined") {
-      var elem = document.getElementById("channelMsgArea");
-      if (elem) {
-        elem.scrollTop = elem.scrollHeight;
+      var messageBody = document.querySelector("#directMessageMsgArea");
+      if (messageBody) {
+        messageBody.scrollTop =
+          messageBody.scrollHeight - messageBody.clientHeight;
       }
     }
   };
+
+  React.useEffect(() => {
+    setScroll();
+  }, []);
 
   return (
     <>
@@ -55,7 +60,6 @@ function Messages({ channel }: { channel: Channel }) {
           </div>
         ))}
       </div>
-      {setScroll()}
     </>
   );
 }
