@@ -30,6 +30,7 @@ export class TwoFactorAuthController {
     const otpauthUrl =
       await this.twoFactorAuthService.generateTwoFactorAuthSecret(reqUser);
 
+    response.setHeader('Content-Type', 'image/png');
     return this.twoFactorAuthService.pipeQrCodeStream(response, otpauthUrl);
   }
 
