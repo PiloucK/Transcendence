@@ -21,6 +21,7 @@ export interface IUser extends IUserPublicInfos {
 
 export interface IUserCredentials {
   login42: string;
+  photo42: string;
 }
 
 export type Message = { author: string; content: string };

@@ -42,7 +42,7 @@ function UserAvatar({ userInfos }: { userInfos: IUserPublicInfos }) {
   return (
     <div className={styles.profile_user_account_details_avatar}>
       <Avatar
-        img="/public/profile_icon.png"
+        src={userInfos.photo42}
         alt="avatar"
         sx={{ width: 151, height: 151 }}
       />

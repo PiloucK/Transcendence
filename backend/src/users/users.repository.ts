@@ -20,14 +20,14 @@ export class UsersRepository extends Repository<User> {
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const { login42, photo } = createUserDto;
+    const { login42, photo42 } = createUserDto;
 
     let user = await this.findOne(login42);
     if (!user) {
       user = this.create({
         login42,
         username: login42,
-        photo42: photo,
+        photo42: photo42,
       });
 
       await this.save(user);

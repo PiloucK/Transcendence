@@ -14,7 +14,7 @@ export class AuthService {
   ) {}
 
   async findOrCreate42UserInDatabase(fortyTwoUserProfileDto: FortyTwoUserProfileDto): Promise<User> {
-    return await this.usersService.createUser({login42: fortyTwoUserProfileDto.username, photo: fortyTwoUserProfileDto.photos[0].value});
+    return await this.usersService.createUser({login42: fortyTwoUserProfileDto.username, photo42: fortyTwoUserProfileDto.photos[0].value});
   }
 
   issueJwtToken(login42: string): string {

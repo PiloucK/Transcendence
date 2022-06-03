@@ -7,5 +7,5 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
-  photo!: string;
+  photo42!: string;
 }
