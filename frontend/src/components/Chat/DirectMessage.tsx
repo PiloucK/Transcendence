@@ -17,6 +17,7 @@ import { CardUserDM } from "../Cards/CardUserDM";
 import Image from "next/image";
 import Rocket from "../../public/no_dm_content.png";
 import Blocked from "../../public/blocked.png";
+import Avatar from "@mui/material/Avatar";
 
 import { SendMessageField } from "../Inputs/SendMessageField";
 
@@ -114,17 +115,45 @@ function Messages({ dm }: { dm: PrivateConv }) {
     }
   };
 
-	if (typeof window !== "undefined") {
-		var messageBody = document.querySelector('#directMessageMsgArea');
-		if (messageBody) {
-			messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
-		}
-	}
+  const GetAvatar = ({ author }: { author: string }) => {
+    if (author === loginContext.userLogin) {
+      return null;
+    } else {
+      if (dm.userOne.username === author) {
+        return (
+          <div className={styles.chat_avatar}>
+            <Avatar
+              src={dm.userOne.photo42}
+              sx={{ width: "40px", height: "40px" }}
+            />
+          </div>
+        );
+      } else {
+        return (
+          <div className={styles.chat_avatar}>
+            <Avatar
+              src={dm.userTwo.photo42}
+              sx={{ width: "40px", height: "40px" }}
+            />
+          </div>
+        );
+      }
+    }
+  };
+
+  if (typeof window !== "undefined") {
+    var messageBody = document.querySelector("#directMessageMsgArea");
+    if (messageBody) {
+      messageBody.scrollTop =
+        messageBody.scrollHeight - messageBody.clientHeight;
+    }
+  }
   return (
-    <div className={styles.messages_area} id='directMessageMsgArea'>
+    <div className={styles.messages_area} id="directMessageMsgArea">
       {dm.messages.map((message, index) => (
         <div className={getStyle(message.author)} key={index}>
           <MessageContent message={message} />
+          <GetAvatar author={message.author} />
         </div>
       ))}
     </div>
@@ -137,7 +166,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
   const [input, setInput] = React.useState("");
   const [privateConv, setPrivateConv] = useState<PrivateConv>();
   const users = menu.split("|");
-	
+
   const friend = users[0] === loginContext.userLogin ? users[1] : users[0];
   React.useEffect(() => {
     userService
@@ -145,7 +174,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       });
-		privateConvService
+    privateConvService
       .getPrivateConv(loginContext.userLogin, friend)
       .then((privateConv: PrivateConv) => {
         setPrivateConv(privateConv);
