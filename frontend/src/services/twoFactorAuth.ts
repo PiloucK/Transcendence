@@ -10,7 +10,7 @@ axios.defaults.withCredentials = true;
 
 const generateQrCode = () => {
   return axios
-    .post(`${baseUrl}/generate-qrcode`, { responseType: 'arraybuffer'})
+    .post(`${baseUrl}/generate-qrcode`)
     .then((response) => response.data);
 };
 

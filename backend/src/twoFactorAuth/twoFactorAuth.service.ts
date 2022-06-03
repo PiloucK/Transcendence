@@ -4,6 +4,7 @@ import { authenticator } from 'otplib';
 import qrcode from 'qrcode';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { TwoFactorAuthCodeDto } from './dto/twoFactorAuthCode.dto';
 
 @Injectable()
 export class TwoFactorAuthService {
@@ -30,9 +31,14 @@ export class TwoFactorAuthService {
     return qrcode.toDataURL(otpauthUrl);
   }
 
-  isTwoFactorAuthCodeValid(twoFactorAuthCode: string, user: User) {
+  isTwoFactorAuthCodeValid(
+    twoFactorAuthCodeDto: TwoFactorAuthCodeDto,
+    user: User,
+  ) {
+    const { authCode } = twoFactorAuthCodeDto;
+
     return authenticator.verify({
-      token: twoFactorAuthCode,
+      token: authCode,
       secret: user.twoFactorAuthSecret,
     });
   }

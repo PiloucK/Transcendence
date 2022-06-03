@@ -42,10 +42,10 @@ export class TwoFactorAuthController {
   @UseGuards(JwtAuthGuard)
   async turnOnTwoFactorAuth(
     @GetReqUser() reqUser: User,
-    @Body() { twoFactorAuthCode }: TwoFactorAuthCodeDto,
+    @Body() twoFactorAuthCodeDto: TwoFactorAuthCodeDto,
   ) {
     const isCodeValid = this.twoFactorAuthService.isTwoFactorAuthCodeValid(
-      twoFactorAuthCode,
+      twoFactorAuthCodeDto,
       reqUser,
     );
     if (!isCodeValid) {
@@ -60,10 +60,10 @@ export class TwoFactorAuthController {
   async authenticate(
     @GetReqUser() reqUser: User,
     @Res() response: Response,
-    @Body() { twoFactorAuthCode }: TwoFactorAuthCodeDto,
+    @Body() twoFactorAuthCodeDto: TwoFactorAuthCodeDto,
   ) {
     const isCodeValid = this.twoFactorAuthService.isTwoFactorAuthCodeValid(
-      twoFactorAuthCode,
+      twoFactorAuthCodeDto,
       reqUser,
     );
     if (!isCodeValid) {
