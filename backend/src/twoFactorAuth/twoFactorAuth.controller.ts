@@ -26,12 +26,15 @@ export class TwoFactorAuthController {
 
   @Post('generate-qrcode')
   @UseGuards(JwtAuthGuard)
-  async register(@GetReqUser() reqUser: User, @Res() response: Response) {
+  async generateQrCode(@GetReqUser() reqUser: User, @Res() response: Response) {
     const otpauthUrl =
       await this.twoFactorAuthService.generateTwoFactorAuthSecret(reqUser);
 
+    const qrcodeDataUrl = await this.twoFactorAuthService.getQrCodeDataUrl(
+      otpauthUrl,
+    );
     response.setHeader('Content-Type', 'image/png');
-    return this.twoFactorAuthService.pipeQrCodeStream(response, otpauthUrl);
+    response.send(qrcodeDataUrl);
   }
 
   @Post('turn-on')
