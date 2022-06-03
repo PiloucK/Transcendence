@@ -53,8 +53,8 @@ export function CardUserDM({
     >
       <div className={styles.user_card_avatar}>
         <Avatar
-          src={"../../public/profile_icon.png"}
-          sx={{ width: "100px", height: "100px" }}
+            src={userInfos.photo42}
+			sx={{ width: "100px", height: "100px" }}
         />
       </div>
       <div className={styles.user_card_username}>{userInfos.username}</div>
