@@ -19,6 +19,9 @@ export class User {
   // https://stackoverflow.com/questions/25300821/difference-between-varchar-and-text-in-mysql
   // https://typeorm.io/#column-data-types
 
+  @Column()
+  photo42!: string;
+
   @Column({ default: 0 })
   elo!: number;
 

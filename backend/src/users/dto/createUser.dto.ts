@@ -4,4 +4,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   login42!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  photo!: string;
 }

@@ -85,11 +85,11 @@ function MyUserName({ userInfos }: { userInfos: IUser }) {
   }
 }
 
-function MyAvatar() {
+function MyAvatar({ userInfos }: { userInfos: IUser }) {
   return (
     <div className={styles.profile_user_account_details_avatar}>
       <Avatar
-        img="/public/profile_icon.png"
+        src={userInfos.photo42}
         alt="avatar"
         sx={{ width: 151, height: 151 }}
       />
@@ -103,7 +103,7 @@ function MyAccountDetails({ userInfos }: { userInfos: IUser }) {
       <div className={styles.profile_user_account_details_title}>
         Account details
       </div>
-      <MyAvatar />
+      <MyAvatar userInfos={userInfos} />
       <MyUserName userInfos={userInfos} />
     </div>
   );
