@@ -11,7 +11,7 @@ const { publicRuntimeConfig } = getConfig();
 
 const LoginContext = createContext<ILoginContext>(defaultLoginState)
 
-export const LoginProvider: React.FC = ({ children }: { children: React.ReactNode }) => {
+export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
 	const [userLogin, setUserLogin] = useState(defaultLoginState.userLogin)
 	const [chatMenu, setChatMenu] = useState(defaultLoginState.chatMenu)
 	const [chatDM, setChatDM] = useState(defaultLoginState.chatDM)
