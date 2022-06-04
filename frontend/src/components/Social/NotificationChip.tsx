@@ -20,7 +20,7 @@ const socket = io(
   { transports: ["websocket"] }
 );
 
-export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
+export const NotificationChip = ({ children }: { children: React.ReactNode }) => {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);

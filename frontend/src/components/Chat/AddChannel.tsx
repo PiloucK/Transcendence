@@ -111,7 +111,7 @@ function CreateChannelForm() {
         .then((res) => {
           socket.emit("user:update-public-channels");
           socket.emit("user:update-joined-channel");
-          loginContext.setChatMenu(res.id);
+          loginContext.setChatMenu?.(res.id);
         });
     }
   };

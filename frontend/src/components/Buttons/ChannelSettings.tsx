@@ -35,7 +35,7 @@ function MenuButtons({
   };
 
   const handleLeaveChannel = () => {
-    loginContext.setChatMenu("direct_message");
+    loginContext.setChatMenu?.("direct_message");
     setAnchorEl(null);
     channelService.leaveChannel(loginContext.userLogin, channel.id).then(() => {
       socket.emit("user:update-channel-content");
