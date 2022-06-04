@@ -1,12 +1,19 @@
-import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Res,
+  UseFilters,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { FortyTwoAuthGuard } from './guards/fortyTwoAuth.guard';
 import { JwtAuthGuard } from './guards/jwtAuth.guard';
 import { ConfigService } from '@nestjs/config';
-import { User } from 'src/users/user.entity';
-import { GetReqUser } from './getReqUser.decorator';
 import { ReqUser } from 'src/reqUser.interface';
+import { GetReqUser } from './decorators/getReqUser.decorator';
+import { FortyTwoAuthFilter } from './filters/fortyTwoAuth.filter';
 
 @Controller('auth')
 export class AuthController {
@@ -25,6 +32,7 @@ export class AuthController {
   }
 
   @UseGuards(FortyTwoAuthGuard)
+  @UseFilters(FortyTwoAuthFilter)
   @Get('42/callback')
   fortyTwoAuthRedirect(
     @GetReqUser() reqUser: ReqUser,

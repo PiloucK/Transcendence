@@ -27,7 +27,7 @@ const defaultLoginState = {
 
 const LoginContext = createContext<ILoginContext>(defaultLoginState)
 
-export const LoginProvider: React.FC = ( {children}: React.ReactNode ) => {
+export const LoginProvider: React.FC = ({ children }: { children: React.ReactNode }) => {
 	const [userLogin, setUserLogin] = useState(defaultLoginState.userLogin)
 	const [userSecret, setUserSecret] = useState(defaultLoginState.userSecret)
 	const [chatMenu, setChatMenu] = useState(defaultLoginState.chatMenu)
@@ -42,9 +42,9 @@ export const LoginProvider: React.FC = ( {children}: React.ReactNode ) => {
 		setUserLogin(null)
 		setUserSecret(null)
 		Router.push("/");
-    Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
-      path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
-    });
+		Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
+			path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
+		});
 	}
 
 	return (

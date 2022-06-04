@@ -9,9 +9,10 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import io from "socket.io-client";
 
-import { errorHandler } from "../../services/errorHandler";
+import { errorHandler } from "../../errors/errorHandler";
 
 import getConfig from "next/config";
+import { useErrorContext } from "../../context/ErrorContext";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -19,6 +20,7 @@ const socket = io(
 );
 
 export function ButtonBlock({ userInfos }: { userInfos: IUserPublicInfos }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   const blockAUser = () => {
@@ -32,7 +34,7 @@ export function ButtonBlock({ userInfos }: { userInfos: IUserPublicInfos }) {
           socket.emit("user:update-relations");
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     }
   };

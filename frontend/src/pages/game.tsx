@@ -7,9 +7,10 @@ import userService from "../services/user";
 
 import io from "socket.io-client";
 
-import { errorHandler } from "../services/errorHandler";
+import { errorHandler } from "../errors/errorHandler";
 
 import getConfig from "next/config";
+import { useErrorContext } from "../context/ErrorContext";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -33,6 +34,7 @@ function DisplayBallForUser() {
 // Access the global user name and update the user rank via the API.
 // Emit on the websocket the user:update-elo event for the real time leaderboard.
 function updateUserElo(eloModification: number) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   if (currentUser !== "") {
@@ -42,7 +44,7 @@ function updateUserElo(eloModification: number) {
         socket.emit("user:update-elo");
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   }
 }

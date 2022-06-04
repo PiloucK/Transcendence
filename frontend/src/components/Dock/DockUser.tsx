@@ -1,5 +1,10 @@
 import Link from "next/link";
-import React, { ChangeEventHandler, FormEventHandler, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  FormEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -19,10 +24,12 @@ import { IUser, IUserCredentials } from "../../interfaces/users";
 import { Button, TextField } from "@mui/material";
 import Cookies from "js-cookie";
 
-import { errorHandler } from "../../services/errorHandler";
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 
 import getConfig from "next/config";
-//import axios from "axios";
+import axios from "axios";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -35,18 +42,21 @@ function NavigationDock({
   setIsInNavigation: (mode: boolean) => void;
 }) {
   const loginContext = useLoginContext();
+  const errorContext = useErrorContext();
 
   const [username, setUsername] = useState("");
 
-//  axios
-//    .get("http://0.0.0.0:3001/j")
-//    .then((response) => response.data)
-//    .then((user) => {
-//      console.log(user);
-//    })
-//    .catch((error) => {
-//      errorHandler(error, loginContext);
-//    });
+  // useEffect(() => {
+  //   console.log("sending request...");
+  //   axios
+  //     .get("http://0.0.0.0:3001/users/mvidal-/friends")
+  //     .then(() => {
+  //       console.log("request sent!");
+  //     })
+  //     .catch((error) => {
+  //       errorContext.newError?.(errorHandler(error, loginContext));
+  //     });
+  // }, []);
 
   const addUser: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -68,11 +78,12 @@ function NavigationDock({
             console.log("new token for", login42, "stored in cookie");
           })
           .catch((error) => {
-            errorHandler(error, loginContext);
+            errorContext.newError?.(errorHandler(error, loginContext));
+            // errorContext.newError(errorParse)
           });
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   };
 
@@ -88,7 +99,7 @@ function NavigationDock({
         });
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   };
 

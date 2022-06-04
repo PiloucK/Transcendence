@@ -10,10 +10,11 @@ import Link from "next/link";
 
 import io from "socket.io-client";
 
-import { errorHandler } from "../services/errorHandler";
+import { errorHandler } from "../errors/errorHandler";
 import { useLoginContext } from "../context/LoginContext";
 
 import getConfig from "next/config";
+import { useErrorContext } from "../context/ErrorContext";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -55,6 +56,7 @@ function createLeaderboard(users: IUserForLeaderboard[]): ReactElement {
 
 // Will print the list of users in the leaderboard.
 export default function Leaderboard() {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   const [users, setUsers] = useState<IUserForLeaderboard[]>([]);
@@ -66,7 +68,7 @@ export default function Leaderboard() {
         setUsers(users);
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     socket.on("update-leaderboard", () => {
@@ -76,7 +78,7 @@ export default function Leaderboard() {
           setUsers(users);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   }, []);

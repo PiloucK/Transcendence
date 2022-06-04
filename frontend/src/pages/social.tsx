@@ -15,9 +15,10 @@ import {
 
 import io from "socket.io-client";
 
-import { errorHandler } from "../services/errorHandler";
+import { errorHandler } from "../errors/errorHandler";
 
 import getConfig from "next/config";
+import { useErrorContext } from "../context/ErrorContext";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -25,6 +26,7 @@ const socket = io(
 );
 
 function SocialPage({ menu }: { menu: string }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
   const [blocked, setBlocked] = useState<IUserPublicInfos[]>([]);
@@ -37,7 +39,7 @@ function SocialPage({ menu }: { menu: string }) {
         setFriends(friends);
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     userService
@@ -46,7 +48,7 @@ function SocialPage({ menu }: { menu: string }) {
         setBlocked(users);
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     userService
@@ -55,7 +57,7 @@ function SocialPage({ menu }: { menu: string }) {
         setNotifications(notifications);
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     socket.on("update-leaderboard", () => {
@@ -65,7 +67,7 @@ function SocialPage({ menu }: { menu: string }) {
           setFriends(friends);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
 
       userService
@@ -74,7 +76,7 @@ function SocialPage({ menu }: { menu: string }) {
           setBlocked(users);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
 
       userService
@@ -83,7 +85,7 @@ function SocialPage({ menu }: { menu: string }) {
           setNotifications(notifications);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
 
@@ -94,7 +96,7 @@ function SocialPage({ menu }: { menu: string }) {
           setFriends(friends);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
 
       userService
@@ -103,7 +105,7 @@ function SocialPage({ menu }: { menu: string }) {
           setBlocked(users);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
 
       userService
@@ -112,7 +114,7 @@ function SocialPage({ menu }: { menu: string }) {
           setNotifications(notifications);
         })
         .catch((error) => {
-          errorHandler(error, loginContext);
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   }, []);
@@ -133,6 +135,7 @@ function SocialPage({ menu }: { menu: string }) {
 
 export default function Social() {
   const [menu, setMenu] = useState("all");
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   if (typeof window !== "undefined") {
