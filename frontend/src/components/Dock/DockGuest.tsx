@@ -30,9 +30,9 @@ export function DockGuest() {
     if (Cookies.get(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME)) {
       authService
         .getLoggedInUser()
-        .then((user) => {
-          loginContext.login?.(user.login42, "");
-          socket.emit("user:new", user.login42);
+        .then((userLogin42) => {
+          loginContext.login?.(userLogin42, "");
+          socket.emit("user:new", userLogin42);
         })
         .catch((error) => {
           errorHandler(error, loginContext);

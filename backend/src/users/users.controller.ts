@@ -17,6 +17,7 @@ import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 import { GetReqUser } from 'src/auth/getReqUser.decorator';
+import { ReqUser } from 'src/reqUser.interface';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -47,7 +48,7 @@ export class UsersController {
   updateUsername(
     @Param('login42') login42: string,
     @Body() updateUsernameDto: UpdateUsernameDto,
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
   ): Promise<User> {
     return this.usersService.updateUsername(
       reqUser,
@@ -59,7 +60,7 @@ export class UsersController {
   @Get('/:login42/friends')
   getUserFriends(
     @Param('login42') login42: string,
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
   ): Promise<User[]> {
     return this.usersService.getUserFriends(reqUser, login42);
   }
@@ -67,7 +68,7 @@ export class UsersController {
   @Get('/:login42/friendRequestsSent')
   getUserFriendRequestsSent(
     @Param('login42') login42: string,
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
   ): Promise<User[]> {
     return this.usersService.getUserFriendRequestsSent(reqUser, login42);
   }
@@ -75,7 +76,7 @@ export class UsersController {
   @Get('/:login42/friendRequestsReceived')
   getUserFriendRequestsReceived(
     @Param('login42') login42: string,
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
   ): Promise<User[]> {
     return this.usersService.getUserFriendRequestsReceived(reqUser, login42);
   }
@@ -84,7 +85,7 @@ export class UsersController {
   sendFriendRequest(
     @Param('login42') login42: string,
     @Body() friendLogin42Dto: FriendLogin42Dto,
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
   ): Promise<User[]> {
     return this.usersService.sendFriendRequest(
       reqUser,
@@ -97,7 +98,7 @@ export class UsersController {
   cancelFriendRequest(
     @Param('login42') login42: string,
     @Body() friendLogin42Dto: FriendLogin42Dto,
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
   ): Promise<User[]> {
     return this.usersService.cancelFriendRequest(
       reqUser,
@@ -110,7 +111,7 @@ export class UsersController {
   acceptFriendRequest(
     @Param('login42') login42: string,
     @Body() friendLogin42Dto: FriendLogin42Dto,
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
   ): Promise<User[]> {
     return this.usersService.acceptFriendRequest(
       reqUser,
@@ -123,7 +124,7 @@ export class UsersController {
   declineFriendRequest(
     @Param('login42') login42: string,
     @Body() friendLogin42Dto: FriendLogin42Dto,
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
   ): Promise<User[]> {
     return this.usersService.declineFriendRequest(
       reqUser,
@@ -136,7 +137,7 @@ export class UsersController {
   removeFriend(
     @Param('login42') login42: string,
     @Body() friendLogin42Dto: FriendLogin42Dto,
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
   ): Promise<User[]> {
     return this.usersService.removeFriend(reqUser, login42, friendLogin42Dto);
   }
@@ -144,7 +145,7 @@ export class UsersController {
   @Get('/:login42/blockedUsers')
   getUserBlockedUsers(
     @Param('login42') login42: string,
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
   ): Promise<User[]> {
     return this.usersService.getUserBlockedUsers(reqUser, login42);
   }
@@ -153,7 +154,7 @@ export class UsersController {
   blockUser(
     @Param('login42') login42: string,
     @Body() friendLogin42Dto: FriendLogin42Dto,
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
   ): Promise<User[]> {
     return this.usersService.blockUser(reqUser, login42, friendLogin42Dto);
   }
@@ -162,7 +163,7 @@ export class UsersController {
   unblockUser(
     @Param('login42') login42: string,
     @Body() friendLogin42Dto: FriendLogin42Dto,
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
   ): Promise<User[]> {
     return this.usersService.unblockUser(reqUser, login42, friendLogin42Dto);
   }

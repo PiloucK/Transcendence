@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { authenticator } from 'otplib';
 import qrcode from 'qrcode';
-import { User } from 'src/users/user.entity';
+import { ReqUser } from 'src/reqUser.interface';
 import { UsersService } from 'src/users/users.service';
-import { TwoFactorAuthCodeDto } from './dto/twoFactorAuthCode.dto';
 
 @Injectable()
 export class TwoFactorAuthService {
@@ -13,16 +12,19 @@ export class TwoFactorAuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async generateTwoFactorAuthSecret(user: User) {
+  async generateTwoFactorAuthSecret(reqUser: ReqUser) {
     const secret = authenticator.generateSecret();
 
     const otpauthUrl = authenticator.keyuri(
-      user.login42,
+      reqUser.login42,
       `${this.configService.get('TWO_FACTOR_AUTH_APP_NAME')}`,
       secret,
     );
 
-    await this.usersService.setTwoFactorAuthSecret(secret, user.login42);
+    await this.usersService.setTwoFactorAuthTemporarySecret(
+      secret,
+      reqUser.login42,
+    );
 
     return otpauthUrl;
   }
@@ -31,15 +33,20 @@ export class TwoFactorAuthService {
     return qrcode.toDataURL(otpauthUrl);
   }
 
-  isTwoFactorAuthCodeValid(
-    twoFactorAuthCodeDto: TwoFactorAuthCodeDto,
-    user: User,
-  ) {
-    const { authCode } = twoFactorAuthCodeDto;
-
-    return authenticator.verify({
-      token: authCode,
-      secret: user.twoFactorAuthSecret,
-    });
+  async isTwoFactorAuthCodeValid(
+    authCode: string | undefined,
+    reqUser: ReqUser,
+  ): Promise<boolean> {
+    const user = await this.usersService.getUserByLogin42(reqUser.login42);
+    if (authCode) {
+      return authenticator.verify({
+        token: authCode,
+        secret: user.twoFactorAuthTemporarySecret,
+      });
+    } else if (user.twoFactorAuthSecret) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

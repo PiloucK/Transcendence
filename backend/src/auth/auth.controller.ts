@@ -6,6 +6,7 @@ import { JwtAuthGuard } from './guards/jwtAuth.guard';
 import { ConfigService } from '@nestjs/config';
 import { User } from 'src/users/user.entity';
 import { GetReqUser } from './getReqUser.decorator';
+import { ReqUser } from 'src/reqUser.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -26,7 +27,7 @@ export class AuthController {
   @UseGuards(FortyTwoAuthGuard)
   @Get('42/callback')
   fortyTwoAuthRedirect(
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
     @Res() response: Response,
   ): void {
     // Passport assigns the User object returned by the validate() method to the
@@ -59,7 +60,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('getLoggedInUser')
-  getLoggedInUser(@GetReqUser() user: User): User {
-    return user;
+  getLoggedInUser(@GetReqUser() reqUser: ReqUser): string {
+    return reqUser.login42;
   }
 }

@@ -64,4 +64,8 @@ export class User {
   @Column({ nullable: true })
   @Exclude()
   twoFactorAuthSecret!: string;
+
+  @Column({ nullable: true })
+  @Exclude()
+  twoFactorAuthTemporarySecret!: string;
 }

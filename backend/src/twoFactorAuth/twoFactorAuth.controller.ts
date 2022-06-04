@@ -11,7 +11,7 @@ import { Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { GetReqUser } from 'src/auth/getReqUser.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
-import { User } from 'src/users/user.entity';
+import { ReqUser } from 'src/reqUser.interface';
 import { UsersService } from 'src/users/users.service';
 import { TwoFactorAuthCodeDto } from './dto/twoFactorAuthCode.dto';
 import { TwoFactorAuthService } from './twoFactorAuth.service';
@@ -26,7 +26,10 @@ export class TwoFactorAuthController {
 
   @Post('generate-qrcode')
   @UseGuards(JwtAuthGuard)
-  async generateQrCode(@GetReqUser() reqUser: User, @Res() response: Response) {
+  async generateQrCode(
+    @GetReqUser() reqUser: ReqUser,
+    @Res() response: Response,
+  ) {
     const otpauthUrl =
       await this.twoFactorAuthService.generateTwoFactorAuthSecret(reqUser);
 
@@ -41,29 +44,37 @@ export class TwoFactorAuthController {
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   async turnOnTwoFactorAuth(
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
     @Body() twoFactorAuthCodeDto: TwoFactorAuthCodeDto,
   ) {
-    const isCodeValid = this.twoFactorAuthService.isTwoFactorAuthCodeValid(
-      twoFactorAuthCodeDto,
-      reqUser,
-    );
+    const { authCode } = twoFactorAuthCodeDto;
+    const isCodeValid =
+      await this.twoFactorAuthService.isTwoFactorAuthCodeValid(
+        authCode,
+        reqUser,
+      );
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
     }
-    await this.usersService.turnOnTwoFactorAuth(reqUser.login42);
+
+    if (authCode) {
+      await this.usersService.turnOnNewTwoFactorAuth(reqUser.login42);
+    } else {
+      await this.usersService.turnOnOldTwoFactorAuth(reqUser.login42);
+    }
   }
 
   @Post('authenticate')
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   async authenticate(
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: ReqUser,
     @Res() response: Response,
     @Body() twoFactorAuthCodeDto: TwoFactorAuthCodeDto,
   ) {
+    const { authCode } = twoFactorAuthCodeDto;
     const isCodeValid = this.twoFactorAuthService.isTwoFactorAuthCodeValid(
-      twoFactorAuthCodeDto,
+      authCode,
       reqUser,
     );
     if (!isCodeValid) {
