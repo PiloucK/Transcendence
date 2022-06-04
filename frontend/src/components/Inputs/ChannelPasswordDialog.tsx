@@ -46,7 +46,7 @@ export function ChannelPasswordDialog({
     channelService
       .joinProtectedChannel(loginContext.userLogin, channelId, input)
       .then((channel: Channel) => {
-        loginContext.setChatMenu(channel.id);
+        loginContext.setChatMenu?.(channel.id);
         socket.emit("user:update-joined-channel");
         socket.emit("user:update-channel-content");
       })
