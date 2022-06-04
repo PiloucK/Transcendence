@@ -34,7 +34,7 @@ export function DockGuest() {
       authService
         .getLoggedInUser()
         .then((user) => {
-          loginContext.login?.(user.login42, "");
+          loginContext.login?.(user.login42);
           socket.emit("user:new", user.login42);
         })
         .catch((error) => {
