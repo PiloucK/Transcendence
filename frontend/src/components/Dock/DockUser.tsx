@@ -68,7 +68,7 @@ function NavigationDock({
     userService
       .addOne(newUserCredentials)
       .then((user: IUser) => {
-        loginContext.login?.(user.login42, "");
+        loginContext.login?.(user.login42);
         socket.emit("user:new", username);
         setUsername("");
 

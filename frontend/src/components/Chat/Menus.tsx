@@ -318,7 +318,7 @@ export function ChannelMenu({ channel }: { channel: Channel }) {
 
 export function AddChannelMenu(props: {
   menu: string;
-  setMenu: (menu: string) => void;
+  setMenu: ((menu: string) => void) | undefined;
 }) {
   const getStyle = (key: string) => {
     if (props.menu === key) {
@@ -333,7 +333,7 @@ export function AddChannelMenu(props: {
       <div
         className={getStyle("public_channels")}
         onClick={() => {
-          props.setMenu("public_channels");
+          props.setMenu?.("public_channels");
         }}
       >
         Public Channels
@@ -341,7 +341,7 @@ export function AddChannelMenu(props: {
       <div
         className={getStyle("create_channel")}
         onClick={() => {
-          props.setMenu("create_channel");
+          props.setMenu?.("create_channel");
         }}
       >
         Create Channel
@@ -356,7 +356,7 @@ function ChannelList({
   channels,
 }: {
   getStyle: (key: string) => string;
-  setMenu: (menu: string) => void;
+  setMenu: ((menu: string) => void) | undefined;
   channels: Channel[];
 }) {
   if (channels.length === 0) return null;
@@ -366,7 +366,7 @@ function ChannelList({
         key={channel.id}
         className={getStyle(channel.id)}
         onClick={() => {
-          setMenu(channel.id);
+          setMenu?.(channel.id);
         }}
       >
         <Image src={channelImage} alt="channel img" width={45} height={45} />
@@ -377,7 +377,7 @@ function ChannelList({
 
 export function ChatMenu(props: {
   menu: string;
-  setMenu: (menu: string) => void;
+  setMenu: ((menu: string) => void) | undefined;
 }) {
   const [channels, setChannels] = useState<Channel[]>([]);
   const loginContext = useLoginContext();
@@ -409,7 +409,7 @@ export function ChatMenu(props: {
       <div
         className={getStyle("direct_message")}
         onClick={() => {
-          props.setMenu("direct_message");
+          props.setMenu?.("direct_message");
         }}
       >
         <Image
@@ -427,7 +427,7 @@ export function ChatMenu(props: {
       <div
         className={getStyle("add_channel")}
         onClick={() => {
-          props.setMenu("add_channel");
+          props.setMenu?.("add_channel");
         }}
       >
         <Image src={addChannel} alt="add channel" width={45} height={45} />
