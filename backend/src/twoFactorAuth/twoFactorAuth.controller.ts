@@ -90,6 +90,13 @@ export class TwoFactorAuthController {
     response.send(reqUser.login42);
   }
 
+  @Post('turn-off')
+  @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
+  async turnOff(@GetReqUser() reqUser: ReqUser) {
+    this.usersService.turnOffTwoFactorAuth(reqUser.login42);
+  }
+
   //dev
   @Get('enabled')
   @UseGuards(JwtAuthGuard)

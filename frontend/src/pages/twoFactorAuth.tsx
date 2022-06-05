@@ -30,6 +30,7 @@ export default function TwoFactorAuth() {
       });
   };
   useEffect(checkIfEnabled, []);
+
   const generateQrCode = () => {
     twoFactorAuthService.generateQrCode().then((qrCode) => {
       setImage(qrCode);
@@ -54,6 +55,17 @@ export default function TwoFactorAuth() {
     setCode(event.target.value);
   };
 
+  const turnOff = () => {
+    twoFactorAuthService
+      .turnOff()
+      .then(() => {
+        checkIfEnabled();
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
+      });
+  };
+
   return (
     <>
       <Button onClick={generateQrCode}>generate qr code</Button>
@@ -64,6 +76,7 @@ export default function TwoFactorAuth() {
       </form>
       <p>is 2FA enabled? {enabled ? <span>yes</span> : <span>no</span>}</p>
       <Button onClick={checkIfEnabled}>recheck</Button>
+      <Button onClick={turnOff}>turn off</Button>
     </>
   );
 }

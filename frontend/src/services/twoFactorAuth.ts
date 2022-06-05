@@ -20,7 +20,14 @@ const turnOn = (authCode: string) => {
     .then((response) => response.data);
 };
 
+const turnOff = () => {
+  return axios
+    .post(`${baseUrl}/turn-off`)
+    .then((response) => response.data);
+};
+
 export default {
   generateQrCode,
   turnOn,
+  turnOff,
 };
