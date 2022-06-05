@@ -12,7 +12,7 @@ export class TwoFactorAuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async generateTwoFactorAuthSecret(reqUser: ReqUser) {
+  async generateSecret(reqUser: ReqUser) {
     const secret = authenticator.generateSecret();
 
     const otpauthUrl = authenticator.keyuri(
@@ -33,7 +33,7 @@ export class TwoFactorAuthService {
     return qrcode.toDataURL(otpauthUrl);
   }
 
-  async isFirstTwoFactorAuthCodeValid(
+  async isFirstCodeValid(
     firstAuthCode: string | undefined,
     reqUser: ReqUser,
   ): Promise<boolean> {
@@ -52,10 +52,7 @@ export class TwoFactorAuthService {
     }
   }
 
-  async isTwoFactorAuthCodeValid(
-    authCode: string,
-    reqUser: ReqUser,
-  ): Promise<boolean> {
+  async isCodeValid(authCode: string, reqUser: ReqUser): Promise<boolean> {
     const user = await this.usersService.getUserByLogin42(reqUser.login42);
     return authenticator.verify({
       token: authCode,

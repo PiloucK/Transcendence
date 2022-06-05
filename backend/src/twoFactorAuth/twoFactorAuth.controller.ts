@@ -34,7 +34,7 @@ export class TwoFactorAuthController {
     @Res() response: Response,
   ) {
     const otpauthUrl =
-      await this.twoFactorAuthService.generateTwoFactorAuthSecret(reqUser);
+      await this.twoFactorAuthService.generateSecret(reqUser);
 
     const qrcodeDataUrl = await this.twoFactorAuthService.getQrCodeDataUrl(
       otpauthUrl,
@@ -46,13 +46,13 @@ export class TwoFactorAuthController {
   @Post('turn-on')
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
-  async turnOnTwoFactorAuth(
+  async turnOn(
     @GetReqUser() reqUser: ReqUser,
     @Body() firstTwoFactorAuthCodeDto: FirstTwoFactorAuthCodeDto,
   ) {
     const { firstAuthCode } = firstTwoFactorAuthCodeDto;
     const isCodeValid =
-      await this.twoFactorAuthService.isFirstTwoFactorAuthCodeValid(
+      await this.twoFactorAuthService.isFirstCodeValid(
         firstAuthCode,
         reqUser,
       );
@@ -76,7 +76,7 @@ export class TwoFactorAuthController {
     @Body() twoFactorAuthCodeDto: TwoFactorAuthCodeDto,
   ) {
     const { authCode } = twoFactorAuthCodeDto;
-    const isCodeValid = this.twoFactorAuthService.isTwoFactorAuthCodeValid(
+    const isCodeValid = this.twoFactorAuthService.isCodeValid(
       authCode,
       reqUser,
     );
