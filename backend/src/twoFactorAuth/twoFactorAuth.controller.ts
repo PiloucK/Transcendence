@@ -13,6 +13,7 @@ import { GetReqUser } from 'src/auth/decorators/getReqUser.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 import { ReqUser } from 'src/reqUser.interface';
 import { UsersService } from 'src/users/users.service';
+import { FirstTwoFactorAuthCodeDto } from './dto/firstTwoFactorAuthCode.dto';
 import { TwoFactorAuthCodeDto } from './dto/twoFactorAuthCode.dto';
 import { TwoFactorAuthService } from './twoFactorAuth.service';
 
@@ -45,19 +46,19 @@ export class TwoFactorAuthController {
   @UseGuards(JwtAuthGuard)
   async turnOnTwoFactorAuth(
     @GetReqUser() reqUser: ReqUser,
-    @Body() twoFactorAuthCodeDto: TwoFactorAuthCodeDto,
+    @Body() firstTwoFactorAuthCodeDto: FirstTwoFactorAuthCodeDto,
   ) {
-    const { authCode } = twoFactorAuthCodeDto;
+    const { firstAuthCode } = firstTwoFactorAuthCodeDto;
     const isCodeValid =
-      await this.twoFactorAuthService.isTwoFactorAuthCodeValid(
-        authCode,
+      await this.twoFactorAuthService.isFirstTwoFactorAuthCodeValid(
+        firstAuthCode,
         reqUser,
       );
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
     }
 
-    if (authCode) {
+    if (firstAuthCode) {
       await this.usersService.turnOnNewTwoFactorAuth(reqUser.login42);
     } else {
       await this.usersService.turnOnOldTwoFactorAuth(reqUser.login42);

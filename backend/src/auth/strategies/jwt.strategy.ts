@@ -3,11 +3,16 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { User } from 'src/users/user.entity';
+import { UsersService } from 'src/users/users.service';
 import { JwtTokenPayloadDto } from '../dto/jwtTokenPayload.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly usersService: UsersService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
@@ -17,7 +22,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: configService.get('JWT_ACCESSTOKEN_SECRET'),
     });
   }
-  async validate(payload: JwtTokenPayloadDto) {
-    return { login42: payload.login42 };
+
+  async validate(payload: JwtTokenPayloadDto): Promise<User> {
+    const user = await this.usersService.getUserByLogin42(payload.login42);
+    if (!user.isTwoFactorAuthEnabled || payload.isTwoFactorAuthenticated) {
+      return user;
+    }
   }
 }

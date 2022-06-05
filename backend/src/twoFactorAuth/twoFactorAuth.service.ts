@@ -33,14 +33,14 @@ export class TwoFactorAuthService {
     return qrcode.toDataURL(otpauthUrl);
   }
 
-  async isTwoFactorAuthCodeValid(
-    authCode: string | undefined,
+  async isFirstTwoFactorAuthCodeValid(
+    firstAuthCode: string | undefined,
     reqUser: ReqUser,
   ): Promise<boolean> {
     const user = await this.usersService.getUserByLogin42(reqUser.login42);
-    if (authCode) {
+    if (firstAuthCode) {
       return authenticator.verify({
-        token: authCode,
+        token: firstAuthCode,
         secret: user.twoFactorAuthTemporarySecret,
       });
     } else if (user.twoFactorAuthSecret) {
@@ -48,5 +48,16 @@ export class TwoFactorAuthService {
     } else {
       return false;
     }
+  }
+
+  async isTwoFactorAuthCodeValid(
+    authCode: string,
+    reqUser: ReqUser,
+  ): Promise<boolean> {
+    const user = await this.usersService.getUserByLogin42(reqUser.login42);
+    return authenticator.verify({
+      token: authCode,
+      secret: user.twoFactorAuthSecret,
+    });
   }
 }
