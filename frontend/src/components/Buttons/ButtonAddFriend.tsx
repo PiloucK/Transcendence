@@ -11,8 +11,9 @@ import io from "socket.io-client";
 
 import { errorHandler } from "../../errors/errorHandler";
 
-import getConfig from "next/config";
 import { useErrorContext } from "../../context/ErrorContext";
+
+import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,

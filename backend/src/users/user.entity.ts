@@ -58,7 +58,6 @@ export class User {
   users!: Channel[];
 
   @Column({ default: false })
-  @Exclude()
   isTwoFactorAuthEnabled!: boolean;
 
   @Column({ nullable: true })

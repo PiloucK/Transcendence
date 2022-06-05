@@ -1,11 +1,13 @@
 import { Button, TextField } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
+import { useErrorContext } from "../context/ErrorContext";
 import { useLoginContext } from "../context/LoginContext";
-import { errorHandler } from "../services/errorHandler";
+import { errorHandler } from "../errors/errorHandler";
 import twoFactorAuthService from "../services/twoFactorAuth";
 
 export default function TwoFactorAuth() {
   const loginContext = useLoginContext();
+  const errorContext = useErrorContext();
 
   const [image, setImage] = useState("");
   const [code, setCode] = useState("");
@@ -18,7 +20,6 @@ export default function TwoFactorAuth() {
 
   const sendValidationCode: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    console.log(code);
 
     twoFactorAuthService
       .turnOn(code)
@@ -26,7 +27,7 @@ export default function TwoFactorAuth() {
         setCode("");
       })
       .catch((error) => {
-        errorHandler(error, loginContext);
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   };
 
