@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
@@ -27,6 +27,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user = await this.usersService.getUserByLogin42(payload.login42);
     if (!user.isTwoFactorAuthEnabled || payload.isTwoFactorAuthenticated) {
       return user;
+    } else {
+      throw new UnauthorizedException('Not authenticated');
     }
   }
 }
