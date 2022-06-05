@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
   Res,
@@ -12,6 +13,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { GetReqUser } from 'src/auth/decorators/getReqUser.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 import { ReqUser } from 'src/reqUser.interface';
+import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { FirstTwoFactorAuthCodeDto } from './dto/firstTwoFactorAuthCode.dto';
 import { TwoFactorAuthCodeDto } from './dto/twoFactorAuthCode.dto';
@@ -86,5 +88,14 @@ export class TwoFactorAuthController {
     response.setHeader('Set-Cookie', cookie);
 
     response.send(reqUser.login42);
+  }
+
+  //dev
+  @Get('enabled')
+  @UseGuards(JwtAuthGuard)
+  async is2FAenabled(@GetReqUser() reqUser: ReqUser) {
+    const user = await this.usersService.getUserByLogin42(reqUser.login42);
+
+    return user.isTwoFactorAuthEnabled;
   }
 }
