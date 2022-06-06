@@ -46,17 +46,25 @@ function NavigationDock({
 
   const [username, setUsername] = useState("");
 
-  // useEffect(() => {
-  //   console.log("sending request...");
-  //   axios
-  //     .get("http://0.0.0.0:3001/users/mvidal-/friends")
-  //     .then(() => {
-  //       console.log("request sent!");
-  //     })
-  //     .catch((error) => {
-  //       errorContext.newError?.(errorHandler(error, loginContext));
-  //     });
-  // }, []);
+  useEffect(() => {
+    console.log("sending request...");
+    axios
+      .get("http://0.0.0.0:3001/users/mvidal-/friends")
+      .then(() => {
+        console.log("request sent!");
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
+      });
+    axios
+      .get("http://0.0.0.0:3001/f")
+      .then(() => {
+        console.log("request sent!");
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
+      });
+  }, []);
 
   const addUser: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();

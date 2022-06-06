@@ -1,4 +1,4 @@
-import { Snackbar } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 import { useErrorContext } from "../../context/ErrorContext";
 
 export const ErrorSnackbar = () => {
@@ -21,7 +21,7 @@ export const ErrorSnackbar = () => {
       ${errorContext.errorData.message}`;
     } else {
       return `Error: ${errorContext.errorData.statusCode} \
-      ${errorContext.errorData.message}`
+      ${errorContext.errorData.message}`;
     }
   };
 
@@ -30,8 +30,10 @@ export const ErrorSnackbar = () => {
       open={errorContext.showError}
       autoHideDuration={6000}
       onClose={handleClose}
-      message={displayMessage()}
-      // action={action}
-    />
+    >
+      <Alert severity="error" variant="filled">
+        {displayMessage()}
+      </Alert>
+    </Snackbar>
   );
 };
