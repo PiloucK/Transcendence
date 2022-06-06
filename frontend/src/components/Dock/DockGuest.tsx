@@ -35,7 +35,7 @@ export function DockGuest() {
         .getLoggedInUser()
         .then((user) => {
           loginContext.login?.(user.login42);
-          socket.emit("user:new", user.login42);
+          socket.emit("user:new", user.login42); // 'user:new' is emitted on any log or account creation and so can be used for user live status
         })
         .catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
@@ -53,7 +53,7 @@ export function DockGuest() {
         href={`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/auth`}
       >
         <IconButton className={styles.icons} aria-label="Authentication">
-          <Image src={FTLogo} layout={"fill"} />
+          <Image src={FTLogo} alt="42 logo" layout={"fill"} />
         </IconButton>
       </Link>
     </Dock>
