@@ -49,7 +49,7 @@ function NavigationDock({
   useEffect(() => {
     console.log("sending request...");
     axios
-      .get("http://0.0.0.0:3001/users/mvidal-/friends")
+      .get("http://0.0.0.0:3001/users/j/friends")
       .then(() => {
         console.log("request sent!");
       })
