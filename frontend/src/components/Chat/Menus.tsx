@@ -27,6 +27,8 @@ import { ButtonTxtSetAsAdmin } from "../Buttons/ButtonTxtSetAsAdmin";
 import io from "socket.io-client";
 import ChannelSettings from "../Buttons/ChannelSettings";
 
+import Avatar from "@mui/material/Avatar";
+
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
@@ -143,12 +145,12 @@ export function DirectMessageMenu(props: {
 }
 
 function SelectedUserMenu({
-  userLogin,
+  user,
   getUserStyle,
   setSelectedUser,
   channel,
 }: {
-  userLogin: string;
+  user: IUserForLeaderboard;
   getUserStyle: (userLogin: string) => any;
   setSelectedUser: (userLogin: string) => void;
   channel: Channel;
@@ -159,47 +161,62 @@ function SelectedUserMenu({
     return (
       <div className={styles.selected_user}>
         <div
-          className={getUserStyle(userLogin)}
+          className={getUserStyle(user.login42)}
           onClick={() => setSelectedUser("")}
         >
-          {userLogin}
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.photo42}
+            sx={{ width: "20px", height: "20px" }}
+          />
+          {user.login42}
         </div>
-        <ButtonTxtViewProfile login={userLogin} />
-        <ButtonTxtUserStatus login={userLogin} />
-        <ButtonTxtBlockUser login={userLogin} />
-        <ButtonTxtMuteUser login={userLogin} channel={channel} />
-        <ButtonTxtBanUser login={userLogin} channel={channel} />
-        <ButtonTxtSetAsAdmin login={userLogin} channel={channel} />
+        <ButtonTxtViewProfile login={user.login42} />
+        <ButtonTxtUserStatus login={user.login42} />
+        <ButtonTxtBlockUser login={user.login42} />
+        <ButtonTxtMuteUser login={user.login42} channel={channel} />
+        <ButtonTxtBanUser login={user.login42} channel={channel} />
+        <ButtonTxtSetAsAdmin login={user.login42} channel={channel} />
       </div>
     );
-  } else if (channel?.admins?.includes(loginContext.userLogin)) {
+  } else if (channel?.admin?.includes(loginContext.userLogin)) {
     return (
       <div className={styles.selected_user}>
         <div
-          className={getUserStyle(userLogin)}
+          className={getUserStyle(user.login42)}
           onClick={() => setSelectedUser("")}
         >
-          {userLogin}
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.photo42}
+            sx={{ width: "20px", height: "20px" }}
+          />
+          {user.login42}
         </div>
-        <ButtonTxtViewProfile login={userLogin} />
-        <ButtonTxtUserStatus login={userLogin} />
-        <ButtonTxtBlockUser login={userLogin} />
-        <ButtonTxtMuteUser login={userLogin} channel={channel} />
-        <ButtonTxtBanUser login={userLogin} channel={channel} />
+        <ButtonTxtViewProfile login={user.login42} />
+        <ButtonTxtUserStatus login={user.login42} />
+        <ButtonTxtBlockUser login={user.login42} />
+        <ButtonTxtMuteUser login={user.login42} channel={channel} />
+        <ButtonTxtBanUser login={user.login42} channel={channel} />
       </div>
     );
   } else {
     return (
       <div className={styles.selected_user}>
         <div
-          className={getUserStyle(userLogin)}
+          className={getUserStyle(user.login42)}
           onClick={() => setSelectedUser("")}
         >
-          {userLogin}
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.photo42}
+            sx={{ width: "20px", height: "20px" }}
+          />
+          {user.login42}
         </div>
-        <ButtonTxtViewProfile login={userLogin} />
-        <ButtonTxtUserStatus login={userLogin} />
-        <ButtonTxtBlockUser login={userLogin} />
+        <ButtonTxtViewProfile login={user.login42} />
+        <ButtonTxtUserStatus login={user.login42} />
+        <ButtonTxtBlockUser login={user.login42} />
       </div>
     );
   }
@@ -207,12 +224,12 @@ function SelectedUserMenu({
 
 function UserList({ channel }: { channel: Channel }) {
   const loginContext = useLoginContext();
-  const [selectedUser, setSelectedUser] = useState<String>("");
+  const [selectedUser, setSelectedUser] = useState<string>("");
 
   const getUserStyle = (userLogin: string) => {
     if (userLogin === channel?.owner) {
       return styles.owner;
-    } else if (channel?.admins?.includes(userLogin)) {
+    } else if (channel?.admin?.includes(userLogin)) {
       return styles.admins;
     } else {
       return styles.users;
@@ -223,6 +240,11 @@ function UserList({ channel }: { channel: Channel }) {
     if (user.login42 === loginContext.userLogin) {
       return (
         <div key={user.login42} className={styles.connected_user}>
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.photo42}
+            sx={{ width: "20px", height: "20px" }}
+          />
           {user.username}
         </div>
       );
@@ -230,7 +252,7 @@ function UserList({ channel }: { channel: Channel }) {
       return (
         <SelectedUserMenu
           key={user.login42}
-          userLogin={selectedUser}
+          user={user}
           getUserStyle={getUserStyle}
           setSelectedUser={setSelectedUser}
           channel={channel}
@@ -245,6 +267,11 @@ function UserList({ channel }: { channel: Channel }) {
             setSelectedUser(user.login42);
           }}
         >
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.photo42}
+            sx={{ width: "20px", height: "20px" }}
+          />
           {user.username}
         </div>
       );
