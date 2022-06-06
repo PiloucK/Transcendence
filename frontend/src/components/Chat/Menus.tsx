@@ -13,6 +13,7 @@ import {
   IUserForLeaderboard,
   PrivateConv,
   Channel,
+  IUser,
 } from "../../interfaces/users";
 import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
@@ -36,19 +37,18 @@ import Box from "@mui/material/Box";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
-function SelectedDMMenu({
-  keyV,
-  userLogin,
-}: {
-  keyV: string;
-  userLogin: string;
-}) {
+function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUser }) {
   return (
     <div key={keyV} className={styles.chat_direct_message_menu_dm_selected}>
-      {userLogin}
-      <ButtonTxtViewProfile login={userLogin} />
-      <ButtonTxtUserStatus login={userLogin} />
-      <ButtonTxtBlockUser login={userLogin} />
+      <Avatar
+        className={styles.chat_avatar}
+        src={user.photo42}
+        sx={{ width: "20px", height: "20px" }}
+      />
+      {user.login42}
+      <ButtonTxtViewProfile login={user.login42} />
+      <ButtonTxtUserStatus login={user.login42} />
+      <ButtonTxtBlockUser login={user.login42} />
     </div>
   );
 }
@@ -66,17 +66,15 @@ function DMList({
 
   return openedDMs?.map((dm) => {
     const key = dm.userOne.login42 + "|" + dm.userTwo.login42;
-    const username =
-      dm.userOne.login42 === loginContext.userLogin
-        ? dm.userTwo.username
-        : dm.userOne.username;
+    const user =
+      dm.userOne.login42 === loginContext.userLogin ? dm.userTwo : dm.userOne;
 
     if (key === menu) {
       return (
         <SelectedDMMenu
           key={"selectedDMMenu"}
           keyV={key}
-          userLogin={username}
+          user={user}
         />
       );
     }
@@ -88,7 +86,12 @@ function DMList({
           setMenu(key);
         }}
       >
-        {username}
+        <Avatar
+          className={styles.chat_avatar}
+          src={user.photo42}
+          sx={{ width: "20px", height: "20px" }}
+        />
+        {user.login42}
       </div>
     );
   });
