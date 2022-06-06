@@ -55,7 +55,7 @@ export function DockGuest() {
       >
         <Tooltip title="Login with your 42 account">
           <IconButton className={styles.icons} aria-label="Authentication">
-            <Image src={FTLogo} layout={"fill"} />
+            <Image src={FTLogo} alt="42 logo" layout={"fill"} />
           </IconButton>
         </Tooltip>
       </Link>
