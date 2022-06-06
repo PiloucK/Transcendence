@@ -2272,3 +2272,11 @@ and should display them in columns of three cards max */
     flex-direction: column;
   }
 }
+
+/* 
+* Snackbar: display line break
+*/
+
+.snackbarMsg {
+  white-space: pre;
+}
