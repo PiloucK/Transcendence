@@ -1,5 +1,5 @@
-import { Channel } from "src/channel/channel.entity";
-import { PrivateConv } from "src/privateConv/privateConv.entity";
+import { Channel } from 'src/channel/channel.entity';
+import { PrivateConv } from 'src/privateConv/privateConv.entity';
 import {
   Column,
   Entity,
@@ -7,7 +7,7 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryColumn,
-} from "typeorm";
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -51,7 +51,7 @@ export class User {
   @OneToMany(
     () => PrivateConv,
     (privateConv) =>
-      privateConv.userOne === this ? privateConv.userOne : privateConv.userTwo
+      privateConv.userOne === this ? privateConv.userOne : privateConv.userTwo,
   )
   privateConvs!: PrivateConv[];
 

@@ -10,10 +10,6 @@ const SocketContext = createContext<ISocketContext>(defaultSocketState);
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [socket, setSocket] = useState(defaultSocketState.socket);
 
-  socket.on("connect", () => {
-    console.log("youhou");
-  });
-
   return (
     <SocketContext.Provider
       value={{

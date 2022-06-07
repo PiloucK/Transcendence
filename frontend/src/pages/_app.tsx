@@ -23,14 +23,14 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return getLayout(
     <ErrorProvider>
-      <LoginProvider>
-        <SocketProvider>
+      <SocketProvider>
+        <LoginProvider>
           <>
             <ErrorSnackbar />
             <Component {...pageProps} />
           </>
-        </SocketProvider>
-      </LoginProvider>
+        </LoginProvider>
+      </SocketProvider>
     </ErrorProvider>
   );
 }
