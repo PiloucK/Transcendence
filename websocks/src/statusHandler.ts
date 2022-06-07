@@ -1,11 +1,6 @@
 import { Server, Socket } from "socket.io";
-import { UserStatus } from ".";
 
-export const registerStatusHandlers = (
-  io: Server,
-  socket: Socket,
-  userStatus: UserStatus[]
-) => {
+export const registerStatusHandlers = (io: Server, socket: Socket) => {
   console.log("connect", socket.id);
 
   socket.on("disconnect", () => {
