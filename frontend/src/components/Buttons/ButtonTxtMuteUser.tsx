@@ -18,10 +18,6 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useLoginContext } from "../../context/LoginContext";
 import channelService from "../../services/channel";
 
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
-
 export function ButtonTxtMuteUser({
   login,
   channel,

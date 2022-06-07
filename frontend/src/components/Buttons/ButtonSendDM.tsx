@@ -7,17 +7,11 @@ import { IUserPublicInfos, PrivateConv } from "../../interfaces/users";
 import privateConvService from "../../services/privateConv";
 
 import { useLoginContext } from "../../context/LoginContext";
+import { useSocketContext } from "../../context/SocketContext";
 
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
-
-export function ButtonSendDM({
-  userInfos,
-}: {
-  userInfos: IUserPublicInfos;
-}) {
+export function ButtonSendDM({ userInfos }: { userInfos: IUserPublicInfos }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
 
   const sendPrivateMessage = () => {
     if (
@@ -26,10 +20,10 @@ export function ButtonSendDM({
     ) {
       privateConvService
         .createPrivateConv(loginContext.userLogin, userInfos.login42)
-        .then((dm:PrivateConv) => {
-					loginContext.setChatDM(dm.userOne.login42 + '|' + dm.userTwo.login42);
-          socket.emit("user:update-direct-messages");
-					Router.push('/chat');
+        .then((dm: PrivateConv) => {
+          loginContext.setChatDM(dm.userOne.login42 + "|" + dm.userTwo.login42);
+          socketContext.socket.emit("user:update-direct-messages");
+          Router.push("/chat");
         });
     }
   };

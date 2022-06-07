@@ -5,10 +5,7 @@ import styles from "../../styles/Home.module.css";
 import { IUserPublicInfos, Channel } from "../../interfaces/users";
 import channelService from "../../services/channel";
 import { useLoginContext } from "../../context/LoginContext";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 export function ButtonTxtSetAsAdmin({
   login,
@@ -18,13 +15,14 @@ export function ButtonTxtSetAsAdmin({
   channel: Channel;
 }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
 
   const handleRemoveOnClick = () => {
     if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
       channelService
         .unsetAChannelAdmin(loginContext.userLogin, channel.id, login)
         .then(() => {
-          socket.emit("user:update-channel-content");
+          socketContext.socket.emit("user:update-channel-content");
         })
         .catch((err) => {
           console.log(err);
@@ -37,7 +35,7 @@ export function ButtonTxtSetAsAdmin({
       channelService
         .setAChannelAdmin(loginContext.userLogin, channel.id, login)
         .then(() => {
-          socket.emit("user:update-channel-content");
+          socketContext.socket.emit("user:update-channel-content");
         })
         .catch((err) => {
           console.log(err);

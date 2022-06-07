@@ -5,18 +5,10 @@ import { IUserPublicInfos } from "../../interfaces/users";
 import { useLoginContext } from "../../context/LoginContext";
 import userService from "../../services/user";
 
-import io from "socket.io-client";
-
 import { errorHandler } from "../../errors/errorHandler";
 
-import getConfig from "next/config";
 import { useErrorContext } from "../../context/ErrorContext";
-const { publicRuntimeConfig } = getConfig();
-
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { useSocketContext } from "../../context/SocketContext";
 
 export function ButtonsFriendRequest({
   userInfos,
@@ -25,6 +17,7 @@ export function ButtonsFriendRequest({
 }) {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
+const socketContext = useSocketContext();
 
   const acceptFriend = () => {
     if (
@@ -34,7 +27,7 @@ export function ButtonsFriendRequest({
       userService
         .acceptFriendRequest(loginContext.userLogin, userInfos.login42)
         .then(() => {
-          socket.emit("user:update-relations");
+          socketContext.socket.emit("user:update-relations");
         })
         .catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
@@ -50,7 +43,7 @@ export function ButtonsFriendRequest({
       userService
         .declineFriendRequest(loginContext.userLogin, userInfos.login42)
         .then(() => {
-          socket.emit("user:update-relations");
+          socketContext.socket.emit("user:update-relations");
         })
         .catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));

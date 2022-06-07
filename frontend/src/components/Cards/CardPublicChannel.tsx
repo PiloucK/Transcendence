@@ -9,13 +9,11 @@ import { useLoginContext } from "../../context/LoginContext";
 import channelService from "../../services/channel";
 
 import { ChannelPasswordDialog } from "../Inputs/ChannelPasswordDialog";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [open, setOpen] = React.useState(false);
 
   const joinChannel = () => {
@@ -27,8 +25,8 @@ export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
           .joinChannel(loginContext.userLogin, channelInfos.id)
           .then((channel: Channel) => {
             loginContext.setChatMenu?.(channel.id);
-            socket.emit("user:update-joined-channel");
-            socket.emit("user:update-channel-content");
+            socketContext.socket.emit("user:update-joined-channel");
+            socketContext.socket.emit("user:update-channel-content");
           });
       }
     }

@@ -5,17 +5,10 @@ import { DockGuest } from "../components/Dock/DockGuest";
 import { Ball } from "../components/Game/Ball";
 import userService from "../services/user";
 
-import io from "socket.io-client";
-
 import { errorHandler } from "../errors/errorHandler";
 
-import getConfig from "next/config";
 import { useErrorContext } from "../context/ErrorContext";
-const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { useSocketContext } from "../context/SocketContext";
 
 // Needed to update the user rank because you can't use the context in the function
 let currentUser = "";
@@ -36,12 +29,13 @@ function DisplayBallForUser() {
 function updateUserElo(eloModification: number) {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
 
   if (currentUser !== "") {
     userService
       .updateUserElo(currentUser, eloModification)
       .then(() => {
-        socket.emit("user:update-elo");
+        socketContext.socket.emit("user:update-elo");
       })
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, loginContext));
