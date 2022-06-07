@@ -22,6 +22,10 @@ const SocketContext = createContext<ISocketContext>(defaultSocketState);
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [socket, setSocket] = useState(defaultSocketState.socket);
 
+  socket.on("connect", () => {
+    console.log("youhouuuuuuuuuu"); // est-ce que ca marche pour toutes les pages
+  });
+
   return (
     <SocketContext.Provider
       value={{
