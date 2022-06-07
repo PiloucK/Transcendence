@@ -20,7 +20,7 @@ const defaultSocketState = {
 const SocketContext = createContext<ISocketContext>(defaultSocketState);
 
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
-  const socket = defaultSocketState.socket;
+  const [socket, setSocket] = useState(defaultSocketState.socket);
 
   return (
     <SocketContext.Provider

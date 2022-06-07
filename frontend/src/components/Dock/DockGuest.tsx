@@ -4,7 +4,6 @@ import authService from "../../services/auth";
 
 import { useLoginContext } from "../../context/LoginContext";
 
-import io from "socket.io-client";
 import Link from "next/link";
 import { IconButton } from "@mui/material";
 import Image from "next/image";
@@ -17,17 +16,15 @@ import Cookies from "js-cookie";
 import { errorHandler } from "../../errors/errorHandler";
 
 import { useErrorContext } from "../../context/ErrorContext";
+import { useSocketContext } from "../../context/SocketContext";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
 
 export function DockGuest() {
   const loginContext = useLoginContext();
   const errorContext = useErrorContext();
+  const socketContext = useSocketContext();
 
   const authenticate = () => {
     if (Cookies.get(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME)) {
@@ -35,7 +32,7 @@ export function DockGuest() {
         .getLoggedInUser()
         .then((user) => {
           loginContext.login?.(user.login42);
-          socket.emit("user:new", user.login42);
+          socketContext.socket.emit("user:new", user.login42);
         })
         .catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
