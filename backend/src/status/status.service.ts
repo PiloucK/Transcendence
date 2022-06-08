@@ -16,10 +16,10 @@ export class StatusService {
   async add(statusDto: StatusDto): Promise<UserStatus> {
     const { socketId, userLogin42 } = statusDto;
 
-    const user = await this.usersService.getUserByLogin42(userLogin42);
-
     let status = await this.statusRepository.findOne(socketId);
+    console.log('status:', status);
     if (!status) {
+      const user = await this.usersService.getUserByLogin42(userLogin42);
       status = this.statusRepository.create({
         socketId,
         user,
