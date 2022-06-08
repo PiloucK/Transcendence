@@ -1,0 +1,71 @@
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+
+:root {
+    --hue: 200;
+    --saturation: 50%;
+    --foreground-color: hsl(var(--hue), var(--saturation), 75%);
+    --background-color: hsl(var(--hue), var(--saturation), 20%);
+
+}
+
+body {
+    margin: 0;
+    background-color: var(--background-color);
+    overflow: hidden;
+}
+
+.paddle {
+    --position: 50;
+    position: absolute;
+    background-color: var(--foreground-color);
+    top: calc(var(--position) * 1vh); /* we want to set the pos with our js file, then use calc to convert to vh */
+    transform: translateY(-50%); /* makes the center of the paddle as the middle (and not the top) */
+    width: 1vh;
+    height: 10vh;
+    border-radius: 1vh;
+}
+
+.paddle.left {
+    left: 1vw; /* 1% of the screen away from left hand side */
+}
+
+.paddle.right {
+    right: 1vw; /* 1% of the screen away from right hand side */
+}
+
+.ball {
+    --x: 50;
+    --y: 50;
+
+    position: absolute;
+    background-color: var(--foreground-color);
+    left: calc(var(--x) * 1vw);
+    top: calc(var(--y) * 1vh);
+    border-radius: 50%;
+    transform: translate(-50%, -50%); /* make sure the ball is at the exact center */
+    width: 2vh;
+    height: 2vh;
+}
+
+.score {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 7vh;
+    color: var(--foreground-color);
+}
+
+.score > * {                    /*style for all .score children*/
+    flex-grow: 1;
+    flex-basis: 0;
+    padding: 2vh 2vh;
+    opacity: .5;
+
+}
+
+.score > :first-child {
+    text-align: right;
+}
+
