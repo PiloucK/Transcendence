@@ -18,12 +18,14 @@ export class StatusService {
 
     const user = await this.usersService.getUserByLogin42(userLogin42);
 
-    const status = this.statusRepository.create({
-      socketId,
-      user,
-    });
-
-    await this.statusRepository.save(status);
+    let status = await this.statusRepository.findOne(socketId);
+    if (!status) {
+      status = this.statusRepository.create({
+        socketId,
+        user,
+      });
+      await this.statusRepository.save(status);
+    }
 
     return status;
   }
