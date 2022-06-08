@@ -21,69 +21,14 @@ import { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import PublicProfile from "../components/Profile/publicprofile";
 
+import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
+
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
   { transports: ["websocket"] }
 );
-
-function MyUserName({ userInfos }: { userInfos: IUser }) {
-  const loginContext = useLoginContext();
-  const [isInModification, setIsInModification] = useState(false);
-  const [tmpUsername, setTmpUsername] = useState(""); // tmpUsername -> usernameInput?
-
-  const changeUsername: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-    setIsInModification(false);
-
-    if (tmpUsername !== "") {
-      userService
-        .updateUserUsername(loginContext.userLogin, tmpUsername)
-        .then(() => {
-          setTmpUsername("");
-          socket.emit("user:update-username");
-        });
-    }
-  };
-
-  const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setTmpUsername(event.target.value);
-  };
-
-  if (loginContext.userLogin === null) return null;
-  if (isInModification === false) {
-    return (
-      <div className={styles.profile_user_account_details_username}>
-        {userInfos.username}
-        <IconButton
-          className={styles.icons}
-          aria-label="userName edit"
-          onClick={() => setIsInModification(true)}
-        >
-          <CreateIcon />
-        </IconButton>
-      </div>
-    );
-  } else {
-    return (
-      <div className={styles.profile_user_account_details_username}>
-        <form onSubmit={changeUsername}>
-          <TextField
-            value={tmpUsername}
-            onChange={handleUsernameChange}
-            label={userInfos.username}
-          />
-          <IconButton type="submit">
-            <CheckIcon />
-          </IconButton>
-        </form>
-      </div>
-    );
-  }
-}
 
 function MyAvatar({ userInfos }: { userInfos: IUser }) {
   return (
@@ -104,7 +49,9 @@ function MyAccountDetails({ userInfos }: { userInfos: IUser }) {
         Account details
       </div>
       <MyAvatar userInfos={userInfos} />
-      <MyUserName userInfos={userInfos} />
+      <div className={styles.profile_user_account_details_username}>
+        {userInfos.username}
+      </div>
     </div>
   );
 }
@@ -131,6 +78,7 @@ function Profile({
   state: { userInfos: IUser; setUserInfos: (userInfos: IUser) => void };
 }) {
   const loginContext = useLoginContext();
+  const [open, setOpen] = useState(false);
 
   React.useEffect(() => {
     socket.on("update-leaderboard", () => {
@@ -146,6 +94,11 @@ function Profile({
         <MyAccountDetails userInfos={state.userInfos} />
         <UserStats userInfos={state.userInfos} />
         <ButtonLogout />
+        <ProfileSettingsDialog
+          user={state.userInfos}
+          open={open}
+          setOpen={setOpen}
+        />
       </div>
       <UserGameHistory userLogin={loginContext.userLogin} />
     </>
@@ -167,6 +120,7 @@ export default function ProfilePage() {
   const [userInfos, setUserInfos] = useState<IUser>({
     id: "",
     login42: "",
+    photo42: "",
     token42: "",
     twoFa: false,
     username: "",

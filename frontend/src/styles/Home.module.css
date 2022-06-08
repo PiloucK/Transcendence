@@ -1900,12 +1900,9 @@ and should display them in columns of three cards max */
 
 .profile_user_account_details_username {
   position: absolute;
-  left: 29.59%;
-  right: 31.07%;
   top: 65.43%;
-  /* bottom: 55.12%; */
-
-  /* Header 2 */
+  left: 50%;
+  transform: translate(-50%, 0%);
 
   font-family: "Khand";
   font-style: normal;
