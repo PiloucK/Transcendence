@@ -43,7 +43,7 @@ export function ProfileSettingsDialog({
   const [preview, setPreview] = useState("");
 
   const updateNewImage = (event) => {
-    console.log("updateNewImage", event.target.files[0]);
+    // console.log("updateNewImage", event.target.files[0]);
     setNewImage(event.target.files[0]);
     setPreview(URL.createObjectURL(event.target.files[0]));
   };
@@ -55,8 +55,6 @@ export function ProfileSettingsDialog({
   const handleClose = () => {
     setOpen(false);
   };
-
-  const setImage = () => {};
 
   const updateUser = () => {
     let error = false;
@@ -71,6 +69,13 @@ export function ProfileSettingsDialog({
         setUsername("");
         socket.emit("user:update-username");
       });
+      if (newImage !== undefined) {
+        userService.updateUserImage(user.login42, newImage).then(() => {
+          setNewImage(undefined);
+          //   setPreview("");
+          socket.emit("user:update-image");
+        });
+      }
     }
   };
 
@@ -116,7 +121,7 @@ export function ProfileSettingsDialog({
                 onChange={updateNewImage}
               />
               <Avatar
-				src={preview}
+                src={preview}
                 alt="avatar"
                 sx={{
                   left: "50%",

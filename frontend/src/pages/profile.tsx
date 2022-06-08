@@ -142,6 +142,7 @@ export default function ProfilePage() {
   }, []);
 
   if (loginContext.userLogin === null) return <DockGuest />;
+  if (userInfos === undefined || userInfos.login42 === "") return null; // We may want to display a loading screen here
   return (
     <Profile state={{ userInfos: userInfos, setUserInfos: setUserInfos }} />
   );
