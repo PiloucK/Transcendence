@@ -4,6 +4,7 @@ import styles from "../../styles/Home.module.css";
 import { TextField } from "../Inputs/TextField";
 
 import Switch from "@mui/material/Switch";
+import Avatar from "@mui/material/Avatar";
 
 import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
 import { IUser } from "../../interfaces/users";
@@ -12,6 +13,7 @@ import userService from "../../services/user";
 import { useLoginContext } from "../../context/LoginContext";
 
 import IconButton from "@mui/material/IconButton";
+import { styled } from "@mui/material/styles";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -36,9 +38,24 @@ export function ProfileSettingsDialog({
 
   const [textFieldError, setTextFieldError] = useState("");
 
+  const [newImage, setNewImage] = useState("");
+  const [preview, setPreview] = useState("");
+
+  const updateNewImage = (event) => {
+    console.log("updateNewImage", event.target.files[0]);
+    setNewImage(event.target.files[0]);
+    setPreview(URL.createObjectURL(event.target.files[0]));
+  };
+
+  const Input = styled("input")({
+    display: "none",
+  });
+
   const handleClose = () => {
     setOpen(false);
   };
+
+  const setImage = () => {};
 
   const updateUser = () => {
     let error = false;
@@ -90,6 +107,37 @@ export function ProfileSettingsDialog({
                 error={textFieldError}
               />
             </div>
+            <label htmlFor="icon-button-file">
+              <Input
+                accept="image/*"
+                id="icon-button-file"
+                type="file"
+                onChange={updateNewImage}
+              />
+              <Avatar
+                src={preview}
+                alt="avatar"
+                sx={{
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: 151,
+                  height: 151,
+                  cursor: "pointer",
+                }}
+              >
+                <Avatar
+                  src={user.photo42}
+                  alt="avatar"
+                  sx={{
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: 151,
+                    height: 151,
+                    cursor: "pointer",
+                  }}
+                />
+              </Avatar>
+            </label>
           </DialogContent>
           <DialogActions>
             <ButtonUpdateChannel updateChannel={updateUser} />
