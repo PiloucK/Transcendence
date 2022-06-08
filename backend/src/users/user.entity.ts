@@ -1,5 +1,6 @@
 import { Channel } from 'src/channel/channel.entity';
 import { PrivateConv } from 'src/privateConv/privateConv.entity';
+import { UserStatus } from 'src/status/status.entity';
 import {
   Column,
   Entity,
@@ -58,6 +59,9 @@ export class User {
   // There is a many to many relation owned by the channel.
   @ManyToMany(() => Channel)
   users!: Channel[];
+
+  @OneToMany(() => UserStatus, (status) => status.user)
+  status!: UserStatus[];
 }
 
 // photo
