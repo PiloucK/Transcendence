@@ -69,6 +69,15 @@ const updateUserUsername = (login: string, username: string) => {
     });
 };
 
+const updateUserImage = (login: string, image: File) => {
+  const request = axios.patch(`${baseUrl}/${login}/image`, { image });
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const updateUserGamesWon = (login: string, gamesWon: string) => {
   const request = axios.patch(`${baseUrl}/${login}/gamesWon`, { gamesWon });
   return request
@@ -238,6 +247,7 @@ export default {
   getUserBlocked,
   updateUserElo,
   updateUserUsername,
+  updateUserImage,
   updateUserGamesWon,
   updateUserGamesLost,
   getUserBlockedUsers,

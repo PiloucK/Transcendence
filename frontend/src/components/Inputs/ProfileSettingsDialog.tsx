@@ -5,6 +5,7 @@ import { TextField } from "../Inputs/TextField";
 
 import Switch from "@mui/material/Switch";
 import Avatar from "@mui/material/Avatar";
+import Image from "next/image";
 
 import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
 import { IUser } from "../../interfaces/users";
@@ -38,7 +39,7 @@ export function ProfileSettingsDialog({
 
   const [textFieldError, setTextFieldError] = useState("");
 
-  const [newImage, setNewImage] = useState("");
+  const [newImage, setNewImage] = useState();
   const [preview, setPreview] = useState("");
 
   const updateNewImage = (event) => {
@@ -115,7 +116,7 @@ export function ProfileSettingsDialog({
                 onChange={updateNewImage}
               />
               <Avatar
-                src={preview}
+				src={preview}
                 alt="avatar"
                 sx={{
                   left: "50%",
