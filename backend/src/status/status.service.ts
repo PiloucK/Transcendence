@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { StatusDto } from './dto/status.dto';
 import { UserStatus } from './status.entity';
@@ -9,13 +10,17 @@ export class StatusService {
   constructor(
     @InjectRepository(UserStatus)
     private readonly statusRepository: Repository<UserStatus>,
+    private readonly usersService: UsersService,
   ) {}
 
   async add(statusDto: StatusDto): Promise<UserStatus> {
-    const { socketId } = statusDto;
+    const { socketId, userLogin42 } = statusDto;
+
+    const user = await this.usersService.getUserByLogin42(userLogin42);
 
     const status = this.statusRepository.create({
       socketId,
+      user,
     });
 
     await this.statusRepository.save(status);

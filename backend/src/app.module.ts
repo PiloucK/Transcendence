@@ -13,7 +13,6 @@ import { StatusModule } from './status/status.module';
     ConfigModule.forRoot({
       validationSchema: configValidationSchema,
     }),
-    UsersModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -28,6 +27,7 @@ import { StatusModule } from './status/status.module';
         database: configService.get('POSTGRES_DB'),
       }),
     }),
+    UsersModule,
     AuthModule,
     PrivateConvModule,
     ChannelModule,
