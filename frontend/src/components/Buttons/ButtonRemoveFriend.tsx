@@ -21,19 +21,17 @@ export function ButtonRemoveFriend({
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
 
-  const removeFromFriend = () => {
+  const removeFromFriend = async () => {
     if (
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userService
-        .removeFriend(loginContext.userLogin, userInfos.login42)
-        .then(() => {
-          socketContext.socket.emit("user:update-relations");
-        })
-        .catch((error) => {
+      await userService
+        .removeFriend(loginContext.userLogin, userInfos.login42).catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
         });
+
+      socketContext.socket.emit("user:update-relations");
     }
   };
 

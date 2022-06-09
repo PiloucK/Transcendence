@@ -39,18 +39,17 @@ export function ButtonTxtBanUser({
     setOpen(true);
   };
 
-  const handleBanUser = () => {
+  const handleBanUser = async () => {
     setOpen(false);
-    channelService
+    await channelService
       .banAChannelUser(loginContext.userLogin, channel.id, login, time)
-      .then(() => {
-        socketContext.socket.emit("user:update-public-channels");
-        socketContext.socket.emit("user:update-joined-channel");
-        socketContext.socket.emit("user:update-channel-content");
-      })
       .catch((err) => {
         console.log(err);
       });
+
+    socketContext.socket.emit("user:update-public-channels");
+    socketContext.socket.emit("user:update-joined-channel");
+    socketContext.socket.emit("user:update-channel-content");
   };
 
   const handleClose = (

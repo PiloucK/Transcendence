@@ -53,7 +53,7 @@ export function DockGuest() {
         href={`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/auth`}
       >
         <IconButton className={styles.icons} aria-label="Authentication">
-          <Image src={FTLogo} layout={"fill"} />
+          <Image src={FTLogo} alt={"42logo"} layout={"fill"} />
         </IconButton>
       </Link>
     </Dock>

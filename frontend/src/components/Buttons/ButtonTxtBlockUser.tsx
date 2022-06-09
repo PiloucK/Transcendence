@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useRef, useState } from "react";
 
 import styles from "../../styles/Home.module.css";
 
@@ -10,39 +10,43 @@ import { useSocketContext } from "../../context/SocketContext";
 export function ButtonTxtBlockUser({ login }: { login: string }) {
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
-  const [blockedList, setBlockedList] = React.useState<[]>([]);
+  const [blockedList, setBlockedList] = useState<IUserPublicInfos[]>([]);
+  const mountedOnce = useRef(false);
 
-  React.useEffect(() => {
-    userService
-      .getUserBlockedUsers(loginContext.userLogin)
-      .then((blocked: IUserPublicInfos[]) => {
-        setBlockedList(blocked);
-      });
+  const handleMount = async () => {
+    let blocked: IUserPublicInfos[];
 
-    socketContext.socket.on("update-relations", () => {
-      userService
-        .getUserBlockedUsers(loginContext.userLogin)
-        .then((blocked: IUserPublicInfos[]) => {
-          setBlockedList(blocked);
-        });
+    blocked = await userService.getUserBlockedUsers(loginContext.userLogin);
+    setBlockedList(blocked);
+
+    socketContext.socket.on("update-relations", async () => {
+      blocked = await userService.getUserBlockedUsers(loginContext.userLogin);
+      setBlockedList(blocked);
     });
+  };
+
+  useEffect(() => {
+    if (mountedOnce.current !== true) {
+      handleMount;
+      mountedOnce.current = true;
+    }
   }, []);
 
-  const handleUnblockOnClick = () => {
+  const handleUnblockOnClick = async () => {
     if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
-      userService.unblockUser(loginContext.userLogin, login).then(() => {
-        socketContext.socket.emit("user:update-relations");
-        socketContext.socket.emit("user:update-direct-messages");
-        socketContext.socket.emit("user:update-channel-content");
-      });
+      await userService.unblockUser(loginContext.userLogin, login);
+
+      socketContext.socket.emit("user:update-relations");
+      socketContext.socket.emit("user:update-direct-messages");
+      socketContext.socket.emit("user:update-channel-content");
     }
   };
 
-  const handleBlockOnClick = () => {
+  const handleBlockOnClick = async () => {
     if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
-      userService.blockUser(loginContext.userLogin, login).then(() => {
-        socketContext.socket.emit("user:update-relations");
-      });
+      await userService.blockUser(loginContext.userLogin, login);
+
+      socketContext.socket.emit("user:update-relations");
     }
   };
 

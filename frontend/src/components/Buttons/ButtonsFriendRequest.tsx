@@ -17,37 +17,35 @@ export function ButtonsFriendRequest({
 }) {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
-const socketContext = useSocketContext();
+  const socketContext = useSocketContext();
 
-  const acceptFriend = () => {
+  const acceptFriend = async () => {
     if (
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userService
+      await userService
         .acceptFriendRequest(loginContext.userLogin, userInfos.login42)
-        .then(() => {
-          socketContext.socket.emit("user:update-relations");
-        })
         .catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
         });
+
+      socketContext.socket.emit("user:update-relations");
     }
   };
 
-  const declineRequest = () => {
+  const declineRequest = async () => {
     if (
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userService
+      await userService
         .declineFriendRequest(loginContext.userLogin, userInfos.login42)
-        .then(() => {
-          socketContext.socket.emit("user:update-relations");
-        })
         .catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
         });
+
+      socketContext.socket.emit("user:update-relations");
     }
   };
 

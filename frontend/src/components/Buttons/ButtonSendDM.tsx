@@ -13,18 +13,19 @@ export function ButtonSendDM({ userInfos }: { userInfos: IUserPublicInfos }) {
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
 
-  const sendPrivateMessage = () => {
+  const sendPrivateMessage = async () => {
     if (
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      privateConvService
-        .createPrivateConv(loginContext.userLogin, userInfos.login42)
-        .then((dm: PrivateConv) => {
-          loginContext.setChatDM(dm.userOne.login42 + "|" + dm.userTwo.login42);
-          socketContext.socket.emit("user:update-direct-messages");
-          Router.push("/chat");
-        });
+      const dm: PrivateConv = await privateConvService.createPrivateConv(
+        loginContext.userLogin,
+        userInfos.login42
+      );
+
+      loginContext.setChatDM?.(dm.userOne.login42 + "|" + dm.userTwo.login42);
+      socketContext.socket.emit("user:update-direct-messages");
+      Router.push("/chat");
     }
   };
 
