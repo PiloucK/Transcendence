@@ -103,8 +103,8 @@ const Pong = () => {
   let ballDirection = useRef<ICoordinates>({x: 0.75, y: 0.5});
   let ballVelocity = INITIAL_VELOCITY;
 
-  const ballRadiusWidthRatio = (window.innerHeight / 100 / window.innerWidth * 100);
-  const ballRadiusHeightRatio =(window.innerHeight / 100 / window.innerHeight * 100);
+  const ballRadiusWidthRatio = window.innerHeight / 100 / window.innerWidth * 100;
+  const ballRadiusHeightRatio = window.innerHeight / 100 / window.innerHeight * 100;
 
   const requestRef = useRef(0);
   const previousTimeRef = useRef(0);
@@ -190,6 +190,8 @@ const Pong = () => {
   
   useEffect(() => {
     resetBall();
+    const ballRadiusWidthRatio = window.innerHeight / 100 / window.innerWidth * 100;
+    const ballRadiusHeightRatio = window.innerHeight / 100 / window.innerHeight * 100;
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current);
   }, []); // Make sure the effect runs only once
@@ -208,11 +210,14 @@ const Pong = () => {
 
 
 function Game() {
-  return (
-    <div>
-      <Game/>
-    </div>
-  );
+  if (typeof window !== "undefined")
+    return (
+      <div>
+        <Pong/>
+      </div>
+    );
+  else
+    return (<></>)
 }
 
 export default Game;
