@@ -14,12 +14,14 @@ import { ConfigService } from '@nestjs/config';
 import { User } from 'src/users/user.entity';
 import { GetReqUser } from './decorators/getReqUser.decorator';
 import { FortyTwoAuthFilter } from './filters/fortyTwoAuth.filter';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
+    private readonly usersService: UsersService,
   ) {}
 
   @UseGuards(FortyTwoAuthGuard) // pass through FortyTwoStrategy
@@ -68,7 +70,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('getLoggedInUser')
-  getLoggedInUser(@GetReqUser() user: User): User {
-    return user;
+  getLoggedInUser(@GetReqUser() user: User): Promise<User> {
+    return this.usersService.getUserByLogin42(user.login42); // 2FA: a voir avec le JwtAuthGuard qui fait le fetch dans la database
   }
 }
