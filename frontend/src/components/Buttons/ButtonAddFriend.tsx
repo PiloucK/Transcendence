@@ -21,19 +21,17 @@ export function ButtonAddFriend({
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
 
-  const sendFriendRequest = () => {
+  const sendFriendRequest = async () => {
     if (
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userService
-        .sendFriendRequest(loginContext.userLogin, userInfos.login42)
-        .then(() => {
-          socketContext.socket.emit("user:update-relations");
-        })
-        .catch((error) => {
+      await userService
+        .sendFriendRequest(loginContext.userLogin, userInfos.login42).catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
         });
+
+      socketContext.socket.emit("user:update-relations");
     }
   };
 

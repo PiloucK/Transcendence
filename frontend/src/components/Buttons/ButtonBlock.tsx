@@ -17,19 +17,17 @@ export function ButtonBlock({ userInfos }: { userInfos: IUserPublicInfos }) {
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
 
-  const blockAUser = () => {
+  const blockAUser = async () => {
     if (
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userService
-        .blockUser(loginContext.userLogin, userInfos.login42)
-        .then(() => {
-          socketContext.socket.emit("user:update-relations");
-        })
-        .catch((error) => {
+      await userService
+        .blockUser(loginContext.userLogin, userInfos.login42).catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
         });
+
+      socketContext.socket.emit("user:update-relations");
     }
   };
 

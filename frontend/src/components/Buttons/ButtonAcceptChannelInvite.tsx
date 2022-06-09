@@ -26,19 +26,16 @@ export function ButtonAcceptChannelInvite({
   const socketContext = useSocketContext();
   const [error, setError] = React.useState(false);
 
-  const joinChannel = () => {
-    channelService
-      .joinChannel(loginContext.userLogin, channelId)
-      .then((channel: Channel) => {
-        loginContext.setChatMenu?.(channel.id);
-        socketContext.socket.emit("user:update-joined-channel");
-        socketContext.socket.emit("user:update-channel-content");
-      })
-      .catch((err) => {
-        if (err.response.status === 403) {
-          setError(true);
-        }
-      });
+  const joinChannel = async () => {
+    const channel: Channel = await channelService.joinChannel(loginContext.userLogin, channelId).catch((err) => {
+      if (err.response.status === 403) {
+        setError(true);
+      }
+    });
+
+    loginContext.setChatMenu?.(channel.id);
+    socketContext.socket.emit("user:update-joined-channel");
+    socketContext.socket.emit("user:update-channel-content");
   };
 
   return (

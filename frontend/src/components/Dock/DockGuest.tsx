@@ -28,17 +28,15 @@ export function DockGuest() {
   const socketContext = useSocketContext();
   const isLogged = useRef(false);
 
-  const authenticate = () => {
+  const authenticate = async () => {
     if (Cookies.get(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME)) {
-      authService
-        .getLoggedInUser()
-        .then((user) => {
-          loginContext.login?.(user.login42);
-          socketContext.socket.emit("user:new", user.login42);
-        })
-        .catch((error) => {
+      const user = await authService
+        .getLoggedInUser().catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
         });
+
+      loginContext.login?.(user.login42);
+      socketContext.socket.emit("user:new", user.login42); // 'user:new' is emitted on any log or account creation and so can be used for user live status
     }
   };
 

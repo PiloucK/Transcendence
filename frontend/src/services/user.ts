@@ -7,107 +7,111 @@ const baseUrl = `http://${publicRuntimeConfig.HOST}\
 import { IUserCredentials } from "../interfaces/users";
 axios.defaults.withCredentials = true;
 
-const getAll = () => {
-  return axios.get(baseUrl).then((response) => response.data);
+const getAll = async () => {
+  const response = await axios.get(baseUrl);
+  return response.data;
 };
 
-const getOne = (login: string) => {
-  return axios.get(`${baseUrl}/${login}`).then((response) => response.data);
+const getOne = async (login: string) => {
+  const response = await axios.get(`${baseUrl}/${login}`);
+  return response.data;
 };
 
-const addOne = (newUser: IUserCredentials) => {
-  return axios.post(baseUrl, newUser).then((response) => response.data);
+const addOne = async (newUser: IUserCredentials) => {
+  const response = await axios.post(baseUrl, newUser);
+  return response.data;
 };
 
 // dev
-const deleteAll = () => {
-  return axios.delete(baseUrl).then((response) => response.data);
+const deleteAll = async () => {
+  const response = await axios.delete(baseUrl);
+  return response.data;
 };
 
-const updateUserUsername = (login: string, username: string) => {
-  return axios
-    .patch(`${baseUrl}/${login}/username`, { username })
-    .then((response) => response.data);
+const updateUserUsername = async (login: string, username: string) => {
+  const response = await axios
+    .patch(`${baseUrl}/${login}/username`, { username });
+  return response.data;
 };
 
-const getUserFriends = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/friends`)
-    .then((response) => response.data);
+const getUserFriends = async (login: string) => {
+  const response = await axios
+    .get(`${baseUrl}/${login}/friends`);
+  return response.data;
 };
 
-const getUserFriendRequestsSent = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/friendRequestsSent`)
-    .then((response) => response.data);
+const getUserFriendRequestsSent = async (login: string) => {
+  const response = await axios
+    .get(`${baseUrl}/${login}/friendRequestsSent`);
+  return response.data;
 };
 
-const getUserFriendRequestsReceived = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/friendRequestsReceived`)
-    .then((response) => response.data);
+const getUserFriendRequestsReceived = async (login: string) => {
+  const response = await axios
+    .get(`${baseUrl}/${login}/friendRequestsReceived`);
+  return response.data;
 };
 
-const sendFriendRequest = (login: string, friendLogin42: string) => {
-  return axios
+const sendFriendRequest = async (login: string, friendLogin42: string) => {
+  const response = await axios
     .patch(`${baseUrl}/${login}/sendFriendRequest`, {
       friendLogin42,
-    })
-    .then((response) => response.data);
+    });
+  return response.data;
 };
 
-const cancelFriendRequest = (login: string, friendLogin42: string) => {
-  return axios
+const cancelFriendRequest = async (login: string, friendLogin42: string) => {
+  const response = await axios
     .patch(`${baseUrl}/${login}/cancelFriendRequest`, {
       friendLogin42,
-    })
-    .then((response) => response.data);
+    });
+  return response.data;
 };
 
-const acceptFriendRequest = (login: string, friendLogin42: string) => {
-  return axios
+const acceptFriendRequest = async (login: string, friendLogin42: string) => {
+  const response = await axios
     .patch(`${baseUrl}/${login}/acceptFriendRequest`, {
       friendLogin42,
-    })
-    .then((response) => response.data);
+    });
+  return response.data;
 };
 
-const declineFriendRequest = (login: string, friendLogin42: string) => {
-  return axios
+const declineFriendRequest = async (login: string, friendLogin42: string) => {
+  const response = await axios
     .patch(`${baseUrl}/${login}/declineFriendRequest`, {
       friendLogin42,
-    })
-    .then((response) => response.data);
+    });
+  return response.data;
 };
 
-const removeFriend = (login: string, friendLogin42: string) => {
-  return axios
+const removeFriend = async (login: string, friendLogin42: string) => {
+  const response = await axios
     .patch(`${baseUrl}/${login}/removeFriend`, {
       friendLogin42,
-    })
-    .then((response) => response.data);
+    });
+  return response.data;
 };
 
-const getUserBlockedUsers = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/blockedUsers`)
-    .then((response) => response.data);
+const getUserBlockedUsers = async (login: string) => {
+  const response = await axios
+    .get(`${baseUrl}/${login}/blockedUsers`);
+  return response.data;
 };
 
-const blockUser = (login: string, friendLogin42: string) => {
-  return axios
+const blockUser = async (login: string, friendLogin42: string) => {
+  const response = await axios
     .patch(`${baseUrl}/${login}/blockUser`, {
       friendLogin42,
-    })
-    .then((response) => response.data);
+    });
+  return response.data;
 };
 
-const unblockUser = (login: string, friendLogin42: string) => {
-  return axios
+const unblockUser = async (login: string, friendLogin42: string) => {
+  const response = await axios
     .patch(`${baseUrl}/${login}/unblockUser`, {
       friendLogin42,
-    })
-    .then((response) => response.data);
+    });
+  return response.data;
 };
 
 export default {

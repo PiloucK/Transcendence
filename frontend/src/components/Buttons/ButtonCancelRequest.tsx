@@ -21,19 +21,17 @@ export function ButtonCancelRequest({
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
 
-  const cancelRequest = () => {
+  const cancelRequest = async () => {
     if (
       loginContext.userLogin !== null &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userService
-        .cancelFriendRequest(loginContext.userLogin, userInfos.login42)
-        .then(() => {
-          socketContext.socket.emit("user:update-relations");
-        })
-        .catch((error) => {
+      await userService
+        .cancelFriendRequest(loginContext.userLogin, userInfos.login42).catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
         });
+
+      socketContext.socket.emit("user:update-relations");
     }
   };
 
