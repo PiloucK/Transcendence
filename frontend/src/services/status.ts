@@ -8,7 +8,6 @@ const baseUrl = `http://${publicRuntimeConfig.HOST}\
 
 axios.defaults.withCredentials = true;
 
-// dev
 const add = (socketId: string, userLogin42: string) => {
   return axios
     .post(baseUrl, { socketId, userLogin42 })

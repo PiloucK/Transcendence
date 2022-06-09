@@ -1,4 +1,5 @@
 import { Server, Socket } from "socket.io";
+import statusService from "./statusService";
 
 export const registerStatusHandlers = (io: Server, socket: Socket) => {
   console.log("connect", socket.id);
@@ -7,6 +8,7 @@ export const registerStatusHandlers = (io: Server, socket: Socket) => {
   });
 
   socket.on("disconnect", () => {
+    statusService.remove(socket.id); // error handling
     console.log("disconnect", socket.id);
   });
 };
