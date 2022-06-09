@@ -29,9 +29,6 @@ export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
     setUserLogin(userLogin);
     statusService
       .add(socketContext.socket.id, userLogin)
-      .then((status) => {
-        console.log("userStatus:", status);
-      })
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, LoginContext));
       });

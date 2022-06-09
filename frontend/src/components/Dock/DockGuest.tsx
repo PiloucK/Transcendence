@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Dock } from "./Dock";
 import authService from "../../services/auth";
 
@@ -19,12 +19,14 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 import getConfig from "next/config";
+import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 const { publicRuntimeConfig } = getConfig();
 
 export function DockGuest() {
   const loginContext = useLoginContext();
   const errorContext = useErrorContext();
   const socketContext = useSocketContext();
+  const isLogged = useRef(false);
 
   const authenticate = () => {
     if (Cookies.get(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME)) {
@@ -41,7 +43,10 @@ export function DockGuest() {
   };
 
   useEffect(() => {
-    authenticate();
+    if (isLogged.current === false) {
+      isLogged.current = true;
+      authenticate();
+    }
   }, []);
 
   return (
