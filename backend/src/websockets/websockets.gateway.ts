@@ -27,13 +27,22 @@ export class WebsocketsGateway
     this.statusService.remove(client.id);
   }
 
-  @SubscribeMessage('user:logged')
-  onLoggedUser(
+  @SubscribeMessage('user:login')
+  onUserLogin(
     @MessageBody() userLogin42: string,
     @ConnectedSocket() client: Socket,
   ) {
-    console.log('user:logged', userLogin42, client.id);
+    console.log('user:login', userLogin42, client.id);
     this.statusService.add(client.id, userLogin42);
+  }
+
+  @SubscribeMessage('user:login')
+  onUserLogout(
+    @MessageBody() userLogin42: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    console.log('user:logout', userLogin42, client.id);
+    this.statusService.remove(client.id);
   }
 
   @SubscribeMessage('user:new')

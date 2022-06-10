@@ -20,11 +20,12 @@ export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
   const [chatDM, setChatDM] = useState(defaultLoginState.chatDM);
 
   const login = (userLogin: string) => {
-    socketContext.socket.emit("user:logged", userLogin);
+    socketContext.socket.emit("user:login", userLogin);
     setUserLogin(userLogin);
   };
 
   const logout = () => {
+    socketContext.socket.emit("user:logout", userLogin);
     setUserLogin(null);
     Router.push("/");
     Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
