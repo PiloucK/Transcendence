@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersService } from 'src/users/users.service';
+import { WebsocketsGateway } from 'src/websockets/websockets.gateway';
 import { Repository } from 'typeorm';
 import { UserStatus } from './status.entity';
 
@@ -10,6 +11,8 @@ export class StatusService {
     @InjectRepository(UserStatus)
     private readonly statusRepository: Repository<UserStatus>,
     private readonly usersService: UsersService,
+    @Inject(forwardRef(() => WebsocketsGateway))
+    private readonly websocketsGateway: WebsocketsGateway,
   ) {}
 
   async add(socketId: string, userLogin42: string): Promise<UserStatus> {
@@ -25,6 +28,7 @@ export class StatusService {
       if (user.status.length === 0) {
         console.log('online');
         this.usersService.updateOnlineStatus(user.login42, true);
+        this.websocketsGateway.updateStatus(user.login42, true);
       }
     }
 
@@ -43,6 +47,7 @@ export class StatusService {
       if (user.status.length === 0) {
         console.log('offline');
         this.usersService.updateOnlineStatus(user.login42, false);
+        this.websocketsGateway.updateStatus(user.login42, false);
       }
     }
   }

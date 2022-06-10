@@ -1,3 +1,4 @@
+import { forwardRef, Inject } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -14,7 +15,10 @@ import { StatusService } from 'src/status/status.service';
 export class WebsocketsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private readonly statusService: StatusService) {}
+  constructor(
+    @Inject(forwardRef(() => StatusService))
+    private readonly statusService: StatusService,
+  ) {}
   @WebSocketServer()
   server!: Server;
 
@@ -25,6 +29,10 @@ export class WebsocketsGateway
   handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('disconnection', client.id);
     this.statusService.remove(client.id);
+  }
+
+  updateStatus(userLogin42: string, online: boolean) {
+    this.server.emit('update-status', userLogin42, online);
   }
 
   @SubscribeMessage('user:login')
