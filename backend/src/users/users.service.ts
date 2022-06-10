@@ -52,6 +52,10 @@ export class UsersService {
     }
   }
 
+  getUserWithStatus(login42: string): Promise<User> {
+    return this.usersRepository.getUserWithRelations(login42, ['status']);
+  }
+
   async updateUsername(
     reqUser: User,
     login42: string,

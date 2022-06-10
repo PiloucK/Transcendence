@@ -15,19 +15,36 @@ export class StatusService {
   async add(socketId: string, userLogin42: string): Promise<UserStatus> {
     let status = await this.statusRepository.findOne(socketId);
     if (!status) {
-      const user = await this.usersService.getUserByLogin42(userLogin42);
+      const user = await this.usersService.getUserWithStatus(userLogin42);
       status = this.statusRepository.create({
         socketId,
         user,
       });
       await this.statusRepository.save(status);
+      console.log('save status');
+      if (user.status.length === 0) {
+        console.log('online');
+        this.usersService.updateOnlineStatus(user.login42, true);
+      }
     }
 
     return status;
   }
 
   async remove(socketId: string): Promise<void> {
-    await this.statusRepository.delete(socketId);
+    const status = await this.statusRepository.findOne(socketId, {
+      relations: ['user'],
+    });
+    if (status) {
+      const userLogin42 = status.user.login42;
+      await this.statusRepository.remove(status);
+      console.log('remove status');
+      const user = await this.usersService.getUserWithStatus(userLogin42);
+      if (user.status.length === 0) {
+        console.log('offline');
+        this.usersService.updateOnlineStatus(user.login42, false);
+      }
+    }
   }
 
   // findAll(): Promise<UserStatus[]> {
