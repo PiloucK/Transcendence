@@ -5,7 +5,7 @@ import { useLoginContext } from "../context/LoginContext";
 import { errorHandler } from "../errors/errorHandler";
 import twoFactorAuthService from "../services/twoFactorAuth";
 
-export default function TwoFactorLogin() {
+export default function SecondFactorLogin() {
   const loginContext = useLoginContext();
   const errorContext = useErrorContext();
   const [code, setCode] = useState("");

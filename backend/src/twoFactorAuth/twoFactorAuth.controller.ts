@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+// import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { GetReqUser } from 'src/auth/decorators/getReqUser.decorator';
@@ -26,7 +26,7 @@ export class TwoFactorAuthController {
     private readonly twoFactorAuthService: TwoFactorAuthService,
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
-    private readonly configService: ConfigService,
+    // private readonly configService: ConfigService,
   ) {}
 
   @Post('generate-qrcode')

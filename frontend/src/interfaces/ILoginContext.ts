@@ -5,7 +5,7 @@ export interface ILoginContext {
 	chatDM: string;
 	setChatDM?: (dm: string) => void;
 	login?: (userLogin: string) => void;
-	verifyTwoFactorCode?: () => void;
+	secondFactorLogin?: () => void;
 	logout?: () => void;
 }
 
