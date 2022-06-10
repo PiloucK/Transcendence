@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
-import { StatusDto } from './dto/status.dto';
 import { UserStatus } from './status.entity';
 
 @Injectable()
@@ -13,9 +12,7 @@ export class StatusService {
     private readonly usersService: UsersService,
   ) {}
 
-  async add(statusDto: StatusDto): Promise<UserStatus> {
-    const { socketId, userLogin42 } = statusDto;
-
+  async add(socketId: string, userLogin42: string): Promise<UserStatus> {
     let status = await this.statusRepository.findOne(socketId);
     console.log('status:', status);
     if (!status) {

@@ -8,11 +8,13 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { StatusService } from 'src/status/status.service';
 
 @WebSocketGateway(3002, { transports: ['websocket'] })
 export class WebsocketsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
+  constructor(private readonly statusService: StatusService) {}
   @WebSocketServer()
   server!: Server;
 
@@ -22,6 +24,7 @@ export class WebsocketsGateway
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('disconnection', client.id);
+    this.statusService.remove(client.id);
   }
 
   @SubscribeMessage('user:logged')
@@ -29,7 +32,8 @@ export class WebsocketsGateway
     @MessageBody() userLogin42: string,
     @ConnectedSocket() client: Socket,
   ) {
-    console.log('login:', userLogin42, client.id);
+    console.log('user:logged', userLogin42, client.id);
+    this.statusService.add(client.id, userLogin42);
   }
 
   @SubscribeMessage('user:new')
