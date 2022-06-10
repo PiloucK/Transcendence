@@ -32,6 +32,9 @@ export class User {
   @Column({ default: false })
   twoFa!: boolean; // make it private
 
+  @Column({ default: false })
+  online!: boolean;
+
   @ManyToMany(() => User)
   @JoinTable()
   friends!: User[];
