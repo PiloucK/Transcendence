@@ -7,10 +7,6 @@ import Cookies from "js-cookie";
 import { defaultLoginState, ILoginContext } from "../interfaces/ILoginContext";
 
 import { useSocketContext } from "./SocketContext";
-import { useErrorContext } from "./ErrorContext";
-import { errorHandler } from "../errors/errorHandler";
-
-import statusService from "../services/status";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
@@ -19,7 +15,6 @@ const LoginContext = createContext<ILoginContext>(defaultLoginState);
 
 export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
   const socketContext = useSocketContext();
-  const errorContext = useErrorContext();
   const [userLogin, setUserLogin] = useState(defaultLoginState.userLogin);
   const [chatMenu, setChatMenu] = useState(defaultLoginState.chatMenu);
   const [chatDM, setChatDM] = useState(defaultLoginState.chatDM);
@@ -27,11 +22,6 @@ export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
   const login = (userLogin: string) => {
     // socketContext.socket.emit("user:logged", userLogin);
     setUserLogin(userLogin);
-    statusService
-      .add(socketContext.socket.id, userLogin)
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, LoginContext));
-      });
   };
 
   const logout = () => {
