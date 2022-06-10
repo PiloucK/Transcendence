@@ -27,4 +27,39 @@ export class WebsocketsGateway
   onNewUser() {
     this.server.sockets.emit('update-leaderboard');
   }
+
+  @SubscribeMessage('user:update-elo')
+  onEloUpdate() {
+    this.server.sockets.emit('update-leaderboard');
+  }
+
+  @SubscribeMessage('user:update-username')
+  onUsernameUpdate() {
+    this.server.sockets.emit('update-leaderboard');
+  }
+
+  @SubscribeMessage('user:update-relations')
+  onRelationsUpdate() {
+    this.server.sockets.emit('update-relations');
+  }
+
+  @SubscribeMessage('user:update-direct-messages')
+  onUserDMUpdate() {
+    this.server.sockets.emit('update-direct-messages');
+  }
+
+  @SubscribeMessage('user:update-public-channels')
+  onUserPublicChannelUpdate() {
+    this.server.sockets.emit('update-public-channels');
+  }
+
+  @SubscribeMessage('user:update-joined-channels')
+  onUserJoinedChannelUpdate() {
+    this.server.sockets.emit('update-channels-list');
+  }
+
+  @SubscribeMessage('user:update-channel-content')
+  onChannelContentUpdate() {
+    this.server.sockets.emit('update-channel-content');
+  }
 }
