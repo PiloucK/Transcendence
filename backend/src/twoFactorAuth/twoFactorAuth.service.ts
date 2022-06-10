@@ -12,7 +12,7 @@ export class TwoFactorAuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async generateSecret(reqUser: ReqUser) {
+  generateSecret(reqUser: ReqUser) {
     const secret = authenticator.generateSecret();
 
     const otpauthUrl = authenticator.keyuri(
@@ -21,10 +21,7 @@ export class TwoFactorAuthService {
       secret,
     );
 
-    await this.usersService.setTwoFactorAuthTemporarySecret(
-      secret,
-      reqUser.login42,
-    );
+    this.usersService.setTwoFactorAuthTemporarySecret(secret, reqUser.login42);
     console.log('temporary secret', secret);
 
     return otpauthUrl;
@@ -39,7 +36,6 @@ export class TwoFactorAuthService {
     reqUser: ReqUser,
   ): Promise<boolean> {
     const user = await this.usersService.getUserByLogin42(reqUser.login42);
-    console.log('enabled:', user.isTwoFactorAuthEnabled);
     console.log(
       'temporary secret',
       user.twoFactorAuthTemporarySecret,

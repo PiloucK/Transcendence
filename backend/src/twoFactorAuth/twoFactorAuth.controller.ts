@@ -46,6 +46,7 @@ export class TwoFactorAuthController {
   @UseGuards(JwtAuthGuard)
   async turnOn(
     @GetReqUser() reqUser: ReqUser,
+    @Res() response: Response,
     @Body() firstTwoFactorAuthCodeDto: FirstTwoFactorAuthCodeDto,
   ) {
     const { authCode } = firstTwoFactorAuthCodeDto;
@@ -62,11 +63,16 @@ export class TwoFactorAuthController {
     } else {
       await this.usersService.turnOnOldTwoFactorAuth(reqUser.login42);
     }
+
+    const jwtToken = this.authService.issueJwtToken(reqUser.login42, true);
+    const cookie = this.authService.getAccessTokenCookie(jwtToken);
+    response.setHeader('Set-Cookie', cookie);
+
+    response.send(reqUser.login42);
   }
 
   @Post('authenticate')
   @HttpCode(200)
-  @UseGuards(JwtAuthGuard)
   async authenticate(
     @GetReqUser() reqUser: ReqUser,
     @Res() response: Response,
