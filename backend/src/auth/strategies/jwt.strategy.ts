@@ -25,7 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: JwtTokenPayloadDto): Promise<User> {
     const user = await this.usersService.getUserByLogin42(payload.login42);
-    if (!user.isTwoFactorAuthEnabled || payload.isTwoFactorAuthenticated) {
+    if (!user.isTwoFactorAuthEnabled || payload.isSecondFactorAuthenticated) {
       return user;
     } else {
       throw new UnauthorizedException('Not double-authenticated');

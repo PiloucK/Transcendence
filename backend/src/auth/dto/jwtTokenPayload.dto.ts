@@ -7,5 +7,5 @@ export class JwtTokenPayloadDto {
 
   @IsNotEmpty()
   @IsBoolean()
-  isTwoFactorAuthenticated!: boolean;
+  isSecondFactorAuthenticated!: boolean;
 }
