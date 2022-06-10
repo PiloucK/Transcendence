@@ -23,6 +23,9 @@ function LeaderboardUserCard(props: {
     userStyle = styles.leaderboard_firstuser;
   }
   let statusStyle = styles.leaderboard_user_status_offline;
+  if (props.user.online) {
+    statusStyle = styles.leaderboard_user_status_online;
+  }
 
   return (
     <Link href={`/profile?login=${props.user.login42}`} key={props.index}>
