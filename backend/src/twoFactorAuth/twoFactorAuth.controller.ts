@@ -8,10 +8,12 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { GetReqUser } from 'src/auth/decorators/getReqUser.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
+import { JwtSingleFactorAuthGuard } from 'src/auth/guards/jwtSingleFactorAuth.guard';
 import { ReqUser } from 'src/reqUser.interface';
 import { UsersService } from 'src/users/users.service';
 import { FirstTwoFactorAuthCodeDto } from './dto/firstTwoFactorAuthCode.dto';
@@ -24,6 +26,7 @@ export class TwoFactorAuthController {
     private readonly twoFactorAuthService: TwoFactorAuthService,
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Post('generate-qrcode')
@@ -73,29 +76,35 @@ export class TwoFactorAuthController {
 
   @Post('authenticate')
   @HttpCode(200)
+  @UseGuards(JwtSingleFactorAuthGuard)
   async authenticate(
     @GetReqUser() reqUser: ReqUser,
     @Res() response: Response,
     @Body() twoFactorAuthCodeDto: TwoFactorAuthCodeDto,
   ) {
     const { authCode } = twoFactorAuthCodeDto;
-    const isCodeValid = this.twoFactorAuthService.isCodeValid(
+    const isCodeValid = await this.twoFactorAuthService.isCodeValid(
       authCode,
       reqUser,
     );
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
     }
+
     const jwtToken = this.authService.issueJwtToken(reqUser.login42, true);
     const cookie = this.authService.getAccessTokenCookie(jwtToken);
     response.setHeader('Set-Cookie', cookie);
 
-    response.send(reqUser.login42);
+    // response.redirect(
+    //   `http://${this.configService.get('HOST')}:${this.configService.get(
+    //     'FRONTEND_PORT',
+    //   )}`,
+    // );
   }
 
   @Post('turn-off')
   @HttpCode(200)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtSingleFactorAuthGuard)
   async turnOff(@GetReqUser() reqUser: ReqUser) {
     this.usersService.turnOffTwoFactorAuth(reqUser.login42);
   }

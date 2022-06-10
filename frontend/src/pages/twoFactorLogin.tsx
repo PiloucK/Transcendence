@@ -15,7 +15,10 @@ export default function TwoFactorLogin() {
 
     twoFactorAuthService
       .authenticate(code)
-      .then(() => {})
+      .then(() => {
+        console.log('double-authenticated!!!!!');
+        
+      })
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, loginContext));
       });

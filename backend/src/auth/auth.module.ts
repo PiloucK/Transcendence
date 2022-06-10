@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { FortyTwoStrategy } from './strategies/fortyTwo.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtSingleFactorStrategy } from './strategies/jwtSingleFactor.strategy';
 
 @Module({
   imports: [
@@ -28,8 +29,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       },
     }),
   ],
-  providers: [AuthService, FortyTwoStrategy, JwtStrategy],
+  providers: [
+    AuthService,
+    FortyTwoStrategy,
+    JwtStrategy,
+    JwtSingleFactorStrategy,
+  ],
   controllers: [AuthController],
-  exports: [AuthService], // to import in TwoFactorAuthModule
+  exports: [AuthService],
 })
 export class AuthModule {}
