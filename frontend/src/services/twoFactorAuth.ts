@@ -24,9 +24,9 @@ const turnOff = () => {
   return axios.post(`${baseUrl}/turn-off`).then((response) => response.data);
 };
 
-const authenticate = () => {
+const authenticate = (authCode: string) => {
   return axios
-    .post(`${baseUrl}/authenticate`)
+    .post(`${baseUrl}/authenticate`, { authCode })
     .then((response) => response.data);
 };
 
