@@ -14,7 +14,6 @@ export class StatusService {
 
   async add(socketId: string, userLogin42: string): Promise<UserStatus> {
     let status = await this.statusRepository.findOne(socketId);
-    console.log('status:', status);
     if (!status) {
       const user = await this.usersService.getUserByLogin42(userLogin42);
       status = this.statusRepository.create({

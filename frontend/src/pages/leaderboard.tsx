@@ -22,6 +22,7 @@ function LeaderboardUserCard(props: {
   if (props.index === 0) {
     userStyle = styles.leaderboard_firstuser;
   }
+  let statusStyle = styles.leaderboard_user_status_offline;
 
   return (
     <Link href={`/profile?login=${props.user.login42}`} key={props.index}>
@@ -30,6 +31,7 @@ function LeaderboardUserCard(props: {
         <div className={styles.leaderboard_user_name}>
           {props.user.username}
         </div>
+        <div className={statusStyle}>🟢</div>
         <div className={styles.leaderboard_user_score}>{props.user.elo}</div>
       </div>
     </Link>
