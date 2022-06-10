@@ -25,6 +25,7 @@ export class TwoFactorAuthService {
       secret,
       reqUser.login42,
     );
+    console.log('temporary secret', secret);
 
     return otpauthUrl;
   }
@@ -34,15 +35,21 @@ export class TwoFactorAuthService {
   }
 
   async isFirstCodeValid(
-    firstAuthCode: string | undefined,
+    authCode: string | undefined,
     reqUser: ReqUser,
   ): Promise<boolean> {
     const user = await this.usersService.getUserByLogin42(reqUser.login42);
-    //console.log('enabled:', user.isTwoFactorAuthEnabled);
+    console.log('enabled:', user.isTwoFactorAuthEnabled);
+    console.log(
+      'temporary secret',
+      user.twoFactorAuthTemporarySecret,
+      'authcode',
+      authCode,
+    );
 
-    if (firstAuthCode) {
+    if (authCode) {
       return authenticator.verify({
-        token: firstAuthCode,
+        token: authCode,
         secret: user.twoFactorAuthTemporarySecret,
       });
     } else if (user.twoFactorAuthSecret) {

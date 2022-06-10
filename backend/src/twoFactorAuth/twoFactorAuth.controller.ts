@@ -13,7 +13,6 @@ import { AuthService } from 'src/auth/auth.service';
 import { GetReqUser } from 'src/auth/decorators/getReqUser.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 import { ReqUser } from 'src/reqUser.interface';
-import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { FirstTwoFactorAuthCodeDto } from './dto/firstTwoFactorAuthCode.dto';
 import { TwoFactorAuthCodeDto } from './dto/twoFactorAuthCode.dto';
@@ -33,8 +32,7 @@ export class TwoFactorAuthController {
     @GetReqUser() reqUser: ReqUser,
     @Res() response: Response,
   ) {
-    const otpauthUrl =
-      await this.twoFactorAuthService.generateSecret(reqUser);
+    const otpauthUrl = await this.twoFactorAuthService.generateSecret(reqUser);
 
     const qrcodeDataUrl = await this.twoFactorAuthService.getQrCodeDataUrl(
       otpauthUrl,
@@ -50,17 +48,16 @@ export class TwoFactorAuthController {
     @GetReqUser() reqUser: ReqUser,
     @Body() firstTwoFactorAuthCodeDto: FirstTwoFactorAuthCodeDto,
   ) {
-    const { firstAuthCode } = firstTwoFactorAuthCodeDto;
-    const isCodeValid =
-      await this.twoFactorAuthService.isFirstCodeValid(
-        firstAuthCode,
-        reqUser,
-      );
+    const { authCode } = firstTwoFactorAuthCodeDto;
+    const isCodeValid = await this.twoFactorAuthService.isFirstCodeValid(
+      authCode,
+      reqUser,
+    );
     if (!isCodeValid) {
       throw new UnauthorizedException('Wrong authentication code');
     }
 
-    if (firstAuthCode) {
+    if (authCode) {
       await this.usersService.turnOnNewTwoFactorAuth(reqUser.login42);
     } else {
       await this.usersService.turnOnOldTwoFactorAuth(reqUser.login42);
