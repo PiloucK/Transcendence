@@ -8,7 +8,6 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-// import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { GetReqUser } from 'src/auth/decorators/getReqUser.decorator';
@@ -26,7 +25,6 @@ export class TwoFactorAuthController {
     private readonly twoFactorAuthService: TwoFactorAuthService,
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
-    // private readonly configService: ConfigService,
   ) {}
 
   @Post('generate-qrcode')
@@ -95,11 +93,7 @@ export class TwoFactorAuthController {
     const cookie = this.authService.getAccessTokenCookie(jwtToken);
     response.setHeader('Set-Cookie', cookie);
 
-    // response.redirect(
-    //   `http://${this.configService.get('HOST')}:${this.configService.get(
-    //     'FRONTEND_PORT',
-    //   )}`,
-    // );
+    response.send(reqUser.login42);
   }
 
   @Post('turn-off')
