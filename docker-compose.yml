@@ -10,21 +10,22 @@ services:
       - ./frontend/src:/usr/src/app/frontend/src
     restart: unless-stopped
 
-  websocks:
-    build: ./websocks
-    ports:
-      - "${WEBSOCKETS_PORT}:${WEBSOCKETS_PORT}"
-    container_name: websocks-transcendence
-    env_file:
-      - .env
-    volumes: #remove when development is finished
-      - ./websocks/src:/usr/src/app/websocks/src
-    restart: unless-stopped
+  # websocks:
+  #   build: ./websocks
+  #   ports:
+  #     - "${WEBSOCKETS_PORT}:${WEBSOCKETS_PORT}"
+  #   container_name: websocks-transcendence
+  #   env_file:
+  #     - .env
+  #   volumes: #remove when development is finished
+  #     - ./websocks/src:/usr/src/app/websocks/src
+  #   restart: unless-stopped
 
   backend:
     build: ./backend
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
+      - "${WEBSOCKETS_PORT}:${WEBSOCKETS_PORT}"
     container_name: backend-transcendence
     env_file:
       - .env
