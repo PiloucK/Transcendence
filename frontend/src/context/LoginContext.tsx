@@ -20,6 +20,10 @@ export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
 		setUserLogin(userLogin)
 	}
 
+	const verifyTwoFactorCode = () => {
+		Router.push("twoFactorLogin");
+	}
+
 	const logout = () => {
 		setUserLogin(null)
 		Router.push("/");
@@ -37,6 +41,7 @@ export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
 				chatDM,
 				setChatDM,
 				login,
+				verifyTwoFactorCode,
 				logout,
 			}}
 		>
