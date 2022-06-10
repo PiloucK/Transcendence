@@ -1,4 +1,5 @@
 import { Button, TextField } from "@mui/material";
+import Router from "next/router";
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { useErrorContext } from "../context/ErrorContext";
 import { useLoginContext } from "../context/LoginContext";
@@ -16,8 +17,8 @@ export default function SecondFactorLogin() {
     twoFactorAuthService
       .authenticate(code)
       .then(() => {
-        console.log('double-authenticated!!!!!');
-        
+        console.log("double-authenticated!!!!!");
+        Router.push("/");
       })
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, loginContext));
