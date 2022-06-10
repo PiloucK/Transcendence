@@ -32,9 +32,14 @@ export default function TwoFactorAuth() {
   useEffect(checkIfEnabled, []);
 
   const generateQrCode = () => {
-    twoFactorAuthService.generateQrCode().then((qrCode) => {
-      setImage(qrCode);
-    });
+    twoFactorAuthService
+      .generateQrCode()
+      .then((qrCode) => {
+        setImage(qrCode);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
+      });
   };
 
   const sendValidationCode: FormEventHandler<HTMLFormElement> = (event) => {
