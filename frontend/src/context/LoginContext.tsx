@@ -20,7 +20,7 @@ export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
   const [chatDM, setChatDM] = useState(defaultLoginState.chatDM);
 
   const login = (userLogin: string) => {
-    // socketContext.socket.emit("user:logged", userLogin);
+    socketContext.socket.emit("user:logged", userLogin);
     setUserLogin(userLogin);
   };
 

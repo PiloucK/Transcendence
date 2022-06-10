@@ -1,5 +1,6 @@
 import {
   ConnectedSocket,
+  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   SubscribeMessage,
@@ -21,6 +22,14 @@ export class WebsocketsGateway
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('disconnection', client.id);
+  }
+
+  @SubscribeMessage('user:logged')
+  onLoggedUser(
+    @MessageBody() userLogin42: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    console.log('login:', userLogin42, client.id);
   }
 
   @SubscribeMessage('user:new')
