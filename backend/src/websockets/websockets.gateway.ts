@@ -36,7 +36,7 @@ export class WebsocketsGateway
     this.statusService.add(client.id, userLogin42);
   }
 
-  @SubscribeMessage('user:login')
+  @SubscribeMessage('user:logout')
   onUserLogout(
     @MessageBody() userLogin42: string,
     @ConnectedSocket() client: Socket,
