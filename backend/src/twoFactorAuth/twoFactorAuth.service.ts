@@ -22,7 +22,7 @@ export class TwoFactorAuthService {
       secret,
     );
 
-    this.usersService.setTwoFactorAuthTemporarySecret(secret, reqUser.login42);
+    this.usersService.setTwoFactorAuthTemporarySecret(secret, reqUser);
     console.log('temporary secret', secret);
 
     return otpauthUrl;

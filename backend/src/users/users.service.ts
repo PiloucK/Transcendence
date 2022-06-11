@@ -42,8 +42,7 @@ export class UsersService {
     await this.usersRepository.save(user);
   }
 
-  async setTwoFactorAuthTemporarySecret(secret: string, login42: string) {
-    const user = await this.getUserByLogin42(login42);
+  async setTwoFactorAuthTemporarySecret(secret: string, user: User) {
     user.twoFactorAuthTemporarySecret = secret;
     await this.usersRepository.save(user);
   }
