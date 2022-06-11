@@ -57,9 +57,9 @@ export class TwoFactorAuthController {
     }
 
     if (authCode) {
-      await this.usersService.turnOnNewTwoFactorAuth(reqUser.login42);
+      await this.usersService.turnOnNewTwoFactorAuth(reqUser);
     } else {
-      await this.usersService.turnOnOldTwoFactorAuth(reqUser.login42);
+      await this.usersService.turnOnOldTwoFactorAuth(reqUser);
     }
 
     const jwtToken = this.authService.issueJwtToken(reqUser.login42, true);
@@ -97,7 +97,7 @@ export class TwoFactorAuthController {
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   async turnOff(@GetReqUser() reqUser: User) {
-    this.usersService.turnOffTwoFactorAuth(reqUser.login42);
+    this.usersService.turnOffTwoFactorAuth(reqUser);
   }
 
   //dev

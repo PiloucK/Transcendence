@@ -26,21 +26,18 @@ export class UsersService {
     }
   }
 
-  async turnOnOldTwoFactorAuth(login42: string) {
-    const user = await this.getUserByLogin42(login42);
+  async turnOnOldTwoFactorAuth(user: User) {
     user.isTwoFactorAuthEnabled = true;
     await this.usersRepository.save(user);
   }
 
-  async turnOnNewTwoFactorAuth(login42: string) {
-    const user = await this.getUserByLogin42(login42);
+  async turnOnNewTwoFactorAuth(user: User) {
     user.isTwoFactorAuthEnabled = true;
     user.twoFactorAuthSecret = user.twoFactorAuthTemporarySecret;
     await this.usersRepository.save(user);
   }
 
-  async turnOffTwoFactorAuth(login42: string) {
-    const user = await this.getUserByLogin42(login42);
+  async turnOffTwoFactorAuth(user: User) {
     user.isTwoFactorAuthEnabled = false;
     await this.usersRepository.save(user);
   }
