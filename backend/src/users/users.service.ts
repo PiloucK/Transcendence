@@ -74,10 +74,9 @@ export class UsersService {
     this.restrictToReqUser(reqUser, login42);
 
     const { username } = updateUsernameDto;
-    const user = await this.getUserByLogin42(login42);
-    user.username = username;
-    await this.usersRepository.save(user);
-    return user;
+    reqUser.username = username;
+    await this.usersRepository.save(reqUser);
+    return reqUser;
   }
 
   async updateUserElo(login42: string, elo: number): Promise<User> {
