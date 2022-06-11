@@ -10,7 +10,6 @@ import { UsersRepository } from './users.repository';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
-import { ReqUser } from 'src/reqUser.interface';
 
 @Injectable()
 export class UsersService {
@@ -19,7 +18,7 @@ export class UsersService {
     private readonly usersRepository: UsersRepository,
   ) {}
 
-  private restrictToReqUser(reqUser: ReqUser, login42: string): void {
+  private restrictToReqUser(reqUser: User, login42: string): void {
     if (reqUser.login42 !== login42) {
       throw new UnauthorizedException(
         `You must have the login42 "${login42}" to make this request.`,
@@ -71,7 +70,7 @@ export class UsersService {
   }
 
   async updateUsername(
-    reqUser: ReqUser,
+    reqUser: User,
     login42: string,
     updateUsernameDto: UpdateUsernameDto,
   ): Promise<User> {
@@ -105,7 +104,7 @@ export class UsersService {
     return user;
   }
 
-  async getUserFriends(reqUser: ReqUser, login42: string): Promise<User[]> {
+  async getUserFriends(reqUser: User, login42: string): Promise<User[]> {
     this.restrictToReqUser(reqUser, login42);
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
@@ -115,7 +114,7 @@ export class UsersService {
   }
 
   async getUserFriendRequestsSent(
-    reqUser: ReqUser,
+    reqUser: User,
     login42: string,
   ): Promise<User[]> {
     this.restrictToReqUser(reqUser, login42);
@@ -127,7 +126,7 @@ export class UsersService {
   }
 
   async getUserFriendRequestsReceived(
-    reqUser: ReqUser,
+    reqUser: User,
     login42: string,
   ): Promise<User[]> {
     this.restrictToReqUser(reqUser, login42);
@@ -139,7 +138,7 @@ export class UsersService {
   }
 
   async sendFriendRequest(
-    reqUser: ReqUser,
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
@@ -183,7 +182,7 @@ export class UsersService {
   }
 
   async cancelFriendRequest(
-    reqUser: ReqUser,
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
@@ -216,7 +215,7 @@ export class UsersService {
   }
 
   async acceptFriendRequest(
-    reqUser: ReqUser,
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
@@ -247,7 +246,7 @@ export class UsersService {
   }
 
   async declineFriendRequest(
-    reqUser: ReqUser,
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
@@ -280,7 +279,7 @@ export class UsersService {
   }
 
   async removeFriend(
-    reqUser: ReqUser,
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
@@ -302,10 +301,7 @@ export class UsersService {
     return user.friends;
   }
 
-  async getUserBlockedUsers(
-    reqUser: ReqUser,
-    login42: string,
-  ): Promise<User[]> {
+  async getUserBlockedUsers(reqUser: User, login42: string): Promise<User[]> {
     this.restrictToReqUser(reqUser, login42);
 
     const user = await this.usersRepository.getUserWithRelations(login42, [
@@ -315,7 +311,7 @@ export class UsersService {
   }
 
   async blockUser(
-    reqUser: ReqUser,
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {
@@ -341,7 +337,7 @@ export class UsersService {
   }
 
   async unblockUser(
-    reqUser: ReqUser,
+    reqUser: User,
     login42: string,
     friendLogin42Dto: FriendLogin42Dto,
   ): Promise<User[]> {

@@ -13,7 +13,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { GetReqUser } from 'src/auth/decorators/getReqUser.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 import { JwtSingleFactorAuthGuard } from 'src/auth/guards/jwtSingleFactorAuth.guard';
-import { ReqUser } from 'src/reqUser.interface';
+import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { FirstTwoFactorAuthCodeDto } from './dto/firstTwoFactorAuthCode.dto';
 import { TwoFactorAuthCodeDto } from './dto/twoFactorAuthCode.dto';
@@ -29,10 +29,7 @@ export class TwoFactorAuthController {
 
   @Post('generate-qrcode')
   @UseGuards(JwtAuthGuard)
-  async generateQrCode(
-    @GetReqUser() reqUser: ReqUser,
-    @Res() response: Response,
-  ) {
+  async generateQrCode(@GetReqUser() reqUser: User, @Res() response: Response) {
     const otpauthUrl = await this.twoFactorAuthService.generateSecret(reqUser);
 
     const qrcodeDataUrl = await this.twoFactorAuthService.getQrCodeDataUrl(
@@ -46,7 +43,7 @@ export class TwoFactorAuthController {
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   async turnOn(
-    @GetReqUser() reqUser: ReqUser,
+    @GetReqUser() reqUser: User,
     @Res() response: Response,
     @Body() firstTwoFactorAuthCodeDto: FirstTwoFactorAuthCodeDto,
   ) {
@@ -76,7 +73,7 @@ export class TwoFactorAuthController {
   @HttpCode(200)
   @UseGuards(JwtSingleFactorAuthGuard)
   async authenticate(
-    @GetReqUser() reqUser: ReqUser,
+    @GetReqUser() reqUser: User,
     @Res() response: Response,
     @Body() twoFactorAuthCodeDto: TwoFactorAuthCodeDto,
   ) {
@@ -99,14 +96,14 @@ export class TwoFactorAuthController {
   @Post('turn-off')
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
-  async turnOff(@GetReqUser() reqUser: ReqUser) {
+  async turnOff(@GetReqUser() reqUser: User) {
     this.usersService.turnOffTwoFactorAuth(reqUser.login42);
   }
 
   //dev
   @Get('enabled')
   @UseGuards(JwtAuthGuard)
-  async is2FAenabled(@GetReqUser() reqUser: ReqUser) {
+  async is2FAenabled(@GetReqUser() reqUser: User) {
     const user = await this.usersService.getUserByLogin42(reqUser.login42);
 
     return user.isTwoFactorAuthEnabled;

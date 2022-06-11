@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { authenticator } from 'otplib';
 import qrcode from 'qrcode';
-import { ReqUser } from 'src/reqUser.interface';
+import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -12,7 +12,7 @@ export class TwoFactorAuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  generateSecret(reqUser: ReqUser) {
+  generateSecret(reqUser: User) {
     const secret = authenticator.generateSecret();
 
     const otpauthUrl = authenticator.keyuri(
@@ -33,7 +33,7 @@ export class TwoFactorAuthService {
 
   async isFirstCodeValid(
     authCode: string | undefined,
-    reqUser: ReqUser,
+    reqUser: User,
   ): Promise<boolean> {
     const user = await this.usersService.getUserByLogin42(reqUser.login42);
     console.log(
@@ -55,7 +55,7 @@ export class TwoFactorAuthService {
     }
   }
 
-  async isCodeValid(authCode: string, reqUser: ReqUser): Promise<boolean> {
+  async isCodeValid(authCode: string, reqUser: User): Promise<boolean> {
     const user = await this.usersService.getUserByLogin42(reqUser.login42);
     return authenticator.verify({
       token: authCode,
