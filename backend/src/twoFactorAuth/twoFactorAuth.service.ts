@@ -35,10 +35,9 @@ export class TwoFactorAuthService {
     authCode: string | undefined,
     reqUser: User,
   ): Promise<boolean> {
-    const user = await this.usersService.getUserByLogin42(reqUser.login42);
     console.log(
       'temporary secret',
-      user.twoFactorAuthTemporarySecret,
+      reqUser.twoFactorAuthTemporarySecret,
       'authcode',
       authCode,
     );
@@ -46,9 +45,9 @@ export class TwoFactorAuthService {
     if (authCode) {
       return authenticator.verify({
         token: authCode,
-        secret: user.twoFactorAuthTemporarySecret,
+        secret: reqUser.twoFactorAuthTemporarySecret,
       });
-    } else if (user.twoFactorAuthSecret) {
+    } else if (reqUser.twoFactorAuthSecret) {
       return true;
     } else {
       return false;
