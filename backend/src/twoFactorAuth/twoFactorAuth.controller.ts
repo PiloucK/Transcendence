@@ -105,8 +105,6 @@ export class TwoFactorAuthController {
   @Get('enabled')
   @UseGuards(JwtAuthGuard)
   async is2FAenabled(@GetReqUser() reqUser: User) {
-    const user = await this.usersService.getUserByLogin42(reqUser.login42);
-
-    return user.isTwoFactorAuthEnabled;
+    return reqUser.isTwoFactorAuthEnabled;
   }
 }
