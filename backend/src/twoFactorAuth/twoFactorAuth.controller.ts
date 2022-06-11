@@ -17,6 +17,7 @@ import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { FirstTwoFactorAuthCodeDto } from './dto/firstTwoFactorAuthCode.dto';
 import { TwoFactorAuthCodeDto } from './dto/twoFactorAuthCode.dto';
+import { JwtSingleFactorReqUser } from './jwtSingleFactorReqUser.interface';
 import { TwoFactorAuthService } from './twoFactorAuth.service';
 
 @Controller('two-factor-auth')
@@ -73,7 +74,7 @@ export class TwoFactorAuthController {
   @HttpCode(200)
   @UseGuards(JwtSingleFactorAuthGuard)
   async authenticate(
-    @GetReqUser() reqUser: User,
+    @GetReqUser() reqUser: JwtSingleFactorReqUser,
     @Res() response: Response,
     @Body() twoFactorAuthCodeDto: TwoFactorAuthCodeDto,
   ) {

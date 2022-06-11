@@ -4,6 +4,7 @@ import { authenticator } from 'otplib';
 import qrcode from 'qrcode';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { JwtSingleFactorReqUser } from './jwtSingleFactorReqUser.interface';
 
 @Injectable()
 export class TwoFactorAuthService {
@@ -54,7 +55,10 @@ export class TwoFactorAuthService {
     }
   }
 
-  async isCodeValid(authCode: string, reqUser: User): Promise<boolean> {
+  async isCodeValid(
+    authCode: string,
+    reqUser: JwtSingleFactorReqUser,
+  ): Promise<boolean> {
     const user = await this.usersService.getUserByLogin42(reqUser.login42);
     return authenticator.verify({
       token: authCode,
