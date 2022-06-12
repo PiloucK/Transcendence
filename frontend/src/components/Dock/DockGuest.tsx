@@ -19,7 +19,6 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 import getConfig from "next/config";
-import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 const { publicRuntimeConfig } = getConfig();
 
 export function DockGuest() {

@@ -21,14 +21,16 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout =
     Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
 
-  return getLayout(
+  return (
     <ErrorProvider>
       <SocketProvider>
         <LoginProvider>
-          <>
-            <ErrorSnackbar />
-            <Component {...pageProps} />
-          </>
+          {getLayout(
+            <>
+              <ErrorSnackbar />
+              <Component {...pageProps} />
+            </>
+          )}
         </LoginProvider>
       </SocketProvider>
     </ErrorProvider>

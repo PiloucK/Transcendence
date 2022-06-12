@@ -1,7 +1,7 @@
 import styles from "../styles/Home.module.css";
 import { useLoginContext } from "../context/LoginContext";
 import React from "react";
-import { DockGuest } from "../components/Dock/DockGuest";
+// import { DockGuest } from "../components/Dock/DockGuest";
 import { Ball } from "../components/Game/Ball";
 import userService from "../services/user";
 
@@ -20,7 +20,7 @@ function DisplayBallForUser() {
     currentUser = loginContext.userLogin;
     return <Ball />;
   } else {
-    return <DockGuest />;
+    return <></>;
   }
 }
 
