@@ -37,20 +37,18 @@ export function ButtonTxtMuteUser({
     setOpen(true);
   };
 
-  const handleUnmuteUser = () => {
-    channelService
+  const handleUnmuteUser = async () => {
+    await channelService
       .muteAChannelUser(loginContext.userLogin, channel.id, login, 0)
-      .then(() => {})
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const handleMuteUser = () => {
+  const handleMuteUser = async () => {
     setOpen(false);
-    channelService
+    await channelService
       .muteAChannelUser(loginContext.userLogin, channel.id, login, time)
-      .then(() => {})
       .catch((err) => {
         console.log(err);
       });
