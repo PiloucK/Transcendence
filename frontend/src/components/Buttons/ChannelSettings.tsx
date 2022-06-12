@@ -32,13 +32,14 @@ function MenuButtons({
     setSettingsOpen(true);
   };
 
-  const handleLeaveChannel = () => {
+  const handleLeaveChannel = async () => {
     loginContext.setChatMenu?.("direct_message");
     setAnchorEl(null);
-    channelService.leaveChannel(loginContext.userLogin, channel.id).then(() => {
-      socketContext.socket.emit("user:update-channel-content");
-      socketContext.socket.emit("user:update-joined-channel");
-    });
+
+    await channelService.leaveChannel(loginContext.userLogin, channel.id);
+
+    socketContext.socket.emit("user:update-channel-content");
+    socketContext.socket.emit("user:update-joined-channel");
   };
 
   if (loginContext.userLogin === channel.owner) {
