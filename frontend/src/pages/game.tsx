@@ -208,16 +208,34 @@ const Pong = () => {
   );
 };
 
+const SSR = typeof window === 'undefined'
 
-function Game() {
-  if (typeof window !== "undefined")
-    return (
-      <div>
-        <Pong/>
-      </div>
-    );
-  else
-    return (<></>)
+
+
+function SafeHydrate({children} : { children : React.ReactNode}) {
+  return (
+    <div suppressHydrationWarning>
+      {typeof window === 'undefined' ? null : children}
+    </div>
+  )
 }
 
-export default Game;
+export default function Game() {
+  return <SafeHydrate><div>{!SSR ? <Pong/> : null}</div></SafeHydrate>
+}
+
+
+
+
+// function Game() {
+//   if (typeof window !== "undefined")
+//     return (
+//       <>
+//         <Pong/>
+//       </>
+//     );
+//   else
+//     return (<></>)
+// }
+
+// export default Game;
