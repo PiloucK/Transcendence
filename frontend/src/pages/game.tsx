@@ -12,6 +12,12 @@ import getConfig from "next/config";
 import { useErrorContext } from "../context/ErrorContext";
 import { ICoordinates } from "../interfaces/ICoordinates";
 import dynamic from "next/dynamic";
+import Ball from "../components/Game/Ball";
+import PlayerPaddle from "../components/Game/PlayerPaddle";
+import OpponentPaddle from "../components/Game/OpponentPaddle";
+import Score  from "../components/Game/Score";
+
+
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -21,77 +27,6 @@ const socket = io(
 
 const INITIAL_VELOCITY = 0.055;
 
-const PlayerPaddle = (  ) => {
-  const [playerPosition, setPlayerPosition] = useState(50);
-
-  useEffect(() => {
-    document.addEventListener("mousemove", e => {
-      setPlayerPosition((e.y / window.innerHeight) * 100)
-    })
-  }, []);
-
-  useEffect(() => {
-    const paddleElem = document.getElementById("player-paddle") as HTMLElement;
-    paddleElem.style.setProperty("--position", playerPosition.toString());
-  });
-
-  return (
-    <div className="paddle left" id="player-paddle"></div>
-  );
-};
-
-const OpponentPaddle = () => {
-  const [opponentPosition, setOpponentPosition] = useState(50);
-
-  useEffect(() => {
-    document.addEventListener("mousemove", e => {
-      setOpponentPosition((e.y / window.innerHeight) * 100)
-    })
-  }, []);
-
-  useEffect(() => {
-    const paddleElem = document.getElementById("opponent-paddle") as HTMLElement;
-    paddleElem.style.setProperty("--position", opponentPosition.toString());
-  });
-
-  return (
-    <div className="paddle right" id="opponent-paddle"></div>
-  );
-};
-
-const Ball = ({ ball } : { ball : ICoordinates}) => {
-
-    useEffect(() => {      
-      const ballElem = document.getElementById("ball") as HTMLElement;
-      ballElem.style.setProperty("--x", ball.x.toString());
-      ballElem.style.setProperty("--y", ball.y.toString());
-    });
-
-  return (
-    <div className="ball" id="ball"></div>
-  );
-};
-
-const PlayerScore = ({score} : {score : number}) => {
-  return (
-    <div id="player-score">{score}</div>
-  );
-};
-
-const OpponentScore = ({score} : {score : number}) => {
-  return (
-    <div id="opponent-score">{score}</div>
-  );
-};
-
-const Scores = ({player, opponent} : {player : number, opponent : number}) => {
-  return (
-    <div className="score">
-      <PlayerScore score={player}/>
-      <OpponentScore score={opponent}/>
-    </div>
-  );
-};
 
 const Pong = () => {
   const [ballPosition, setBallPosition] = useState<ICoordinates>({x: 50, y: 50});
@@ -193,14 +128,12 @@ const Pong = () => {
     return () => cancelAnimationFrame(requestRef.current);
   }, []); // Make sure the effect runs only once
 
-
   return (
     <div className="game">
-        <Scores player={playerScore.current} opponent={opponentScore.current}/>
+        <Score player={playerScore.current} opponent={opponentScore.current}/>
         <Ball ball={ballPosition}/>
         <PlayerPaddle/>
         <OpponentPaddle/>
-
     </div>
   );
 };
