@@ -123,20 +123,25 @@ const Pong = () => {
   }
   
   useEffect(() => {
+    document.body.style.overflow = "hidden";
     resetBall();
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current);
   }, []); // Make sure the effect runs only once
 
   return (
-    <div className="game">
+    <>
+        <div className={styles.mainLayout_left_background} />
+        <div className={styles.mainLayout_right_background} />
         <Score player={playerScore.current} opponent={opponentScore.current}/>
         <Ball ball={ballPosition}/>
         <PlayerPaddle/>
-        <OpponentPaddle/>
-    </div>
+        <OpponentPaddle ballDirection={ballDirection.current}/>
+    </>
   );
 };
+
+
 
 export default dynamic(() => Promise.resolve(Pong), {
   ssr: false

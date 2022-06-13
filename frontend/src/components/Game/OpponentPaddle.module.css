@@ -1,0 +1,11 @@
+.paddleRight {
+    --position: 50;
+    position: absolute;
+    background-color: rgba(255,255,255,1);
+    top: calc(var(--position) * 1vh); /* we want to set the pos with our js file, then use calc to convert to vh */
+    transform: translateY(-50%); /* makes the center of the paddle as the middle (and not the top) */
+    width: 1vh;
+    height: 10vh;
+    border-radius: 1vh;
+    right: 1vw; /* 1% of the screen away from right hand side */
+}

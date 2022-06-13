@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { ICoordinates } from "../../interfaces/ICoordinates";
+import styles from './Ball.module.css';
 
 const Ball = ({ ball } : { ball : ICoordinates}) => {
 
@@ -10,7 +11,7 @@ const Ball = ({ ball } : { ball : ICoordinates}) => {
     });
 
   return (
-    <div className="ball" id="ball"></div>
+    <div className={styles.ball} id="ball"></div>
   );
 };
 

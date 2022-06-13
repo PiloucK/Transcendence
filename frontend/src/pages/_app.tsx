@@ -7,7 +7,6 @@ import { MainLayout } from "../layouts/mainLayout";
 import { ErrorProvider } from "../context/ErrorContext";
 import { ErrorSnackbar } from "../components/Alerts/ErrorSnackbar";
 
-import "../styles/gameStyles.css"
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;

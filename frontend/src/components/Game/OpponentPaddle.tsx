@@ -1,21 +1,29 @@
 import { useEffect, useState } from "react";
+import styles from './OpponentPaddle.module.css'
+import { ICoordinates } from "../../interfaces/ICoordinates";
 
-const OpponentPaddle = () => {
-    const [opponentPosition, setOpponentPosition] = useState(50);
-  
+const OpponentPaddle = ({ballDirection} : {ballDirection : ICoordinates}) => {
+
+
+
     useEffect(() => {
-      document.addEventListener("mousemove", e => {
-        setOpponentPosition((e.y / window.innerHeight) * 100)
-      })
-    }, []);
-  
-    useEffect(() => {
-      const paddleElem = document.getElementById("opponent-paddle") as HTMLElement;
-      paddleElem.style.setProperty("--position", opponentPosition.toString());
+      let ballRect = document.getElementById("ball")?.getBoundingClientRect() as DOMRect;
+      
+      if (ballRect.x >= window.innerWidth / 2 && ballDirection.x > 0) {
+        const paddleElem = document.getElementById("opponent-paddle") as HTMLElement;
+        let position =  Number(paddleElem.style.getPropertyValue("--position"))
+
+        if (position < ballRect.y / window.innerHeight * 100)
+          position++;
+        else
+          position--;
+
+        paddleElem.style.setProperty("--position", position.toString());
+      }
     });
   
     return (
-      <div className="paddle right" id="opponent-paddle"></div>
+      <div className={styles.paddleRight} id="opponent-paddle"></div>
     );
 };
 

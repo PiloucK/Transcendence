@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styles from './PlayerPaddle.module.css'
 
 const PlayerPaddle = (  ) => {
     const [playerPosition, setPlayerPosition] = useState(50);
@@ -15,7 +16,7 @@ const PlayerPaddle = (  ) => {
     });
   
     return (
-      <div className="paddle left" id="player-paddle"></div>
+      <div className={styles.paddleLeft} id="player-paddle"></div>
     );
  };
 
