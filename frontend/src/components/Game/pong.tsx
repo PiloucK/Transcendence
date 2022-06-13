@@ -11,12 +11,13 @@ import { errorHandler } from "../errors/errorHandler";
 import getConfig from "next/config";
 import { useErrorContext } from "../context/ErrorContext";
 import { ICoordinates } from "../interfaces/ICoordinates";
-import dynamic from "next/dynamic";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
   { transports: ["websocket"] }
 );
+
+
 
 
 const INITIAL_VELOCITY = 0.055;
@@ -204,7 +205,3 @@ const Pong = () => {
     </div>
   );
 };
-
-export default dynamic(() => Promise.resolve(Pong), {
-  ssr: false
-})
