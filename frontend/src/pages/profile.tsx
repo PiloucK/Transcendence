@@ -22,8 +22,10 @@ import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import PublicProfile from "../components/Profile/publicprofile";
 
 import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
+import { errorHandler } from "../errors/errorHandler";
 
 import getConfig from "next/config";
+import { useErrorContext } from "../context/ErrorContext";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -83,14 +85,20 @@ function Profile({
 }: {
   state: { userInfos: IUser; setUserInfos: (userInfos: IUser) => void };
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const [open, setOpen] = useState(false);
 
   React.useEffect(() => {
     socket.on("update-leaderboard", () => {
-      userService.getOne(loginContext.userLogin).then((user: IUser) => {
-        state.setUserInfos(user);
-      });
+      userService
+        .getOne(loginContext.userLogin)
+        .then((user: IUser) => {
+          state.setUserInfos(user);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
+        });
     });
   }, []);
 
@@ -114,6 +122,7 @@ function Profile({
 export default function ProfilePage() {
   const router = useRouter();
   const { login } = router.query;
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   if (
@@ -142,9 +151,14 @@ export default function ProfilePage() {
       userInfos !== undefined &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userService.getOne(loginContext.userLogin).then((user: IUser) => {
-        setUserInfos(user);
-      });
+      userService
+        .getOne(loginContext.userLogin)
+        .then((user: IUser) => {
+          setUserInfos(user);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
+        });
     }
   }, []);
 

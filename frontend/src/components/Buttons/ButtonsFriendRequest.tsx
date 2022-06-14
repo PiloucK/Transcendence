@@ -7,15 +7,23 @@ import userService from "../../services/user";
 
 import io from "socket.io-client";
 
+import { errorHandler } from "../../errors/errorHandler";
+
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig()
-const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
+import { useErrorContext } from "../../context/ErrorContext";
+const { publicRuntimeConfig } = getConfig();
+
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 export function ButtonsFriendRequest({
   userInfos,
 }: {
   userInfos: IUserPublicInfos;
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   const acceptFriend = () => {
@@ -27,6 +35,9 @@ export function ButtonsFriendRequest({
         .acceptFriendRequest(loginContext.userLogin, userInfos.login42)
         .then(() => {
           socket.emit("user:update-relations");
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     }
   };
@@ -40,6 +51,9 @@ export function ButtonsFriendRequest({
         .declineFriendRequest(loginContext.userLogin, userInfos.login42)
         .then(() => {
           socket.emit("user:update-relations");
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     }
   };

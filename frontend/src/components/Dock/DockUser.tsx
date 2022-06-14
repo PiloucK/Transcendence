@@ -1,5 +1,10 @@
 import Link from "next/link";
-import React, { ChangeEventHandler, FormEventHandler, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  FormEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -19,7 +24,12 @@ import { IUser, IUserCredentials } from "../../interfaces/users";
 import { Button, TextField } from "@mui/material";
 import Cookies from "js-cookie";
 
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
+
 import getConfig from "next/config";
+import axios from "axios";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
   `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
@@ -32,8 +42,21 @@ function NavigationDock({
   setIsInNavigation: (mode: boolean) => void;
 }) {
   const loginContext = useLoginContext();
+  const errorContext = useErrorContext();
 
   const [username, setUsername] = useState("");
+
+  // useEffect(() => {
+  //   console.log("sending request...");
+  //   axios
+  //     .get("http://0.0.0.0:3001/users/mvidal-/friends")
+  //     .then(() => {
+  //       console.log("request sent!");
+  //     })
+  //     .catch((error) => {
+  //       errorContext.newError?.(errorHandler(error, loginContext));
+  //     });
+  // }, []);
 
   const addUser: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -46,28 +69,39 @@ function NavigationDock({
     userService
       .addOne(newUserCredentials)
       .then((user: IUser) => {
-        loginContext.login(user.login42, "");
+        loginContext.login?.(user.login42, "");
         socket.emit("user:new", username);
         setUsername("");
-      })
-      .then(() => {
+
         authService
           .getToken(newUserCredentials.login42)
           .then((login42: string) => {
             console.log("new token for", login42, "stored in cookie");
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, loginContext));
+            // errorContext.newError(errorParse)
           });
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   };
 
   const deleteAllUsers = () => {
-    userService.deleteAll().then(() => {
-      console.log("all users deleted");
-      loginContext.logout?.();
-      Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
-        path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
-        sameSite: publicRuntimeConfig.ACCESSTOKEN_COOKIE_SAMESITE,
+    userService
+      .deleteAll()
+      .then(() => {
+        console.log("all users deleted");
+        loginContext.logout?.();
+        Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
+          path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
+          sameSite: publicRuntimeConfig.ACCESSTOKEN_COOKIE_SAMESITE,
+        });
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
-    });
   };
 
   const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (

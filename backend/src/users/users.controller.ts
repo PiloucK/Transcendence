@@ -50,14 +50,6 @@ export class UsersController {
     return this.usersService.deleteAllUsers();
   }
 
-  @Delete('/:login42')
-  deleteUser(
-    @Param('login42') login42: string,
-    @GetReqUser() reqUser: User,
-  ): Promise<void> {
-    return this.usersService.deleteUser(reqUser, login42);
-  }
-
   @Patch('/:login42/username')
   updateUsername(
     @Param('login42') login42: string,

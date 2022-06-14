@@ -1,4 +1,5 @@
 retirer le champ d'ajout d'user dans le dock
+retirer la route createUser et le call axios addUser
 retirer la route et le call axios getToken
 retirer la route et le call axios deleteAllUsers
 retirer l'export et l'import de AuthService dans auth.module et users.module,

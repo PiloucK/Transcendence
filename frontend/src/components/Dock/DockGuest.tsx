@@ -14,6 +14,10 @@ import FTLogo from "../../public/42logo.png";
 
 import Cookies from "js-cookie";
 
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
+
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 const socket = io(
@@ -23,14 +27,19 @@ const socket = io(
 
 export function DockGuest() {
   const loginContext = useLoginContext();
+  const errorContext = useErrorContext();
 
   const authenticate = () => {
     if (Cookies.get(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME)) {
-      console.log("authentication cookie detected");
-      authService.getLoggedInUser().then((user) => {
-        loginContext.login(user.login42, "");
-        socket.emit("user:new", user.login42);
-      });
+      authService
+        .getLoggedInUser()
+        .then((user) => {
+          loginContext.login?.(user.login42, "");
+          socket.emit("user:new", user.login42);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
+        });
     }
   };
 
@@ -38,7 +47,6 @@ export function DockGuest() {
     authenticate();
   }, []);
 
-  // store 0.0.0.0 as an environment var in .env file
   return (
     <Dock>
       <Link

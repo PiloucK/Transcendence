@@ -16,14 +16,14 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
 
 	React.useEffect(() => {
     userService
-      .getUserBlocked(loginContext.userLogin)
+      .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       });
 
     socket.on("update-relations", () => {
       userService
-        .getUserBlocked(loginContext.userLogin)
+        .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
         });

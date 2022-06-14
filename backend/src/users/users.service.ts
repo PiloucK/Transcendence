@@ -1,7 +1,6 @@
 import {
   ConflictException,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -34,30 +33,17 @@ export class UsersService {
     return users;
   }
 
-  // returns a user if called with undefined as argument
   getUserByLogin42(login42: string): Promise<User> {
     return this.usersRepository.getUserWithRelations(login42, []);
   }
 
   createUser(createUserDto: CreateUserDto): Promise<User> {
-    // this.restrictToReqUser(reqUser, login42);
-
     return this.usersRepository.createUser(createUserDto);
   }
 
   async deleteAllUsers(): Promise<void> {
     const users = await this.getAllUsers();
     await this.usersRepository.remove(users);
-  }
-
-  async deleteUser(reqUser: User, login42: string): Promise<void> {
-    this.restrictToReqUser(reqUser, login42);
-
-    const result = await this.usersRepository.delete(login42);
-
-    if (result.affected === 0) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
   }
 
   async updateUsername(

@@ -1,4 +1,8 @@
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // generated with "npx create-next-app --typescript [project-name]"
+  reactStrictMode: true,
+
   serverRuntimeConfig: {
     // Will only be available on the server side
   },
@@ -11,3 +15,5 @@ module.exports = {
     ACCESSTOKEN_COOKIE_PATH: process.env.ACCESSTOKEN_COOKIE_PATH,
   },
 };
+
+module.exports = nextConfig;
