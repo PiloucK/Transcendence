@@ -15,10 +15,7 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -37,6 +34,7 @@ export function SendMessageField({
   channel: string;
 }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [error, setError] = React.useState(false);
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -53,7 +51,7 @@ export function SendMessageField({
             content: input,
           })
           .then(() => {
-            socket.emit("user:update-channel-content");
+            socketContext.socket.emit("user:update-channel-content");
             setInput("");
           })
           .catch((err) => {
@@ -72,7 +70,7 @@ export function SendMessageField({
             content: input,
           })
           .then(() => {
-            socket.emit("user:update-direct-messages");
+            socketContext.socket.emit("user:update-direct-messages");
             setInput("");
           });
       }

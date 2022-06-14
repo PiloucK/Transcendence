@@ -19,22 +19,13 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import userService from "../../services/user";
 import authService from "../../services/auth";
-import io from "socket.io-client";
 import { IUser, IUserCredentials } from "../../interfaces/users";
 import { Button, TextField, Tooltip } from "@mui/material";
-import Cookies from "js-cookie";
 
 import { errorHandler } from "../../errors/errorHandler";
 
 import { useErrorContext } from "../../context/ErrorContext";
-
-import getConfig from "next/config";
-import axios from "axios";
-const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { useSocketContext } from "../../context/SocketContext";
 
 function NavigationDock({
   setIsInNavigation,
@@ -43,6 +34,7 @@ function NavigationDock({
 }) {
   const loginContext = useLoginContext();
   const errorContext = useErrorContext();
+  const socketContext = useSocketContext();
 
   const [username, setUsername] = useState("");
 
@@ -57,7 +49,7 @@ function NavigationDock({
       .addOne(newUserCredentials)
       .then((user: IUser) => {
         loginContext.login?.(user.login42);
-        socket.emit("user:new", username);
+        socketContext.socket.emit("user:new", username);
         setUsername("");
 
         authService
@@ -81,10 +73,6 @@ function NavigationDock({
       .then(() => {
         console.log("all users deleted");
         loginContext.logout?.();
-        Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
-          path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
-          sameSite: publicRuntimeConfig.ACCESSTOKEN_COOKIE_SAMESITE,
-        });
       })
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, loginContext));
