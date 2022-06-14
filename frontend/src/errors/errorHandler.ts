@@ -17,7 +17,7 @@ export function errorHandler(
         if (!errorData.error) {
           loginContext.logout?.();
         } else if (errorData.message === 'Not double-authenticated') {
-          loginContext.secondFactorLogin?.();
+          loginContext.setSecondFactorLogin?.(true);
         }
         // } else if (error.response.status === NOT_FOUND) {
         // } else if (error.response.status === CONFLICT) {

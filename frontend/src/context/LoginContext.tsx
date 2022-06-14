@@ -15,13 +15,12 @@ export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
   const [userLogin, setUserLogin] = useState(defaultLoginState.userLogin);
   const [chatMenu, setChatMenu] = useState(defaultLoginState.chatMenu);
   const [chatDM, setChatDM] = useState(defaultLoginState.chatDM);
+  const [secondFactorLogin, setSecondFactorLogin] = useState(
+    defaultLoginState.secondFactorLogin
+  );
 
   const login = (userLogin: string) => {
     setUserLogin(userLogin);
-  };
-
-  const secondFactorLogin = () => {
-    Router.push("secondFactorLogin");
   };
 
   const logout = () => {
@@ -41,8 +40,9 @@ export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
         chatDM,
         setChatDM,
         login,
-        secondFactorLogin,
         logout,
+        secondFactorLogin,
+        setSecondFactorLogin,
       }}
     >
       {children}
