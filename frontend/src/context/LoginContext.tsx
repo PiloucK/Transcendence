@@ -1,70 +1,55 @@
-import { createContext, useContext, useState } from 'react'
-import React from 'react'
+import { createContext, useContext, useState } from "react";
+import React from "react";
 import Router from "next/router";
 
 import Cookies from "js-cookie";
 
+import { defaultLoginState, ILoginContext } from "../interfaces/ILoginContext";
+
+import { useSocketContext } from "./SocketContext";
+
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
-interface ILoginContext {
-	userLogin: string | null;
-	userSecret: string | null;
-	chatMenu: string;
-	setChatMenu: (menu: string) => void;
-	chatDM: string;
-	setChatDM: (dm: string) => void;
-	login?: (userLogin: string, userSecret: string) => void;
-	logout?: () => void;
-}
+const LoginContext = createContext<ILoginContext>(defaultLoginState);
 
-const defaultLoginState = {
-	userLogin: null,
-	userSecret: null,
-	chatMenu: "direct_message",
-	chatDM: "new_message",
+export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
+  const socketContext = useSocketContext();
+  const [userLogin, setUserLogin] = useState(defaultLoginState.userLogin);
+  const [chatMenu, setChatMenu] = useState(defaultLoginState.chatMenu);
+  const [chatDM, setChatDM] = useState(defaultLoginState.chatDM);
+
+  const login = (userLogin: string) => {
+    socketContext.socket.emit("user:login", userLogin);
+    setUserLogin(userLogin);
+  };
+
+  const logout = () => {
+    socketContext.socket.emit("user:logout", userLogin);
+    setUserLogin(null);
+    Router.push("/");
+    Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
+      path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
+    });
+  };
+
+  return (
+    <LoginContext.Provider
+      value={{
+        userLogin,
+        chatMenu,
+        setChatMenu,
+        chatDM,
+        setChatDM,
+        login,
+        logout,
+      }}
+    >
+      {children}
+    </LoginContext.Provider>
+  );
 };
 
-const LoginContext = createContext<ILoginContext>(defaultLoginState)
-
-export const LoginProvider: React.FC = ({ children }: { children: React.ReactNode }) => {
-	const [userLogin, setUserLogin] = useState(defaultLoginState.userLogin)
-	const [userSecret, setUserSecret] = useState(defaultLoginState.userSecret)
-	const [chatMenu, setChatMenu] = useState(defaultLoginState.chatMenu)
-	const [chatDM, setChatDM] = useState(defaultLoginState.chatDM)
-
-	const login = (userLogin: string, userSecret: string) => {
-		setUserLogin(userLogin)
-		setUserSecret(userSecret)
-	}
-
-	const logout = () => {
-		setUserLogin(null)
-		setUserSecret(null)
-		Router.push("/");
-		Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
-			path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
-		});
-	}
-
-	return (
-		<LoginContext.Provider
-			value={{
-				userLogin,
-				userSecret,
-				chatMenu,
-				setChatMenu,
-				chatDM,
-				setChatDM,
-				login,
-				logout,
-			}}
-		>
-			{children}
-		</LoginContext.Provider>
-	)
-}
-
 export function useLoginContext() {
-	return useContext(LoginContext)
+  return useContext(LoginContext);
 }

@@ -12,10 +12,7 @@ import channelService from "../../services/channel";
 import { Channel } from "../../interfaces/users";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -34,6 +31,7 @@ export function ChannelPasswordDialog({
   setOpen: (open: boolean) => void;
 }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [input, setInput] = React.useState("");
   const [error, setError] = React.useState(false);
 
@@ -46,9 +44,9 @@ export function ChannelPasswordDialog({
     channelService
       .joinProtectedChannel(loginContext.userLogin, channelId, input)
       .then((channel: Channel) => {
-        loginContext.setChatMenu(channel.id);
-        socket.emit("user:update-joined-channel");
-        socket.emit("user:update-channel-content");
+        loginContext.setChatMenu?.(channel.id);
+        socketContext.socket.emit("user:update-joined-channel");
+        socketContext.socket.emit("user:update-channel-content");
       })
       .catch((err: Error) => {
         setError(true);

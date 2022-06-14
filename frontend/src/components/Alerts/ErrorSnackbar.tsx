@@ -1,5 +1,7 @@
-import { Snackbar } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 import { useErrorContext } from "../../context/ErrorContext";
+
+import styles from "../../styles/Home.module.css";
 
 export const ErrorSnackbar = () => {
   const errorContext = useErrorContext();
@@ -17,11 +19,11 @@ export const ErrorSnackbar = () => {
   const displayMessage = () => {
     if (errorContext.errorData.error) {
       return `Error: ${errorContext.errorData.statusCode} \
-      ${errorContext.errorData.error}\n\
-      ${errorContext.errorData.message}`;
+${errorContext.errorData.error}\n\
+${errorContext.errorData.message}`;
     } else {
       return `Error: ${errorContext.errorData.statusCode} \
-      ${errorContext.errorData.message}`
+${errorContext.errorData.message}`;
     }
   };
 
@@ -30,8 +32,10 @@ export const ErrorSnackbar = () => {
       open={errorContext.showError}
       autoHideDuration={6000}
       onClose={handleClose}
-      message={displayMessage()}
-      // action={action}
-    />
+    >
+      <Alert severity="error" variant="filled" className={styles.snackbarMsg}>
+        {displayMessage()}
+      </Alert>
+    </Snackbar>
   );
 };

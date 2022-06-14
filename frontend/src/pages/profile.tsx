@@ -12,8 +12,6 @@ import { FormEventHandler, ChangeEventHandler, useState } from "react";
 import userService from "../services/user";
 import { IUser } from "../interfaces/users";
 
-import io from "socket.io-client";
-
 import Avatar from "@mui/material/Avatar";
 import { DockGuest } from "../components/Dock/DockGuest";
 
@@ -24,13 +22,8 @@ import PublicProfile from "../components/Profile/publicprofile";
 import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
 import { errorHandler } from "../errors/errorHandler";
 
-import getConfig from "next/config";
 import { useErrorContext } from "../context/ErrorContext";
-const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { useSocketContext } from "../context/SocketContext";
 
 function MyAvatar({ userInfos }: { userInfos: IUser }) {
   return (
@@ -88,9 +81,10 @@ function Profile({
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const [open, setOpen] = useState(false);
+  const socketContext = useSocketContext();
 
   React.useEffect(() => {
-    socket.on("update-leaderboard", () => {
+    socketContext.socket.on("update-leaderboard", () => {
       userService
         .getOne(loginContext.userLogin)
         .then((user: IUser) => {

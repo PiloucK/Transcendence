@@ -8,21 +8,19 @@ import Badge from "@mui/material/Badge";
 
 import userService from "../../services/user";
 
-import io from "socket.io-client";
-
 import { errorHandler } from "../../errors/errorHandler";
 
-import getConfig from "next/config";
 import { useErrorContext } from "../../context/ErrorContext";
-const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { useSocketContext } from "../../context/SocketContext";
 
-export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
+export const NotificationChip = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
   const [blockedUsers, setBlockedUsers] = useState<IUserPublicInfos[]>([]);
 
@@ -44,7 +42,7 @@ export const NotificationChip: React.FC = ({ children }: React.ReactNode) => {
         errorContext.newError?.(errorHandler(error, loginContext));
       });
 
-    socket.on("update-relations", () => {
+    socketContext.socket.on("update-relations", () => {
       userService
         .getUserFriendRequestsReceived(loginContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {

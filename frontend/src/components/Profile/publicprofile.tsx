@@ -6,8 +6,6 @@ import { IUserPublicInfos } from "../../interfaces/users";
 
 import Link from "next/link";
 
-import io from "socket.io-client";
-
 import Avatar from "@mui/material/Avatar";
 
 import { UserGameHistory } from "./UserGameHistory";
@@ -25,13 +23,8 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import { errorHandler } from "../../errors/errorHandler";
 
-import getConfig from "next/config";
 import { useErrorContext } from "../../context/ErrorContext";
-const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { useSocketContext } from "../../context/SocketContext";
 
 function UserName({ userInfos }: { userInfos: IUserPublicInfos }) {
   return (
@@ -90,6 +83,7 @@ function UserStats({ userInfos }: { userInfos: IUserPublicInfos }) {
 function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [friendList, setFriendList] = React.useState<[]>([]);
   const [sentRList, setSentRList] = React.useState<[]>([]);
   const [blockedList, setBlockedList] = React.useState<[]>([]);
@@ -120,7 +114,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         errorContext.newError?.(errorHandler(error, loginContext));
       });
 
-    socket.on("update-relations", () => {
+    socketContext.socket.on("update-relations", () => {
       userService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
@@ -202,9 +196,10 @@ function Profile({
 }) {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
 
   React.useEffect(() => {
-    socket.on("update-leaderboard", () => {
+    socketContext.socket.on("update-leaderboard", () => {
       userService
         .getOne(state.usrInfo.username)
         .then((user: IUserPublicInfos) => {

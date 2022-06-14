@@ -6,6 +6,8 @@ import { LoginProvider } from "../context/LoginContext";
 import { MainLayout } from "../layouts/mainLayout";
 import { ErrorProvider } from "../context/ErrorContext";
 import { ErrorSnackbar } from "../components/Alerts/ErrorSnackbar";
+import { SocketProvider } from "../context/SocketContext";
+
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -22,12 +24,14 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return getLayout(
     <ErrorProvider>
-      <LoginProvider>
-        <>
-          <ErrorSnackbar/>
-          <Component {...pageProps} />
-        </>
-      </LoginProvider>
+      <SocketProvider>
+        <LoginProvider>
+          <>
+            <ErrorSnackbar />
+            <Component {...pageProps} />
+          </>
+        </LoginProvider>
+      </SocketProvider>
     </ErrorProvider>
   );
 }

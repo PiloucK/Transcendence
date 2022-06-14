@@ -5,6 +5,7 @@ export interface IUserForLeaderboard {
   image: string;
   //photo?
   elo: number;
+  online: boolean;
 }
 
 export interface IUserPublicInfos extends IUserForLeaderboard {

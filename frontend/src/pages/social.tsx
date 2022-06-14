@@ -13,21 +13,15 @@ import {
   NotificationContent,
 } from "../components/Social/pagesContent";
 
-import io from "socket.io-client";
-
 import { errorHandler } from "../errors/errorHandler";
 
-import getConfig from "next/config";
 import { useErrorContext } from "../context/ErrorContext";
-const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { useSocketContext } from "../context/SocketContext";
 
 function SocialPage({ menu }: { menu: string }) {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
   const [blocked, setBlocked] = useState<IUserPublicInfos[]>([]);
   const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
@@ -60,7 +54,7 @@ function SocialPage({ menu }: { menu: string }) {
         errorContext.newError?.(errorHandler(error, loginContext));
       });
 
-    socket.on("update-leaderboard", () => {
+    socketContext.socket.on("update-leaderboard", () => {
       userService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
@@ -89,7 +83,7 @@ function SocialPage({ menu }: { menu: string }) {
         });
     });
 
-    socket.on("update-relations", () => {
+    socketContext.socket.on("update-relations", () => {
       userService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {

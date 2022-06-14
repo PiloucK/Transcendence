@@ -1,7 +1,9 @@
 import axios from "axios";
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
-const baseUrl = `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/users`;
+const baseUrl = `http://${publicRuntimeConfig.HOST}\
+:${publicRuntimeConfig.BACKEND_PORT}\
+/users`;
 import { IUserCredentials } from "../interfaces/users";
 axios.defaults.withCredentials = true;
 

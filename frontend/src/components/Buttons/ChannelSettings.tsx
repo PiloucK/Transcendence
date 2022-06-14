@@ -10,10 +10,7 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import { ChannelSettingsDialog } from "../Inputs/ChannelSettingsDialog";
 import { ChannelInviteDialog } from "../Inputs/ChannelInviteDialog";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 function MenuButtons({
   channel,
@@ -23,6 +20,7 @@ function MenuButtons({
   setAnchorEl: (anchorEl: any) => void;
 }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [settingsOpen, setSettingsOpen] = React.useState(false);
   const [invitationOpen, setInvitationOpen] = React.useState(false);
 
@@ -35,11 +33,11 @@ function MenuButtons({
   };
 
   const handleLeaveChannel = () => {
-    loginContext.setChatMenu("direct_message");
+    loginContext.setChatMenu?.("direct_message");
     setAnchorEl(null);
     channelService.leaveChannel(loginContext.userLogin, channel.id).then(() => {
-      socket.emit("user:update-channel-content");
-      socket.emit("user:update-joined-channel");
+      socketContext.socket.emit("user:update-channel-content");
+      socketContext.socket.emit("user:update-joined-channel");
     });
   };
 

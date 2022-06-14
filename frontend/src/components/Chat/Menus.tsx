@@ -25,7 +25,6 @@ import { ButtonTxtMuteUser } from "../Buttons/ButtonTxtMuteUser";
 import { ButtonTxtBanUser } from "../Buttons/ButtonTxtBanUser";
 import { ButtonTxtSetAsAdmin } from "../Buttons/ButtonTxtSetAsAdmin";
 
-import io from "socket.io-client";
 import ChannelSettings from "../Buttons/ChannelSettings";
 
 import Avatar from "@mui/material/Avatar";
@@ -34,8 +33,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUser }) {
   return (
@@ -108,6 +106,7 @@ export function DirectMessageMenu(props: {
   setMenu: (menu: string) => void;
 }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [openedDMs, setOpenedDMs] = React.useState<PrivateConv[]>([]);
 
   React.useEffect(() => {
@@ -117,7 +116,7 @@ export function DirectMessageMenu(props: {
         setOpenedDMs(currentDMs);
       });
 
-    socket.on("update-direct-messages", () => {
+    socketContext.socket.on("update-direct-messages", () => {
       privateConvService
         .getPrivateConvs(loginContext.userLogin)
         .then((currentDMs: PrivateConv[]) => {
@@ -384,7 +383,7 @@ export function ChannelMenu({ channel }: { channel: Channel }) {
 
 export function AddChannelMenu(props: {
   menu: string;
-  setMenu: (menu: string) => void;
+  setMenu: ((menu: string) => void) | undefined;
 }) {
   const getStyle = (key: string) => {
     if (props.menu === key) {
@@ -399,7 +398,7 @@ export function AddChannelMenu(props: {
       <div
         className={getStyle("public_channels")}
         onClick={() => {
-          props.setMenu("public_channels");
+          props.setMenu?.("public_channels");
         }}
       >
         Public Channels
@@ -407,7 +406,7 @@ export function AddChannelMenu(props: {
       <div
         className={getStyle("create_channel")}
         onClick={() => {
-          props.setMenu("create_channel");
+          props.setMenu?.("create_channel");
         }}
       >
         Create Channel
@@ -422,7 +421,7 @@ function ChannelList({
   channels,
 }: {
   getStyle: (key: string) => string;
-  setMenu: (menu: string) => void;
+  setMenu: ((menu: string) => void) | undefined;
   channels: Channel[];
 }) {
   if (channels.length === 0) return null;
@@ -432,7 +431,7 @@ function ChannelList({
         key={channel.id}
         className={getStyle(channel.id)}
         onClick={() => {
-          setMenu(channel.id);
+          setMenu?.(channel.id);
         }}
       >
         <Image src={channelImage} alt="channel img" width={45} height={45} />
@@ -443,10 +442,11 @@ function ChannelList({
 
 export function ChatMenu(props: {
   menu: string;
-  setMenu: (menu: string) => void;
+  setMenu: ((menu: string) => void) | undefined;
 }) {
   const [channels, setChannels] = useState<Channel[]>([]);
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
 
   React.useEffect(() => {
     channelService
@@ -454,7 +454,7 @@ export function ChatMenu(props: {
       .then((currentChannels: Channel[]) => {
         setChannels(currentChannels);
       });
-    socket.on("update-channels-list", () => {
+    socketContext.socket.on("update-channels-list", () => {
       channelService
         .getJoinedChannels(loginContext.userLogin)
         .then((currentChannels: Channel[]) => {
@@ -475,7 +475,7 @@ export function ChatMenu(props: {
       <div
         className={getStyle("direct_message")}
         onClick={() => {
-          props.setMenu("direct_message");
+          props.setMenu?.("direct_message");
         }}
       >
         <Image
@@ -493,7 +493,7 @@ export function ChatMenu(props: {
       <div
         className={getStyle("add_channel")}
         onClick={() => {
-          props.setMenu("add_channel");
+          props.setMenu?.("add_channel");
         }}
       >
         <Image src={addChannel} alt="add channel" width={45} height={45} />

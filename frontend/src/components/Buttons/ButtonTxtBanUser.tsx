@@ -17,10 +17,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import { useLoginContext } from "../../context/LoginContext";
 import channelService from "../../services/channel";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 export function ButtonTxtBanUser({
   login,
@@ -30,6 +27,7 @@ export function ButtonTxtBanUser({
   channel: Channel;
 }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [open, setOpen] = React.useState(false);
   const [time, setTime] = React.useState<number | string>(300);
 
@@ -46,9 +44,9 @@ export function ButtonTxtBanUser({
     channelService
       .banAChannelUser(loginContext.userLogin, channel.id, login, time)
       .then(() => {
-        socket.emit("user:update-public-channels");
-        socket.emit("user:update-joined-channel");
-        socket.emit("user:update-channel-content");
+        socketContext.socket.emit("user:update-public-channels");
+        socketContext.socket.emit("user:update-joined-channel");
+        socketContext.socket.emit("user:update-channel-content");
       })
       .catch((err) => {
         console.log(err);

@@ -22,10 +22,7 @@ import Avatar from "@mui/material/Avatar";
 import { SendMessageField } from "../Inputs/SendMessageField";
 
 import { ButtonAcceptChannelInvite } from "../Buttons/ButtonAcceptChannelInvite";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 function FriendList({
   friends,
@@ -49,6 +46,7 @@ function FriendList({
 
 function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
 
   React.useEffect(() => {
@@ -58,14 +56,14 @@ function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
         setFriends(friends);
       });
 
-    socket.on("update-leaderboard", () => {
+    socketContext.socket.on("update-leaderboard", () => {
       userService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
         });
     });
-    socket.on("update-relations", () => {
+    socketContext.socket.on("update-relations", () => {
       userService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
@@ -172,6 +170,7 @@ function Messages({ dm }: { dm: PrivateConv }) {
 
 function CurrentDirectMessage({ menu }: { menu: string }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [blockedList, setBlockedList] = React.useState<IUserPublicInfos[]>([]);
   const [input, setInput] = React.useState("");
   const [privateConv, setPrivateConv] = useState<PrivateConv>();
@@ -190,14 +189,14 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
         setPrivateConv(privateConv);
       });
 
-    socket.on("update-relations", () => {
+    socketContext.socket.on("update-relations", () => {
       userService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
         });
     });
-    socket.on("update-direct-messages", () => {
+    socketContext.socket.on("update-direct-messages", () => {
       privateConvService
         .getPrivateConv(loginContext.userLogin, friend)
         .then((privateConv: PrivateConv) => {
