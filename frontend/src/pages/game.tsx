@@ -16,7 +16,7 @@ import Score  from "../components/Game/Score";
 import { useSocketContext } from "../context/SocketContext";
 
 
-const INITIAL_VELOCITY = 0.055;
+const INITIAL_VELOCITY = 0.06;
 
 
 const Pong = () => {
@@ -56,19 +56,11 @@ const Pong = () => {
     )
   }
 
-  const updateScore = (ballRect: DOMRect) => {
-    if (ballRect?.left <= 0)
-      opponentScore.current++;
-    else if (ballRect?.right >= window.innerWidth)
-      playerScore.current++;
-  }
-
   const handleCollision = () => {
     let ballRect = document.getElementById("ball")?.getBoundingClientRect() as DOMRect;
-
     let playerRect = document.getElementById("player-paddle")?.getBoundingClientRect() as DOMRect;
     let opponentRect = document.getElementById("opponent-paddle")?.getBoundingClientRect() as DOMRect;
-
+    
     let paddleBorderRatio = playerRect.right / window.innerWidth * 100;
 
     let currentPaddle = ballRect.x < window.innerWidth / 2 ? playerRect : opponentRect;
@@ -83,7 +75,15 @@ const Pong = () => {
     }
     else if (paddleCollision(currentPaddle, ballRect)) {
 
-      ballDirection.current.x *= -1;
+      let direction = (ballRect.x < window.innerWidth / 2) ? 1 : -1;
+
+      let collidePoint = ballRect.y - (currentPaddle.y + currentPaddle.height / 2);
+      collidePoint /= currentPaddle.height / 2;
+
+      let angleRad = collidePoint * Math.PI / 4;
+ 
+      ballDirection.current.x = direction * Math.cos(angleRad);
+      ballDirection.current.y = Math.sin(angleRad);
 
       if (currentPaddle === playerRect)
         setBallPosition(prevState => ({x: paddleBorderRatio + ballRadiusWidthRatio, y: prevState.y}))
@@ -91,9 +91,16 @@ const Pong = () => {
         setBallPosition(prevState => ({x: 100 - paddleBorderRatio - ballRadiusWidthRatio, y: prevState.y}))
 
     }
-    else if (ballRect?.left <= 0 || ballRect?.right >= window.innerWidth) {
-      updateScore(ballRect);
+    else if (ballRect?.left <= 0) {
+      opponentScore.current++;
       resetBall();
+      ballDirection.current.x = Math.abs(ballDirection.current.x)
+      ballDirection.current.x *= -1;
+    }
+    else if (ballRect?.right >= window.innerWidth) {
+      playerScore.current++;
+      resetBall();
+      ballDirection.current.x = Math.abs(ballDirection.current.x)
     }
   }
 
