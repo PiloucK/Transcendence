@@ -40,7 +40,7 @@ function NavigationDock({
 
     const newUserCredentials: IUserCredentials = {
       login42: username,
-	  photo42: "https://cdn.intra.42.fr/users/chdespon.jpg",
+      photo42: "https://cdn.intra.42.fr/users/chdespon.jpg",
     };
 
     userService

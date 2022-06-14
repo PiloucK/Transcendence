@@ -42,15 +42,24 @@ function Messages({ channel }: { channel: Channel }) {
     if (author === loginContext.userLogin) {
       return null;
     } else {
-      return (
-        <Avatar
-          className={styles.chat_avatar}
-          src={
-            channel.users.find((member) => member.login42 === author)!.photo42
-          }
-          sx={{ width: "40px", height: "40px" }}
-        />
-      );
+      const user = channel.users.find((user) => user.login42 === author);
+      if (user.image) {
+        return (
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.image}
+            sx={{ width: "40px", height: "40px" }}
+          />
+        );
+      } else {
+        return (
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.photo42}
+            sx={{ width: "40px", height: "40px" }}
+          />
+        );
+      }
     }
   };
 
@@ -113,7 +122,6 @@ export function Channel({ id }: { id: string }) {
     });
   }, []);
 
-  console.log("channel: ", channel);
   return (
     <>
       <ChannelMenu channel={channel} />

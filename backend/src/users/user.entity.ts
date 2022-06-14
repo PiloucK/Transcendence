@@ -22,6 +22,9 @@ export class User {
   @Column()
   photo42!: string;
 
+  @Column({ nullable: true })
+  image!: string;
+
   @Column({ default: 0 })
   elo!: number;
 

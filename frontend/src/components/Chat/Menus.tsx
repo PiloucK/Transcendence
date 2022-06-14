@@ -42,9 +42,15 @@ function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUser }) {
     <div key={keyV} className={styles.chat_direct_message_menu_dm_selected}>
       <Avatar
         className={styles.chat_avatar}
-        src={user.photo42}
+        src={user.image}
         sx={{ width: "20px", height: "20px" }}
-      />
+      >
+        <Avatar
+          className={styles.chat_avatar}
+          src={user.photo42}
+          sx={{ width: "20px", height: "20px" }}
+        />
+      </Avatar>
       {user.login42}
       <ButtonTxtViewProfile login={user.login42} />
       <ButtonTxtUserStatus login={user.login42} />
@@ -70,13 +76,7 @@ function DMList({
       dm.userOne.login42 === loginContext.userLogin ? dm.userTwo : dm.userOne;
 
     if (key === menu) {
-      return (
-        <SelectedDMMenu
-          key={"selectedDMMenu"}
-          keyV={key}
-          user={user}
-        />
-      );
+      return <SelectedDMMenu key={"selectedDMMenu"} keyV={key} user={user} />;
     }
     return (
       <div
@@ -88,9 +88,15 @@ function DMList({
       >
         <Avatar
           className={styles.chat_avatar}
-          src={user.photo42}
+          src={user.image}
           sx={{ width: "20px", height: "20px" }}
-        />
+        >
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.photo42}
+            sx={{ width: "20px", height: "20px" }}
+          />
+        </Avatar>
         {user.login42}
       </div>
     );
@@ -169,9 +175,15 @@ function SelectedUserMenu({
         >
           <Avatar
             className={styles.chat_avatar}
-            src={user.photo42}
+            src={user.image}
             sx={{ width: "20px", height: "20px" }}
-          />
+          >
+            <Avatar
+              className={styles.chat_avatar}
+              src={user.photo42}
+              sx={{ width: "20px", height: "20px" }}
+            />
+          </Avatar>
           {user.login42}
         </div>
         <ButtonTxtViewProfile login={user.login42} />
@@ -191,9 +203,15 @@ function SelectedUserMenu({
         >
           <Avatar
             className={styles.chat_avatar}
-            src={user.photo42}
+            src={user.image}
             sx={{ width: "20px", height: "20px" }}
-          />
+          >
+            <Avatar
+              className={styles.chat_avatar}
+              src={user.photo42}
+              sx={{ width: "20px", height: "20px" }}
+            />
+          </Avatar>
           {user.login42}
         </div>
         <ButtonTxtViewProfile login={user.login42} />
@@ -212,9 +230,15 @@ function SelectedUserMenu({
         >
           <Avatar
             className={styles.chat_avatar}
-            src={user.photo42}
+            src={user.image}
             sx={{ width: "20px", height: "20px" }}
-          />
+          >
+            <Avatar
+              className={styles.chat_avatar}
+              src={user.photo42}
+              sx={{ width: "20px", height: "20px" }}
+            />
+          </Avatar>
           {user.login42}
         </div>
         <ButtonTxtViewProfile login={user.login42} />
@@ -245,9 +269,15 @@ function UserList({ channel }: { channel: Channel }) {
         <div key={user.login42} className={styles.connected_user}>
           <Avatar
             className={styles.chat_avatar}
-            src={user.photo42}
+            src={user.image}
             sx={{ width: "20px", height: "20px" }}
-          />
+          >
+            <Avatar
+              className={styles.chat_avatar}
+              src={user.photo42}
+              sx={{ width: "20px", height: "20px" }}
+            />
+          </Avatar>
           {user.username}
         </div>
       );
@@ -272,9 +302,15 @@ function UserList({ channel }: { channel: Channel }) {
         >
           <Avatar
             className={styles.chat_avatar}
-            src={user.photo42}
+            src={user.image}
             sx={{ width: "20px", height: "20px" }}
-          />
+          >
+            <Avatar
+              className={styles.chat_avatar}
+              src={user.photo42}
+              sx={{ width: "20px", height: "20px" }}
+            />
+          </Avatar>
           {user.username}
         </div>
       );

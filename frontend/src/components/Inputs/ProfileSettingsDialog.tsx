@@ -39,11 +39,10 @@ export function ProfileSettingsDialog({
 
   const [textFieldError, setTextFieldError] = useState("");
 
-  const [newImage, setNewImage] = useState();
+  const [newImage, setNewImage] = useState<Blob>();
   const [preview, setPreview] = useState("");
 
   const updateNewImage = (event) => {
-    // console.log("updateNewImage", event.target.files[0]);
     setNewImage(event.target.files[0]);
     setPreview(URL.createObjectURL(event.target.files[0]));
   };
@@ -66,13 +65,14 @@ export function ProfileSettingsDialog({
     if (error === false) {
       setOpen(false);
       userService.updateUserUsername(user.login42, username).then(() => {
-        setUsername("");
         socket.emit("user:update-username");
       });
       if (newImage !== undefined) {
-        userService.updateUserImage(user.login42, newImage).then(() => {
+        const formData = new FormData();
+        formData.append("file", newImage);
+        userService.updateUserImage(user.login42, formData).then(() => {
           setNewImage(undefined);
-          //   setPreview("");
+          setPreview("");
           socket.emit("user:update-image");
         });
       }
@@ -132,7 +132,7 @@ export function ProfileSettingsDialog({
                 }}
               >
                 <Avatar
-                  src={user.photo42}
+                  src={user.image}
                   alt="avatar"
                   sx={{
                     left: "50%",
@@ -141,7 +141,19 @@ export function ProfileSettingsDialog({
                     height: 151,
                     cursor: "pointer",
                   }}
-                />
+                >
+                  <Avatar
+                    src={user.photo42}
+                    alt="avatar"
+                    sx={{
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      width: 151,
+                      height: 151,
+                      cursor: "pointer",
+                    }}
+                  />
+                </Avatar>
               </Avatar>
             </label>
           </DialogContent>

@@ -69,8 +69,14 @@ const updateUserUsername = (login: string, username: string) => {
     });
 };
 
-const updateUserImage = (login: string, image: File) => {
-  const request = axios.patch(`${baseUrl}/${login}/image`, { image });
+const updateUserImage = (login: string, file: FormData) => {
+  const request = axios.post(
+    `${baseUrl}/${login}/image`,
+    file,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
   return request
     .then((response) => response.data)
     .catch((e) => {

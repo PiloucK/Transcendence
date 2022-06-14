@@ -11,17 +11,20 @@ import Link from "next/link";
 import io from "socket.io-client";
 
 import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig()
-const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
+const { publicRuntimeConfig } = getConfig();
+const socket = io(
+  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
+  { transports: ["websocket"] }
+);
 
 function LeaderboardUserCard(props: {
   user: IUserForLeaderboard;
   index: number;
 }) {
-	let userStyle = styles.leaderboard_user;
-	if (props.index === 0) {
-		userStyle = styles.leaderboard_firstuser;
-	}
+  let userStyle = styles.leaderboard_user;
+  if (props.index === 0) {
+    userStyle = styles.leaderboard_firstuser;
+  }
 
   return (
     <Link href={`/profile?login=${props.user.login42}`} key={props.index}>
@@ -35,13 +38,11 @@ function LeaderboardUserCard(props: {
     </Link>
   );
 }
-// Will create the five cards component to display the users and their scores.
 function createLeaderboard(users: IUserForLeaderboard[]): ReactElement {
-  // console.log(users);
   return (
     <div className={styles.leaderboard}>
       {users.map((user, index) => {
-        return LeaderboardUserCard({user, index});
+        return LeaderboardUserCard({ user, index });
       })}
     </div>
   );

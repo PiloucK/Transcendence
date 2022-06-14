@@ -123,18 +123,28 @@ function Messages({ dm }: { dm: PrivateConv }) {
         return (
           <div className={styles.chat_avatar}>
             <Avatar
-              src={dm.userOne.photo42}
+              src={dm.userOne.image}
               sx={{ width: "40px", height: "40px" }}
-            />
+            >
+              <Avatar
+                src={dm.userOne.photo42}
+                sx={{ width: "40px", height: "40px" }}
+              />
+            </Avatar>
           </div>
         );
       } else {
         return (
           <div className={styles.chat_avatar}>
             <Avatar
-              src={dm.userTwo.photo42}
+              src={dm.userTwo.image}
               sx={{ width: "40px", height: "40px" }}
-            />
+            >
+              <Avatar
+                src={dm.userTwo.photo42}
+                sx={{ width: "40px", height: "40px" }}
+              />
+            </Avatar>
           </div>
         );
       }

@@ -6,7 +6,6 @@ import { Message, ChannelCreation } from "../interfaces/users";
 axios.defaults.withCredentials = true;
 
 const createChannel = (login: string, channelInfos: ChannelCreation) => {
-  console.log("Create channel: ", channelInfos);
   const request = axios.patch(`${baseUrl}/${login}/createChannel`, {
     name: channelInfos.name,
     password: channelInfos.password,
