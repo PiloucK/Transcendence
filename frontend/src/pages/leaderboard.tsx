@@ -8,18 +8,11 @@ import { IUserForLeaderboard } from "../interfaces/users";
 
 import Link from "next/link";
 
-import io from "socket.io-client";
-
 import { errorHandler } from "../errors/errorHandler";
 import { useLoginContext } from "../context/LoginContext";
 
-import getConfig from "next/config";
 import { useErrorContext } from "../context/ErrorContext";
-const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { useSocketContext } from "../context/SocketContext";
 
 function LeaderboardUserCard(props: {
   user: IUserForLeaderboard;
@@ -29,6 +22,10 @@ function LeaderboardUserCard(props: {
   if (props.index === 0) {
     userStyle = styles.leaderboard_firstuser;
   }
+  let statusStyle = styles.leaderboard_user_status_offline;
+  if (props.user.online) {
+    statusStyle = styles.leaderboard_user_status_online;
+  }
 
   return (
     <Link href={`/profile?login=${props.user.login42}`} key={props.index}>
@@ -37,6 +34,7 @@ function LeaderboardUserCard(props: {
         <div className={styles.leaderboard_user_name}>
           {props.user.username}
         </div>
+        <div className={statusStyle}>🟢</div>
         <div className={styles.leaderboard_user_score}>{props.user.elo}</div>
       </div>
     </Link>
@@ -58,6 +56,7 @@ function createLeaderboard(users: IUserForLeaderboard[]): ReactElement {
 export default function Leaderboard() {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
 
   const [users, setUsers] = useState<IUserForLeaderboard[]>([]);
 
@@ -71,7 +70,7 @@ export default function Leaderboard() {
         errorContext.newError?.(errorHandler(error, loginContext));
       });
 
-    socket.on("update-leaderboard", () => {
+    socketContext.socket.on("update-leaderboard", () => {
       userService
         .getAll()
         .then((users: IUserForLeaderboard[]) => {

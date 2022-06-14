@@ -21,10 +21,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { CardUserChannelInvite } from "../Cards/CardUserChannelInvite";
 
 import { EmptyInvitableFriendList } from "../Social/emptyPages";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 function FriendList({
   friends,
@@ -68,6 +65,7 @@ export function ChannelInviteDialog({
   setOpen: (open: boolean) => void;
 }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [friends, setFriends] = useState<IUserForLeaderboard[]>([]);
   const [selectedFriends, setSelectedFriends] = useState<IUserForLeaderboard[]>(
     []
@@ -80,14 +78,14 @@ export function ChannelInviteDialog({
         setFriends(friends);
       });
 
-    socket.on("update-channel-content", () => {
+    socketContext.socket.on("update-channel-content", () => {
       channelService
         .getChannelInvitableFriends(loginContext.userLogin, channel.id)
         .then((friends: IUserForLeaderboard[]) => {
           setFriends(friends);
         });
     });
-    socket.on("update-relations", () => {
+    socketContext.socket.on("update-relations", () => {
       channelService
         .getChannelInvitableFriends(loginContext.userLogin, channel.id)
         .then((friends: IUserForLeaderboard[]) => {
@@ -121,7 +119,9 @@ export function ChannelInviteDialog({
     selectedFriends.forEach((friend: IUserForLeaderboard) => {
       channelService
         .inviteToChannel(loginContext.userLogin, channel.id, friend.login42)
-        .then(socket.emit("user:update-channel-content"))
+        .then(() => {
+          socketContext.socket.emit("user:update-channel-content");
+        })
         .catch((err: Error) => {
           console.log(err);
         });

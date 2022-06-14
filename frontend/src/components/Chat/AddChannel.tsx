@@ -19,10 +19,7 @@ import { CardPublicChannel } from "../Cards/CardPublicChannel";
 
 import channelService from "../../services/channel";
 import { useLoginContext } from "../../context/LoginContext";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 function EmptyPublicChannels() {
   return (
@@ -47,6 +44,7 @@ function PublicChannelsList({ channels }: { channels: Channel[] }) {
 
 function PublicChannels() {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [channels, setChannels] = useState<Channel[]>([]);
 
   React.useEffect(() => {
@@ -56,7 +54,7 @@ function PublicChannels() {
         setChannels(channels);
       });
 
-    socket.on("update-public-channels", () => {
+    socketContext.socket.on("update-public-channels", () => {
       channelService
         .getPublicChannels(loginContext.userLogin)
         .then((channels: ChannelCreation[]) => {
@@ -70,6 +68,7 @@ function PublicChannels() {
 
 function CreateChannelForm() {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [channelName, setChannelName] = useState("");
   const [channelPassword, setChannelPassword] = useState<inputPFState>({
     password: "",
@@ -109,8 +108,8 @@ function CreateChannelForm() {
       channelService
         .createChannel(loginContext.userLogin, channel)
         .then((res) => {
-          socket.emit("user:update-public-channels");
-          socket.emit("user:update-joined-channel");
+          socketContext.socket.emit("user:update-public-channels");
+          socketContext.socket.emit("user:update-joined-channel");
           loginContext.setChatMenu?.(res.id);
         });
     }

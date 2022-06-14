@@ -14,12 +14,14 @@ import { ConfigService } from '@nestjs/config';
 import { GetReqUser } from './decorators/getReqUser.decorator';
 import { FortyTwoAuthFilter } from './filters/fortyTwoAuth.filter';
 import { User } from 'src/users/user.entity';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
+    private readonly usersService: UsersService,
   ) {}
 
   @UseGuards(FortyTwoAuthGuard) // pass through FortyTwoStrategy

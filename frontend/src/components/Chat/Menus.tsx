@@ -24,15 +24,13 @@ import { ButtonTxtMuteUser } from "../Buttons/ButtonTxtMuteUser";
 import { ButtonTxtBanUser } from "../Buttons/ButtonTxtBanUser";
 import { ButtonTxtSetAsAdmin } from "../Buttons/ButtonTxtSetAsAdmin";
 
-import io from "socket.io-client";
 import ChannelSettings from "../Buttons/ChannelSettings";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 function SelectedDMMenu({
   keyV,
@@ -97,6 +95,7 @@ export function DirectMessageMenu(props: {
   setMenu: (menu: string) => void;
 }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [openedDMs, setOpenedDMs] = React.useState<PrivateConv[]>([]);
 
   React.useEffect(() => {
@@ -106,7 +105,7 @@ export function DirectMessageMenu(props: {
         setOpenedDMs(currentDMs);
       });
 
-    socket.on("update-direct-messages", () => {
+    socketContext.socket.on("update-direct-messages", () => {
       privateConvService
         .getPrivateConvs(loginContext.userLogin)
         .then((currentDMs: PrivateConv[]) => {
@@ -381,6 +380,7 @@ export function ChatMenu(props: {
 }) {
   const [channels, setChannels] = useState<Channel[]>([]);
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
 
   React.useEffect(() => {
     channelService
@@ -388,7 +388,7 @@ export function ChatMenu(props: {
       .then((currentChannels: Channel[]) => {
         setChannels(currentChannels);
       });
-    socket.on("update-channels-list", () => {
+    socketContext.socket.on("update-channels-list", () => {
       channelService
         .getJoinedChannels(loginContext.userLogin)
         .then((currentChannels: Channel[]) => {

@@ -158,6 +158,15 @@
   color: #ffffff;
 }
 
+.leaderboard_user_status_online {
+  margin-left: 1%;
+}
+
+.leaderboard_user_status_offline {
+  margin-left: 1%;
+  display: none;
+}
+
 /* 
 	Background that will take the left side of the screen
 */
@@ -2271,4 +2280,12 @@ and should display them in columns of three cards max */
     width: 100%;
     flex-direction: column;
   }
+}
+
+/* 
+* Snackbar: display line break
+*/
+
+.snackbarMsg {
+  white-space: pre;
 }

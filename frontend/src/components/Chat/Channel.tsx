@@ -12,10 +12,7 @@ import Image from "next/image";
 import Rocket from "../../public/no_dm_content.png";
 
 import { SendMessageField } from "../Inputs/SendMessageField";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 function Messages({ channel }: { channel: Channel }) {
   const loginContext = useLoginContext();
@@ -77,6 +74,7 @@ function ChannelContent({ channel }: { channel: Channel }) {
 
 export function Channel({ id }: { id: string }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [channel, setChannel] = useState<Channel>();
 
   React.useEffect(() => {
@@ -86,7 +84,7 @@ export function Channel({ id }: { id: string }) {
         setChannel(channel);
       });
 
-    socket.on("update-channel-content", () => {
+    socketContext.socket.on("update-channel-content", () => {
       channelService
         .getChannelById(loginContext.userLogin, id)
         .then((channel: Channel) => {
