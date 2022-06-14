@@ -20,7 +20,7 @@ import { useLoginContext } from "../../context/LoginContext";
 import userService from "../../services/user";
 import authService from "../../services/auth";
 import { IUser, IUserCredentials } from "../../interfaces/users";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Tooltip } from "@mui/material";
 
 import { errorHandler } from "../../errors/errorHandler";
 
@@ -91,36 +91,46 @@ function NavigationDock({
     <>
       <Dock>
         <Link href="/profile">
-          <IconButton className={styles.icons} aria-label="profile">
-            <AccountCircleIcon />
-          </IconButton>
+          <Tooltip title="Profile">
+            <IconButton className={styles.icons} aria-label="profile">
+              <AccountCircleIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
 
         <Link href="/chat">
-          <IconButton className={styles.icons} aria-label="chat">
-            <ChatIcon />
-          </IconButton>
+          <Tooltip title="Chat">
+            <IconButton className={styles.icons} aria-label="chat">
+              <ChatIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
 
         <Link href="/social">
-          <IconButton className={styles.icons} aria-label="social">
-            <GroupIcon />
-          </IconButton>
+          <Tooltip title="Friends">
+            <IconButton className={styles.icons} aria-label="social">
+              <GroupIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
 
         <Link href="/leaderboard">
-          <IconButton className={styles.icons} aria-label="leaderboard">
-            <LeaderboardIcon />
-          </IconButton>
+          <Tooltip title="Leaderboard">
+            <IconButton className={styles.icons} aria-label="leaderboard">
+              <LeaderboardIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
 
-        <IconButton
-          onClick={() => setIsInNavigation(false)}
-          className={styles.icons}
-          aria-label="gamemode"
-        >
-          <GamemodeIcon />
-        </IconButton>
+        <Tooltip title="Game mode">
+          <IconButton
+            onClick={() => setIsInNavigation(false)}
+            className={styles.icons}
+            aria-label="gamemode"
+          >
+            <GamemodeIcon />
+          </IconButton>
+        </Tooltip>
       </Dock>
 
       <div>
