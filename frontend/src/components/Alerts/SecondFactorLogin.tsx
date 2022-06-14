@@ -17,7 +17,7 @@ export const SecondFactorLogin = () => {
     twoFactorAuthService
       .authenticate(code)
       .then(() => {
-        Router.push("/");
+        loginContext.setShowSecondFactorLogin?.(false);
       })
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, loginContext));
@@ -29,7 +29,7 @@ export const SecondFactorLogin = () => {
   };
 
   return (
-    <Dialog open={loginContext.secondFactorLogin}>
+    <Dialog open={loginContext.showSecondFactorLogin}>
       <form onSubmit={sendValidationCode}>
         <TextField value={code} onChange={handleCodeChange} />
         <Button type="submit">send validation code</Button>
