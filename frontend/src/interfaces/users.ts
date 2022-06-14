@@ -3,6 +3,7 @@ export interface IUserForLeaderboard {
   username: string; // username qu'on peut changer (unique?)
   //photo?
   elo: number;
+  online: boolean;
 }
 
 export interface IUserPublicInfos extends IUserForLeaderboard {

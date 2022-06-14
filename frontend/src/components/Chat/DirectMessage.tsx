@@ -21,10 +21,7 @@ import Blocked from "../../public/blocked.png";
 import { SendMessageField } from "../Inputs/SendMessageField";
 
 import { ButtonAcceptChannelInvite } from "../Buttons/ButtonAcceptChannelInvite";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 function FriendList({
   friends,
@@ -48,6 +45,7 @@ function FriendList({
 
 function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
 
   React.useEffect(() => {
@@ -57,14 +55,14 @@ function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
         setFriends(friends);
       });
 
-    socket.on("update-leaderboard", () => {
+    socketContext.socket.on("update-leaderboard", () => {
       userService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
         });
     });
-    socket.on("update-relations", () => {
+    socketContext.socket.on("update-relations", () => {
       userService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
@@ -114,14 +112,15 @@ function Messages({ dm }: { dm: PrivateConv }) {
     }
   };
 
-	if (typeof window !== "undefined") {
-		var messageBody = document.querySelector('#directMessageMsgArea');
-		if (messageBody) {
-			messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
-		}
-	}
+  if (typeof window !== "undefined") {
+    var messageBody = document.querySelector("#directMessageMsgArea");
+    if (messageBody) {
+      messageBody.scrollTop =
+        messageBody.scrollHeight - messageBody.clientHeight;
+    }
+  }
   return (
-    <div className={styles.messages_area} id='directMessageMsgArea'>
+    <div className={styles.messages_area} id="directMessageMsgArea">
       {dm.messages.map((message, index) => (
         <div className={getStyle(message.author)} key={index}>
           <MessageContent message={message} />
@@ -133,11 +132,12 @@ function Messages({ dm }: { dm: PrivateConv }) {
 
 function CurrentDirectMessage({ menu }: { menu: string }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [blockedList, setBlockedList] = React.useState<IUserPublicInfos[]>([]);
   const [input, setInput] = React.useState("");
   const [privateConv, setPrivateConv] = useState<PrivateConv>();
   const users = menu.split("|");
-	
+
   const friend = users[0] === loginContext.userLogin ? users[1] : users[0];
   React.useEffect(() => {
     userService
@@ -145,20 +145,20 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       });
-		privateConvService
+    privateConvService
       .getPrivateConv(loginContext.userLogin, friend)
       .then((privateConv: PrivateConv) => {
         setPrivateConv(privateConv);
       });
 
-    socket.on("update-relations", () => {
+    socketContext.socket.on("update-relations", () => {
       userService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
         });
     });
-    socket.on("update-direct-messages", () => {
+    socketContext.socket.on("update-direct-messages", () => {
       privateConvService
         .getPrivateConv(loginContext.userLogin, friend)
         .then((privateConv: PrivateConv) => {

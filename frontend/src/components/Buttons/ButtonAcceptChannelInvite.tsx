@@ -8,10 +8,7 @@ import { Channel } from "../../interfaces/users";
 
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -26,6 +23,7 @@ export function ButtonAcceptChannelInvite({
   channelId: string;
 }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [error, setError] = React.useState(false);
 
   const joinChannel = () => {
@@ -33,8 +31,8 @@ export function ButtonAcceptChannelInvite({
       .joinChannel(loginContext.userLogin, channelId)
       .then((channel: Channel) => {
         loginContext.setChatMenu?.(channel.id);
-        socket.emit("user:update-joined-channel");
-        socket.emit("user:update-channel-content");
+        socketContext.socket.emit("user:update-joined-channel");
+        socketContext.socket.emit("user:update-channel-content");
       })
       .catch((err) => {
         if (err.response.status === 403) {

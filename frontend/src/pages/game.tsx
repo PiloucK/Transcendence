@@ -4,11 +4,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { DockGuest } from "../components/Dock/DockGuest";
 import userService from "../services/user";
 
-import io from "socket.io-client";
-
 import { errorHandler } from "../errors/errorHandler";
 
-import getConfig from "next/config";
 import { useErrorContext } from "../context/ErrorContext";
 import { ICoordinates } from "../interfaces/ICoordinates";
 import dynamic from "next/dynamic";
@@ -16,13 +13,7 @@ import Ball from "../components/Game/Ball";
 import PlayerPaddle from "../components/Game/PlayerPaddle";
 import OpponentPaddle from "../components/Game/OpponentPaddle";
 import Score  from "../components/Game/Score";
-
-
-const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { useSocketContext } from "../context/SocketContext";
 
 
 const INITIAL_VELOCITY = 0.055;
