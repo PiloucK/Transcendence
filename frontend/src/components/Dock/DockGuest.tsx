@@ -6,7 +6,7 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import io from "socket.io-client";
 import Link from "next/link";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import Image from "next/image";
 
 import styles from "../../styles/Home.module.css";
@@ -52,9 +52,11 @@ export function DockGuest() {
       <Link
         href={`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/auth`}
       >
-        <IconButton className={styles.icons} aria-label="Authentication">
-          <Image src={FTLogo} layout={"fill"} />
-        </IconButton>
+        <Tooltip title="Login with your 42 account">
+          <IconButton className={styles.icons} aria-label="Authentication">
+            <Image src={FTLogo} layout={"fill"} />
+          </IconButton>
+        </Tooltip>
       </Link>
     </Dock>
   );
