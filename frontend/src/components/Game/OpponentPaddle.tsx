@@ -19,12 +19,12 @@ const OpponentPaddle = ({ballDirection} : {ballDirection : ICoordinates}) => {
     
     let ballRect = document.getElementById("ball")?.getBoundingClientRect() as DOMRect;
       
-    if (ballRect.x >= window.innerWidth / 3 && ballDirection.x > 0) {
+    if (ballRect.x >= window.innerWidth / 4 && ballDirection.x > 0) {
       const paddleElem = document.getElementById("opponent-paddle") as HTMLElement;
       const ballY = ballRect.y / window.innerHeight * 100;
 
       // if the ball is out of range
-      if (paddlePosition.current - randomNumberBetween(5, 40 - computerLvl * 10) > ballY || paddlePosition.current + randomNumberBetween(5, 40 - computerLvl * 10) < ballY)
+      if (paddlePosition.current - randomNumberBetween(5, 20 - computerLvl * 5) > ballY || paddlePosition.current + randomNumberBetween(5, 25 - computerLvl * 5) < ballY)
         movePaddle.current = true;
 
       if (movePaddle.current) {

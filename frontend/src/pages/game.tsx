@@ -16,7 +16,7 @@ import Score  from "../components/Game/Score";
 import { useSocketContext } from "../context/SocketContext";
 
 
-const INITIAL_VELOCITY = 0.06;
+const INITIAL_VELOCITY = 0.065;
 
 
 const Pong = () => {
@@ -39,7 +39,7 @@ const Pong = () => {
   }
 
   const resetBall = () => {
-    setBallPosition({x: 50, y: 50});
+    setBallPosition({x: 50, y: randomNumberBetween(10, 90)});
     ballDirection.current.x =  0;
     while (Math.abs(ballDirection.current.x) <= 0.2 || Math.abs(ballDirection.current.x) >= 0.9) {
       const heading = randomNumberBetween(0, 2 * Math.PI);
