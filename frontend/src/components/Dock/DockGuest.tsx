@@ -45,7 +45,7 @@ export function DockGuest() {
 
   useEffect(() => {
     authenticate();
-  }, []);
+  }, [loginContext]);
 
   return (
     <Dock>
