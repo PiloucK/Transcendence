@@ -23,7 +23,11 @@ export class StatusService {
         socketId,
         user,
       });
-      await this.statusRepository.save(status);
+      await this.statusRepository.save(status).catch(() => {
+        console.log(
+          'dirty fix: if you want more, change status implementation',
+        );
+      });
       console.log('save status');
       if (user.status.length === 0) {
         console.log('online');

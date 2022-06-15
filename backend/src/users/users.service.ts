@@ -27,6 +27,27 @@ export class UsersService {
     }
   }
 
+  async turnOnOldTwoFactorAuth(user: User) {
+    user.isTwoFactorAuthEnabled = true;
+    await this.usersRepository.save(user);
+  }
+
+  async turnOnNewTwoFactorAuth(user: User) {
+    user.isTwoFactorAuthEnabled = true;
+    user.twoFactorAuthSecret = user.twoFactorAuthTemporarySecret;
+    await this.usersRepository.save(user);
+  }
+
+  async turnOffTwoFactorAuth(user: User) {
+    user.isTwoFactorAuthEnabled = false;
+    await this.usersRepository.save(user);
+  }
+
+  async setTwoFactorAuthTemporarySecret(secret: string, user: User) {
+    user.twoFactorAuthTemporarySecret = secret;
+    await this.usersRepository.save(user);
+  }
+
   async getAllUsers(): Promise<User[]> {
     const users = await this.usersRepository.find();
     return users;
@@ -64,10 +85,9 @@ export class UsersService {
     this.restrictToReqUser(reqUser, login42);
 
     const { username } = updateUsernameDto;
-    const user = await this.getUserByLogin42(login42);
-    user.username = username;
-    await this.usersRepository.save(user);
-    return user;
+    reqUser.username = username;
+    await this.usersRepository.save(reqUser);
+    return reqUser;
   }
 
   async updateUserElo(login42: string, elo: number): Promise<User> {
