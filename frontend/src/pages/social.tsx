@@ -1,6 +1,6 @@
 import styles from "../styles/Home.module.css";
 import { useLoginContext } from "../context/LoginContext";
-import { DockGuest } from "../components/Dock/DockGuest";
+// import { DockGuest } from "../components/Dock/DockGuest";
 import React, { useState } from "react";
 
 import { IUserPublicInfos } from "../interfaces/users";
@@ -136,9 +136,6 @@ export default function Social() {
     document.body.style.backgroundColor = "#00213D";
   }
 
-  if (loginContext.userLogin === null) {
-    return <DockGuest />;
-  } else {
     return (
       <>
         <div className={styles.social_title}>Friends</div>
@@ -146,5 +143,4 @@ export default function Social() {
         <SocialPage menu={menu} />
       </>
     );
-  }
 }

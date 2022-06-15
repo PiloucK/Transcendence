@@ -1,7 +1,6 @@
 import styles from "../styles/Home.module.css";
 import { useLoginContext } from "../context/LoginContext";
 import React, { useEffect, useRef, useState } from 'react';
-import { DockGuest } from "../components/Dock/DockGuest";
 import userService from "../services/user";
 
 import { errorHandler } from "../errors/errorHandler";

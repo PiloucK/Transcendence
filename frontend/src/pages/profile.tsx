@@ -13,7 +13,7 @@ import userService from "../services/user";
 import { IUser } from "../interfaces/users";
 
 import Avatar from "@mui/material/Avatar";
-import { DockGuest } from "../components/Dock/DockGuest";
+// import { DockGuest } from "../components/Dock/DockGuest";
 
 import { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
@@ -201,7 +201,7 @@ export default function ProfilePage() {
     }
   }, []);
 
-  if (loginContext.userLogin === null) return <DockGuest />;
+  // if (loginContext.userLogin === null) return <DockGuest />;
   return (
     <Profile state={{ userInfos: userInfos, setUserInfos: setUserInfos }} />
   );
