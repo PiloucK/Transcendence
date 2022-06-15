@@ -64,13 +64,7 @@ export class User {
 
   @Column({ default: false })
   isTwoFactorAuthEnabled!: boolean;
-
-// export enum UserState {
-//   IN_GAME = "IN_GAME",
-//   IN_QUEUE = "IN_QUEUE",
-//   IS_ONLINE = "IN_ONLINE",
-//   IS_OFFLINE = "IS_OFFLINE"
-// }
+}
 
 // export type Friends = Array<string>;
 // export type FriendRequestsSent = Array<string>;

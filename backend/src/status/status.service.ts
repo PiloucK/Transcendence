@@ -3,7 +3,7 @@ import { UsersService } from 'src/users/users.service';
 
 interface StatusMetrics {
   socketCount: number;
-  status: 'ONLINE' | 'OFFLINE' | 'IN_GAME' | 'IN_QUEUE';
+  status: 'ONLINE' | 'IN_GAME' | 'IN_QUEUE';
 }
 
 type Login42 = string;
@@ -32,16 +32,17 @@ export class StatusService {
   }
 
   remove(socketId: string): 'EMIT' | 'QUIET' {
-    const currentUser = this.statuses.get(userLogin42);
-    if (!currentUser) {
-      this.statuses.set(userLogin42, {
-        socketIds: new Set([socketId]),
-        status: 'ONLINE',
-      });
-      return 'EMIT';
-    } else {
-      currentUser.socketIds.add(socketId);
-      return 'QUIET';
+    const currentSocket = this.sockets.get(socketId);
+    if (currentSocket) {
+      const currentUser = this.statuses.get(currentSocket);
+      if (currentUser) {
+        --currentUser.socketCount;
+        if (currentUser.socketCount === 0) {
+          return 'EMIT';
+        } else {
+          return 'QUIET';
+        }
+      }
     }
   }
 }

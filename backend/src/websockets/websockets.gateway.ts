@@ -25,7 +25,9 @@ export class WebsocketsGateway
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('disconnection', client.id);
-    this.statusService.remove(client.id);
+    if (this.statusService.remove(client.id) === 'EMIT') {
+      this.updateRelations();
+    }
   }
 
   updateRelations() {
@@ -49,7 +51,9 @@ export class WebsocketsGateway
     @ConnectedSocket() client: Socket,
   ) {
     console.log('user:logout', userLogin42, client.id);
-    this.statusService.remove(client.id);
+    if (this.statusService.remove(client.id) === 'EMIT') {
+      this.updateRelations();
+    }
   }
 
   @SubscribeMessage('user:new')
