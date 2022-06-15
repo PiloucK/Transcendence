@@ -28,7 +28,7 @@ export class StatusService {
       if (user.status.length === 0) {
         console.log('online');
         this.usersService.updateOnlineStatus(user.login42, true);
-        this.websocketsGateway.updateStatus(user.login42, true);
+        this.websocketsGateway.updateRelations();
       }
     }
 
@@ -47,7 +47,7 @@ export class StatusService {
       if (user.status.length === 0) {
         console.log('offline');
         this.usersService.updateOnlineStatus(user.login42, false);
-        this.websocketsGateway.updateStatus(user.login42, false);
+        this.websocketsGateway.updateRelations();
       }
     }
   }

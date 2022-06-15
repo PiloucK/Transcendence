@@ -31,8 +31,8 @@ export class WebsocketsGateway
     this.statusService.remove(client.id);
   }
 
-  updateStatus(userLogin42: string, online: boolean) {
-    this.server.emit('update-status', userLogin42, online);
+  updateRelations() {
+    this.server.emit('update-relations');
   }
 
   @SubscribeMessage('user:login')
