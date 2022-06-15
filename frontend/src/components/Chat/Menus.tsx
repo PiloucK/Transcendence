@@ -434,7 +434,21 @@ function ChannelList({
           setMenu?.(channel.id);
         }}
       >
-        <Image src={channelImage} alt="channel img" width={45} height={45} />
+        <Avatar
+          src={channel.image}
+          alt="channel image"
+          sx={{
+            width: 45,
+            height: 45,
+          }}
+        >
+          <Image
+            src={channelImage}
+            alt="channel image"
+            width="45"
+            height="45"
+          />
+        </Avatar>
       </div>
     );
   });

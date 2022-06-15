@@ -1762,12 +1762,17 @@ and should display them in columns of three cards max */
   cursor: pointer;
 }
 
+.channel_card .channel_image {
+	position: absolute;
+	top:10%;
+  }
+
 .channel_card .channel_name {
   position: absolute;
   /* left: 2.64%; */
   /* right: 2.55%; */
-  top: 71.32%;
-  bottom: 11.7%;
+  top: 78.32%;
+  bottom: 4.7%;
   left: 50%;
   transform: translate(-50%, 0%);
   /* Header 2 */

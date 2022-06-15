@@ -37,6 +37,7 @@ export type restriction = { login: string; until: number }; // login, end of the
 export type Channel = {
   name: string;
   id: string;
+  image: string;
   password: string;
   isPrivate: boolean;
   owner: string;
