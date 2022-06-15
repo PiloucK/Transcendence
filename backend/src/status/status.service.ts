@@ -1,38 +1,35 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { UsersService } from 'src/users/users.service';
 import { WebsocketsGateway } from 'src/websockets/websockets.gateway';
-import { Repository } from 'typeorm';
-import { UserStatus } from './status.entity';
+
+interface StatusMetrics {
+  socketIds: Set<string>;
+  status: 'ONLINE' | 'OFFLINE' | 'IN_GAME' | 'IN_QUEUE';
+}
+
+type Login42 = string;
 
 @Injectable()
 export class StatusService {
   constructor(
-    @InjectRepository(UserStatus)
-    private readonly statusRepository: Repository<UserStatus>,
     private readonly usersService: UsersService,
     @Inject(forwardRef(() => WebsocketsGateway))
     private readonly websocketsGateway: WebsocketsGateway,
   ) {}
 
-  async add(socketId: string, userLogin42: string): Promise<UserStatus> {
-    let status = await this.statusRepository.findOne(socketId);
-    if (!status) {
-      const user = await this.usersService.getUserWithStatus(userLogin42);
-      status = this.statusRepository.create({
-        socketId,
-        user,
-      });
-      await this.statusRepository.save(status);
-      console.log('save status');
-      if (user.status.length === 0) {
-        console.log(user.login42, 'online');
-        this.usersService.updateOnlineStatus(user.login42, true);
-        this.websocketsGateway.updateRelations();
-      }
-    }
+  private statuses = new Map<Login42, StatusMetrics>();
 
-    return status;
+  add(socketId: string, userLogin42: string): void {
+    const currentUser = this.statuses.get(userLogin42);
+    if (!currentUser) {
+      this.statuses.set(userLogin42, {
+        socketIds: new Set([socketId]),
+        status: 'ONLINE',
+      });
+      this.websocketsGateway.updateRelations();
+    } else {
+      currentUser.socketIds.add(socketId);
+    }
   }
 
   async remove(socketId: string): Promise<void> {

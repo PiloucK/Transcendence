@@ -1,6 +1,5 @@
 import { Channel } from 'src/channel/channel.entity';
 import { PrivateConv } from 'src/privateConv/privateConv.entity';
-import { UserStatus } from 'src/status/status.entity';
 import {
   Column,
   Entity,
@@ -63,11 +62,8 @@ export class User {
   @ManyToMany(() => Channel)
   users!: Channel[];
 
-  @OneToMany(() => UserStatus, (status) => status.user)
-  status!: UserStatus[];
-}
-
-// photo
+  @Column({ default: false })
+  isTwoFactorAuthEnabled!: boolean;
 
 // export enum UserState {
 //   IN_GAME = "IN_GAME",
