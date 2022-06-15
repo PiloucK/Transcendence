@@ -26,7 +26,7 @@ export class StatusService {
       await this.statusRepository.save(status);
       console.log('save status');
       if (user.status.length === 0) {
-        console.log('online');
+        console.log(user.login42, 'online');
         this.usersService.updateOnlineStatus(user.login42, true);
         this.websocketsGateway.updateRelations();
       }
@@ -45,7 +45,7 @@ export class StatusService {
       console.log('remove status');
       const user = await this.usersService.getUserWithStatus(userLogin42);
       if (user.status.length === 0) {
-        console.log('offline');
+        console.log(user.login42, 'offline');
         this.usersService.updateOnlineStatus(user.login42, false);
         this.websocketsGateway.updateRelations();
       }

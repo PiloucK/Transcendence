@@ -16,7 +16,11 @@ import { CardBlockedUser } from "../Cards/CardBlockedUser";
 function FriendList({ friends }: { friends: IUserPublicInfos[] }) {
   return (
     <div className={styles.social_content}>
-      {friends.map((friend) => CardUserSocial({ userInfos: friend }))}
+      {friends.map((friend) => {
+        console.log('online?', friend.online);
+        
+        return CardUserSocial({ userInfos: friend });
+      })}
     </div>
   );
 }
@@ -60,9 +64,12 @@ export function NotificationContent({
   blockedUsers: IUserPublicInfos[];
   notifications: IUserPublicInfos[];
 }) {
-	const requests = notifications?.filter(
-		(notification) => !blockedUsers?.some((blockedUser) => blockedUser.login42 === notification.login42)
-	);
+  const requests = notifications?.filter(
+    (notification) =>
+      !blockedUsers?.some(
+        (blockedUser) => blockedUser.login42 === notification.login42
+      )
+  );
 
   if (typeof requests === "undefined" || requests.length === 0) {
     return <EmptyNotificationcenter />;

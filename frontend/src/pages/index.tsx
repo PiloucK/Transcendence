@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { DockUser } from "../components/Dock/DockUser";
+import styles from "../styles/Home.module.css";
 // function DockToShow() {
 //   const loginContext = useLoginContext();
 
@@ -12,6 +14,13 @@ import { DockUser } from "../components/Dock/DockUser";
 //Show a Big play button to start the game in the middle of the screen.
 export default function MainMenu() {
   return (
-    <DockUser />
+        <>
+          <div className={styles.mainLayout_left_background} />
+          <div className={styles.mainLayout_right_background} />
+          <Link href="/game">
+            <div className={styles.play}>PLAY</div>
+          </Link>
+          <DockUser />
+        </>
   );
 }
