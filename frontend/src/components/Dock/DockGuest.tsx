@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Dock } from "./Dock";
 import authService from "../../services/auth";
 
@@ -25,7 +25,6 @@ export function DockGuest() {
   const loginContext = useLoginContext();
   const errorContext = useErrorContext();
   const socketContext = useSocketContext();
-  const isLogged = useRef(false);
 
   const authenticate = () => {
     if (Cookies.get(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME)) {
@@ -42,10 +41,7 @@ export function DockGuest() {
   };
 
   useEffect(() => {
-    if (isLogged.current === false) {
-      isLogged.current = true;
-      authenticate();
-    }
+    authenticate();
   }, [loginContext]);
 
   return (
