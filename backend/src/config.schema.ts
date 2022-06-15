@@ -14,6 +14,7 @@ export const configValidationSchema = Joi.object({
   JWT_ACCESSTOKEN_EXPIRATION_TIME: Joi.number().required(),
   ACCESSTOKEN_COOKIE_NAME: Joi.string().required(),
   ACCESSTOKEN_COOKIE_PATH: Joi.string().required(),
+  TWO_FACTOR_AUTH_APP_NAME: Joi.string().required(),
 
   FRONTEND_PORT: Joi.number().required(),
   BACKEND_PORT: Joi.number().required(),

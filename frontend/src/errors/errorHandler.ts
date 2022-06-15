@@ -13,11 +13,12 @@ export function errorHandler(
     if (error.response) {
       // Request made and server responded
       errorData = error.response.data as IErrorData;
-      if (
-        errorData.statusCode === HttpStatusCodes.UNAUTHORIZED &&
-        !errorData.error
-      ) {
-        loginContext.logout?.();
+      if (errorData.statusCode === HttpStatusCodes.UNAUTHORIZED) {
+        if (!errorData.error) {
+          loginContext.logout?.();
+        } else if (errorData.message === 'Not double-authenticated') {
+          loginContext.setShowSecondFactorLogin?.(true);
+        }
         // } else if (error.response.status === NOT_FOUND) {
         // } else if (error.response.status === CONFLICT) {
       }
