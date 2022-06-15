@@ -1,6 +1,5 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
-import { WebsocketsGateway } from 'src/websockets/websockets.gateway';
 
 interface StatusMetrics {
   socketIds: Set<string>;
@@ -11,24 +10,21 @@ type Login42 = string;
 
 @Injectable()
 export class StatusService {
-  constructor(
-    private readonly usersService: UsersService,
-    @Inject(forwardRef(() => WebsocketsGateway))
-    private readonly websocketsGateway: WebsocketsGateway,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   private statuses = new Map<Login42, StatusMetrics>();
 
-  add(socketId: string, userLogin42: string): void {
+  add(socketId: string, userLogin42: string): 'EMIT' | 'QUIET' {
     const currentUser = this.statuses.get(userLogin42);
     if (!currentUser) {
       this.statuses.set(userLogin42, {
         socketIds: new Set([socketId]),
         status: 'ONLINE',
       });
-      this.websocketsGateway.updateRelations();
+      return 'EMIT';
     } else {
       currentUser.socketIds.add(socketId);
+      return 'QUIET';
     }
   }
 

@@ -15,10 +15,7 @@ import { StatusService } from 'src/status/status.service';
 export class WebsocketsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(
-    @Inject(forwardRef(() => StatusService))
-    private readonly statusService: StatusService,
-  ) {}
+  constructor(private readonly statusService: StatusService) {}
   @WebSocketServer()
   server!: Server;
 
@@ -41,7 +38,9 @@ export class WebsocketsGateway
     @ConnectedSocket() client: Socket,
   ) {
     console.log('user:login', userLogin42, client.id);
-    this.statusService.add(client.id, userLogin42);
+    if (this.statusService.add(client.id, userLogin42) === 'EMIT') {
+      this.updateRelations();
+    }
   }
 
   @SubscribeMessage('user:logout')
