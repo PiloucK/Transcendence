@@ -18,31 +18,43 @@ export class StatusService {
 
   add(socketId: SocketId, userLogin42: Login42): 'EMIT' | 'QUIET' {
     this.sockets.set(socketId, userLogin42);
-    const currentUser = this.statuses.get(userLogin42);
-    if (!currentUser) {
+    const currentUserMetrics = this.statuses.get(userLogin42);
+
+    if (!currentUserMetrics) {
       this.statuses.set(userLogin42, {
         socketCount: 1,
         status: 'ONLINE',
       });
       return 'EMIT';
     } else {
-      ++currentUser.socketCount;
+      ++currentUserMetrics.socketCount;
       return 'QUIET';
     }
   }
 
   remove(socketId: string): 'EMIT' | 'QUIET' {
-    const currentSocket = this.sockets.get(socketId);
-    if (currentSocket) {
-      const currentUser = this.statuses.get(currentSocket);
-      if (currentUser) {
-        --currentUser.socketCount;
-        if (currentUser.socketCount === 0) {
-          return 'EMIT';
-        } else {
-          return 'QUIET';
-        }
-      }
+    const currentUserLogin42 = this.sockets.get(socketId);
+
+    if (!currentUserLogin42) {
+      return 'QUIET';
+    }
+
+    const currentUserMetrics = this.statuses.get(currentUserLogin42);
+
+    if (!currentUserMetrics) {
+      this.sockets.delete(socketId);
+      return 'EMIT';
+    }
+
+    --currentUserMetrics.socketCount;
+
+    if (currentUserMetrics.socketCount === 0) {
+      this.statuses.delete(currentUserLogin42);
+      this.sockets.delete(socketId);
+      return 'EMIT';
+    } else {
+      this.sockets.delete(socketId);
+      return 'QUIET';
     }
   }
 }
