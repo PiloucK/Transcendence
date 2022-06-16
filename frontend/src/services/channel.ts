@@ -10,6 +10,7 @@ axios.defaults.withCredentials = true;
 const createChannel = (login: string, channelInfos: ChannelCreation) => {
   const request = axios.post(`${baseUrl}/${login}/createChannel`, {
     name: channelInfos.name,
+	setPassword: channelInfos.setPassword,
     password: channelInfos.password,
     isPrivate: channelInfos.isPrivate,
   });
@@ -29,6 +30,7 @@ const updateChannel = (
     `${baseUrl}/${login}/updateChannel/${channelId}`,
     {
       name: channelInfos.name,
+	  setPassword: channelInfos.setPassword,
       password: channelInfos.password,
       isPrivate: channelInfos.isPrivate,
     }

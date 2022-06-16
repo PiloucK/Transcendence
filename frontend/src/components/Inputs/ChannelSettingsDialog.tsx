@@ -13,11 +13,11 @@ import { Channel, ChannelCreation } from "../../interfaces/users";
 import channelService from "../../services/channel";
 import { useLoginContext } from "../../context/LoginContext";
 
-import Button from "@mui/material/Button";
+import ToggleButton from "@mui/material/ToggleButton";
+
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useSocketContext } from "../../context/SocketContext";
 
@@ -33,6 +33,9 @@ export function ChannelSettingsDialog({
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [channelName, setChannelName] = useState(channel.name);
+
+  const [setPassword, setSetPassword] = React.useState(false);
+  const [height, setHeight] = React.useState("400px");
   const [channelPassword, setChannelPassword] = useState<inputPFState>({
     password: channel.password,
     showPassword: false,
@@ -41,6 +44,7 @@ export function ChannelSettingsDialog({
     password: "",
     showPassword: false,
   });
+
   const [isPrivate, setIsPrivate] = useState(channel.isPrivate);
 
   const [textFieldError, setTextFieldError] = useState("");
@@ -57,6 +61,7 @@ export function ChannelSettingsDialog({
   const updateChannel = () => {
     const channelInfos: ChannelCreation = {
       name: channelName,
+	  setPassword: setPassword,
       password: channelPassword.password,
       isPrivate: isPrivate,
     };
@@ -67,10 +72,12 @@ export function ChannelSettingsDialog({
       setTextFieldError("Channel name is required.");
       error = true;
     }
-    if (channelInfos.password !== confirmation.password) {
-      setConfirmationFieldError("Passwords do not match.");
-      error = true;
-    }
+	if (setPassword === true) {
+		if (channelInfos.password !== confirmation.password) {
+			setConfirmationFieldError("Passwords do not match.");
+			error = true;
+		}
+	}
     if (error === false) {
       setOpen(false);
       channelService
@@ -83,31 +90,10 @@ export function ChannelSettingsDialog({
     }
   };
 
-  return (
-    <div className={styles.channel_settings}>
-      <Dialog
-        PaperProps={{
-          style: {
-            backgroundColor: "#163F5B",
-            width: "779px",
-            minWidth: "779px",
-            height: "657px",
-            minHeight: "657px",
-          },
-        }}
-        open={open}
-        onClose={handleClose}
-      >
-        <DialogTitle>Channel settings</DialogTitle>
-        <DialogContent>
-          <div className={styles.chat_create_channel_form_input}>
-            Channel Name
-            <TextField
-              value={channelName}
-              setValue={setChannelName}
-              error={textFieldError}
-            />
-          </div>
+  const passwordChange = () => {
+    if (setPassword === true) {
+      return (
+        <>
           <div className={styles.chat_create_channel_form_input}>
             Channel Password
             <PasswordField
@@ -126,6 +112,53 @@ export function ChannelSettingsDialog({
               error={confirmationFieldError}
             />
           </div>
+        </>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  return (
+    <div className={styles.channel_settings}>
+      <Dialog
+        PaperProps={{
+          style: {
+            backgroundColor: "#163F5B",
+            width: "779px",
+            minWidth: "779px",
+            minHeight: height,
+            overflowY: "hidden",
+          },
+        }}
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle>Channel settings</DialogTitle>
+        <DialogContent>
+          <div className={styles.chat_create_channel_form_input}>
+            Channel Name
+            <TextField
+              value={channelName}
+              setValue={setChannelName}
+              error={textFieldError}
+            />
+          </div>
+          <ToggleButton
+            value="check"
+            selected={setPassword}
+            onChange={() => {
+              height === "700px" ? setHeight("400px") : setHeight("700px");
+              setSetPassword(!setPassword);
+            }}
+            sx={{
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            {setPassword ? "Keep password" : "Change password"}
+          </ToggleButton>
+          {passwordChange()}
           <div className={styles.channel_settings_switch}>
             Set channel as private{" "}
             <Switch checked={isPrivate} onChange={handleSwitchChange} />

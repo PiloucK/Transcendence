@@ -50,6 +50,7 @@ export type Channel = {
 
 export type ChannelCreation = {
   name: string;
+  setPassword: boolean;
   password: string;
   isPrivate: boolean;
 };

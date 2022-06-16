@@ -118,6 +118,7 @@ function CreateChannelForm() {
   const createChannel = () => {
     const channel: ChannelCreation = {
       name: channelName,
+	  setPassword: true,
       password: channelPassword.password,
       isPrivate: isPrivate,
     };

@@ -66,7 +66,9 @@ export class ChannelRepository extends Repository<Channel> {
     this.resolveChannelRestrictions(channel);
 
     channel.name = updateChannelDto.name;
-    channel.password = updateChannelDto.password;
+    if (updateChannelDto.setPassword === true) {
+      channel.password = updateChannelDto.password;
+    }
     channel.isPrivate = updateChannelDto.isPrivate;
 
     await this.save(channel);
