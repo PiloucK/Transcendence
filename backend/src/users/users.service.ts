@@ -1,7 +1,6 @@
 import {
   ConflictException,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -55,6 +54,15 @@ export class UsersService {
 
   getUserByLogin42(login42: string): Promise<User> {
     return this.usersRepository.getUserWithRelations(login42, []);
+  }
+
+  getUserWithAllRelations(login42: string): Promise<User> {
+    return this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+      'friendRequestsSent',
+      'friendRequestsReceived',
+      'blockedUsers',
+    ]);
   }
 
   createUser(createUserDto: CreateUserDto): Promise<User> {
