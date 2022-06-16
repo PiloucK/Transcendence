@@ -9,16 +9,16 @@ const baseUrl = `http://${publicRuntimeConfig.HOST}\
 axios.defaults.withCredentials = true;
 
 // dev
-const getToken = (login42: string) => {
-  return axios
-    .get(`${baseUrl}/getToken/${login42}`)
-    .then((response) => response.data);
+const getToken = async (login42: string) => {
+  const response = await axios
+    .get(`${baseUrl}/getToken/${login42}`);
+  return response.data;
 };
 
-const getLoggedInUser = () => {
-  return axios
-    .get(`${baseUrl}/getLoggedInUser`)
-    .then((response) => response.data);
+const getLoggedInUser = async () => {
+  const response = await axios
+    .get(`${baseUrl}/getLoggedInUser`);
+  return response.data;
 };
 
 export default {

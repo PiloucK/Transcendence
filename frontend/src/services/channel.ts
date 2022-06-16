@@ -7,21 +7,22 @@ const baseUrl = `http://${publicRuntimeConfig.HOST}\
 import { Message, ChannelCreation } from "../interfaces/users";
 axios.defaults.withCredentials = true;
 
-const createChannel = (login: string, channelInfos: ChannelCreation) => {
+const createChannel = async (login: string, channelInfos: ChannelCreation) => {
   console.log("Create channel: ", channelInfos);
   const request = axios.patch(`${baseUrl}/${login}/createChannel`, {
     name: channelInfos.name,
     password: channelInfos.password,
     isPrivate: channelInfos.isPrivate,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-const updateChannel = (
+const updateChannel = async (
   login: string,
   channelId: string,
   channelInfos: ChannelCreation
@@ -34,14 +35,15 @@ const updateChannel = (
       isPrivate: channelInfos.isPrivate,
     }
   );
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-const joinProtectedChannel = (
+const joinProtectedChannel = async (
   login: string,
   channelId: string,
   password: string
@@ -50,26 +52,27 @@ const joinProtectedChannel = (
     channelId,
     password,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-const joinChannel = (login: string, channelId: string) => {
+const joinChannel = async (login: string, channelId: string) => {
   const request = axios.patch(`${baseUrl}/${login}/joinChannel`, {
     channelId,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      throw e;
-      // console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    throw e;
+  }
 };
 
-const inviteToChannel = (
+const inviteToChannel = async (
   login: string,
   channelId: string,
   userLogin42: string
@@ -78,25 +81,27 @@ const inviteToChannel = (
     channelId,
     userLogin42,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-const leaveChannel = (login: string, channelId: string) => {
+const leaveChannel = async (login: string, channelId: string) => {
   const request = axios.patch(`${baseUrl}/${login}/leaveChannel`, {
     channelId,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-const muteAChannelUser = (
+const muteAChannelUser = async (
   login: string,
   channelId: string,
   userLogin42: string,
@@ -107,14 +112,15 @@ const muteAChannelUser = (
     userLogin42,
     duration,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-const banAChannelUser = (
+const banAChannelUser = async (
   login: string,
   channelId: string,
   userLogin42: string,
@@ -125,14 +131,15 @@ const banAChannelUser = (
     userLogin42,
     duration,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-const setAChannelAdmin = (
+const setAChannelAdmin = async (
   login: string,
   channelId: string,
   userLogin42: string
@@ -141,14 +148,15 @@ const setAChannelAdmin = (
     channelId,
     userLogin42,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-const unsetAChannelAdmin = (
+const unsetAChannelAdmin = async (
   login: string,
   channelId: string,
   userLogin42: string
@@ -157,14 +165,15 @@ const unsetAChannelAdmin = (
     channelId,
     userLogin42,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-const sendMSGToChannel = (
+const sendMSGToChannel = async (
   login: string,
   channelId: string,
   message: Message
@@ -173,52 +182,57 @@ const sendMSGToChannel = (
     channelId,
     message,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      if (e.response.status !== 403) {
-        console.error(e);
-      }
-      throw e;
-    });
-};
-
-const getChannelById = (login: string, channelId: string) => {
-  const request = axios.get(`${baseUrl}/${login}/channel/${channelId}`);
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    if (e.response.status !== 403) {
       console.error(e);
-    });
+    }
+    throw e;
+  }
 };
 
-const getChannelInvitableFriends = (login: string, channelId: string) => {
+const getChannelById = async (login: string, channelId: string) => {
+  const request = axios.get(`${baseUrl}/${login}/channel/${channelId}`);
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+const getChannelInvitableFriends = async (login: string, channelId: string) => {
   const request = axios.get(
     `${baseUrl}/${login}/channel/${channelId}/invitableFriends`
   );
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-const getPublicChannels = (login: string) => {
+const getPublicChannels = async (login: string) => {
   const request = axios.get(`${baseUrl}/${login}/publicChannels`);
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
-const getJoinedChannels = (login: string) => {
+const getJoinedChannels = async (login: string) => {
   const request = axios.get(`${baseUrl}/${login}/joinedChannels`);
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  try {
+    const response = await request;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 export default {

@@ -1,9 +1,8 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { Channel, ChannelCreation } from "../../interfaces/users";
+import { Channel } from "../../interfaces/users";
 
-import Avatar from "@mui/material/Avatar";
 // import profileIcon from "../../public/profile_icon.png";
 import { useLoginContext } from "../../context/LoginContext";
 import channelService from "../../services/channel";
@@ -16,18 +15,18 @@ export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
   const socketContext = useSocketContext();
   const [open, setOpen] = React.useState(false);
 
-  const joinChannel = () => {
+  const joinChannel = async () => {
     if (loginContext.userLogin !== null) {
       if (channelInfos.password !== "") {
         setOpen(true);
       } else {
-        channelService
-          .joinChannel(loginContext.userLogin, channelInfos.id)
-          .then((channel: Channel) => {
-            loginContext.setChatMenu?.(channel.id);
-            socketContext.socket.emit("user:update-joined-channel");
-            socketContext.socket.emit("user:update-channel-content");
-          });
+        const channel: Channel = await channelService.joinChannel(
+          loginContext.userLogin,
+          channelInfos.id
+        );
+        loginContext.setChatMenu?.(channel.id);
+        socketContext.socket.emit("user:update-joined-channel");
+        socketContext.socket.emit("user:update-channel-content");
       }
     }
   };
