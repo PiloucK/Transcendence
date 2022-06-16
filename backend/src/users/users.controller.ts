@@ -2,17 +2,14 @@ import {
   Body,
   Controller,
   Get,
-  Post,
   Param,
   Patch,
   Query,
-  Delete,
   UseGuards,
 } from '@nestjs/common';
 
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
@@ -31,16 +28,6 @@ export class UsersController {
   @Get('/:login42')
   getUserByLogin42(@Param('login42') login42: string): Promise<User> {
     return this.usersService.getUserByLogin42(login42);
-  }
-
-  @Post()
-  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.createUser(createUserDto);
-  }
-
-  @Delete() // dev
-  deleteAllUsers(): Promise<void> {
-    return this.usersService.deleteAllUsers();
   }
 
   @Patch('/:login42/username')

@@ -13,7 +13,7 @@ export class AuthService {
   ) {}
 
   async findOrCreate42UserInDatabase(login42: string): Promise<User> {
-    return await this.usersService.createUser({ login42 });
+    return await this.usersService.createUser(login42);
   }
 
   issueJwtToken(login42: string, isSecondFactorAuthenticated = false): string {

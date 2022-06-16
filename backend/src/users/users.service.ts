@@ -7,7 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from './user.entity';
 import { UsersRepository } from './users.repository';
-import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 
@@ -65,13 +64,8 @@ export class UsersService {
     ]);
   }
 
-  createUser(createUserDto: CreateUserDto): Promise<User> {
-    return this.usersRepository.createUser(createUserDto);
-  }
-
-  async deleteAllUsers(): Promise<void> {
-    const users = await this.getAllUsers();
-    await this.usersRepository.remove(users);
+  createUser(login42: string): Promise<User> {
+    return this.usersRepository.createUser(login42);
   }
 
   async updateUsername(

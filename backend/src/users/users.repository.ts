@@ -2,7 +2,6 @@ import { NotFoundException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 
 import { User } from './user.entity';
-import { CreateUserDto } from './dto/createUser.dto';
 
 type UserRelations =
   | 'friends'
@@ -25,9 +24,7 @@ export class UsersRepository extends Repository<User> {
     return user;
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const { login42 } = createUserDto;
-
+  async createUser(login42: string): Promise<User> {
     let user = await this.findOne(login42);
     if (!user) {
       user = this.create({

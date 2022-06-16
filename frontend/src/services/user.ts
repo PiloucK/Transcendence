@@ -4,7 +4,6 @@ const { publicRuntimeConfig } = getConfig();
 const baseUrl = `http://${publicRuntimeConfig.HOST}\
 :${publicRuntimeConfig.BACKEND_PORT}\
 /users`;
-import { IUserCredentials } from "../interfaces/IUser";
 axios.defaults.withCredentials = true;
 
 const getAll = () => {
@@ -13,15 +12,6 @@ const getAll = () => {
 
 const getOne = (login: string) => {
   return axios.get(`${baseUrl}/${login}`).then((response) => response.data);
-};
-
-const addOne = (newUser: IUserCredentials) => {
-  return axios.post(baseUrl, newUser).then((response) => response.data);
-};
-
-// dev
-const deleteAll = () => {
-  return axios.delete(baseUrl).then((response) => response.data);
 };
 
 const updateUserUsername = (login: string, username: string) => {
@@ -113,8 +103,6 @@ const unblockUser = (login: string, friendLogin42: string) => {
 export default {
   getAll,
   getOne,
-  addOne,
-  deleteAll,
   updateUserUsername,
   getUserFriends,
   getUserFriendRequestsSent,
