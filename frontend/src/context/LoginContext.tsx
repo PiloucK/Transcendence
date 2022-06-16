@@ -18,6 +18,9 @@ export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
   const [userLogin, setUserLogin] = useState(defaultLoginState.userLogin);
   const [chatMenu, setChatMenu] = useState(defaultLoginState.chatMenu);
   const [chatDM, setChatDM] = useState(defaultLoginState.chatDM);
+  const [showSecondFactorLogin, setShowSecondFactorLogin] = useState(
+    defaultLoginState.showSecondFactorLogin
+  );
 
   const login = (userLogin: string) => {
     socketContext.socket.emit("user:login", userLogin);
@@ -43,6 +46,8 @@ export const LoginProvider = ({ children }: { children: React.ReactNode }) => {
         setChatDM,
         login,
         logout,
+        showSecondFactorLogin,
+        setShowSecondFactorLogin,
       }}
     >
       {children}

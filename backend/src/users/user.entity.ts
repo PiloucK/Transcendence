@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Channel } from 'src/channel/channel.entity';
 import { PrivateConv } from 'src/privateConv/privateConv.entity';
 import { UserStatus } from 'src/status/status.entity';
@@ -28,9 +29,6 @@ export class User {
 
   @Column({ default: 0 })
   gamesLost!: number;
-
-  @Column({ default: false })
-  twoFa!: boolean; // make it private
 
   @Column({ default: false })
   online!: boolean;
@@ -65,18 +63,15 @@ export class User {
 
   @OneToMany(() => UserStatus, (status) => status.user)
   status!: UserStatus[];
+
+  @Column({ default: false })
+  isTwoFactorAuthEnabled!: boolean;
+
+  @Column({ nullable: true })
+  @Exclude()
+  twoFactorAuthSecret!: string;
+
+  @Column({ nullable: true })
+  @Exclude()
+  twoFactorAuthTemporarySecret!: string;
 }
-
-// photo
-
-// export enum UserState {
-//   IN_GAME = "IN_GAME",
-//   IN_QUEUE = "IN_QUEUE",
-//   IS_ONLINE = "IN_ONLINE",
-//   IS_OFFLINE = "IS_OFFLINE"
-// }
-
-// export type Friends = Array<string>;
-// export type FriendRequestsSent = Array<string>;
-// export type FriendRequestsReceived = Array<string>;
-// export type BlockedUsers = Array<string>;
