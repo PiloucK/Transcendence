@@ -14,7 +14,7 @@ const PlayerPaddle = (  ) => {
       const paddleElem = document.getElementById("player-paddle") as HTMLElement;
       paddleElem.style.setProperty("--position", playerPosition.toString());
     });
-  
+
     return (
       <div className={styles.paddleLeft} id="player-paddle"></div>
     );

@@ -1,25 +1,33 @@
 import { useEffect, useRef, useState } from "react";
-import styles from './OpponentPaddle.module.css'
+import styles from './ComputerPaddle.module.css'
 import { ICoordinates } from "../../interfaces/ICoordinates";
 
 
-const computerLvl = 3; // peut aller de 1 a 3 EASY MEDIUM HARD
-
-const OpponentPaddle = ({ballDirection} : {ballDirection : ICoordinates}) => {
-  
+const ComputerPaddle = ({computerLvl} : {computerLvl : number}) => {
+ 
   const paddlePosition = useRef(50);
 
   const movePaddle = useRef(true);
+
+  const requestRef = useRef(0);
+  const previousTimeRef = useRef(0);
+
+  let prevBallX = useRef(0);
 
   function randomNumberBetween(min : number, max : number) {
     return Math.random() * (max - min) + min;
   }
 
-  useEffect(() => {
+
+  function computerPlaying() {
     
-    let ballRect = document.getElementById("ball")?.getBoundingClientRect() as DOMRect;
+    
+    const ballRect = document.getElementById("ball")?.getBoundingClientRect() as DOMRect;
+    const ballX = ballRect.x / window.innerHeight * 100;
+    const ballY = ballRect.y / window.innerHeight * 100;
+  
       
-    if (ballRect.x >= window.innerWidth / 4 && ballDirection.x > 0) {
+    if (ballRect.x >= window.innerWidth / 4 && prevBallX.current < ballX) {
       const paddleElem = document.getElementById("opponent-paddle") as HTMLElement;
       const ballY = ballRect.y / window.innerHeight * 100;
 
@@ -41,11 +49,29 @@ const OpponentPaddle = ({ballDirection} : {ballDirection : ICoordinates}) => {
 
       paddleElem.style.setProperty("--position", paddlePosition.current.toString());
     }
-  });
+
+    prevBallX.current = ballX;
+  }
+
+  const animate : FrameRequestCallback = (time : number)  => {
+
+    if (previousTimeRef.current != undefined) {
+      const deltaTime = time - previousTimeRef.current;
+
+    computerPlaying();
+    previousTimeRef.current = time;
+    requestRef.current = requestAnimationFrame(animate);
+    }
+  }
+  
+  useEffect(() => {
+    requestRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(requestRef.current);
+  }, []); // Make sure the effect runs only once
   
     return (
       <div className={styles.paddleRight} id="opponent-paddle"></div>
     );
 };
 
-export default OpponentPaddle;
+export default ComputerPaddle;
