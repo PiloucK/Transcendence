@@ -13,17 +13,15 @@ import {
   NotificationContent,
 } from "../components/Social/pagesContent";
 
-import io from "socket.io-client";
+import { errorHandler } from "../errors/errorHandler";
 
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { useErrorContext } from "../context/ErrorContext";
+import { useSocketContext } from "../context/SocketContext";
 
 function SocialPage({ menu }: { menu: string }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
   const [blocked, setBlocked] = useState<IUserPublicInfos[]>([]);
   const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
@@ -33,57 +31,84 @@ function SocialPage({ menu }: { menu: string }) {
       .getUserFriends(loginContext.userLogin)
       .then((friends: IUserPublicInfos[]) => {
         setFriends(friends);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     userService
       .getUserBlockedUsers(loginContext.userLogin)
       .then((users: IUserPublicInfos[]) => {
         setBlocked(users);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     userService
       .getUserFriendRequestsReceived(loginContext.userLogin)
       .then((notifications: IUserPublicInfos[]) => {
         setNotifications(notifications);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
-    socket.on("update-leaderboard", () => {
+    socketContext.socket.on("update-leaderboard", () => {
       userService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
 
       userService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((users: IUserPublicInfos[]) => {
           setBlocked(users);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
 
       userService
         .getUserFriendRequestsReceived(loginContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
 
-    socket.on("update-relations", () => {
+    socketContext.socket.on("update-relations", () => {
       userService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
 
       userService
         .getUserBlockedUsers(loginContext.userLogin)
         .then((users: IUserPublicInfos[]) => {
           setBlocked(users);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
 
       userService
         .getUserFriendRequestsReceived(loginContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   }, []);
@@ -104,6 +129,7 @@ function SocialPage({ menu }: { menu: string }) {
 
 export default function Social() {
   const [menu, setMenu] = useState("all");
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   if (typeof window !== "undefined") {

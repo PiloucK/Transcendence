@@ -19,10 +19,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 export function ChannelSettingsDialog({
   channel,
@@ -34,6 +31,7 @@ export function ChannelSettingsDialog({
   setOpen: (open: boolean) => void;
 }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [channelName, setChannelName] = useState(channel.name);
   const [channelPassword, setChannelPassword] = useState<inputPFState>({
     password: channel.password,
@@ -78,9 +76,9 @@ export function ChannelSettingsDialog({
       channelService
         .updateChannel(loginContext.userLogin, channel.id, channelInfos)
         .then((res) => {
-          socket.emit("user:update-public-channels");
-          socket.emit("user:update-joined-channel");
-          socket.emit("user:update-channel-content");
+          socketContext.socket.emit("user:update-public-channels");
+          socketContext.socket.emit("user:update-joined-channel");
+          socketContext.socket.emit("user:update-channel-content");
         });
     }
   };

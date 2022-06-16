@@ -7,15 +7,7 @@ import Avatar from "@mui/material/Avatar";
 // import profileIcon from "../../public/profile_icon.png";
 import { useLoginContext } from "../../context/LoginContext";
 import privateConvService from "../../services/privateConv";
-
-import io from "socket.io-client";
-
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { useSocketContext } from "../../context/SocketContext";
 
 export function CardUserDM({
   userInfos,
@@ -25,6 +17,7 @@ export function CardUserDM({
   setMenu: (menu: string) => void;
 }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
 
   const createPrivateConv = () => {
     if (
@@ -37,7 +30,7 @@ export function CardUserDM({
           setMenu(
             privateConv.userOne.login42 + "|" + privateConv.userTwo.login42
           );
-          socket.emit("user:update-direct-messages");
+          socketContext.socket.emit("user:update-direct-messages");
         })
         .catch((error) => {
           console.log(error);
@@ -53,9 +46,16 @@ export function CardUserDM({
     >
       <div className={styles.user_card_avatar}>
         <Avatar
+          src={userInfos.image}
+          alt="avatar"
+          sx={{ width: 100, height: 100 }}
+        >
+          <Avatar
             src={userInfos.photo42}
-			sx={{ width: "100px", height: "100px" }}
-        />
+            alt="avatar"
+            sx={{ width: 100, height: 100 }}
+          />
+        </Avatar>
       </div>
       <div className={styles.user_card_username}>{userInfos.username}</div>
       <div className={styles.user_card_elo}>Elo: {userInfos.elo}</div>

@@ -3,19 +3,18 @@ import React from "react";
 import styles from "../../styles/Home.module.css";
 import { Channel, ChannelCreation } from "../../interfaces/users";
 
+import Image from "next/image";
 import Avatar from "@mui/material/Avatar";
-// import profileIcon from "../../public/profile_icon.png";
+import channelImage from "../../public/channel_image.png";
 import { useLoginContext } from "../../context/LoginContext";
 import channelService from "../../services/channel";
 
 import { ChannelPasswordDialog } from "../Inputs/ChannelPasswordDialog";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [open, setOpen] = React.useState(false);
 
   const joinChannel = () => {
@@ -26,9 +25,9 @@ export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
         channelService
           .joinChannel(loginContext.userLogin, channelInfos.id)
           .then((channel: Channel) => {
-            loginContext.setChatMenu(channel.id);
-            socket.emit("user:update-joined-channel");
-            socket.emit("user:update-channel-content");
+            loginContext.setChatMenu?.(channel.id);
+            socketContext.socket.emit("user:update-joined-channel");
+            socketContext.socket.emit("user:update-channel-content");
           });
       }
     }
@@ -37,7 +36,23 @@ export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
   return (
     <div key={channelInfos.id}>
       <div className={styles.channel_card} onClick={joinChannel}>
-        {/* Channel Avatar here */}
+        <div className={styles.channel_image}>
+          <Avatar
+            src={channelInfos.image}
+            alt="channel image"
+            sx={{
+              width: 200,
+              height: 200,
+            }}
+          >
+            <Image
+              src={channelImage}
+              alt="channel image"
+              width="200"
+              height="200"
+            />
+          </Avatar>
+        </div>
         <div className={styles.channel_name}>{channelInfos.name}</div>
       </div>
       <ChannelPasswordDialog

@@ -158,6 +158,15 @@
   color: #ffffff;
 }
 
+.leaderboard_user_status_online {
+  margin-left: 1%;
+}
+
+.leaderboard_user_status_offline {
+  margin-left: 1%;
+  display: none;
+}
+
 /* 
 	Background that will take the left side of the screen
 */
@@ -1753,12 +1762,17 @@ and should display them in columns of three cards max */
   cursor: pointer;
 }
 
+.channel_card .channel_image {
+	position: absolute;
+	top:10%;
+  }
+
 .channel_card .channel_name {
   position: absolute;
   /* left: 2.64%; */
   /* right: 2.55%; */
-  top: 71.32%;
-  bottom: 11.7%;
+  top: 78.32%;
+  bottom: 4.7%;
   left: 50%;
   transform: translate(-50%, 0%);
   /* Header 2 */
@@ -1900,12 +1914,9 @@ and should display them in columns of three cards max */
 
 .profile_user_account_details_username {
   position: absolute;
-  left: 29.59%;
-  right: 31.07%;
   top: 65.43%;
-  /* bottom: 55.12%; */
-
-  /* Header 2 */
+  left: 50%;
+  transform: translate(-50%, 0%);
 
   font-family: "Khand";
   font-style: normal;
@@ -2278,4 +2289,12 @@ and should display them in columns of three cards max */
     width: 100%;
     flex-direction: column;
   }
+}
+
+/* 
+* Snackbar: display line break
+*/
+
+.snackbarMsg {
+  white-space: pre;
 }

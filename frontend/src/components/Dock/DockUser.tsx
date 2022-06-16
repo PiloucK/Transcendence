@@ -1,5 +1,10 @@
 import Link from "next/link";
-import React, { ChangeEventHandler, FormEventHandler, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  FormEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -14,17 +19,13 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import userService from "../../services/user";
 import authService from "../../services/auth";
-import io from "socket.io-client";
 import { IUser, IUserCredentials } from "../../interfaces/users";
-import { Button, TextField } from "@mui/material";
-import Cookies from "js-cookie";
+import { Button, TextField, Tooltip } from "@mui/material";
 
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
+import { useSocketContext } from "../../context/SocketContext";
 
 function NavigationDock({
   setIsInNavigation,
@@ -32,6 +33,8 @@ function NavigationDock({
   setIsInNavigation: (mode: boolean) => void;
 }) {
   const loginContext = useLoginContext();
+  const errorContext = useErrorContext();
+  const socketContext = useSocketContext();
 
   const [username, setUsername] = useState("");
 
@@ -40,34 +43,41 @@ function NavigationDock({
 
     const newUserCredentials: IUserCredentials = {
       login42: username,
-	  photo42: "https://cdn.intra.42.fr/users/chdespon.jpg",
+      photo42: "https://cdn.intra.42.fr/users/chdespon.jpg",
     };
 
     userService
       .addOne(newUserCredentials)
       .then((user: IUser) => {
-        loginContext.login(user.login42, "");
-        socket.emit("user:new", username);
+        loginContext.login?.(user.login42);
+        socketContext.socket.emit("user:new", username);
         setUsername("");
-      })
-      .then(() => {
+
         authService
           .getToken(newUserCredentials.login42)
           .then((login42: string) => {
             console.log("new token for", login42, "stored in cookie");
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, loginContext));
+            // errorContext.newError(errorParse)
           });
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   };
 
   const deleteAllUsers = () => {
-    userService.deleteAll().then(() => {
-      console.log("all users deleted");
-      loginContext.logout?.();
-      Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
-        path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
-        sameSite: publicRuntimeConfig.ACCESSTOKEN_COOKIE_SAMESITE,
+    userService
+      .deleteAll()
+      .then(() => {
+        console.log("all users deleted");
+        loginContext.logout?.();
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
-    });
   };
 
   const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
@@ -82,36 +92,46 @@ function NavigationDock({
     <>
       <Dock>
         <Link href="/profile">
-          <IconButton className={styles.icons} aria-label="profile">
-            <AccountCircleIcon />
-          </IconButton>
+          <Tooltip title="Profile">
+            <IconButton className={styles.icons} aria-label="profile">
+              <AccountCircleIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
 
         <Link href="/chat">
-          <IconButton className={styles.icons} aria-label="chat">
-            <ChatIcon />
-          </IconButton>
+          <Tooltip title="Chat">
+            <IconButton className={styles.icons} aria-label="chat">
+              <ChatIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
 
         <Link href="/social">
-          <IconButton className={styles.icons} aria-label="social">
-            <GroupIcon />
-          </IconButton>
+          <Tooltip title="Friends">
+            <IconButton className={styles.icons} aria-label="social">
+              <GroupIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
 
         <Link href="/leaderboard">
-          <IconButton className={styles.icons} aria-label="leaderboard">
-            <LeaderboardIcon />
-          </IconButton>
+          <Tooltip title="Leaderboard">
+            <IconButton className={styles.icons} aria-label="leaderboard">
+              <LeaderboardIcon />
+            </IconButton>
+          </Tooltip>
         </Link>
 
-        <IconButton
-          onClick={() => setIsInNavigation(false)}
-          className={styles.icons}
-          aria-label="gamemode"
-        >
-          <GamemodeIcon />
-        </IconButton>
+        <Tooltip title="Game mode">
+          <IconButton
+            onClick={() => setIsInNavigation(false)}
+            className={styles.icons}
+            aria-label="gamemode"
+          >
+            <GamemodeIcon />
+          </IconButton>
+        </Tooltip>
       </Dock>
 
       <div>

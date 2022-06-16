@@ -12,8 +12,6 @@ import { FormEventHandler, ChangeEventHandler, useState } from "react";
 import userService from "../services/user";
 import { IUser } from "../interfaces/users";
 
-import io from "socket.io-client";
-
 import Avatar from "@mui/material/Avatar";
 import { DockGuest } from "../components/Dock/DockGuest";
 
@@ -21,78 +19,26 @@ import { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import PublicProfile from "../components/Profile/publicprofile";
 
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
-const socket = io(
-  `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`,
-  { transports: ["websocket"] }
-);
+import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
+import { errorHandler } from "../errors/errorHandler";
 
-function MyUserName({ userInfos }: { userInfos: IUser }) {
-  const loginContext = useLoginContext();
-  const [isInModification, setIsInModification] = useState(false);
-  const [tmpUsername, setTmpUsername] = useState(""); // tmpUsername -> usernameInput?
-
-  const changeUsername: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-    setIsInModification(false);
-
-    if (tmpUsername !== "") {
-      userService
-        .updateUserUsername(loginContext.userLogin, tmpUsername)
-        .then(() => {
-          setTmpUsername("");
-          socket.emit("user:update-username");
-        });
-    }
-  };
-
-  const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setTmpUsername(event.target.value);
-  };
-
-  if (loginContext.userLogin === null) return null;
-  if (isInModification === false) {
-    return (
-      <div className={styles.profile_user_account_details_username}>
-        {userInfos.username}
-        <IconButton
-          className={styles.icons}
-          aria-label="userName edit"
-          onClick={() => setIsInModification(true)}
-        >
-          <CreateIcon />
-        </IconButton>
-      </div>
-    );
-  } else {
-    return (
-      <div className={styles.profile_user_account_details_username}>
-        <form onSubmit={changeUsername}>
-          <TextField
-            value={tmpUsername}
-            onChange={handleUsernameChange}
-            label={userInfos.username}
-          />
-          <IconButton type="submit">
-            <CheckIcon />
-          </IconButton>
-        </form>
-      </div>
-    );
-  }
-}
+import { useErrorContext } from "../context/ErrorContext";
+import { useSocketContext } from "../context/SocketContext";
 
 function MyAvatar({ userInfos }: { userInfos: IUser }) {
   return (
     <div className={styles.profile_user_account_details_avatar}>
       <Avatar
-        src={userInfos.photo42}
+        src={userInfos.image}
         alt="avatar"
         sx={{ width: 151, height: 151 }}
-      />
+      >
+        <Avatar
+          src={userInfos.photo42}
+          alt="avatar"
+          sx={{ width: 151, height: 151 }}
+        />
+      </Avatar>
     </div>
   );
 }
@@ -104,7 +50,9 @@ function MyAccountDetails({ userInfos }: { userInfos: IUser }) {
         Account details
       </div>
       <MyAvatar userInfos={userInfos} />
-      <MyUserName userInfos={userInfos} />
+      <div className={styles.profile_user_account_details_username}>
+        {userInfos.username}
+      </div>
     </div>
   );
 }
@@ -130,13 +78,21 @@ function Profile({
 }: {
   state: { userInfos: IUser; setUserInfos: (userInfos: IUser) => void };
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
+  const [open, setOpen] = useState(false);
+  const socketContext = useSocketContext();
 
   React.useEffect(() => {
-    socket.on("update-leaderboard", () => {
-      userService.getOne(loginContext.userLogin).then((user: IUser) => {
-        state.setUserInfos(user);
-      });
+    socketContext.socket.on("update-leaderboard", () => {
+      userService
+        .getOne(loginContext.userLogin)
+        .then((user: IUser) => {
+          state.setUserInfos(user);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
+        });
     });
   }, []);
 
@@ -146,6 +102,11 @@ function Profile({
         <MyAccountDetails userInfos={state.userInfos} />
         <UserStats userInfos={state.userInfos} />
         <ButtonLogout />
+        <ProfileSettingsDialog
+          user={state.userInfos}
+          open={open}
+          setOpen={setOpen}
+        />
       </div>
       <UserGameHistory userLogin={loginContext.userLogin} />
     </>
@@ -155,6 +116,7 @@ function Profile({
 export default function ProfilePage() {
   const router = useRouter();
   const { login } = router.query;
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
 
   if (
@@ -167,6 +129,8 @@ export default function ProfilePage() {
   const [userInfos, setUserInfos] = useState<IUser>({
     id: "",
     login42: "",
+    image: "",
+    photo42: "",
     token42: "",
     twoFa: false,
     username: "",
@@ -181,13 +145,19 @@ export default function ProfilePage() {
       userInfos !== undefined &&
       loginContext.userLogin !== userInfos.login42
     ) {
-      userService.getOne(loginContext.userLogin).then((user: IUser) => {
-        setUserInfos(user);
-      });
+      userService
+        .getOne(loginContext.userLogin)
+        .then((user: IUser) => {
+          setUserInfos(user);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
+        });
     }
   }, []);
 
   if (loginContext.userLogin === null) return <DockGuest />;
+  if (userInfos === undefined || userInfos.login42 === "") return null; // We may want to display a loading screen here
   return (
     <Profile state={{ userInfos: userInfos, setUserInfos: setUserInfos }} />
   );

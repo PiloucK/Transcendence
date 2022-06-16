@@ -7,12 +7,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { FortyTwoStrategy } from './strategies/fortyTwo.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtSingleFactorStrategy } from './strategies/jwtSingleFactor.strategy';
 
 @Module({
   imports: [
+    ConfigModule,
     UsersModule,
     PassportModule,
-    ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -26,9 +27,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           },
         };
       },
-    }), // https://github.com/nestjs/jwt/blob/master/README.md#secret--encryption-key-options
+    }),
   ],
-  providers: [AuthService, FortyTwoStrategy, JwtStrategy],
+  providers: [
+    AuthService,
+    FortyTwoStrategy,
+    JwtStrategy,
+    JwtSingleFactorStrategy,
+  ],
   controllers: [AuthController],
+  exports: [AuthService],
 })
 export class AuthModule {}

@@ -10,12 +10,10 @@ import { CardUserDM } from "../Cards/CardUserDM";
 
 import Image from "next/image";
 import Rocket from "../../public/no_dm_content.png";
+import Avatar from "@mui/material/Avatar";
 
 import { SendMessageField } from "../Inputs/SendMessageField";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
 
 function Messages({ channel }: { channel: Channel }) {
   const loginContext = useLoginContext();
@@ -34,6 +32,31 @@ function Messages({ channel }: { channel: Channel }) {
       return styles.message_author;
     } else {
       return styles.message_friend;
+    }
+  };
+
+  const GetAvatar = ({ author }: { author: string }) => {
+    if (author === loginContext.userLogin) {
+      return null;
+    } else {
+      const user = channel.users.find((user) => user.login42 === author);
+      if (user.image) {
+        return (
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.image}
+            sx={{ width: "40px", height: "40px" }}
+          />
+        );
+      } else {
+        return (
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.photo42}
+            sx={{ width: "40px", height: "40px" }}
+          />
+        );
+      }
     }
   };
 
@@ -57,6 +80,7 @@ function Messages({ channel }: { channel: Channel }) {
         {channel.messages.map((message, index) => (
           <div className={getStyle(message.author)} key={index}>
             {message.content}
+            <GetAvatar author={message.author} />
           </div>
         ))}
       </div>
@@ -81,6 +105,7 @@ function ChannelContent({ channel }: { channel: Channel }) {
 
 export function Channel({ id }: { id: string }) {
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
   const [channel, setChannel] = useState<Channel>();
 
   React.useEffect(() => {
@@ -90,7 +115,7 @@ export function Channel({ id }: { id: string }) {
         setChannel(channel);
       });
 
-    socket.on("update-channel-content", () => {
+    socketContext.socket.on("update-channel-content", () => {
       channelService
         .getChannelById(loginContext.userLogin, id)
         .then((channel: Channel) => {
@@ -99,7 +124,6 @@ export function Channel({ id }: { id: string }) {
     });
   }, []);
 
-  console.log("channel: ", channel);
   return (
     <>
       <ChannelMenu channel={channel} />

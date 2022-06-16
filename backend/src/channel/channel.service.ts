@@ -1,11 +1,12 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { PrivateConvService } from "src/privateConv/privateConv.service";
-import { User } from "src/users/user.entity";
-import { UsersService } from "src/users/users.service";
-import { threadId } from "worker_threads";
-import { Channel } from "./channel.entity";
-import { ChannelRepository } from "./channel.repository";
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PrivateConvService } from 'src/privateConv/privateConv.service';
+import { User } from 'src/users/user.entity';
+import { UsersService } from 'src/users/users.service';
+import { threadId } from 'worker_threads';
+import { Channel } from './channel.entity';
+import { ChannelRepository } from './channel.repository';
 import {
   ChannelIdDto,
   ChannelInfoDto,
@@ -13,7 +14,7 @@ import {
   JoinProtectedChannelDto,
   RestrictionDto,
   SendMessageDto,
-} from "./dto/channel.dto";
+} from './dto/channel.dto';
 
 @Injectable()
 export class ChannelService {
@@ -21,12 +22,13 @@ export class ChannelService {
     @InjectRepository(ChannelRepository)
     private readonly channelRepository: ChannelRepository,
     private readonly usersService: UsersService,
-    private readonly privateConvService: PrivateConvService
+    private readonly privateConvService: PrivateConvService,
+    private readonly configService: ConfigService,
   ) {}
 
   async createChannel(
     login42: string,
-    createChannelDto: ChannelInfoDto
+    createChannelDto: ChannelInfoDto,
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
     return this.channelRepository.createChannel(user, createChannelDto);
@@ -35,30 +37,58 @@ export class ChannelService {
   async updateChannel(
     login42: string,
     channelId: string,
-    updateChannelDto: ChannelInfoDto
+    updateChannelDto: ChannelInfoDto,
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
     return this.channelRepository.updateChannel(
       user,
       channelId,
-      updateChannelDto
+      updateChannelDto,
     );
+  }
+
+  async updateChannelImage(
+    login42: string,
+    channelId: string,
+    file: Express.Multer.File,
+  ): Promise<Channel> {
+    const user = await this.usersService.getUserByLogin42(login42);
+    const channel = await this.channelRepository.findOne({
+      where: {
+        id: channelId,
+      },
+    });
+    if (!channel) {
+      throw new Error('Channel not found');
+    }
+    if (channel.owner !== user.login42) {
+      throw new Error('You are not the owner of this channel');
+    }
+    channel.image =
+      `http://${this.configService.get('HOST')}:${this.configService.get(
+        'BACKEND_PORT',
+      )}/channel/image/` +
+      channelId +
+      '/' +
+      file.filename;
+    await this.channelRepository.save(channel);
+    return channel;
   }
 
   async joinProtectedChannel(
     login42: string,
-    joinProtectedChannelDto: JoinProtectedChannelDto
+    joinProtectedChannelDto: JoinProtectedChannelDto,
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
     return this.channelRepository.joinProtectedChannel(
       user,
-      joinProtectedChannelDto
+      joinProtectedChannelDto,
     );
   }
 
   async joinChannel(
     login42: string,
-    joinChannelDto: ChannelIdDto
+    joinChannelDto: ChannelIdDto,
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
     return this.channelRepository.joinChannel(user, joinChannelDto);
@@ -66,18 +96,18 @@ export class ChannelService {
 
   async inviteToChannel(
     login42: string,
-    inviteToChannelDto: InteractionDto
+    inviteToChannelDto: InteractionDto,
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
     const channel = await this.channelRepository.findOne({
-      relations: ["users"],
+      relations: ['users'],
       where: {
         id: inviteToChannelDto.channelId,
       },
     });
 
     if (!channel) {
-      throw new Error("Channel not found");
+      throw new Error('Channel not found');
     }
     this.channelRepository.resolveChannelRestrictions(channel);
 
@@ -86,7 +116,7 @@ export class ChannelService {
     }
     if (
       channel.users.find(
-        ({ login42 }) => login42 === inviteToChannelDto.userLogin42
+        ({ login42 }) => login42 === inviteToChannelDto.userLogin42,
       )
     ) {
       return channel;
@@ -110,30 +140,30 @@ export class ChannelService {
 
   async leaveChannel(
     login42: string,
-    leaveChannelDto: ChannelIdDto
+    leaveChannelDto: ChannelIdDto,
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
     const channel = await this.channelRepository.findOne({
-      relations: ["users"],
+      relations: ['users'],
       where: {
         id: leaveChannelDto.channelId,
       },
     });
 
     if (!channel) {
-      throw new Error("Channel not found");
+      throw new Error('Channel not found');
     }
 
     channel.users = channel.users.filter(
-      (channelUser) => channelUser.login42 !== user.login42
+      (channelUser) => channelUser.login42 !== user.login42,
     );
     channel.admins = channel.admins.filter(
-      (channelAdmin) => channelAdmin !== user.login42
+      (channelAdmin) => channelAdmin !== user.login42,
     );
     if (channel.owner === user.login42) {
       if (channel.admins.length > 0) {
         const firstAdmin = await this.usersService.getUserByLogin42(
-          channel.admins[0]
+          channel.admins[0],
         );
         channel.owner = firstAdmin.login42;
       } else {
@@ -147,7 +177,7 @@ export class ChannelService {
 
   async muteAChannelUser(
     login42: string,
-    muteAChannelUserDto: RestrictionDto
+    muteAChannelUserDto: RestrictionDto,
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
     return this.channelRepository.muteAChannelUser(user, muteAChannelUserDto);
@@ -155,18 +185,18 @@ export class ChannelService {
 
   async banAChannelUser(
     login42: string,
-    banAChannelUserDto: RestrictionDto
+    banAChannelUserDto: RestrictionDto,
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
     this.channelRepository.banAChannelUser(user, banAChannelUserDto);
-	return this.leaveChannel(banAChannelUserDto.userLogin42, {
-		channelId: banAChannelUserDto.channelId,
-		});
+    return this.leaveChannel(banAChannelUserDto.userLogin42, {
+      channelId: banAChannelUserDto.channelId,
+    });
   }
 
   async setAChannelAdmin(
     login42: string,
-    setAChannelAdminDto: InteractionDto
+    setAChannelAdminDto: InteractionDto,
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
     return this.channelRepository.setAChannelAdmin(user, setAChannelAdminDto);
@@ -174,18 +204,18 @@ export class ChannelService {
 
   async unsetAChannelAdmin(
     login42: string,
-    unsetAChannelAdminDto: InteractionDto
+    unsetAChannelAdminDto: InteractionDto,
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
     return this.channelRepository.unsetAChannelAdmin(
       user,
-      unsetAChannelAdminDto
+      unsetAChannelAdminDto,
     );
   }
 
   async sendMSGToChannel(
     login42: string,
-    sendMSGToChannelDto: SendMessageDto
+    sendMSGToChannelDto: SendMessageDto,
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
     return this.channelRepository.sendMSGToChannel(user, sendMSGToChannelDto);
@@ -198,17 +228,17 @@ export class ChannelService {
 
   async getInvitableFriends(
     login42: string,
-    channelId: string
+    channelId: string,
   ): Promise<User[]> {
     const user = await this.usersService.getUserByLogin42(login42);
     const userFriends = await this.usersService.getUserFriends(
       user,
-      user.login42
+      user.login42,
     );
     return this.channelRepository.getInvitableFriends(
       user,
       userFriends,
-      channelId
+      channelId,
     );
   }
 

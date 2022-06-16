@@ -7,14 +7,15 @@ import userService from "../../services/user";
 
 import { useLoginContext } from "../../context/LoginContext";
 
-import io from "socket.io-client";
+import { errorHandler } from "../../errors/errorHandler";
 
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig()
-const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
+import { useErrorContext } from "../../context/ErrorContext";
+import { useSocketContext } from "../../context/SocketContext";
 
 export function ButtonUnblock({ userInfos }: { userInfos: IUserPublicInfos }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
 
   const unblockAUser = () => {
     if (
@@ -24,7 +25,10 @@ export function ButtonUnblock({ userInfos }: { userInfos: IUserPublicInfos }) {
       userService
         .unblockUser(loginContext.userLogin, userInfos.login42)
         .then(() => {
-          socket.emit("user:update-relations");
+          socketContext.socket.emit("user:update-relations");
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     }
   };

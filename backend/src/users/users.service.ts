@@ -11,12 +11,14 @@ import { UsersRepository } from './users.repository';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UsersRepository)
     private readonly usersRepository: UsersRepository,
+    private readonly configService: ConfigService,
   ) {}
 
   private restrictToReqUser(reqUser: User, login42: string): void {
@@ -27,19 +29,37 @@ export class UsersService {
     }
   }
 
+  async turnOnOldTwoFactorAuth(user: User) {
+    user.isTwoFactorAuthEnabled = true;
+    await this.usersRepository.save(user);
+  }
+
+  async turnOnNewTwoFactorAuth(user: User) {
+    user.isTwoFactorAuthEnabled = true;
+    user.twoFactorAuthSecret = user.twoFactorAuthTemporarySecret;
+    await this.usersRepository.save(user);
+  }
+
+  async turnOffTwoFactorAuth(user: User) {
+    user.isTwoFactorAuthEnabled = false;
+    await this.usersRepository.save(user);
+  }
+
+  async setTwoFactorAuthTemporarySecret(secret: string, user: User) {
+    user.twoFactorAuthTemporarySecret = secret;
+    await this.usersRepository.save(user);
+  }
+
   async getAllUsers(): Promise<User[]> {
     const users = await this.usersRepository.find();
     return users;
   }
 
-  // returns a user if called with undefined as argument
   getUserByLogin42(login42: string): Promise<User> {
     return this.usersRepository.getUserWithRelations(login42, []);
   }
 
   createUser(createUserDto: CreateUserDto): Promise<User> {
-    // this.restrictToReqUser(reqUser, login42);
-
     return this.usersRepository.createUser(createUserDto);
   }
 
@@ -48,14 +68,15 @@ export class UsersService {
     await this.usersRepository.remove(users);
   }
 
-  async deleteUser(reqUser: User, login42: string): Promise<void> {
-    this.restrictToReqUser(reqUser, login42);
-
-    const result = await this.usersRepository.delete(login42);
-
+  async updateOnlineStatus(login42: string, online: boolean): Promise<void> {
+    const result = await this.usersRepository.update(login42, { online });
     if (result.affected === 0) {
       throw new NotFoundException(`User with login42 "${login42}" not found`);
     }
+  }
+
+  getUserWithStatus(login42: string): Promise<User> {
+    return this.usersRepository.getUserWithRelations(login42, ['status']);
   }
 
   async updateUsername(
@@ -66,8 +87,23 @@ export class UsersService {
     this.restrictToReqUser(reqUser, login42);
 
     const { username } = updateUsernameDto;
+    reqUser.username = username;
+    await this.usersRepository.save(reqUser);
+    return reqUser;
+  }
+
+  async updateUserImage(
+    reqUser: User,
+    login42: string,
+    file: Express.Multer.File,
+  ): Promise<User> {
+    this.restrictToReqUser(reqUser, login42);
+
     const user = await this.getUserByLogin42(login42);
-    user.username = username;
+    user.image =
+      `http://${this.configService.get('HOST')}:${this.configService.get(
+        'BACKEND_PORT',
+      )}/users/image/` + file.filename;
     await this.usersRepository.save(user);
     return user;
   }

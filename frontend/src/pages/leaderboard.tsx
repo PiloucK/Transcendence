@@ -8,20 +8,24 @@ import { IUserForLeaderboard } from "../interfaces/users";
 
 import Link from "next/link";
 
-import io from "socket.io-client";
+import { errorHandler } from "../errors/errorHandler";
+import { useLoginContext } from "../context/LoginContext";
 
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig()
-const socket = io(`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}`, { transports: ["websocket"] });
+import { useErrorContext } from "../context/ErrorContext";
+import { useSocketContext } from "../context/SocketContext";
 
 function LeaderboardUserCard(props: {
   user: IUserForLeaderboard;
   index: number;
 }) {
-	let userStyle = styles.leaderboard_user;
-	if (props.index === 0) {
-		userStyle = styles.leaderboard_firstuser;
-	}
+  let userStyle = styles.leaderboard_user;
+  if (props.index === 0) {
+    userStyle = styles.leaderboard_firstuser;
+  }
+  let statusStyle = styles.leaderboard_user_status_offline;
+  if (props.user.online) {
+    statusStyle = styles.leaderboard_user_status_online;
+  }
 
   return (
     <Link href={`/profile?login=${props.user.login42}`} key={props.index}>
@@ -30,18 +34,17 @@ function LeaderboardUserCard(props: {
         <div className={styles.leaderboard_user_name}>
           {props.user.username}
         </div>
+        <div className={statusStyle}>🟢</div>
         <div className={styles.leaderboard_user_score}>{props.user.elo}</div>
       </div>
     </Link>
   );
 }
-// Will create the five cards component to display the users and their scores.
 function createLeaderboard(users: IUserForLeaderboard[]): ReactElement {
-  // console.log(users);
   return (
     <div className={styles.leaderboard}>
       {users.map((user, index) => {
-        return LeaderboardUserCard({user, index});
+        return LeaderboardUserCard({ user, index });
       })}
     </div>
   );
@@ -49,17 +52,31 @@ function createLeaderboard(users: IUserForLeaderboard[]): ReactElement {
 
 // Will print the list of users in the leaderboard.
 export default function Leaderboard() {
+  const errorContext = useErrorContext();
+  const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
+
   const [users, setUsers] = useState<IUserForLeaderboard[]>([]);
 
   useEffect(() => {
-    userService.getAll().then((users: IUserForLeaderboard[]) => {
-      setUsers(users);
-    });
-
-    socket.on("update-leaderboard", () => {
-      userService.getAll().then((users: IUserForLeaderboard[]) => {
+    userService
+      .getAll()
+      .then((users: IUserForLeaderboard[]) => {
         setUsers(users);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
+
+    socketContext.socket.on("update-leaderboard", () => {
+      userService
+        .getAll()
+        .then((users: IUserForLeaderboard[]) => {
+          setUsers(users);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
+        });
     });
   }, []);
 

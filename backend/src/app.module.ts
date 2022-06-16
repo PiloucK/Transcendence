@@ -6,13 +6,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { PrivateConvModule } from './privateConv/privateConv.module';
 import { ChannelModule } from './channel/channel.module';
+import { TwoFactorAuthModule } from './twoFactorAuth/twoFactorAuth.module';
+import { StatusModule } from './status/status.module';
+import { WebsocketsModule } from './websockets/websockets.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       validationSchema: configValidationSchema,
     }),
-    UsersModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -27,9 +29,13 @@ import { ChannelModule } from './channel/channel.module';
         database: configService.get('POSTGRES_DB'),
       }),
     }),
+    UsersModule,
     AuthModule,
+    TwoFactorAuthModule,
     PrivateConvModule,
     ChannelModule,
+    StatusModule,
+    WebsocketsModule,
   ],
 })
 export class AppModule {}

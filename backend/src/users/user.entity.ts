@@ -1,5 +1,7 @@
-import { Channel } from "src/channel/channel.entity";
-import { PrivateConv } from "src/privateConv/privateConv.entity";
+import { Exclude } from 'class-transformer';
+import { Channel } from 'src/channel/channel.entity';
+import { PrivateConv } from 'src/privateConv/privateConv.entity';
+import { UserStatus } from 'src/status/status.entity';
 import {
   Column,
   Entity,
@@ -7,7 +9,7 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryColumn,
-} from "typeorm";
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -22,6 +24,9 @@ export class User {
   @Column()
   photo42!: string;
 
+  @Column({ nullable: true })
+  image!: string;
+
   @Column({ default: 0 })
   elo!: number;
 
@@ -32,7 +37,7 @@ export class User {
   gamesLost!: number;
 
   @Column({ default: false })
-  twoFa!: boolean; // make it private
+  online!: boolean;
 
   @ManyToMany(() => User)
   @JoinTable()
@@ -54,25 +59,25 @@ export class User {
   @OneToMany(
     () => PrivateConv,
     (privateConv) =>
-      privateConv.userOne === this ? privateConv.userOne : privateConv.userTwo
+      privateConv.userOne === this ? privateConv.userOne : privateConv.userTwo,
   )
   privateConvs!: PrivateConv[];
 
   // There is a many to many relation owned by the channel.
   @ManyToMany(() => Channel)
   users!: Channel[];
+
+  @OneToMany(() => UserStatus, (status) => status.user)
+  status!: UserStatus[];
+
+  @Column({ default: false })
+  isTwoFactorAuthEnabled!: boolean;
+
+  @Column({ nullable: true })
+  @Exclude()
+  twoFactorAuthSecret!: string;
+
+  @Column({ nullable: true })
+  @Exclude()
+  twoFactorAuthTemporarySecret!: string;
 }
-
-// photo
-
-// export enum UserState {
-//   IN_GAME = "IN_GAME",
-//   IN_QUEUE = "IN_QUEUE",
-//   IS_ONLINE = "IN_ONLINE",
-//   IS_OFFLINE = "IS_OFFLINE"
-// }
-
-// export type Friends = Array<string>;
-// export type FriendRequestsSent = Array<string>;
-// export type FriendRequestsReceived = Array<string>;
-// export type BlockedUsers = Array<string>;

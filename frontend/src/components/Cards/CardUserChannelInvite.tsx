@@ -32,9 +32,16 @@ export function CardUserChannelInvite({
     <div className={getStyle()} onClick={handleClick} key={userInfos.login42}>
       <div className={styles.user_card_avatar}>
         <Avatar
-          src={userInfos.photo42}
-          sx={{ width: "100px", height: "100px" }}
-        />
+          src={userInfos.image}
+          alt="avatar"
+          sx={{ width: 100, height: 100 }}
+        >
+          <Avatar
+            src={userInfos.photo42}
+            alt="avatar"
+            sx={{ width: 100, height: 100 }}
+          />
+        </Avatar>
       </div>
       <div className={styles.user_card_username}>{userInfos.username}</div>
       <div className={styles.user_card_elo}>Elo: {userInfos.elo}</div>

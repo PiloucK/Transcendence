@@ -17,10 +17,9 @@ export class AuthService {
     return await this.usersService.createUser({login42: fortyTwoUserProfileDto.username, photo42: fortyTwoUserProfileDto.photos[0].value});
   }
 
-  issueJwtToken(login42: string): string {
-    const payload = { login42 };
+  issueJwtToken(login42: string, isSecondFactorAuthenticated = false): string {
+    const payload = { login42, isSecondFactorAuthenticated };
     return this.jwtService.sign(payload);
-    // this sign() function comes from the @nestjs/jwt library
   }
 
   getAccessTokenCookie(token: string): string {
