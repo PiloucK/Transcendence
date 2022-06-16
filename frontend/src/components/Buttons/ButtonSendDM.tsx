@@ -6,22 +6,22 @@ import { IUserPublicInfos, PrivateConv } from "../../interfaces/IUser";
 
 import privateConvService from "../../services/privateConv";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 export function ButtonSendDM({ userInfos }: { userInfos: IUserPublicInfos }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   const sendPrivateMessage = () => {
     if (
-      loginContext.userLogin !== null &&
-      loginContext.userLogin !== userInfos.login42
+      sessionContext.userLogin !== null &&
+      sessionContext.userLogin !== userInfos.login42
     ) {
       privateConvService
-        .createPrivateConv(loginContext.userLogin, userInfos.login42)
+        .createPrivateConv(sessionContext.userLogin, userInfos.login42)
         .then((dm: PrivateConv) => {
-          loginContext.setChatDM(dm.userOne.login42 + "|" + dm.userTwo.login42);
+          sessionContext.setChatDM(dm.userOne.login42 + "|" + dm.userTwo.login42);
           socketContext.socket.emit("user:update-direct-messages");
           Router.push("/chat");
         });

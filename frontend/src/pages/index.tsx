@@ -2,9 +2,9 @@ import Link from "next/link";
 import { DockUser } from "../components/Dock/DockUser";
 import styles from "../styles/Home.module.css";
 // function DockToShow() {
-//   const loginContext = useLoginContext();
+//   const sessionContext = useSessionContext();
 
-//   if (loginContext.userLogin !== null) {
+//   if (sessionContext.userLogin !== null) {
 //     return <DockUser />;
 //   } else {
 //     return <DockGuest />;

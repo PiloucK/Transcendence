@@ -4,9 +4,9 @@ import { defaultErrorData, IErrorData } from "../interfaces/IErrorData";
 
 export function errorHandler(
   error: Error | AxiosError,
-  loginContext: any
+  sessionContext: any
 ): IErrorData {
-  // TODO: loginContext define the type
+  // TODO: sessionContext define the type
   let errorData: IErrorData = defaultErrorData;
 
   if (axios.isAxiosError(error)) {
@@ -15,9 +15,9 @@ export function errorHandler(
       errorData = error.response.data as IErrorData;
       if (errorData.statusCode === HttpStatusCodes.UNAUTHORIZED) {
         if (!errorData.error) {
-          loginContext.logout?.();
+          sessionContext.logout?.();
         } else if (errorData.message === 'Not double-authenticated') {
-          loginContext.setShowSecondFactorLogin?.(true);
+          sessionContext.setShowSecondFactorLogin?.(true);
         }
         // } else if (error.response.status === NOT_FOUND) {
         // } else if (error.response.status === CONFLICT) {

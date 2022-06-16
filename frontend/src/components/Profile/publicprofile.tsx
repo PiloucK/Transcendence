@@ -19,7 +19,7 @@ import { ButtonUserStatus } from "../Buttons/ButtonUserStatus";
 import { ButtonBlock } from "../Buttons/ButtonBlock";
 import { ButtonUnblock } from "../Buttons/ButtonUnblock";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 import { errorHandler } from "../../errors/errorHandler";
 
@@ -76,7 +76,7 @@ function UserStats({ userInfos }: { userInfos: IUserPublicInfos }) {
 
 function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [friendList, setFriendList] = React.useState<[]>([]);
   const [sentRList, setSentRList] = React.useState<[]>([]);
@@ -84,54 +84,54 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
 
   React.useEffect(() => {
     userService
-      .getUserFriends(loginContext.userLogin)
+      .getUserFriends(sessionContext.userLogin)
       .then((friends: IUserPublicInfos[]) => {
         setFriendList(friends);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
     userService
-      .getUserFriendRequestsSent(loginContext.userLogin)
+      .getUserFriendRequestsSent(sessionContext.userLogin)
       .then((requests: IUserPublicInfos[]) => {
         setSentRList(requests);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
     userService
-      .getUserBlockedUsers(loginContext.userLogin)
+      .getUserBlockedUsers(sessionContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
 
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserFriends(loginContext.userLogin)
+        .getUserFriends(sessionContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriendList(friends);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
       userService
-        .getUserFriendRequestsSent(loginContext.userLogin)
+        .getUserFriendRequestsSent(sessionContext.userLogin)
         .then((requests: IUserPublicInfos[]) => {
           setSentRList(requests);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
       userService
-        .getUserBlockedUsers(loginContext.userLogin)
+        .getUserBlockedUsers(sessionContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
   }, []);
@@ -189,7 +189,7 @@ function Profile({
   };
 }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   React.useEffect(() => {
@@ -200,7 +200,7 @@ function Profile({
           state.setUsrInfo(user);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
   }, []);
@@ -219,7 +219,7 @@ function Profile({
 
 export default function PublicProfile({ login }: { login: string }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   const [userInfos, setUserInfos] = React.useState<IUserPublicInfos>({
     login42: "",
@@ -240,7 +240,7 @@ export default function PublicProfile({ login }: { login: string }) {
         setUserInfos(user);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   }
 

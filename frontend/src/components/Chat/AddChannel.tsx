@@ -18,7 +18,7 @@ import { Channel, ChannelCreation } from "../../interfaces/IUser";
 import { CardPublicChannel } from "../Cards/CardPublicChannel";
 
 import channelService from "../../services/channel";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 function EmptyPublicChannels() {
@@ -43,20 +43,20 @@ function PublicChannelsList({ channels }: { channels: Channel[] }) {
 }
 
 function PublicChannels() {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [channels, setChannels] = useState<Channel[]>([]);
 
   React.useEffect(() => {
     channelService
-      .getPublicChannels(loginContext.userLogin)
+      .getPublicChannels(sessionContext.userLogin)
       .then((channels: Channel[]) => {
         setChannels(channels);
       });
 
     socketContext.socket.on("update-public-channels", () => {
       channelService
-        .getPublicChannels(loginContext.userLogin)
+        .getPublicChannels(sessionContext.userLogin)
         .then((channels: ChannelCreation[]) => {
           setChannels(channels);
         });
@@ -67,7 +67,7 @@ function PublicChannels() {
 }
 
 function CreateChannelForm() {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [channelName, setChannelName] = useState("");
   const [channelPassword, setChannelPassword] = useState<inputPFState>({
@@ -106,11 +106,11 @@ function CreateChannelForm() {
     }
     if (error === false) {
       channelService
-        .createChannel(loginContext.userLogin, channel)
+        .createChannel(sessionContext.userLogin, channel)
         .then((res) => {
           socketContext.socket.emit("user:update-public-channels");
           socketContext.socket.emit("user:update-joined-channel");
-          loginContext.setChatMenu?.(res.id);
+          sessionContext.setChatMenu?.(res.id);
         });
     }
   };

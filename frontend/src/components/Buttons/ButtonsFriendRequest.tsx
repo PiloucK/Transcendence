@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../../styles/Home.module.css";
 
 import { IUserPublicInfos } from "../../interfaces/IUser";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import userService from "../../services/user";
 
 import { errorHandler } from "../../errors/errorHandler";
@@ -16,37 +16,37 @@ export function ButtonsFriendRequest({
   userInfos: IUserPublicInfos;
 }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 const socketContext = useSocketContext();
 
   const acceptFriend = () => {
     if (
-      loginContext.userLogin !== null &&
-      loginContext.userLogin !== userInfos.login42
+      sessionContext.userLogin !== null &&
+      sessionContext.userLogin !== userInfos.login42
     ) {
       userService
-        .acceptFriendRequest(loginContext.userLogin, userInfos.login42)
+        .acceptFriendRequest(sessionContext.userLogin, userInfos.login42)
         .then(() => {
           socketContext.socket.emit("user:update-relations");
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
   };
 
   const declineRequest = () => {
     if (
-      loginContext.userLogin !== null &&
-      loginContext.userLogin !== userInfos.login42
+      sessionContext.userLogin !== null &&
+      sessionContext.userLogin !== userInfos.login42
     ) {
       userService
-        .declineFriendRequest(loginContext.userLogin, userInfos.login42)
+        .declineFriendRequest(sessionContext.userLogin, userInfos.login42)
         .then(() => {
           socketContext.socket.emit("user:update-relations");
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
   };

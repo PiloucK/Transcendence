@@ -1,16 +1,16 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 export function ButtonLogout() {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   const handleOnClick = () => {
-    loginContext.logout?.();
+    sessionContext.logout?.();
   };
 
-  if (loginContext.userLogin === null) return null;
+  if (sessionContext.userLogin === null) return null;
   return (
     <button className={styles.logout_button} onClick={handleOnClick}>
       Logout

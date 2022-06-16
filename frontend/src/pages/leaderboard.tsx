@@ -9,7 +9,7 @@ import { IUserSlim } from "../interfaces/IUser";
 import Link from "next/link";
 
 import { errorHandler } from "../errors/errorHandler";
-import { useLoginContext } from "../context/LoginContext";
+import { useSessionContext } from "../context/SessionContext";
 
 import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
@@ -50,7 +50,7 @@ function createLeaderboard(users: IUserSlim[]): ReactElement {
 // Will print the list of users in the leaderboard.
 export default function Leaderboard() {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   const [users, setUsers] = useState<IUserSlim[]>([]);
@@ -62,7 +62,7 @@ export default function Leaderboard() {
         setUsers(users);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
 
     socketContext.socket.on("update-leaderboard", () => {
@@ -72,7 +72,7 @@ export default function Leaderboard() {
           setUsers(users);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
   }, []);

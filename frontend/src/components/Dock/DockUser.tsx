@@ -15,7 +15,7 @@ import CheckIcon from "@mui/icons-material/Check";
 
 import { Dock } from "./Dock";
 import styles from "../../styles/Home.module.css";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 import userService from "../../services/user";
 import authService from "../../services/auth";
@@ -32,7 +32,7 @@ function NavigationDock({
 }: {
   setIsInNavigation: (mode: boolean) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const errorContext = useErrorContext();
   const socketContext = useSocketContext();
 
@@ -48,7 +48,7 @@ function NavigationDock({
     userService
       .addOne(newUserCredentials)
       .then((user: IUserSelf) => {
-        loginContext.login?.(user.login42);
+        sessionContext.login?.(user.login42);
         socketContext.socket.emit("user:new", username);
         setUsername("");
 
@@ -58,12 +58,12 @@ function NavigationDock({
             console.log("new token for", login42, "stored in cookie");
           })
           .catch((error) => {
-            errorContext.newError?.(errorHandler(error, loginContext));
+            errorContext.newError?.(errorHandler(error, sessionContext));
             // errorContext.newError(errorParse)
           });
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 
@@ -72,10 +72,10 @@ function NavigationDock({
       .deleteAll()
       .then(() => {
         console.log("all users deleted");
-        loginContext.logout?.();
+        sessionContext.logout?.();
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 

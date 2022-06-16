@@ -11,7 +11,7 @@ import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
 import { Channel, ChannelCreation } from "../../interfaces/IUser";
 
 import channelService from "../../services/channel";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -30,7 +30,7 @@ export function ChannelSettingsDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [channelName, setChannelName] = useState(channel.name);
   const [channelPassword, setChannelPassword] = useState<inputPFState>({
@@ -74,7 +74,7 @@ export function ChannelSettingsDialog({
     if (error === false) {
       setOpen(false);
       channelService
-        .updateChannel(loginContext.userLogin, channel.id, channelInfos)
+        .updateChannel(sessionContext.userLogin, channel.id, channelInfos)
         .then((res) => {
           socketContext.socket.emit("user:update-public-channels");
           socketContext.socket.emit("user:update-joined-channel");

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Dock } from "./Dock";
 import authService from "../../services/auth";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 import Link from "next/link";
 import { IconButton, Tooltip } from "@mui/material";
@@ -22,7 +22,7 @@ import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
 export function DockGuest() {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const errorContext = useErrorContext();
   const socketContext = useSocketContext();
 
@@ -31,18 +31,18 @@ export function DockGuest() {
       authService
         .getLoggedInUser()
         .then((userLogin42) => {
-          loginContext.login?.(userLogin42);
+          sessionContext.login?.(userLogin42);
           socketContext.socket.emit("user:new", userLogin42);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
   };
 
   useEffect(() => {
     authenticate();
-  }, [loginContext]);
+  }, [sessionContext]);
 
   return (
     <Dock>

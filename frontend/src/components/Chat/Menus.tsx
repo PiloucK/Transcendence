@@ -7,7 +7,7 @@ import channelImage from "../../public/channel_image.png";
 import directMessage from "../../public/direct_message.png";
 import addChannel from "../../public/add_channel.png";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import {
   IUserPublicInfos,
   IUserSlim,
@@ -58,12 +58,12 @@ function DMList({
   menu: string;
   setMenu: (menu: string) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   return openedDMs?.map((dm) => {
     const key = dm.userOne.login42 + "|" + dm.userTwo.login42;
     const username =
-      dm.userOne.login42 === loginContext.userLogin
+      dm.userOne.login42 === sessionContext.userLogin
         ? dm.userTwo.username
         : dm.userOne.username;
 
@@ -94,20 +94,20 @@ export function DirectMessageMenu(props: {
   menu: string;
   setMenu: (menu: string) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [openedDMs, setOpenedDMs] = React.useState<PrivateConv[]>([]);
 
   React.useEffect(() => {
     privateConvService
-      .getPrivateConvs(loginContext.userLogin)
+      .getPrivateConvs(sessionContext.userLogin)
       .then((currentDMs: PrivateConv[]) => {
         setOpenedDMs(currentDMs);
       });
 
     socketContext.socket.on("update-direct-messages", () => {
       privateConvService
-        .getPrivateConvs(loginContext.userLogin)
+        .getPrivateConvs(sessionContext.userLogin)
         .then((currentDMs: PrivateConv[]) => {
           setOpenedDMs(currentDMs);
         });
@@ -152,9 +152,9 @@ function SelectedUserMenu({
   setSelectedUser: (userLogin: string) => void;
   channel: Channel;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
-  if (loginContext.userLogin === channel?.owner) {
+  if (sessionContext.userLogin === channel?.owner) {
     return (
       <div className={styles.selected_user}>
         <div
@@ -171,7 +171,7 @@ function SelectedUserMenu({
         <ButtonTxtSetAsAdmin login={userLogin} channel={channel} />
       </div>
     );
-  } else if (channel?.admins?.includes(loginContext.userLogin)) {
+  } else if (channel?.admins?.includes(sessionContext.userLogin)) {
     return (
       <div className={styles.selected_user}>
         <div
@@ -205,7 +205,7 @@ function SelectedUserMenu({
 }
 
 function UserList({ channel }: { channel: Channel }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const [selectedUser, setSelectedUser] = useState<String>("");
 
   const getUserStyle = (userLogin: string) => {
@@ -219,7 +219,7 @@ function UserList({ channel }: { channel: Channel }) {
   };
 
   return channel?.users?.map((user) => {
-    if (user.login42 === loginContext.userLogin) {
+    if (user.login42 === sessionContext.userLogin) {
       return (
         <div key={user.login42} className={styles.connected_user}>
           {user.username}
@@ -379,18 +379,18 @@ export function ChatMenu(props: {
   setMenu: ((menu: string) => void) | undefined;
 }) {
   const [channels, setChannels] = useState<Channel[]>([]);
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   React.useEffect(() => {
     channelService
-      .getJoinedChannels(loginContext.userLogin)
+      .getJoinedChannels(sessionContext.userLogin)
       .then((currentChannels: Channel[]) => {
         setChannels(currentChannels);
       });
     socketContext.socket.on("update-channels-list", () => {
       channelService
-        .getJoinedChannels(loginContext.userLogin)
+        .getJoinedChannels(sessionContext.userLogin)
         .then((currentChannels: Channel[]) => {
           setChannels(currentChannels);
         });

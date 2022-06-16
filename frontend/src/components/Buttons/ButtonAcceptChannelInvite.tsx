@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../styles/Home.module.css";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import channelService from "../../services/channel";
 
 import { Channel } from "../../interfaces/IUser";
@@ -22,15 +22,15 @@ export function ButtonAcceptChannelInvite({
 }: {
   channelId: string;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [error, setError] = React.useState(false);
 
   const joinChannel = () => {
     channelService
-      .joinChannel(loginContext.userLogin, channelId)
+      .joinChannel(sessionContext.userLogin, channelId)
       .then((channel: Channel) => {
-        loginContext.setChatMenu?.(channel.id);
+        sessionContext.setChatMenu?.(channel.id);
         socketContext.socket.emit("user:update-joined-channel");
         socketContext.socket.emit("user:update-channel-content");
       })

@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import Router from "next/router";
 import { DockGuest } from "../components/Dock/DockGuest";
-import { useLoginContext } from "../context/LoginContext";
+import { useSessionContext } from "../context/SessionContext";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
 
@@ -34,11 +34,11 @@ export const MainLayout: React.FunctionComponent<Props> = ({ children }) => {
     document.addEventListener("keyup", OnUp);
   }
 
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   return (
     <>
-      {loginContext.userLogin !== null ? (
+      {sessionContext.userLogin !== null ? (
         children
       ) : (
         <>

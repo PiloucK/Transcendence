@@ -11,7 +11,7 @@ import { ButtonChannelInvite } from "../Buttons/ButtonChannelInvite";
 import { Channel, IUserSlim } from "../../interfaces/IUser";
 
 import channelService from "../../services/channel";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -64,7 +64,7 @@ export function ChannelInviteDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [friends, setFriends] = useState<IUserSlim[]>([]);
   const [selectedFriends, setSelectedFriends] = useState<IUserSlim[]>(
@@ -73,21 +73,21 @@ export function ChannelInviteDialog({
 
   React.useEffect(() => {
     channelService
-      .getChannelInvitableFriends(loginContext.userLogin, channel.id)
+      .getChannelInvitableFriends(sessionContext.userLogin, channel.id)
       .then((friends: IUserSlim[]) => {
         setFriends(friends);
       });
 
     socketContext.socket.on("update-channel-content", () => {
       channelService
-        .getChannelInvitableFriends(loginContext.userLogin, channel.id)
+        .getChannelInvitableFriends(sessionContext.userLogin, channel.id)
         .then((friends: IUserSlim[]) => {
           setFriends(friends);
         });
     });
     socketContext.socket.on("update-relations", () => {
       channelService
-        .getChannelInvitableFriends(loginContext.userLogin, channel.id)
+        .getChannelInvitableFriends(sessionContext.userLogin, channel.id)
         .then((friends: IUserSlim[]) => {
           setFriends(friends);
         });
@@ -118,7 +118,7 @@ export function ChannelInviteDialog({
     setOpen(false);
     selectedFriends.forEach((friend: IUserSlim) => {
       channelService
-        .inviteToChannel(loginContext.userLogin, channel.id, friend.login42)
+        .inviteToChannel(sessionContext.userLogin, channel.id, friend.login42)
         .then(() => {
           socketContext.socket.emit("user:update-channel-content");
         })

@@ -3,7 +3,7 @@ import styles from "../../styles/Home.module.css";
 import { EmptyFriendList } from "../Social/emptyPages";
 
 import { DirectMessageMenu } from "./Menus";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import {
   IUserPublicInfos,
   PrivateConv,
@@ -44,27 +44,27 @@ function FriendList({
 }
 
 function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
 
   React.useEffect(() => {
     userService
-      .getUserFriends(loginContext.userLogin)
+      .getUserFriends(sessionContext.userLogin)
       .then((friends: IUserPublicInfos[]) => {
         setFriends(friends);
       });
 
     socketContext.socket.on("update-leaderboard", () => {
       userService
-        .getUserFriends(loginContext.userLogin)
+        .getUserFriends(sessionContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
         });
     });
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserFriends(loginContext.userLogin)
+        .getUserFriends(sessionContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
         });
@@ -93,7 +93,7 @@ function MessageContent({ message }: { message: Message | Invitation }) {
 }
 
 function Messages({ dm }: { dm: PrivateConv }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   if (typeof dm === "undefined" || dm.messages.length === 0) {
     return (
@@ -105,7 +105,7 @@ function Messages({ dm }: { dm: PrivateConv }) {
   }
 
   const getStyle = (author: string) => {
-    if (author === loginContext.userLogin) {
+    if (author === sessionContext.userLogin) {
       return styles.message_author;
     } else {
       return styles.message_friend;
@@ -131,36 +131,36 @@ function Messages({ dm }: { dm: PrivateConv }) {
 }
 
 function CurrentDirectMessage({ menu }: { menu: string }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [blockedList, setBlockedList] = React.useState<IUserPublicInfos[]>([]);
   const [input, setInput] = React.useState("");
   const [privateConv, setPrivateConv] = useState<PrivateConv>();
   const users = menu.split("|");
 
-  const friend = users[0] === loginContext.userLogin ? users[1] : users[0];
+  const friend = users[0] === sessionContext.userLogin ? users[1] : users[0];
   React.useEffect(() => {
     userService
-      .getUserBlockedUsers(loginContext.userLogin)
+      .getUserBlockedUsers(sessionContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       });
     privateConvService
-      .getPrivateConv(loginContext.userLogin, friend)
+      .getPrivateConv(sessionContext.userLogin, friend)
       .then((privateConv: PrivateConv) => {
         setPrivateConv(privateConv);
       });
 
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserBlockedUsers(loginContext.userLogin)
+        .getUserBlockedUsers(sessionContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
         });
     });
     socketContext.socket.on("update-direct-messages", () => {
       privateConvService
-        .getPrivateConv(loginContext.userLogin, friend)
+        .getPrivateConv(sessionContext.userLogin, friend)
         .then((privateConv: PrivateConv) => {
           setPrivateConv(privateConv);
         });
@@ -202,17 +202,17 @@ function DirectMessageContent({
 }
 
 export function DirectMessage() {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   return (
     <>
       <DirectMessageMenu
-        menu={loginContext.chatDM}
-        setMenu={loginContext.setChatDM}
+        menu={sessionContext.chatDM}
+        setMenu={sessionContext.setChatDM}
       />
       <DirectMessageContent
-        menu={loginContext.chatDM}
-        setMenu={loginContext.setChatDM}
+        menu={sessionContext.chatDM}
+        setMenu={sessionContext.setChatDM}
       />
     </>
   );

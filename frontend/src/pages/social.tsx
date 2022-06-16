@@ -1,5 +1,5 @@
 import styles from "../styles/Home.module.css";
-import { useLoginContext } from "../context/LoginContext";
+import { useSessionContext } from "../context/SessionContext";
 // import { DockGuest } from "../components/Dock/DockGuest";
 import React, { useState } from "react";
 
@@ -20,7 +20,7 @@ import { useSocketContext } from "../context/SocketContext";
 
 function SocialPage({ menu }: { menu: string }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
   const [blocked, setBlocked] = useState<IUserPublicInfos[]>([]);
@@ -28,87 +28,87 @@ function SocialPage({ menu }: { menu: string }) {
 
   React.useEffect(() => {
     userService
-      .getUserFriends(loginContext.userLogin)
+      .getUserFriends(sessionContext.userLogin)
       .then((friends: IUserPublicInfos[]) => {
         setFriends(friends);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
 
     userService
-      .getUserBlockedUsers(loginContext.userLogin)
+      .getUserBlockedUsers(sessionContext.userLogin)
       .then((users: IUserPublicInfos[]) => {
         setBlocked(users);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
 
     userService
-      .getUserFriendRequestsReceived(loginContext.userLogin)
+      .getUserFriendRequestsReceived(sessionContext.userLogin)
       .then((notifications: IUserPublicInfos[]) => {
         setNotifications(notifications);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
 
     socketContext.socket.on("update-leaderboard", () => {
       userService
-        .getUserFriends(loginContext.userLogin)
+        .getUserFriends(sessionContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
 
       userService
-        .getUserBlockedUsers(loginContext.userLogin)
+        .getUserBlockedUsers(sessionContext.userLogin)
         .then((users: IUserPublicInfos[]) => {
           setBlocked(users);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
 
       userService
-        .getUserFriendRequestsReceived(loginContext.userLogin)
+        .getUserFriendRequestsReceived(sessionContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
 
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserFriends(loginContext.userLogin)
+        .getUserFriends(sessionContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
 
       userService
-        .getUserBlockedUsers(loginContext.userLogin)
+        .getUserBlockedUsers(sessionContext.userLogin)
         .then((users: IUserPublicInfos[]) => {
           setBlocked(users);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
 
       userService
-        .getUserFriendRequestsReceived(loginContext.userLogin)
+        .getUserFriendRequestsReceived(sessionContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
   }, []);
@@ -130,7 +130,7 @@ function SocialPage({ menu }: { menu: string }) {
 export default function Social() {
   const [menu, setMenu] = useState("all");
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   if (typeof window !== "undefined") {
     document.body.style.backgroundColor = "#00213D";

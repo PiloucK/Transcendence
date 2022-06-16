@@ -5,7 +5,7 @@ import { IUserPublicInfos, PrivateConv } from "../../interfaces/IUser";
 
 import Avatar from "@mui/material/Avatar";
 // import profileIcon from "../../public/profile_icon.png";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import privateConvService from "../../services/privateConv";
 import { useSocketContext } from "../../context/SocketContext";
 
@@ -16,16 +16,16 @@ export function CardUserDM({
   userInfos: IUserPublicInfos;
   setMenu: (menu: string) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   const createPrivateConv = () => {
     if (
-      loginContext.userLogin !== null &&
-      loginContext.userLogin !== userInfos.login42
+      sessionContext.userLogin !== null &&
+      sessionContext.userLogin !== userInfos.login42
     ) {
       privateConvService
-        .createPrivateConv(loginContext.userLogin, userInfos.login42)
+        .createPrivateConv(sessionContext.userLogin, userInfos.login42)
         .then((privateConv: PrivateConv) => {
           setMenu(
             privateConv.userOne.login42 + "|" + privateConv.userTwo.login42

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "../../styles/Home.module.css";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import { IUserPublicInfos } from "../../interfaces/IUser";
 
 import Badge from "@mui/material/Badge";
@@ -19,45 +19,45 @@ export const NotificationChip = ({
   children: React.ReactNode;
 }) => {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
   const [blockedUsers, setBlockedUsers] = useState<IUserPublicInfos[]>([]);
 
   React.useEffect(() => {
     userService
-      .getUserFriendRequestsReceived(loginContext.userLogin)
+      .getUserFriendRequestsReceived(sessionContext.userLogin)
       .then((notifications: IUserPublicInfos[]) => {
         setNotifications(notifications);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
     userService
-      .getUserBlockedUsers(loginContext.userLogin)
+      .getUserBlockedUsers(sessionContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedUsers(blocked);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
 
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserFriendRequestsReceived(loginContext.userLogin)
+        .getUserFriendRequestsReceived(sessionContext.userLogin)
         .then((notifications: IUserPublicInfos[]) => {
           setNotifications(notifications);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
       userService
-        .getUserBlockedUsers(loginContext.userLogin)
+        .getUserBlockedUsers(sessionContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedUsers(blocked);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
   }, []);

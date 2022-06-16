@@ -1,5 +1,5 @@
 import styles from "../styles/Home.module.css";
-import { useLoginContext } from "../context/LoginContext";
+import { useSessionContext } from "../context/SessionContext";
 import React, { useEffect, useRef, useState } from 'react';
 import userService from "../services/user";
 

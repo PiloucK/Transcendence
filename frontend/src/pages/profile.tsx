@@ -1,6 +1,6 @@
 import { ButtonLogout } from "../components/Buttons/ButtonLogout";
 import styles from "../styles/Home.module.css";
-import { useLoginContext } from "../context/LoginContext";
+import { useSessionContext } from "../context/SessionContext";
 
 import IconButton from "@mui/material/IconButton";
 import CreateIcon from "@mui/icons-material/Create";
@@ -26,7 +26,7 @@ import { useSocketContext } from "../context/SocketContext";
 
 function MyUserName({ userInfos }: { userInfos: IUserSelf }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [isInModification, setIsInModification] = useState(false);
   const [tmpUsername, setTmpUsername] = useState(""); // tmpUsername -> usernameInput?
@@ -37,13 +37,13 @@ function MyUserName({ userInfos }: { userInfos: IUserSelf }) {
 
     if (tmpUsername !== "") {
       userService
-        .updateUserUsername(loginContext.userLogin, tmpUsername)
+        .updateUserUsername(sessionContext.userLogin, tmpUsername)
         .then(() => {
           setTmpUsername("");
           socketContext.socket.emit("user:update-username");
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
   };
@@ -54,7 +54,7 @@ function MyUserName({ userInfos }: { userInfos: IUserSelf }) {
     setTmpUsername(event.target.value);
   };
 
-  if (loginContext.userLogin === null) return null;
+  if (sessionContext.userLogin === null) return null;
   if (isInModification === false) {
     return (
       <div className={styles.profile_user_account_details_username}>
@@ -132,18 +132,18 @@ function Profile({
   state: { userInfos: IUserSelf; setUserInfos: (userInfos: IUserSelf) => void };
 }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   React.useEffect(() => {
     socketContext.socket.on("update-leaderboard", () => {
       userService
-        .getOne(loginContext.userLogin)
+        .getOne(sessionContext.userLogin)
         .then((user: IUserSelf) => {
           state.setUserInfos(user);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
   }, []);
@@ -155,7 +155,7 @@ function Profile({
         <UserStats userInfos={state.userInfos} />
         <ButtonLogout />
       </div>
-      <UserGameHistory userLogin={loginContext.userLogin} />
+      <UserGameHistory userLogin={sessionContext.userLogin} />
     </>
   );
 }
@@ -164,12 +164,12 @@ export default function ProfilePage() {
   const router = useRouter();
   const { login } = router.query;
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   if (
     login !== undefined &&
-    loginContext.userLogin !== null &&
-    login !== loginContext.userLogin
+    sessionContext.userLogin !== null &&
+    login !== sessionContext.userLogin
   ) {
     return <PublicProfile login={login} />;
   }
@@ -186,22 +186,22 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (
-      loginContext.userLogin !== null &&
+      sessionContext.userLogin !== null &&
       userInfos !== undefined &&
-      loginContext.userLogin !== userInfos.login42
+      sessionContext.userLogin !== userInfos.login42
     ) {
       userService
-        .getOne(loginContext.userLogin)
+        .getOne(sessionContext.userLogin)
         .then((user: IUserSelf) => {
           setUserInfos(user);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
   }, []);
 
-  // if (loginContext.userLogin === null) return <DockGuest />;
+  // if (sessionContext.userLogin === null) return <DockGuest />;
   return (
     <Profile state={{ userInfos: userInfos, setUserInfos: setUserInfos }} />
   );

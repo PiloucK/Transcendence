@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
@@ -33,7 +33,7 @@ export function SendMessageField({
   setInput: (input: string) => void;
   channel: string;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [error, setError] = React.useState(false);
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (
@@ -46,8 +46,8 @@ export function SendMessageField({
     if (input.length > 0) {
       if (channel.length === 36) {
         channelService
-          .sendMSGToChannel(loginContext.userLogin, channel, {
-            author: loginContext.userLogin,
+          .sendMSGToChannel(sessionContext.userLogin, channel, {
+            author: sessionContext.userLogin,
             content: input,
           })
           .then(() => {
@@ -62,11 +62,11 @@ export function SendMessageField({
       } else {
         const users = channel.split("|");
         const otherLogin =
-          users[0] === loginContext.userLogin ? users[1] : users[0];
+          users[0] === sessionContext.userLogin ? users[1] : users[0];
 
         privateConvService
-          .sendPrivateMessage(loginContext.userLogin, otherLogin, {
-            author: loginContext.userLogin,
+          .sendPrivateMessage(sessionContext.userLogin, otherLogin, {
+            author: sessionContext.userLogin,
             content: input,
           })
           .then(() => {

@@ -5,7 +5,7 @@ import { IUserPublicInfos } from "../../interfaces/IUser";
 
 import userService from "../../services/user";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 import { errorHandler } from "../../errors/errorHandler";
 
@@ -18,21 +18,21 @@ export function ButtonCancelRequest({
   userInfos: IUserPublicInfos;
 }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   const cancelRequest = () => {
     if (
-      loginContext.userLogin !== null &&
-      loginContext.userLogin !== userInfos.login42
+      sessionContext.userLogin !== null &&
+      sessionContext.userLogin !== userInfos.login42
     ) {
       userService
-        .cancelFriendRequest(loginContext.userLogin, userInfos.login42)
+        .cancelFriendRequest(sessionContext.userLogin, userInfos.login42)
         .then(() => {
           socketContext.socket.emit("user:update-relations");
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
   };

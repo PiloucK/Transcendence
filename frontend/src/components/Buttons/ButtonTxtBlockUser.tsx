@@ -4,24 +4,24 @@ import styles from "../../styles/Home.module.css";
 
 import { IUserPublicInfos } from "../../interfaces/IUser";
 import userService from "../../services/user";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 export function ButtonTxtBlockUser({ login }: { login: string }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [blockedList, setBlockedList] = React.useState<[]>([]);
 
   React.useEffect(() => {
     userService
-      .getUserBlockedUsers(loginContext.userLogin)
+      .getUserBlockedUsers(sessionContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
       });
 
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserBlockedUsers(loginContext.userLogin)
+        .getUserBlockedUsers(sessionContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
         });
@@ -29,8 +29,8 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
   }, []);
 
   const handleUnblockOnClick = () => {
-    if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
-      userService.unblockUser(loginContext.userLogin, login).then(() => {
+    if (sessionContext.userLogin !== null && sessionContext.userLogin !== login) {
+      userService.unblockUser(sessionContext.userLogin, login).then(() => {
         socketContext.socket.emit("user:update-relations");
         socketContext.socket.emit("user:update-direct-messages");
         socketContext.socket.emit("user:update-channel-content");
@@ -39,8 +39,8 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
   };
 
   const handleBlockOnClick = () => {
-    if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
-      userService.blockUser(loginContext.userLogin, login).then(() => {
+    if (sessionContext.userLogin !== null && sessionContext.userLogin !== login) {
+      userService.blockUser(sessionContext.userLogin, login).then(() => {
         socketContext.socket.emit("user:update-relations");
       });
     }

@@ -2,7 +2,7 @@ import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 
-import { LoginProvider } from "../context/LoginContext";
+import { SessionProvider } from "../context/SessionContext";
 import { MainLayout } from "../layouts/mainLayout";
 import { ErrorProvider } from "../context/ErrorContext";
 import { ErrorSnackbar } from "../components/Alerts/ErrorSnackbar";
@@ -25,7 +25,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <ErrorProvider>
       <SocketProvider>
-        <LoginProvider>
+        <SessionProvider>
           {getLayout(
             <>
               <ErrorSnackbar />
@@ -33,7 +33,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
               <Component {...pageProps} />
             </>
           )}
-        </LoginProvider>
+        </SessionProvider>
       </SocketProvider>
     </ErrorProvider>
   );
