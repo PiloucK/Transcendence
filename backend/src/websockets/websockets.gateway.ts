@@ -9,6 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { StatusService } from 'src/status/status.service';
+import { EmittedLiveStatus } from 'src/status/status.type';
 
 @WebSocketGateway(3002, { transports: ['websocket'] })
 export class WebsocketsGateway
@@ -24,13 +25,14 @@ export class WebsocketsGateway
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('disconnection', client.id);
-    if (this.statusService.remove(client.id) === 'EMIT') {
-      this.updateRelations();
+    const userLogin42 = this.statusService.remove(client.id);
+    if (userLogin42) {
+      this.updateStatus(userLogin42, 'OFFLINE');
     }
   }
 
-  updateRelations() {
-    this.server.emit('update-relations');
+  updateStatus(userLogin42: string, status: EmittedLiveStatus) {
+    this.server.emit('user:update-status', userLogin42, status);
   }
 
   @SubscribeMessage('user:login')
@@ -40,7 +42,7 @@ export class WebsocketsGateway
   ) {
     console.log('user:login', userLogin42, client.id);
     if (this.statusService.add(client.id, userLogin42) === 'EMIT') {
-      this.updateRelations();
+      this.updateStatus(userLogin42, 'ONLINE');
     }
   }
 
@@ -51,7 +53,7 @@ export class WebsocketsGateway
   ) {
     console.log('user:logout', userLogin42, client.id);
     if (this.statusService.remove(client.id) === 'EMIT') {
-      this.updateRelations();
+      this.updateStatus(userLogin42, 'OFFLINE');
     }
   }
 

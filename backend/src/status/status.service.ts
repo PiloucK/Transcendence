@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
+import { StoredLiveStatus } from './status.type';
 
 interface StatusMetrics {
   socketCount: number;
-  status: 'ONLINE' | 'IN_GAME' | 'IN_QUEUE';
+  status: StoredLiveStatus;
 }
 
 type Login42 = string;
@@ -18,8 +19,8 @@ export class StatusService {
 
   add(socketId: SocketId, userLogin42: Login42): 'EMIT' | 'QUIET' {
     this.sockets.set(socketId, userLogin42);
-    const currentUserMetrics = this.statuses.get(userLogin42);
 
+    const currentUserMetrics = this.statuses.get(userLogin42);
     if (!currentUserMetrics) {
       this.statuses.set(userLogin42, {
         socketCount: 1,
@@ -35,34 +36,30 @@ export class StatusService {
     }
   }
 
-  remove(socketId: string): 'EMIT' | 'QUIET' {
+  remove(socketId: SocketId): Login42 | undefined {
     const currentUserLogin42 = this.sockets.get(socketId);
-
     if (!currentUserLogin42) {
       console.log('socket not found');
-      return 'QUIET';
+      return undefined;
     }
 
-    const currentUserMetrics = this.statuses.get(currentUserLogin42);
+    this.sockets.delete(socketId);
 
+    const currentUserMetrics = this.statuses.get(currentUserLogin42);
     if (!currentUserMetrics) {
-      this.sockets.delete(socketId);
       console.log('offline!');
-      return 'EMIT';
+      return currentUserLogin42;
     }
 
     --currentUserMetrics.socketCount;
-
     if (currentUserMetrics.socketCount === 0) {
       this.statuses.delete(currentUserLogin42);
-      this.sockets.delete(socketId);
       console.log('offline!');
 
-      return 'EMIT';
+      return currentUserLogin42;
     } else {
-      this.sockets.delete(socketId);
       console.log('still online');
-      return 'QUIET';
+      return undefined;
     }
   }
 }
