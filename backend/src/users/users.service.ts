@@ -66,17 +66,6 @@ export class UsersService {
     await this.usersRepository.remove(users);
   }
 
-  async updateOnlineStatus(login42: string, online: boolean): Promise<void> {
-    const result = await this.usersRepository.update(login42, { online });
-    if (result.affected === 0) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-  }
-
-  getUserWithStatus(login42: string): Promise<User> {
-    return this.usersRepository.getUserWithRelations(login42, ['status']);
-  }
-
   async updateUsername(
     reqUser: User,
     login42: string,
