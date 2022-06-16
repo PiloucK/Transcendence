@@ -62,7 +62,7 @@ function Messages({ channel }: { channel: Channel }) {
 
   const setScroll = () => {
     if (typeof window !== "undefined") {
-      var messageBody = document.querySelector("#directMessageMsgArea");
+      var messageBody = document.querySelector("#channelMsgArea");
       if (messageBody) {
         messageBody.scrollTop =
           messageBody.scrollHeight - messageBody.clientHeight;
