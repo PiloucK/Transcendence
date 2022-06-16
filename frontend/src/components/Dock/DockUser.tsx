@@ -19,7 +19,7 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import userService from "../../services/user";
 import authService from "../../services/auth";
-import { IUser, IUserCredentials } from "../../interfaces/users";
+import { IUserSelf, IUserCredentials } from "../../interfaces/IUser";
 import { Button, TextField, Tooltip } from "@mui/material";
 
 import { errorHandler } from "../../errors/errorHandler";
@@ -47,7 +47,7 @@ function NavigationDock({
 
     userService
       .addOne(newUserCredentials)
-      .then((user: IUser) => {
+      .then((user: IUserSelf) => {
         loginContext.login?.(user.login42);
         socketContext.socket.emit("user:new", username);
         setUsername("");

@@ -3,7 +3,7 @@ import { useLoginContext } from "../context/LoginContext";
 // import { DockGuest } from "../components/Dock/DockGuest";
 import React, { useState } from "react";
 
-import { IUserPublicInfos } from "../interfaces/users";
+import { IUserPublicInfos } from "../interfaces/IUser";
 import userService from "../services/user";
 
 import { SocialMenu } from "../components/Social/menu";

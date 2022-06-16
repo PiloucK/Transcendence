@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import React, { useEffect } from "react";
 import { FormEventHandler, ChangeEventHandler, useState } from "react";
 import userService from "../services/user";
-import { IUser } from "../interfaces/users";
+import { IUserSelf } from "../interfaces/IUser";
 
 import Avatar from "@mui/material/Avatar";
 // import { DockGuest } from "../components/Dock/DockGuest";
@@ -24,7 +24,7 @@ import { errorHandler } from "../errors/errorHandler";
 import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
 
-function MyUserName({ userInfos }: { userInfos: IUser }) {
+function MyUserName({ userInfos }: { userInfos: IUserSelf }) {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
@@ -98,7 +98,7 @@ function MyAvatar() {
   );
 }
 
-function MyAccountDetails({ userInfos }: { userInfos: IUser }) {
+function MyAccountDetails({ userInfos }: { userInfos: IUserSelf }) {
   return (
     <div className={styles.profile_user_account_details}>
       <div className={styles.profile_user_account_details_title}>
@@ -110,7 +110,7 @@ function MyAccountDetails({ userInfos }: { userInfos: IUser }) {
   );
 }
 
-function UserStats({ userInfos }: { userInfos: IUser }) {
+function UserStats({ userInfos }: { userInfos: IUserSelf }) {
   return (
     <div className={styles.profile_user_stats}>
       <div className={styles.profile_user_stats_header}>
@@ -129,7 +129,7 @@ function UserStats({ userInfos }: { userInfos: IUser }) {
 function Profile({
   state,
 }: {
-  state: { userInfos: IUser; setUserInfos: (userInfos: IUser) => void };
+  state: { userInfos: IUserSelf; setUserInfos: (userInfos: IUserSelf) => void };
 }) {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
@@ -139,7 +139,7 @@ function Profile({
     socketContext.socket.on("update-leaderboard", () => {
       userService
         .getOne(loginContext.userLogin)
-        .then((user: IUser) => {
+        .then((user: IUserSelf) => {
           state.setUserInfos(user);
         })
         .catch((error) => {
@@ -173,7 +173,7 @@ export default function ProfilePage() {
   ) {
     return <PublicProfile login={login} />;
   }
-  const [userInfos, setUserInfos] = useState<IUser>({
+  const [userInfos, setUserInfos] = useState<IUserSelf>({
     id: "",
     login42: "",
     token42: "",
@@ -192,7 +192,7 @@ export default function ProfilePage() {
     ) {
       userService
         .getOne(loginContext.userLogin)
-        .then((user: IUser) => {
+        .then((user: IUserSelf) => {
           setUserInfos(user);
         })
         .catch((error) => {

@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/Home.module.css";
 import userService from "../../services/user";
-import { IUserPublicInfos } from "../../interfaces/users";
+import { IUserPublicInfos } from "../../interfaces/IUser";
 
 import Link from "next/link";
 

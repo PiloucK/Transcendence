@@ -9,7 +9,7 @@ import {
   PrivateConv,
   Message,
   Invitation,
-} from "../../interfaces/users";
+} from "../../interfaces/IUser";
 import userService from "../../services/user";
 import privateConvService from "../../services/privateConv";
 import { CardUserDM } from "../Cards/CardUserDM";

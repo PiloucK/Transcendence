@@ -4,7 +4,7 @@ import userService from "../services/user";
 import IconButton from "@mui/material/IconButton";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
-import { IUserForLeaderboard } from "../interfaces/users";
+import { IUserSlim } from "../interfaces/IUser";
 
 import Link from "next/link";
 
@@ -15,7 +15,7 @@ import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
 
 function LeaderboardUserCard(props: {
-  user: IUserForLeaderboard;
+  user: IUserSlim;
   index: number;
 }) {
   let userStyle = styles.leaderboard_user;
@@ -36,7 +36,7 @@ function LeaderboardUserCard(props: {
   );
 }
 // Will create the five cards component to display the users and their scores.
-function createLeaderboard(users: IUserForLeaderboard[]): ReactElement {
+function createLeaderboard(users: IUserSlim[]): ReactElement {
   // console.log(users);
   return (
     <div className={styles.leaderboard}>
@@ -53,12 +53,12 @@ export default function Leaderboard() {
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
 
-  const [users, setUsers] = useState<IUserForLeaderboard[]>([]);
+  const [users, setUsers] = useState<IUserSlim[]>([]);
 
   useEffect(() => {
     userService
       .getAll()
-      .then((users: IUserForLeaderboard[]) => {
+      .then((users: IUserSlim[]) => {
         setUsers(users);
       })
       .catch((error) => {
@@ -68,7 +68,7 @@ export default function Leaderboard() {
     socketContext.socket.on("update-leaderboard", () => {
       userService
         .getAll()
-        .then((users: IUserForLeaderboard[]) => {
+        .then((users: IUserSlim[]) => {
           setUsers(users);
         })
         .catch((error) => {

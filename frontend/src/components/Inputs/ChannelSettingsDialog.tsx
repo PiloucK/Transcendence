@@ -8,7 +8,7 @@ import { inputPFState } from "../../interfaces/inputPasswordField";
 import Switch from "@mui/material/Switch";
 
 import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
-import { Channel, ChannelCreation } from "../../interfaces/users";
+import { Channel, ChannelCreation } from "../../interfaces/IUser";
 
 import channelService from "../../services/channel";
 import { useLoginContext } from "../../context/LoginContext";

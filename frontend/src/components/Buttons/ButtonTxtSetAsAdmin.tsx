@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "../../styles/Home.module.css";
 
-import { IUserPublicInfos, Channel } from "../../interfaces/users";
+import { IUserPublicInfos, Channel } from "../../interfaces/IUser";
 import channelService from "../../services/channel";
 import { useLoginContext } from "../../context/LoginContext";
 import { useSocketContext } from "../../context/SocketContext";

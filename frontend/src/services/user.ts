@@ -4,7 +4,7 @@ const { publicRuntimeConfig } = getConfig();
 const baseUrl = `http://${publicRuntimeConfig.HOST}\
 :${publicRuntimeConfig.BACKEND_PORT}\
 /users`;
-import { IUserCredentials } from "../interfaces/users";
+import { IUserCredentials } from "../interfaces/IUser";
 axios.defaults.withCredentials = true;
 
 const getAll = () => {

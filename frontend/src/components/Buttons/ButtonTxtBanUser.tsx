@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos, Channel } from "../../interfaces/users";
+import { IUserPublicInfos, Channel } from "../../interfaces/IUser";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";

@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "../../styles/Home.module.css";
 
-import { IUserPublicInfos } from "../../interfaces/users";
+import { IUserPublicInfos } from "../../interfaces/IUser";
 import userService from "../../services/user";
 import { useLoginContext } from "../../context/LoginContext";
 import { useSocketContext } from "../../context/SocketContext";

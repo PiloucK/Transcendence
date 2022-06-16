@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "../../styles/Home.module.css";
 
 import { useLoginContext } from "../../context/LoginContext";
-import { IUserPublicInfos } from "../../interfaces/users";
+import { IUserPublicInfos } from "../../interfaces/IUser";
 
 import Badge from "@mui/material/Badge";
 

@@ -29,9 +29,6 @@ export class User {
   @Column({ default: 0 })
   gamesLost!: number;
 
-  @Column({ default: false })
-  online!: boolean;
-
   @ManyToMany(() => User)
   @JoinTable()
   friends!: User[];

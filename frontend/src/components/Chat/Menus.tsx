@@ -10,10 +10,10 @@ import addChannel from "../../public/add_channel.png";
 import { useLoginContext } from "../../context/LoginContext";
 import {
   IUserPublicInfos,
-  IUserForLeaderboard,
+  IUserSlim,
   PrivateConv,
   Channel,
-} from "../../interfaces/users";
+} from "../../interfaces/IUser";
 import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
 

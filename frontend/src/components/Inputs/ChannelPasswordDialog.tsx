@@ -9,7 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import { useLoginContext } from "../../context/LoginContext";
 import channelService from "../../services/channel";
-import { Channel } from "../../interfaces/users";
+import { Channel } from "../../interfaces/IUser";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { useSocketContext } from "../../context/SocketContext";

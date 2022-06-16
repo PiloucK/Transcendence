@@ -5,7 +5,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 import channelService from "../../services/channel";
-import { Channel } from "../../interfaces/users";
+import { Channel } from "../../interfaces/IUser";
 import { useLoginContext } from "../../context/LoginContext";
 
 import { ChannelSettingsDialog } from "../Inputs/ChannelSettingsDialog";

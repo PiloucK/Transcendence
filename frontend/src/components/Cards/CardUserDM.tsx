@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos, PrivateConv } from "../../interfaces/users";
+import { IUserPublicInfos, PrivateConv } from "../../interfaces/IUser";
 
 import Avatar from "@mui/material/Avatar";
 // import profileIcon from "../../public/profile_icon.png";

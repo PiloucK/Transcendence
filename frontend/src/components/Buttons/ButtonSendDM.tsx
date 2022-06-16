@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../../styles/Home.module.css";
 import Router from "next/router";
 
-import { IUserPublicInfos, PrivateConv } from "../../interfaces/users";
+import { IUserPublicInfos, PrivateConv } from "../../interfaces/IUser";
 
 import privateConvService from "../../services/privateConv";
 

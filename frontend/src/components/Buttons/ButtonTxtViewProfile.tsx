@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos } from "../../interfaces/users";
+import { IUserPublicInfos } from "../../interfaces/IUser";
 
 import Router from "next/router";
 

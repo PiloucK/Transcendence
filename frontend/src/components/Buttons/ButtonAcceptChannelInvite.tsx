@@ -4,7 +4,7 @@ import styles from "../../styles/Home.module.css";
 import { useLoginContext } from "../../context/LoginContext";
 import channelService from "../../services/channel";
 
-import { Channel } from "../../interfaces/users";
+import { Channel } from "../../interfaces/IUser";
 
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";

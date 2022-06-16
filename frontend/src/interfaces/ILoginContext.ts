@@ -1,5 +1,8 @@
+import { defaultUserSelf } from "../constants/defaultIUser";
+import { IUserSelf } from "./IUser";
+
 export interface ILoginContext {
-  userLogin: string | null;
+  userSelf: IUserSelf;
   chatMenu: string;
   setChatMenu?: (menu: string) => void;
   chatDM: string;
@@ -11,7 +14,7 @@ export interface ILoginContext {
 }
 
 export const defaultLoginState: ILoginContext = {
-  userLogin: null,
+  userSelf: defaultUserSelf,
   chatMenu: "direct_message",
   chatDM: "new_message",
   showSecondFactorLogin: false,
