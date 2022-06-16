@@ -3,11 +3,9 @@ import styles from "../../styles/Home.module.css";
 
 import FormControl from "@mui/material/FormControl";
 import InputAdornment from "@mui/material/InputAdornment";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import Input from "@mui/material/Input";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
-import Box from "@mui/material/Box";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
@@ -42,7 +40,8 @@ export function SendMessageField({
     setInput(event.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (event) => {
+    event.preventDefault();
     if (input.length > 0) {
       if (channel.length === 36) {
         channelService
@@ -79,13 +78,8 @@ export function SendMessageField({
 
   return (
     <>
-      <Input
+      <FormControl
         onSubmit={handleSendMessage}
-        autoFocus={true}
-        autoComplete="off"
-        disableUnderline={true}
-        multiline={true}
-        maxRows={4}
         sx={{
           border: "5px solid #E5E5E5",
           top: "86%",
@@ -94,22 +88,28 @@ export function SendMessageField({
           borderRadius: "20px",
           backgroundColor: "#E5E5E5",
         }}
-        id="outlined-adornment-input"
-        value={input}
-        onChange={handleInputChange}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="send message"
-              edge="end"
-              onClick={handleSendMessage}
-            >
-              <SendIcon />
-            </IconButton>
-          </InputAdornment>
-        }
-        label="Text message"
-      />
+        component="form"
+      >
+        <Input
+          autoFocus={true}
+          autoComplete="off"
+          disableUnderline={true}
+          id="outlined-adornment-input"
+          value={input}
+          onChange={handleInputChange}
+          label="Text message"
+          endAdornment={
+            <InputAdornment position="end" type="submit">
+              <IconButton
+                type="submit"
+                aria-label="send message"
+              >
+                <SendIcon />
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+      </FormControl>
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={error}
