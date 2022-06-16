@@ -11,9 +11,9 @@ import { AuthService } from './auth.service';
 import { FortyTwoAuthGuard } from './guards/fortyTwoAuth.guard';
 import { JwtAuthGuard } from './guards/jwtAuth.guard';
 import { ConfigService } from '@nestjs/config';
-import { User } from 'src/users/user.entity';
 import { GetReqUser } from './decorators/getReqUser.decorator';
 import { FortyTwoAuthFilter } from './filters/fortyTwoAuth.filter';
+import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 
 @Controller('auth')
@@ -70,7 +70,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('getLoggedInUser')
-  getLoggedInUser(@GetReqUser() user: User): Promise<User> {
-    return this.usersService.getUserByLogin42(user.login42); // 2FA: a voir avec le JwtAuthGuard qui fait le fetch dans la database
+  getLoggedInUser(@GetReqUser() reqUser: User): string {
+    return reqUser.login42;
   }
 }

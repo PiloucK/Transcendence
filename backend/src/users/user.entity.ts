@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Channel } from 'src/channel/channel.entity';
 import { PrivateConv } from 'src/privateConv/privateConv.entity';
 import {
@@ -27,9 +28,6 @@ export class User {
 
   @Column({ default: 0 })
   gamesLost!: number;
-
-  @Column({ default: false })
-  twoFa!: boolean; // make it private
 
   @Column({ default: false })
   online!: boolean;
@@ -64,9 +62,12 @@ export class User {
 
   @Column({ default: false })
   isTwoFactorAuthEnabled!: boolean;
-}
 
-// export type Friends = Array<string>;
-// export type FriendRequestsSent = Array<string>;
-// export type FriendRequestsReceived = Array<string>;
-// export type BlockedUsers = Array<string>;
+  @Column({ nullable: true })
+  @Exclude()
+  twoFactorAuthSecret!: string;
+
+  @Column({ nullable: true })
+  @Exclude()
+  twoFactorAuthTemporarySecret!: string;
+}

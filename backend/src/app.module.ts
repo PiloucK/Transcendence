@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { PrivateConvModule } from './privateConv/privateConv.module';
 import { ChannelModule } from './channel/channel.module';
+import { TwoFactorAuthModule } from './twoFactorAuth/twoFactorAuth.module';
 import { StatusModule } from './status/status.module';
 import { WebsocketsModule } from './websockets/websockets.module';
 
@@ -30,6 +31,7 @@ import { WebsocketsModule } from './websockets/websockets.module';
     }),
     UsersModule,
     AuthModule,
+    TwoFactorAuthModule,
     PrivateConvModule,
     ChannelModule,
     StatusModule,
