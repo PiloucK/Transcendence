@@ -25,9 +25,12 @@ export class StatusService {
         socketCount: 1,
         status: 'ONLINE',
       });
+      console.log('online!');
+
       return 'EMIT';
     } else {
       ++currentUserMetrics.socketCount;
+      console.log('online dup');
       return 'QUIET';
     }
   }
@@ -36,6 +39,7 @@ export class StatusService {
     const currentUserLogin42 = this.sockets.get(socketId);
 
     if (!currentUserLogin42) {
+      console.log('socket not found');
       return 'QUIET';
     }
 
@@ -43,6 +47,7 @@ export class StatusService {
 
     if (!currentUserMetrics) {
       this.sockets.delete(socketId);
+      console.log('offline!');
       return 'EMIT';
     }
 
@@ -51,9 +56,12 @@ export class StatusService {
     if (currentUserMetrics.socketCount === 0) {
       this.statuses.delete(currentUserLogin42);
       this.sockets.delete(socketId);
+      console.log('offline!');
+
       return 'EMIT';
     } else {
       this.sockets.delete(socketId);
+      console.log('still online');
       return 'QUIET';
     }
   }
