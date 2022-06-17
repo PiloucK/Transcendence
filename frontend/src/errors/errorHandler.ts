@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
+import { defaultErrorData } from "../constants/defaultErrorData";
 import { HttpStatusCodes } from "../constants/httpStatusCodes";
-import { defaultErrorData, IErrorData } from "../interfaces/IErrorData";
+import { IErrorData } from "../interfaces/IErrorData";
 
 export function errorHandler(
   error: Error | AxiosError,

@@ -1,7 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import React from "react";
+
 import { IErrorData } from "../interfaces/IErrorData";
-import { defaultErrorState, IErrorContext } from "../interfaces/IErrorContext";
+import { IErrorContext } from "../interfaces/IErrorContext";
+import { defaultErrorState } from "../constants/defaultErrorState";
 
 const ErrorContext = createContext<IErrorContext>(defaultErrorState);
 

@@ -1,4 +1,3 @@
-import { defaultUserSelf } from "../constants/defaultIUser";
 import { IUserSelf } from "./IUser";
 
 export interface ISessionContext {
@@ -12,10 +11,3 @@ export interface ISessionContext {
   showSecondFactorLogin: boolean;
   setShowSecondFactorLogin?: (showSecondFactorLogin: boolean) => void;
 }
-
-export const defaultSessionState: ISessionContext = {
-  userSelf: defaultUserSelf,
-  chatMenu: "direct_message",
-  chatDM: "new_message",
-  showSecondFactorLogin: false,
-};

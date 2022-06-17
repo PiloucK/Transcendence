@@ -4,12 +4,14 @@ import Router from "next/router";
 
 import Cookies from "js-cookie";
 
-import { defaultSessionState, ISessionContext } from "../interfaces/ISessionContext";
-
 import { useSocketContext } from "./SocketContext";
 
-import getConfig from "next/config";
+import { ISessionContext } from "../interfaces/ISessionContext";
+import { defaultSessionState } from "../constants/defaultSessionState";
+
 import { IUserSelf } from "../interfaces/IUser";
+
+import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
 const SessionContext = createContext<ISessionContext>(defaultSessionState);
