@@ -26,61 +26,7 @@ import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
-function UserName({ userInfos }: { userInfos: IUserPublic }) {
-  return (
-    <div className={styles.profile_user_account_details_username}>
-      {userInfos?.username}
-    </div>
-  );
-}
-
-function UserAvatar({ userInfos }: { userInfos: IUserPublic }) {
-  return (
-    <div className={styles.profile_user_account_details_avatar}>
-      <Avatar
-        src={userInfos.image}
-        alt="avatar"
-        sx={{ width: 151, height: 151 }}
-      >
-        <Avatar
-          src={userInfos.photo42}
-          alt="avatar"
-          sx={{ width: 151, height: 151 }}
-        />
-      </Avatar>
-    </div>
-  );
-}
-
-function AccountDetails({ userInfos }: { userInfos: IUserPublic }) {
-  return (
-    <div className={styles.profile_user_account_details}>
-      <div className={styles.profile_user_account_details_title}>
-        Account details
-      </div>
-      <UserAvatar userInfos={userInfos} />
-      <UserName userInfos={userInfos} />
-    </div>
-  );
-}
-
-function UserStats({ userInfos }: { userInfos: IUserPublic }) {
-  return (
-    <div className={styles.profile_user_stats}>
-      <div className={styles.profile_user_stats_header}>
-        <div className={styles.profile_user_stats_header_title}>Stats</div>
-      </div>
-      <div className={styles.profile_user_stats_elo}>Elo: {userInfos?.elo}</div>
-      <div className={styles.profile_user_stats_games_summary}>
-        Games won: {userInfos?.gamesWon}
-        <br />
-        Games lost: {userInfos?.gamesLost}
-      </div>
-    </div>
-  );
-}
-
-function Interactions({ userInfos }: { userInfos: IUserPublic }) {
+export function Interactions({ displayedUser }: { displayedUser: IUserPublic }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
@@ -216,9 +162,8 @@ function Profile({
       <div className={styles.profile_user}>
         <AccountDetails userInfos={state.usrInfo} />
         <UserStats userInfos={state.usrInfo} />
-        <Interactions userInfos={state.usrInfo} />
+        
       </div>
-      <UserGameHistory userLogin={state.usrInfo.login42} />
     </>
   );
 }
@@ -240,14 +185,7 @@ export default function PublicProfile({ login }: { login: string }) {
     userInfos !== undefined &&
     userInfos.username !== login
   ) {
-    userService
-      .getOne(login)
-      .then((user: IUserPublic) => {
-        setUserInfos(user);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, sessionContext));
-      });
+    
   }
 
   if (

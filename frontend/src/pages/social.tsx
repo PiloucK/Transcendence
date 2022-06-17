@@ -136,11 +136,11 @@ export default function Social() {
     document.body.style.backgroundColor = "#00213D";
   }
 
-    return (
-      <>
-        <div className={styles.social_title}>Friends</div>
-        <SocialMenu menu={menu} setMenu={setMenu} />
-        <SocialPage menu={menu} />
-      </>
-    );
+  return (
+    <>
+      <div className={styles.social_title}>Friends</div>
+      <SocialMenu menu={menu} setMenu={setMenu} />
+      <SocialPage menu={menu} />
+    </>
+  );
 }

@@ -1,40 +1,25 @@
 import { ButtonLogout } from "../components/Buttons/ButtonLogout";
 import styles from "../styles/Home.module.css";
 import { useSessionContext } from "../context/SessionContext";
-
-import IconButton from "@mui/material/IconButton";
-import CreateIcon from "@mui/icons-material/Create";
-import CheckIcon from "@mui/icons-material/Check";
-import TextField from "@mui/material/TextField";
-
-import React, { useEffect } from "react";
-import { FormEventHandler, ChangeEventHandler, useState } from "react";
-import userService from "../services/user";
-import { IUserSelf } from "../interfaces/IUser";
-
-import Avatar from "@mui/material/Avatar";
-// import { DockGuest } from "../components/Dock/DockGuest";
-
 import { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
-import PublicProfile from "../components/Profile/publicprofile";
-
-import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
-import { errorHandler } from "../errors/errorHandler";
-
+import { IUserPublic } from "../interfaces/IUser";
 import { useErrorContext } from "../context/ErrorContext";
-import { useSocketContext } from "../context/SocketContext";
+import { errorHandler } from "../errors/errorHandler";
+import userService from "../services/user";
+import { AxiosError } from "axios";
+import { Interactions } from "../components/Profile/publicprofile";
 
-function MyAvatar({ userInfos }: { userInfos: IUser }) {
+function UserAvatar({ displayedUser }: { displayedUser: IUserPublic }) {
   return (
     <div className={styles.profile_user_account_details_avatar}>
       <Avatar
-        src={userInfos.image}
+        src={displayedUser.image}
         alt="avatar"
         sx={{ width: 151, height: 151 }}
       >
         <Avatar
-          src={userInfos.photo42}
+          src={displayedUser.photo42}
           alt="avatar"
           sx={{ width: 151, height: 151 }}
         />
@@ -43,120 +28,73 @@ function MyAvatar({ userInfos }: { userInfos: IUser }) {
   );
 }
 
-function MyAccountDetails({ userInfos }: { userInfos: IUserSelf }) {
+export function UserName({ displayedUser }: { displayedUser: IUserPublic }) {
+  return (
+    <div className={styles.profile_user_account_details_username}>
+      {displayedUser.username}
+    </div>
+  );
+}
+
+function AccountDetails({ displayedUser }: { displayedUser: IUserPublic }) {
   return (
     <div className={styles.profile_user_account_details}>
       <div className={styles.profile_user_account_details_title}>
         Account details
       </div>
-      <MyAvatar userInfos={userInfos} />
-      <div className={styles.profile_user_account_details_username}>
-        {userInfos.username}
-      </div>
+      <UserAvatar displayedUser={displayedUser} />
+      <UserName displayedUser={displayedUser} />
     </div>
   );
 }
 
-function UserStats({ userInfos }: { userInfos: IUserSelf }) {
+function UserStats({ displayedUser }: { displayedUser: IUserPublic }) {
   return (
     <div className={styles.profile_user_stats}>
       <div className={styles.profile_user_stats_header}>
         <div className={styles.profile_user_stats_header_title}>Stats</div>
       </div>
-      <div className={styles.profile_user_stats_elo}>Elo: {userInfos.elo}</div>
+      <div className={styles.profile_user_stats_elo}>
+        Elo: {displayedUser.elo}
+      </div>
       <div className={styles.profile_user_stats_games_summary}>
-        Games won: {userInfos.gamesWon}
+        Games won: {displayedUser.gamesWon}
         <br />
-        Games lost: {userInfos.gamesLost}
+        Games lost: {displayedUser.gamesLost}
       </div>
     </div>
   );
 }
 
-function Profile({
-  state,
-}: {
-  state: { userInfos: IUserSelf; setUserInfos: (userInfos: IUserSelf) => void };
-}) {
-  const errorContext = useErrorContext();
+export default async function ProfilePage() {
+  const router = useRouter();
+  const { login } = router.query;
   const sessionContext = useSessionContext();
-  const [open, setOpen] = useState(false);
-  const socketContext = useSocketContext();
+  const errorContext = useErrorContext();
+  let displayedUser: IUserPublic;
 
-  React.useEffect(() => {
-    socketContext.socket.on("update-leaderboard", () => {
-      userService
-        .getOne(sessionContext.userSelf.login42)
-        .then((user: IUserSelf) => {
-          state.setUserInfos(user);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-    });
-  }, []);
+  if (login !== undefined && login !== sessionContext.userSelf.login42) {
+    displayedUser = await userService
+      .getOne(login)
+      .catch((error: Error | AxiosError<unknown, any>) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
+      });
+  } else {
+    displayedUser = sessionContext.userSelf;
+  }
 
   return (
     <>
       <div className={styles.profile_user}>
-        <MyAccountDetails userInfos={state.userInfos} />
-        <UserStats userInfos={state.userInfos} />
-        <ButtonLogout />
-        <ProfileSettingsDialog
-          user={state.userInfos}
-          open={open}
-          setOpen={setOpen}
-        />
+        <AccountDetails displayedUser={displayedUser} />
+        <UserStats displayedUser={displayedUser} />
+        {login !== undefined && login !== sessionContext.userSelf.login42 ? (
+          <Interactions displayedUser={displayedUser} />
+        ) : (
+          <ButtonLogout />
+        )}
       </div>
       <UserGameHistory userLogin={sessionContext.userSelf.login42} />
     </>
-  );
-}
-
-export default function ProfilePage() {
-  const router = useRouter();
-  const { login } = router.query;
-  const errorContext = useErrorContext();
-  const sessionContext = useSessionContext();
-
-  if (
-    login !== undefined &&
-    sessionContext.userSelf.login42 !== null &&
-    login !== sessionContext.userSelf.login42
-  ) {
-    return <PublicProfile login={login} />;
-  }
-  const [userInfos, setUserInfos] = useState<IUserSelf>({
-    id: "",
-    login42: "",
-    image: "",
-    photo42: "",
-    token42: "",
-    twoFa: false,
-    username: "",
-    elo: 0,
-    gamesWon: 0,
-    gamesLost: 0,
-  });
-
-  useEffect(() => {
-    if (
-      sessionContext.userSelf.login42 !== null &&
-      userInfos !== undefined &&
-      sessionContext.userSelf.login42 !== userInfos.login42
-    ) {
-      userService
-        .getOne(sessionContext.userSelf.login42)
-        .then((user: IUserSelf) => {
-          setUserInfos(user);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-    }
-  }, []);
-
-  return (
-    <Profile state={{ userInfos: userInfos, setUserInfos: setUserInfos }} />
   );
 }
