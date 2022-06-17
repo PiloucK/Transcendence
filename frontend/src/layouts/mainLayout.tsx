@@ -4,6 +4,7 @@ import { DockGuest } from "../components/Dock/DockGuest";
 import { useSessionContext } from "../context/SessionContext";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
+import { defaultSessionState } from "../constants/defaultSessionState";
 
 // It would be way better to put that in a context, but I don't know how to do that.
 let previousPage = false;
@@ -38,7 +39,7 @@ export const MainLayout: React.FunctionComponent<Props> = ({ children }) => {
 
   return (
     <>
-      {sessionContext.userSelf.login42 !== null ? (
+      {sessionContext.userSelf != defaultSessionState.userSelf ? (
         children
       ) : (
         <>
