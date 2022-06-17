@@ -3,8 +3,9 @@ import React from "react";
 import styles from "../../styles/Home.module.css";
 import { Channel, ChannelCreation } from "../../interfaces/users";
 
+import Image from "next/image";
 import Avatar from "@mui/material/Avatar";
-// import profileIcon from "../../public/profile_icon.png";
+import channelImage from "../../public/channel_image.png";
 import { useLoginContext } from "../../context/LoginContext";
 import channelService from "../../services/channel";
 
@@ -35,7 +36,23 @@ export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
   return (
     <div key={channelInfos.id}>
       <div className={styles.channel_card} onClick={joinChannel}>
-        {/* Channel Avatar here */}
+        <div className={styles.channel_image}>
+          <Avatar
+            src={channelInfos.image}
+            alt="channel image"
+            sx={{
+              width: 200,
+              height: 200,
+            }}
+          >
+            <Image
+              src={channelImage}
+              alt="channel image"
+              width="200"
+              height="200"
+            />
+          </Avatar>
+        </div>
         <div className={styles.channel_name}>{channelInfos.name}</div>
       </div>
       <ChannelPasswordDialog
