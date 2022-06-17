@@ -11,7 +11,7 @@ import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
 import { IUser } from "../../interfaces/users";
 
 import userService from "../../services/user";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
@@ -34,7 +34,7 @@ export function ProfileSettingsDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const [username, setUsername] = useState(user.username);
 
   const [textFieldError, setTextFieldError] = useState("");

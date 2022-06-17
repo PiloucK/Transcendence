@@ -115,7 +115,7 @@ function Messages({ dm }: { dm: PrivateConv }) {
   };
 
   const GetAvatar = ({ author }: { author: string }) => {
-    if (author === loginContext.userLogin) {
+    if (author === sessionContext.userLogin) {
       return null;
     } else {
       if (dm.userOne.username === author) {

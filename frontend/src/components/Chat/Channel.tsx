@@ -36,7 +36,7 @@ function Messages({ channel }: { channel: Channel }) {
   };
 
   const GetAvatar = ({ author }: { author: string }) => {
-    if (author === loginContext.userLogin) {
+    if (author === sessionContext.userLogin) {
       return null;
     } else {
       const user = channel.users.find((user) => user.login42 === author);
