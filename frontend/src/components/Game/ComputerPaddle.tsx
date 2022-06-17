@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import styles from './ComputerPaddle.module.css'
+import styles from './PaddleRight.module.css'
 import { ICoordinates } from "../../interfaces/ICoordinates";
 
 
