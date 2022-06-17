@@ -4,7 +4,7 @@ import styles from "../../styles/Home.module.css";
 import { useSessionContext } from "../../context/SessionContext";
 import channelService from "../../services/channel";
 
-import { Channel } from "../../interfaces/IUser";
+import { Channel } from "../../interfaces/Chat.interfaces";
 
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";

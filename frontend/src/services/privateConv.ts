@@ -4,7 +4,7 @@ const { publicRuntimeConfig } = getConfig();
 const baseUrl = `http://${publicRuntimeConfig.HOST}\
 :${publicRuntimeConfig.BACKEND_PORT}\
 /privateConv`;
-import { Message } from "../interfaces/IUser";
+import { Message } from "../interfaces/Chat.interfaces";
 axios.defaults.withCredentials = true;
 
 const createPrivateConv = (login: string, friendLogin42: string) => {

@@ -5,7 +5,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 import channelService from "../../services/channel";
-import { Channel } from "../../interfaces/IUser";
+import { Channel } from "../../interfaces/Chat.interfaces";
 import { useSessionContext } from "../../context/SessionContext";
 
 import { ChannelSettingsDialog } from "../Inputs/ChannelSettingsDialog";

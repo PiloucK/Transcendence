@@ -14,7 +14,7 @@ import { inputPFState } from "../../interfaces/inputPasswordField";
 import Switch from "@mui/material/Switch";
 
 import { ButtonCreateChannel } from "../Buttons/ButtonCreateChannel";
-import { Channel, ChannelCreation } from "../../interfaces/IUser";
+import { Channel, ChannelCreation } from "../../interfaces/Chat.interfaces";
 import { CardPublicChannel } from "../Cards/CardPublicChannel";
 
 import channelService from "../../services/channel";

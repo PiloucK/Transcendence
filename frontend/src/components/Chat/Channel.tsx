@@ -4,7 +4,7 @@ import { EmptyFriendList } from "../Social/emptyPages";
 
 import { ChannelMenu } from "./Menus";
 import { useSessionContext } from "../../context/SessionContext";
-import { IUserPublicInfos, Channel, Message } from "../interfaces/users";
+import { Channel, Message } from "../../interfaces/Chat.interfaces";
 import channelService from "../../services/channel";
 import { CardUserDM } from "../Cards/CardUserDM";
 

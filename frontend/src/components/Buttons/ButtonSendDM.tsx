@@ -2,7 +2,8 @@ import React from "react";
 import styles from "../../styles/Home.module.css";
 import Router from "next/router";
 
-import { IUserPublic, PrivateConv } from "../../interfaces/IUser";
+import { IUserPublic } from "../../interfaces/IUser";
+import { PrivateConv } from "../../interfaces/Chat.interfaces";
 
 import privateConvService from "../../services/privateConv";
 
@@ -21,7 +22,9 @@ export function ButtonSendDM({ userInfos }: { userInfos: IUserPublic }) {
       privateConvService
         .createPrivateConv(sessionContext.userLogin, userInfos.login42)
         .then((dm: PrivateConv) => {
-          sessionContext.setChatDM(dm.userOne.login42 + "|" + dm.userTwo.login42);
+          sessionContext.setChatDM(
+            dm.userOne.login42 + "|" + dm.userTwo.login42
+          );
           socketContext.socket.emit("user:update-direct-messages");
           Router.push("/chat");
         });

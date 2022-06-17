@@ -8,12 +8,7 @@ import directMessage from "../../public/direct_message.png";
 import addChannel from "../../public/add_channel.png";
 
 import { useSessionContext } from "../../context/SessionContext";
-import {
-  IUserPublic,
-  IUserSlim,
-  PrivateConv,
-  Channel,
-} from "../../interfaces/IUser";
+import { PrivateConv, Channel } from "../../interfaces/Chat.interfaces";
 import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
 

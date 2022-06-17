@@ -4,12 +4,13 @@ import { EmptyFriendList } from "../Social/emptyPages";
 
 import { DirectMessageMenu } from "./Menus";
 import { useSessionContext } from "../../context/SessionContext";
+import { IUserPublic } from "../../interfaces/IUser";
 import {
-  IUserPublic,
   PrivateConv,
   Message,
   Invitation,
-} from "../../interfaces/IUser";
+} from "../../interfaces/Chat.interfaces";
+
 import userService from "../../services/user";
 import privateConvService from "../../services/privateConv";
 import { CardUserDM } from "../Cards/CardUserDM";

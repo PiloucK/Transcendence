@@ -8,7 +8,9 @@ import { inputPFState } from "../../interfaces/inputPasswordField";
 import Switch from "@mui/material/Switch";
 
 import { ButtonChannelInvite } from "../Buttons/ButtonChannelInvite";
-import { Channel, IUserSlim } from "../../interfaces/IUser";
+import { IUserSlim } from "../../interfaces/IUser";
+
+import { Channel } from "../../interfaces/Chat.interfaces";
 
 import channelService from "../../services/channel";
 import { useSessionContext } from "../../context/SessionContext";
