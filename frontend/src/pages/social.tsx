@@ -28,7 +28,7 @@ function SocialPage({ menu }: { menu: string }) {
 
   React.useEffect(() => {
     userService
-      .getUserFriends(sessionContext.userLogin)
+      .getUserFriends(sessionContext.userSelf.login42)
       .then((friends: IUserPublic[]) => {
         setFriends(friends);
       })
@@ -37,7 +37,7 @@ function SocialPage({ menu }: { menu: string }) {
       });
 
     userService
-      .getUserBlockedUsers(sessionContext.userLogin)
+      .getUserBlockedUsers(sessionContext.userSelf.login42)
       .then((users: IUserPublic[]) => {
         setBlocked(users);
       })
@@ -46,7 +46,7 @@ function SocialPage({ menu }: { menu: string }) {
       });
 
     userService
-      .getUserFriendRequestsReceived(sessionContext.userLogin)
+      .getUserFriendRequestsReceived(sessionContext.userSelf.login42)
       .then((notifications: IUserPublic[]) => {
         setNotifications(notifications);
       })
@@ -56,7 +56,7 @@ function SocialPage({ menu }: { menu: string }) {
 
     socketContext.socket.on("update-leaderboard", () => {
       userService
-        .getUserFriends(sessionContext.userLogin)
+        .getUserFriends(sessionContext.userSelf.login42)
         .then((friends: IUserPublic[]) => {
           setFriends(friends);
         })
@@ -65,7 +65,7 @@ function SocialPage({ menu }: { menu: string }) {
         });
 
       userService
-        .getUserBlockedUsers(sessionContext.userLogin)
+        .getUserBlockedUsers(sessionContext.userSelf.login42)
         .then((users: IUserPublic[]) => {
           setBlocked(users);
         })
@@ -74,7 +74,7 @@ function SocialPage({ menu }: { menu: string }) {
         });
 
       userService
-        .getUserFriendRequestsReceived(sessionContext.userLogin)
+        .getUserFriendRequestsReceived(sessionContext.userSelf.login42)
         .then((notifications: IUserPublic[]) => {
           setNotifications(notifications);
         })
@@ -85,7 +85,7 @@ function SocialPage({ menu }: { menu: string }) {
 
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserFriends(sessionContext.userLogin)
+        .getUserFriends(sessionContext.userSelf.login42)
         .then((friends: IUserPublic[]) => {
           setFriends(friends);
         })
@@ -94,7 +94,7 @@ function SocialPage({ menu }: { menu: string }) {
         });
 
       userService
-        .getUserBlockedUsers(sessionContext.userLogin)
+        .getUserBlockedUsers(sessionContext.userSelf.login42)
         .then((users: IUserPublic[]) => {
           setBlocked(users);
         })
@@ -103,7 +103,7 @@ function SocialPage({ menu }: { menu: string }) {
         });
 
       userService
-        .getUserFriendRequestsReceived(sessionContext.userLogin)
+        .getUserFriendRequestsReceived(sessionContext.userSelf.login42)
         .then((notifications: IUserPublic[]) => {
           setNotifications(notifications);
         })

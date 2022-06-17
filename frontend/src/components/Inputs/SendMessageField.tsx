@@ -46,8 +46,8 @@ export function SendMessageField({
     if (input.length > 0) {
       if (channel.length === 36) {
         channelService
-          .sendMSGToChannel(sessionContext.userLogin, channel, {
-            author: sessionContext.userLogin,
+          .sendMSGToChannel(sessionContext.userSelf.login42, channel, {
+            author: sessionContext.userSelf.login42,
             content: input,
           })
           .then(() => {
@@ -62,11 +62,11 @@ export function SendMessageField({
       } else {
         const users = channel.split("|");
         const otherLogin =
-          users[0] === sessionContext.userLogin ? users[1] : users[0];
+          users[0] === sessionContext.userSelf.login42 ? users[1] : users[0];
 
         privateConvService
-          .sendPrivateMessage(sessionContext.userLogin, otherLogin, {
-            author: sessionContext.userLogin,
+          .sendPrivateMessage(sessionContext.userSelf.login42, otherLogin, {
+            author: sessionContext.userSelf.login42,
             content: input,
           })
           .then(() => {

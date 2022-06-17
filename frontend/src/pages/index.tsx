@@ -4,7 +4,7 @@ import styles from "../styles/Home.module.css";
 // function DockToShow() {
 //   const sessionContext = useSessionContext();
 
-//   if (sessionContext.userLogin !== null) {
+//   if (sessionContext.userSelf.login42 !== null) {
 //     return <DockUser />;
 //   } else {
 //     return <DockGuest />;

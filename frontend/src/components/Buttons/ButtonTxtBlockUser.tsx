@@ -14,14 +14,14 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
 
   React.useEffect(() => {
     userService
-      .getUserBlockedUsers(sessionContext.userLogin)
+      .getUserBlockedUsers(sessionContext.userSelf.login42)
       .then((blocked: IUserPublic[]) => {
         setBlockedList(blocked);
       });
 
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserBlockedUsers(sessionContext.userLogin)
+        .getUserBlockedUsers(sessionContext.userSelf.login42)
         .then((blocked: IUserPublic[]) => {
           setBlockedList(blocked);
         });
@@ -29,8 +29,8 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
   }, []);
 
   const handleUnblockOnClick = () => {
-    if (sessionContext.userLogin !== null && sessionContext.userLogin !== login) {
-      userService.unblockUser(sessionContext.userLogin, login).then(() => {
+    if (sessionContext.userSelf.login42 !== null && sessionContext.userSelf.login42 !== login) {
+      userService.unblockUser(sessionContext.userSelf.login42, login).then(() => {
         socketContext.socket.emit("user:update-relations");
         socketContext.socket.emit("user:update-direct-messages");
         socketContext.socket.emit("user:update-channel-content");
@@ -39,8 +39,8 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
   };
 
   const handleBlockOnClick = () => {
-    if (sessionContext.userLogin !== null && sessionContext.userLogin !== login) {
-      userService.blockUser(sessionContext.userLogin, login).then(() => {
+    if (sessionContext.userSelf.login42 !== null && sessionContext.userSelf.login42 !== login) {
+      userService.blockUser(sessionContext.userSelf.login42, login).then(() => {
         socketContext.socket.emit("user:update-relations");
       });
     }

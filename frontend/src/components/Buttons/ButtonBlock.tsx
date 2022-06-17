@@ -19,11 +19,11 @@ export function ButtonBlock({ userInfos }: { userInfos: IUserPublic }) {
 
   const blockAUser = () => {
     if (
-      sessionContext.userLogin !== null &&
-      sessionContext.userLogin !== userInfos.login42
+      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       userService
-        .blockUser(sessionContext.userLogin, userInfos.login42)
+        .blockUser(sessionContext.userSelf.login42, userInfos.login42)
         .then(() => {
           socketContext.socket.emit("user:update-relations");
         })

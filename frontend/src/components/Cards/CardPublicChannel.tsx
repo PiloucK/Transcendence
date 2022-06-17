@@ -18,12 +18,12 @@ export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
   const [open, setOpen] = React.useState(false);
 
   const joinChannel = () => {
-    if (sessionContext.userLogin !== null) {
+    if (sessionContext.userSelf.login42 !== null) {
       if (channelInfos.password !== "") {
         setOpen(true);
       } else {
         channelService
-          .joinChannel(sessionContext.userLogin, channelInfos.id)
+          .joinChannel(sessionContext.userSelf.login42, channelInfos.id)
           .then((channel: Channel) => {
             sessionContext.setChatMenu?.(channel.id);
             socketContext.socket.emit("user:update-joined-channel");

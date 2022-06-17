@@ -21,11 +21,11 @@ const socketContext = useSocketContext();
 
   const acceptFriend = () => {
     if (
-      sessionContext.userLogin !== null &&
-      sessionContext.userLogin !== userInfos.login42
+      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       userService
-        .acceptFriendRequest(sessionContext.userLogin, userInfos.login42)
+        .acceptFriendRequest(sessionContext.userSelf.login42, userInfos.login42)
         .then(() => {
           socketContext.socket.emit("user:update-relations");
         })
@@ -37,11 +37,11 @@ const socketContext = useSocketContext();
 
   const declineRequest = () => {
     if (
-      sessionContext.userLogin !== null &&
-      sessionContext.userLogin !== userInfos.login42
+      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       userService
-        .declineFriendRequest(sessionContext.userLogin, userInfos.login42)
+        .declineFriendRequest(sessionContext.userSelf.login42, userInfos.login42)
         .then(() => {
           socketContext.socket.emit("user:update-relations");
         })

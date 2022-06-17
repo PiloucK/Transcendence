@@ -23,11 +23,11 @@ export function ButtonRemoveFriend({
 
   const removeFromFriend = () => {
     if (
-      sessionContext.userLogin !== null &&
-      sessionContext.userLogin !== userInfos.login42
+      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       userService
-        .removeFriend(sessionContext.userLogin, userInfos.login42)
+        .removeFriend(sessionContext.userSelf.login42, userInfos.login42)
         .then(() => {
           socketContext.socket.emit("user:update-relations");
         })

@@ -19,11 +19,11 @@ export function ButtonUnblock({ userInfos }: { userInfos: IUserPublic }) {
 
   const unblockAUser = () => {
     if (
-      sessionContext.userLogin !== null &&
-      sessionContext.userLogin !== userInfos.login42
+      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       userService
-        .unblockUser(sessionContext.userLogin, userInfos.login42)
+        .unblockUser(sessionContext.userSelf.login42, userInfos.login42)
         .then(() => {
           socketContext.socket.emit("user:update-relations");
         })

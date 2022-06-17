@@ -28,7 +28,7 @@ function Messages({ channel }: { channel: Channel }) {
   }
 
   const getStyle = (author: string) => {
-    if (author === sessionContext.userLogin) {
+    if (author === sessionContext.userSelf.login42) {
       return styles.message_author;
     } else {
       return styles.message_friend;
@@ -106,14 +106,14 @@ export function Channel({ id }: { id: string }) {
 
   React.useEffect(() => {
     channelService
-      .getChannelById(sessionContext.userLogin, id)
+      .getChannelById(sessionContext.userSelf.login42, id)
       .then((channel: Channel) => {
         setChannel(channel);
       });
 
     socketContext.socket.on("update-channel-content", () => {
       channelService
-        .getChannelById(sessionContext.userLogin, id)
+        .getChannelById(sessionContext.userSelf.login42, id)
         .then((channel: Channel) => {
           setChannel(channel);
         });

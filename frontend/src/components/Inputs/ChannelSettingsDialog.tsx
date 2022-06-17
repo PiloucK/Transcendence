@@ -74,7 +74,7 @@ export function ChannelSettingsDialog({
     if (error === false) {
       setOpen(false);
       channelService
-        .updateChannel(sessionContext.userLogin, channel.id, channelInfos)
+        .updateChannel(sessionContext.userSelf.login42, channel.id, channelInfos)
         .then((res) => {
           socketContext.socket.emit("user:update-public-channels");
           socketContext.socket.emit("user:update-joined-channel");

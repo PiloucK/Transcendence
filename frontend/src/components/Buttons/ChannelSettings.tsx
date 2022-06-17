@@ -35,13 +35,13 @@ function MenuButtons({
   const handleLeaveChannel = () => {
     sessionContext.setChatMenu?.("direct_message");
     setAnchorEl(null);
-    channelService.leaveChannel(sessionContext.userLogin, channel.id).then(() => {
+    channelService.leaveChannel(sessionContext.userSelf.login42, channel.id).then(() => {
       socketContext.socket.emit("user:update-channel-content");
       socketContext.socket.emit("user:update-joined-channel");
     });
   };
 
-  if (sessionContext.userLogin === channel.owner) {
+  if (sessionContext.userSelf.login42 === channel.owner) {
     return (
       <>
         <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
@@ -59,7 +59,7 @@ function MenuButtons({
         />
       </>
     );
-  } else if (channel?.admins?.includes(sessionContext.userLogin)) {
+  } else if (channel?.admins?.includes(sessionContext.userSelf.login42)) {
     return (
       <>
         <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>

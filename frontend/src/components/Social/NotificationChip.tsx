@@ -26,7 +26,7 @@ export const NotificationChip = ({
 
   React.useEffect(() => {
     userService
-      .getUserFriendRequestsReceived(sessionContext.userLogin)
+      .getUserFriendRequestsReceived(sessionContext.userSelf.login42)
       .then((notifications: IUserPublic[]) => {
         setNotifications(notifications);
       })
@@ -34,7 +34,7 @@ export const NotificationChip = ({
         errorContext.newError?.(errorHandler(error, sessionContext));
       });
     userService
-      .getUserBlockedUsers(sessionContext.userLogin)
+      .getUserBlockedUsers(sessionContext.userSelf.login42)
       .then((blocked: IUserPublic[]) => {
         setBlockedUsers(blocked);
       })
@@ -44,7 +44,7 @@ export const NotificationChip = ({
 
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserFriendRequestsReceived(sessionContext.userLogin)
+        .getUserFriendRequestsReceived(sessionContext.userSelf.login42)
         .then((notifications: IUserPublic[]) => {
           setNotifications(notifications);
         })
@@ -52,7 +52,7 @@ export const NotificationChip = ({
           errorContext.newError?.(errorHandler(error, sessionContext));
         });
       userService
-        .getUserBlockedUsers(sessionContext.userLogin)
+        .getUserBlockedUsers(sessionContext.userSelf.login42)
         .then((blocked: IUserPublic[]) => {
           setBlockedUsers(blocked);
         })

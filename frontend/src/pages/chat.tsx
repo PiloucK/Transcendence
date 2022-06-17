@@ -21,7 +21,7 @@ function ChatContent({ menu }: { menu: string }) {
 export default function Chat() {
 	const sessionContext = useSessionContext();
 
-  // if (sessionContext.userLogin === null) return <DockGuest />;
+  // if (sessionContext.userSelf.login42 === null) return <DockGuest />;
   return (
     <>
       <ChatMenu menu={sessionContext.chatMenu} setMenu={sessionContext.setChatMenu} />

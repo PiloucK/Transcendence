@@ -23,11 +23,11 @@ export function ButtonAddFriend({
 
   const sendFriendRequest = () => {
     if (
-      sessionContext.userLogin !== null &&
-      sessionContext.userLogin !== userInfos.login42
+      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       userService
-        .sendFriendRequest(sessionContext.userLogin, userInfos.login42)
+        .sendFriendRequest(sessionContext.userSelf.login42, userInfos.login42)
         .then(() => {
           socketContext.socket.emit("user:update-relations");
         })

@@ -16,11 +16,11 @@ export function ButtonSendDM({ userInfos }: { userInfos: IUserPublic }) {
 
   const sendPrivateMessage = () => {
     if (
-      sessionContext.userLogin !== null &&
-      sessionContext.userLogin !== userInfos.login42
+      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       privateConvService
-        .createPrivateConv(sessionContext.userLogin, userInfos.login42)
+        .createPrivateConv(sessionContext.userSelf.login42, userInfos.login42)
         .then((dm: PrivateConv) => {
           sessionContext.setChatDM(
             dm.userOne.login42 + "|" + dm.userTwo.login42

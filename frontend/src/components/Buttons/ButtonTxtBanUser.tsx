@@ -42,7 +42,7 @@ export function ButtonTxtBanUser({
   const handleBanUser = () => {
     setOpen(false);
     channelService
-      .banAChannelUser(sessionContext.userLogin, channel.id, login, time)
+      .banAChannelUser(sessionContext.userSelf.login42, channel.id, login, time)
       .then(() => {
         socketContext.socket.emit("user:update-public-channels");
         socketContext.socket.emit("user:update-joined-channel");

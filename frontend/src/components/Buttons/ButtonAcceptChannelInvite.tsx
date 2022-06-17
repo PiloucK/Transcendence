@@ -28,7 +28,7 @@ export function ButtonAcceptChannelInvite({
 
   const joinChannel = () => {
     channelService
-      .joinChannel(sessionContext.userLogin, channelId)
+      .joinChannel(sessionContext.userSelf.login42, channelId)
       .then((channel: Channel) => {
         sessionContext.setChatMenu?.(channel.id);
         socketContext.socket.emit("user:update-joined-channel");

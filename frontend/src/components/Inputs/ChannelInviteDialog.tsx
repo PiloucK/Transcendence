@@ -75,21 +75,21 @@ export function ChannelInviteDialog({
 
   React.useEffect(() => {
     channelService
-      .getChannelInvitableFriends(sessionContext.userLogin, channel.id)
+      .getChannelInvitableFriends(sessionContext.userSelf.login42, channel.id)
       .then((friends: IUserSlim[]) => {
         setFriends(friends);
       });
 
     socketContext.socket.on("update-channel-content", () => {
       channelService
-        .getChannelInvitableFriends(sessionContext.userLogin, channel.id)
+        .getChannelInvitableFriends(sessionContext.userSelf.login42, channel.id)
         .then((friends: IUserSlim[]) => {
           setFriends(friends);
         });
     });
     socketContext.socket.on("update-relations", () => {
       channelService
-        .getChannelInvitableFriends(sessionContext.userLogin, channel.id)
+        .getChannelInvitableFriends(sessionContext.userSelf.login42, channel.id)
         .then((friends: IUserSlim[]) => {
           setFriends(friends);
         });
@@ -120,7 +120,7 @@ export function ChannelInviteDialog({
     setOpen(false);
     selectedFriends.forEach((friend: IUserSlim) => {
       channelService
-        .inviteToChannel(sessionContext.userLogin, channel.id, friend.login42)
+        .inviteToChannel(sessionContext.userSelf.login42, channel.id, friend.login42)
         .then(() => {
           socketContext.socket.emit("user:update-channel-content");
         })

@@ -23,11 +23,11 @@ export function ButtonCancelRequest({
 
   const cancelRequest = () => {
     if (
-      sessionContext.userLogin !== null &&
-      sessionContext.userLogin !== userInfos.login42
+      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       userService
-        .cancelFriendRequest(sessionContext.userLogin, userInfos.login42)
+        .cancelFriendRequest(sessionContext.userSelf.login42, userInfos.login42)
         .then(() => {
           socketContext.socket.emit("user:update-relations");
         })

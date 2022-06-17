@@ -18,9 +18,9 @@ export function ButtonTxtSetAsAdmin({
   const socketContext = useSocketContext();
 
   const handleRemoveOnClick = () => {
-    if (sessionContext.userLogin !== null && sessionContext.userLogin !== login) {
+    if (sessionContext.userSelf.login42 !== null && sessionContext.userSelf.login42 !== login) {
       channelService
-        .unsetAChannelAdmin(sessionContext.userLogin, channel.id, login)
+        .unsetAChannelAdmin(sessionContext.userSelf.login42, channel.id, login)
         .then(() => {
           socketContext.socket.emit("user:update-channel-content");
         })
@@ -31,9 +31,9 @@ export function ButtonTxtSetAsAdmin({
   };
 
   const handleAddOnClick = () => {
-    if (sessionContext.userLogin !== null && sessionContext.userLogin !== login) {
+    if (sessionContext.userSelf.login42 !== null && sessionContext.userSelf.login42 !== login) {
       channelService
-        .setAChannelAdmin(sessionContext.userLogin, channel.id, login)
+        .setAChannelAdmin(sessionContext.userSelf.login42, channel.id, login)
         .then(() => {
           socketContext.socket.emit("user:update-channel-content");
         })

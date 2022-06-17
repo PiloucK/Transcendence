@@ -39,7 +39,7 @@ export function ButtonTxtMuteUser({
 
   const handleUnmuteUser = () => {
     channelService
-      .muteAChannelUser(sessionContext.userLogin, channel.id, login, 0)
+      .muteAChannelUser(sessionContext.userSelf.login42, channel.id, login, 0)
       .then(() => {})
       .catch((err) => {
         console.log(err);
@@ -49,7 +49,7 @@ export function ButtonTxtMuteUser({
   const handleMuteUser = () => {
     setOpen(false);
     channelService
-      .muteAChannelUser(sessionContext.userLogin, channel.id, login, time)
+      .muteAChannelUser(sessionContext.userSelf.login42, channel.id, login, time)
       .then(() => {})
       .catch((err) => {
         console.log(err);

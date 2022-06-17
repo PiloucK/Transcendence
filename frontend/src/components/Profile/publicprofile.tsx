@@ -90,7 +90,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublic }) {
 
   React.useEffect(() => {
     userService
-      .getUserFriends(sessionContext.userLogin)
+      .getUserFriends(sessionContext.userSelf.login42)
       .then((friends: IUserPublic[]) => {
         setFriendList(friends);
       })
@@ -98,7 +98,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublic }) {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });
     userService
-      .getUserFriendRequestsSent(sessionContext.userLogin)
+      .getUserFriendRequestsSent(sessionContext.userSelf.login42)
       .then((requests: IUserPublic[]) => {
         setSentRList(requests);
       })
@@ -106,7 +106,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublic }) {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });
     userService
-      .getUserBlockedUsers(sessionContext.userLogin)
+      .getUserBlockedUsers(sessionContext.userSelf.login42)
       .then((blocked: IUserPublic[]) => {
         setBlockedList(blocked);
       })
@@ -116,7 +116,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublic }) {
 
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserFriends(sessionContext.userLogin)
+        .getUserFriends(sessionContext.userSelf.login42)
         .then((friends: IUserPublic[]) => {
           setFriendList(friends);
         })
@@ -124,7 +124,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublic }) {
           errorContext.newError?.(errorHandler(error, sessionContext));
         });
       userService
-        .getUserFriendRequestsSent(sessionContext.userLogin)
+        .getUserFriendRequestsSent(sessionContext.userSelf.login42)
         .then((requests: IUserPublic[]) => {
           setSentRList(requests);
         })
@@ -132,7 +132,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublic }) {
           errorContext.newError?.(errorHandler(error, sessionContext));
         });
       userService
-        .getUserBlockedUsers(sessionContext.userLogin)
+        .getUserBlockedUsers(sessionContext.userSelf.login42)
         .then((blocked: IUserPublic[]) => {
           setBlockedList(blocked);
         })

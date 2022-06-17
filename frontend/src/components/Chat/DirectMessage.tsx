@@ -52,21 +52,21 @@ function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
 
   React.useEffect(() => {
     userService
-      .getUserFriends(sessionContext.userLogin)
+      .getUserFriends(sessionContext.userSelf.login42)
       .then((friends: IUserPublic[]) => {
         setFriends(friends);
       });
 
     socketContext.socket.on("update-leaderboard", () => {
       userService
-        .getUserFriends(sessionContext.userLogin)
+        .getUserFriends(sessionContext.userSelf.login42)
         .then((friends: IUserPublic[]) => {
           setFriends(friends);
         });
     });
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserFriends(sessionContext.userLogin)
+        .getUserFriends(sessionContext.userSelf.login42)
         .then((friends: IUserPublic[]) => {
           setFriends(friends);
         });
@@ -107,7 +107,7 @@ function Messages({ dm }: { dm: PrivateConv }) {
   }
 
   const getStyle = (author: string) => {
-    if (author === sessionContext.userLogin) {
+    if (author === sessionContext.userSelf.login42) {
       return styles.message_author;
     } else {
       return styles.message_friend;
@@ -177,29 +177,29 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
   const [privateConv, setPrivateConv] = useState<PrivateConv>();
   const users = menu.split("|");
 
-  const friend = users[0] === sessionContext.userLogin ? users[1] : users[0];
+  const friend = users[0] === sessionContext.userSelf.login42 ? users[1] : users[0];
   React.useEffect(() => {
     userService
-      .getUserBlockedUsers(sessionContext.userLogin)
+      .getUserBlockedUsers(sessionContext.userSelf.login42)
       .then((blocked: IUserPublic[]) => {
         setBlockedList(blocked);
       });
     privateConvService
-      .getPrivateConv(sessionContext.userLogin, friend)
+      .getPrivateConv(sessionContext.userSelf.login42, friend)
       .then((privateConv: PrivateConv) => {
         setPrivateConv(privateConv);
       });
 
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserBlockedUsers(sessionContext.userLogin)
+        .getUserBlockedUsers(sessionContext.userSelf.login42)
         .then((blocked: IUserPublic[]) => {
           setBlockedList(blocked);
         });
     });
     socketContext.socket.on("update-direct-messages", () => {
       privateConvService
-        .getPrivateConv(sessionContext.userLogin, friend)
+        .getPrivateConv(sessionContext.userSelf.login42, friend)
         .then((privateConv: PrivateConv) => {
           setPrivateConv(privateConv);
         });

@@ -38,7 +38,7 @@ export const MainLayout: React.FunctionComponent<Props> = ({ children }) => {
 
   return (
     <>
-      {sessionContext.userLogin !== null ? (
+      {sessionContext.userSelf.login42 !== null ? (
         children
       ) : (
         <>

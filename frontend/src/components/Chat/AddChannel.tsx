@@ -51,14 +51,14 @@ function PublicChannels() {
 
   React.useEffect(() => {
     channelService
-      .getPublicChannels(sessionContext.userLogin)
+      .getPublicChannels(sessionContext.userSelf.login42)
       .then((channels: Channel[]) => {
         setChannels(channels);
       });
 
     socketContext.socket.on("update-public-channels", () => {
       channelService
-        .getPublicChannels(sessionContext.userLogin)
+        .getPublicChannels(sessionContext.userSelf.login42)
         .then((channels: ChannelCreation[]) => {
           setChannels(channels);
         });
@@ -134,7 +134,7 @@ function CreateChannelForm() {
     }
     if (error === false) {
       channelService
-        .createChannel(sessionContext.userLogin, channel)
+        .createChannel(sessionContext.userSelf.login42, channel)
         .then((res) => {
           socketContext.socket.emit("user:update-public-channels");
           socketContext.socket.emit("user:update-joined-channel");
@@ -143,7 +143,7 @@ function CreateChannelForm() {
             const formData = new FormData();
             formData.append("file", newImage);
             channelService
-              .updateChannelImage(sessionContext.userLogin, res.id, formData)
+              .updateChannelImage(sessionContext.userSelf.login42, res.id, formData)
               .then((res) => {
                 socketContext.socket.emit("user:update-public-channels");
               });

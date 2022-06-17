@@ -107,14 +107,14 @@ export function DirectMessageMenu(props: {
 
   React.useEffect(() => {
     privateConvService
-      .getPrivateConvs(sessionContext.userLogin)
+      .getPrivateConvs(sessionContext.userSelf.login42)
       .then((currentDMs: PrivateConv[]) => {
         setOpenedDMs(currentDMs);
       });
 
     socketContext.socket.on("update-direct-messages", () => {
       privateConvService
-        .getPrivateConvs(sessionContext.userLogin)
+        .getPrivateConvs(sessionContext.userSelf.login42)
         .then((currentDMs: PrivateConv[]) => {
           setOpenedDMs(currentDMs);
         });
@@ -161,7 +161,7 @@ function SelectedUserMenu({
 }) {
   const sessionContext = useSessionContext();
 
-  if (sessionContext.userLogin === channel?.owner) {
+  if (sessionContext.userSelf.login42 === channel?.owner) {
     return (
       <div className={styles.selected_user}>
         <div
@@ -189,7 +189,7 @@ function SelectedUserMenu({
         <ButtonTxtSetAsAdmin login={user.login42} channel={channel} />
       </div>
     );
-  } else if (channel?.admin?.includes(sessionContext.userLogin)) {
+  } else if (channel?.admin?.includes(sessionContext.userSelf.login42)) {
     return (
       <div className={styles.selected_user}>
         <div
@@ -259,7 +259,7 @@ function UserList({ channel }: { channel: Channel }) {
   };
 
   return channel?.users?.map((user) => {
-    if (user.login42 === sessionContext.userLogin) {
+    if (user.login42 === sessionContext.userSelf.login42) {
       return (
         <div key={user.login42} className={styles.connected_user}>
           <Avatar
@@ -460,13 +460,13 @@ export function ChatMenu(props: {
 
   React.useEffect(() => {
     channelService
-      .getJoinedChannels(sessionContext.userLogin)
+      .getJoinedChannels(sessionContext.userSelf.login42)
       .then((currentChannels: Channel[]) => {
         setChannels(currentChannels);
       });
     socketContext.socket.on("update-channels-list", () => {
       channelService
-        .getJoinedChannels(sessionContext.userLogin)
+        .getJoinedChannels(sessionContext.userSelf.login42)
         .then((currentChannels: Channel[]) => {
           setChannels(currentChannels);
         });

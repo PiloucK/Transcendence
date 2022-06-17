@@ -86,7 +86,7 @@ function Profile({
   React.useEffect(() => {
     socketContext.socket.on("update-leaderboard", () => {
       userService
-        .getOne(sessionContext.userLogin)
+        .getOne(sessionContext.userSelf.login42)
         .then((user: IUserSelf) => {
           state.setUserInfos(user);
         })
@@ -108,7 +108,7 @@ function Profile({
           setOpen={setOpen}
         />
       </div>
-      <UserGameHistory userLogin={sessionContext.userLogin} />
+      <UserGameHistory userLogin={sessionContext.userSelf.login42} />
     </>
   );
 }
@@ -121,8 +121,8 @@ export default function ProfilePage() {
 
   if (
     login !== undefined &&
-    sessionContext.userLogin !== null &&
-    login !== sessionContext.userLogin
+    sessionContext.userSelf.login42 !== null &&
+    login !== sessionContext.userSelf.login42
   ) {
     return <PublicProfile login={login} />;
   }
@@ -141,12 +141,12 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (
-      sessionContext.userLogin !== null &&
+      sessionContext.userSelf.login42 !== null &&
       userInfos !== undefined &&
-      sessionContext.userLogin !== userInfos.login42
+      sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       userService
-        .getOne(sessionContext.userLogin)
+        .getOne(sessionContext.userSelf.login42)
         .then((user: IUserSelf) => {
           setUserInfos(user);
         })
