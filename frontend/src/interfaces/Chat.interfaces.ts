@@ -19,6 +19,7 @@ export type Channel = {
   banned: Array<restriction>;
   users: Array<IUserSlim>;
   messages: Array<Message>;
+  image: string;
 };
 export type ChannelCreation = {
   name: string;

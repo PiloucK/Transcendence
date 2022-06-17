@@ -66,8 +66,8 @@ export class UsersService {
     ]);
   }
 
-  createUser(login42: string): Promise<User> {
-    return this.usersRepository.createUser(login42);
+  createUser(login42: string, photo42: string): Promise<User> {
+    return this.usersRepository.createUser(login42, photo42);
   }
 
   async updateUsername(

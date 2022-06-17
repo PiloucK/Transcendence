@@ -2,6 +2,8 @@ export interface IUserSlim {
   login42: string;
   username: string;
   elo: number;
+  photo42: string;
+  image: string;
 }
 
 export interface IUserPublic extends IUserSlim {
