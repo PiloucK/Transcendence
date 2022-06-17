@@ -8,68 +8,17 @@ import { useErrorContext } from "../context/ErrorContext";
 import { errorHandler } from "../errors/errorHandler";
 import userService from "../services/user";
 import { AxiosError } from "axios";
-import { Interactions } from "../components/Profile/publicprofile";
-
-function UserAvatar({ displayedUser }: { displayedUser: IUserPublic }) {
-  return (
-    <div className={styles.profile_user_account_details_avatar}>
-      <Avatar
-        src={displayedUser.image}
-        alt="avatar"
-        sx={{ width: 151, height: 151 }}
-      >
-        <Avatar
-          src={displayedUser.photo42}
-          alt="avatar"
-          sx={{ width: 151, height: 151 }}
-        />
-      </Avatar>
-    </div>
-  );
-}
-
-export function UserName({ displayedUser }: { displayedUser: IUserPublic }) {
-  return (
-    <div className={styles.profile_user_account_details_username}>
-      {displayedUser.username}
-    </div>
-  );
-}
-
-function AccountDetails({ displayedUser }: { displayedUser: IUserPublic }) {
-  return (
-    <div className={styles.profile_user_account_details}>
-      <div className={styles.profile_user_account_details_title}>
-        Account details
-      </div>
-      <UserAvatar displayedUser={displayedUser} />
-      <UserName displayedUser={displayedUser} />
-    </div>
-  );
-}
-
-function UserStats({ displayedUser }: { displayedUser: IUserPublic }) {
-  return (
-    <div className={styles.profile_user_stats}>
-      <div className={styles.profile_user_stats_header}>
-        <div className={styles.profile_user_stats_header_title}>Stats</div>
-      </div>
-      <div className={styles.profile_user_stats_elo}>
-        Elo: {displayedUser.elo}
-      </div>
-      <div className={styles.profile_user_stats_games_summary}>
-        Games won: {displayedUser.gamesWon}
-        <br />
-        Games lost: {displayedUser.gamesLost}
-      </div>
-    </div>
-  );
-}
+import { Interactions } from "../components/Profile/Interactions";
+import { UserStats } from "../components/Profile/UserStats";
+import { AccountDetails } from "../components/Profile/AccountDetails";
+import { useEffect } from "react";
+import { useSocketContext } from "../context/SocketContext";
 
 export default async function ProfilePage() {
   const router = useRouter();
   const { login } = router.query;
   const sessionContext = useSessionContext();
+  // const socketContext = useSocketContext();
   const errorContext = useErrorContext();
   let displayedUser: IUserPublic;
 
@@ -78,10 +27,24 @@ export default async function ProfilePage() {
       .getOne(login)
       .catch((error: Error | AxiosError<unknown, any>) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
+        // return <div>User not found</div>;
       });
   } else {
     displayedUser = sessionContext.userSelf;
   }
+
+  // useEffect(() => {
+  //   socketContext.socket.on("update-leaderboard", () => {
+  //     userService
+  //       .getOne(state.usrInfo.username)
+  //       .then((user: IUserPublic) => {
+  //         state.setUsrInfo(user);
+  //       })
+  //       .catch((error) => {
+  //         errorContext.newError?.(errorHandler(error, sessionContext));
+  //       });
+  //   });
+  // }, []);
 
   return (
     <>
@@ -89,7 +52,10 @@ export default async function ProfilePage() {
         <AccountDetails displayedUser={displayedUser} />
         <UserStats displayedUser={displayedUser} />
         {login !== undefined && login !== sessionContext.userSelf.login42 ? (
-          <Interactions displayedUser={displayedUser} />
+          <Interactions
+            userSelf={sessionContext.userSelf}
+            displayedUser={displayedUser}
+          />
         ) : (
           <ButtonLogout />
         )}
