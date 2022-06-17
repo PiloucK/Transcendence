@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos } from "../../interfaces/IUser";
+import { IUserPublic } from "../../interfaces/IUser";
 
 export function ButtonTxtUserStatus({ login }: { login: string }) {
   const handleOnClick = () => {

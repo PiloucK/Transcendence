@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../styles/Home.module.css";
 
-import { IUserPublicInfos } from "../../interfaces/IUser";
+import { IUserPublic } from "../../interfaces/IUser";
 
 import userService from "../../services/user";
 
@@ -12,7 +12,7 @@ import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
-export function ButtonUnblock({ userInfos }: { userInfos: IUserPublicInfos }) {
+export function ButtonUnblock({ userInfos }: { userInfos: IUserPublic }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();

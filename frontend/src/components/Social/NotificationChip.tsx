@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "../../styles/Home.module.css";
 
 import { useSessionContext } from "../../context/SessionContext";
-import { IUserPublicInfos } from "../../interfaces/IUser";
+import { IUserPublic } from "../../interfaces/IUser";
 
 import Badge from "@mui/material/Badge";
 
@@ -21,13 +21,13 @@ export const NotificationChip = ({
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
-  const [blockedUsers, setBlockedUsers] = useState<IUserPublicInfos[]>([]);
+  const [notifications, setNotifications] = useState<IUserPublic[]>([]);
+  const [blockedUsers, setBlockedUsers] = useState<IUserPublic[]>([]);
 
   React.useEffect(() => {
     userService
       .getUserFriendRequestsReceived(sessionContext.userLogin)
-      .then((notifications: IUserPublicInfos[]) => {
+      .then((notifications: IUserPublic[]) => {
         setNotifications(notifications);
       })
       .catch((error) => {
@@ -35,7 +35,7 @@ export const NotificationChip = ({
       });
     userService
       .getUserBlockedUsers(sessionContext.userLogin)
-      .then((blocked: IUserPublicInfos[]) => {
+      .then((blocked: IUserPublic[]) => {
         setBlockedUsers(blocked);
       })
       .catch((error) => {
@@ -45,7 +45,7 @@ export const NotificationChip = ({
     socketContext.socket.on("update-relations", () => {
       userService
         .getUserFriendRequestsReceived(sessionContext.userLogin)
-        .then((notifications: IUserPublicInfos[]) => {
+        .then((notifications: IUserPublic[]) => {
           setNotifications(notifications);
         })
         .catch((error) => {
@@ -53,7 +53,7 @@ export const NotificationChip = ({
         });
       userService
         .getUserBlockedUsers(sessionContext.userLogin)
-        .then((blocked: IUserPublicInfos[]) => {
+        .then((blocked: IUserPublic[]) => {
           setBlockedUsers(blocked);
         })
         .catch((error) => {

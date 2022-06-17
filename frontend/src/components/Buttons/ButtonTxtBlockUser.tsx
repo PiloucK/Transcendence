@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "../../styles/Home.module.css";
 
-import { IUserPublicInfos } from "../../interfaces/IUser";
+import { IUserPublic } from "../../interfaces/IUser";
 import userService from "../../services/user";
 import { useSessionContext } from "../../context/SessionContext";
 import { useSocketContext } from "../../context/SocketContext";
@@ -15,14 +15,14 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
   React.useEffect(() => {
     userService
       .getUserBlockedUsers(sessionContext.userLogin)
-      .then((blocked: IUserPublicInfos[]) => {
+      .then((blocked: IUserPublic[]) => {
         setBlockedList(blocked);
       });
 
     socketContext.socket.on("update-relations", () => {
       userService
         .getUserBlockedUsers(sessionContext.userLogin)
-        .then((blocked: IUserPublicInfos[]) => {
+        .then((blocked: IUserPublic[]) => {
           setBlockedList(blocked);
         });
     });
@@ -47,7 +47,7 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
   };
 
   if (
-    blockedList?.find((blocked: IUserPublicInfos) => blocked.login42 === login)
+    blockedList?.find((blocked: IUserPublic) => blocked.login42 === login)
   ) {
     return (
       <div className={styles.buttons} onClick={handleUnblockOnClick}>

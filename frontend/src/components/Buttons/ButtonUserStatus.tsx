@@ -1,12 +1,12 @@
 import React from "react";
 import styles from "../../styles/Home.module.css";
 
-import { IUserPublicInfos } from "../../interfaces/IUser";
+import { IUserPublic } from "../../interfaces/IUser";
 
 export function ButtonUserStatus({
   userInfos,
 }: {
-  userInfos: IUserPublicInfos;
+  userInfos: IUserPublic;
 }) {
   // Will check the status of the user and display the right button
   const status = Math.random();

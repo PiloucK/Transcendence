@@ -9,7 +9,7 @@ import addChannel from "../../public/add_channel.png";
 
 import { useSessionContext } from "../../context/SessionContext";
 import {
-  IUserPublicInfos,
+  IUserPublic,
   IUserSlim,
   PrivateConv,
   Channel,

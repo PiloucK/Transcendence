@@ -2,14 +2,14 @@ import React from "react";
 import styles from "../../styles/Home.module.css";
 import Router from "next/router";
 
-import { IUserPublicInfos, PrivateConv } from "../../interfaces/IUser";
+import { IUserPublic, PrivateConv } from "../../interfaces/IUser";
 
 import privateConvService from "../../services/privateConv";
 
 import { useSessionContext } from "../../context/SessionContext";
 import { useSocketContext } from "../../context/SocketContext";
 
-export function ButtonSendDM({ userInfos }: { userInfos: IUserPublicInfos }) {
+export function ButtonSendDM({ userInfos }: { userInfos: IUserPublic }) {
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 

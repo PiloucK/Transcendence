@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../styles/Home.module.css";
 
-import { IUserPublicInfos } from "../../interfaces/IUser";
+import { IUserPublic } from "../../interfaces/IUser";
 
 import {
   EmptyFriendList,
@@ -13,7 +13,7 @@ import { CardUserSocial } from "../Cards/CardUserSocial";
 import { CardFriendRequest } from "../Cards/CardFriendRequest";
 import { CardBlockedUser } from "../Cards/CardBlockedUser";
 
-function FriendList({ friends }: { friends: IUserPublicInfos[] }) {
+function FriendList({ friends }: { friends: IUserPublic[] }) {
   return (
     <div className={styles.social_content}>
       {friends.map((friend) => {
@@ -25,7 +25,7 @@ function FriendList({ friends }: { friends: IUserPublicInfos[] }) {
   );
 }
 
-function BlockedList({ users }: { users: IUserPublicInfos[] }) {
+function BlockedList({ users }: { users: IUserPublic[] }) {
   return (
     <div className={styles.social_content}>
       {users.map((user) => CardBlockedUser({ userInfos: user }))}
@@ -33,7 +33,7 @@ function BlockedList({ users }: { users: IUserPublicInfos[] }) {
   );
 }
 
-function NotificationList({ requests }: { requests: IUserPublicInfos[] }) {
+function NotificationList({ requests }: { requests: IUserPublic[] }) {
   return (
     <div className={styles.social_content}>
       {requests.map((request) => CardFriendRequest({ userInfos: request }))}
@@ -41,7 +41,7 @@ function NotificationList({ requests }: { requests: IUserPublicInfos[] }) {
   );
 }
 
-export function FriendContent({ friends }: { friends: IUserPublicInfos[] }) {
+export function FriendContent({ friends }: { friends: IUserPublic[] }) {
   if (typeof friends === "undefined" || friends.length === 0) {
     return <EmptyFriendList />;
   } else {
@@ -49,7 +49,7 @@ export function FriendContent({ friends }: { friends: IUserPublicInfos[] }) {
   }
 }
 
-export function BlockedContent({ users }: { users: IUserPublicInfos[] }) {
+export function BlockedContent({ users }: { users: IUserPublic[] }) {
   if (typeof users === "undefined" || users.length === 0) {
     return <EmptyBlockedList />;
   } else {
@@ -61,8 +61,8 @@ export function NotificationContent({
   blockedUsers,
   notifications,
 }: {
-  blockedUsers: IUserPublicInfos[];
-  notifications: IUserPublicInfos[];
+  blockedUsers: IUserPublic[];
+  notifications: IUserPublic[];
 }) {
   const requests = notifications?.filter(
     (notification) =>

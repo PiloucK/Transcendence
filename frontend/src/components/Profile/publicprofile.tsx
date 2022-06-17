@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import styles from "../../styles/Home.module.css";
 import userService from "../../services/user";
-import { IUserPublicInfos } from "../../interfaces/IUser";
+import { IUserPublic } from "../../interfaces/IUser";
 
 import Link from "next/link";
 
@@ -26,7 +26,7 @@ import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
-function UserName({ userInfos }: { userInfos: IUserPublicInfos }) {
+function UserName({ userInfos }: { userInfos: IUserPublic }) {
   return (
     <div className={styles.profile_user_account_details_username}>
       {userInfos?.username}
@@ -34,7 +34,7 @@ function UserName({ userInfos }: { userInfos: IUserPublicInfos }) {
   );
 }
 
-function UserAvatar({ userInfos }: { userInfos: IUserPublicInfos }) {
+function UserAvatar({ userInfos }: { userInfos: IUserPublic }) {
   return (
     <div className={styles.profile_user_account_details_avatar}>
       <Avatar
@@ -46,7 +46,7 @@ function UserAvatar({ userInfos }: { userInfos: IUserPublicInfos }) {
   );
 }
 
-function AccountDetails({ userInfos }: { userInfos: IUserPublicInfos }) {
+function AccountDetails({ userInfos }: { userInfos: IUserPublic }) {
   return (
     <div className={styles.profile_user_account_details}>
       <div className={styles.profile_user_account_details_title}>
@@ -58,7 +58,7 @@ function AccountDetails({ userInfos }: { userInfos: IUserPublicInfos }) {
   );
 }
 
-function UserStats({ userInfos }: { userInfos: IUserPublicInfos }) {
+function UserStats({ userInfos }: { userInfos: IUserPublic }) {
   return (
     <div className={styles.profile_user_stats}>
       <div className={styles.profile_user_stats_header}>
@@ -74,7 +74,7 @@ function UserStats({ userInfos }: { userInfos: IUserPublicInfos }) {
   );
 }
 
-function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
+function Interactions({ userInfos }: { userInfos: IUserPublic }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
@@ -85,7 +85,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
   React.useEffect(() => {
     userService
       .getUserFriends(sessionContext.userLogin)
-      .then((friends: IUserPublicInfos[]) => {
+      .then((friends: IUserPublic[]) => {
         setFriendList(friends);
       })
       .catch((error) => {
@@ -93,7 +93,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
       });
     userService
       .getUserFriendRequestsSent(sessionContext.userLogin)
-      .then((requests: IUserPublicInfos[]) => {
+      .then((requests: IUserPublic[]) => {
         setSentRList(requests);
       })
       .catch((error) => {
@@ -101,7 +101,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
       });
     userService
       .getUserBlockedUsers(sessionContext.userLogin)
-      .then((blocked: IUserPublicInfos[]) => {
+      .then((blocked: IUserPublic[]) => {
         setBlockedList(blocked);
       })
       .catch((error) => {
@@ -111,7 +111,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
     socketContext.socket.on("update-relations", () => {
       userService
         .getUserFriends(sessionContext.userLogin)
-        .then((friends: IUserPublicInfos[]) => {
+        .then((friends: IUserPublic[]) => {
           setFriendList(friends);
         })
         .catch((error) => {
@@ -119,7 +119,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         });
       userService
         .getUserFriendRequestsSent(sessionContext.userLogin)
-        .then((requests: IUserPublicInfos[]) => {
+        .then((requests: IUserPublic[]) => {
           setSentRList(requests);
         })
         .catch((error) => {
@@ -127,7 +127,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         });
       userService
         .getUserBlockedUsers(sessionContext.userLogin)
-        .then((blocked: IUserPublicInfos[]) => {
+        .then((blocked: IUserPublic[]) => {
           setBlockedList(blocked);
         })
         .catch((error) => {
@@ -139,7 +139,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
   const friendButton = () => {
     if (
       friendList.find(
-        (friend: IUserPublicInfos) => friend.login42 === userInfos.login42
+        (friend: IUserPublic) => friend.login42 === userInfos.login42
       )
     ) {
       return (
@@ -150,7 +150,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
       );
     } else if (
       sentRList.find(
-        (friend: IUserPublicInfos) => friend.login42 === userInfos.login42
+        (friend: IUserPublic) => friend.login42 === userInfos.login42
       )
     ) {
       return <ButtonCancelRequest userInfos={userInfos} />;
@@ -162,7 +162,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
   const blockButton = () => {
     if (
       blockedList.find(
-        (blocked: IUserPublicInfos) => blocked.login42 === userInfos.login42
+        (blocked: IUserPublic) => blocked.login42 === userInfos.login42
       )
     ) {
       return <ButtonUnblock userInfos={userInfos} />;
@@ -184,8 +184,8 @@ function Profile({
   state,
 }: {
   state: {
-    usrInfo: IUserPublicInfos;
-    setUsrInfo: (usrInfos: IUserPublicInfos) => void;
+    usrInfo: IUserPublic;
+    setUsrInfo: (usrInfos: IUserPublic) => void;
   };
 }) {
   const errorContext = useErrorContext();
@@ -196,7 +196,7 @@ function Profile({
     socketContext.socket.on("update-leaderboard", () => {
       userService
         .getOne(state.usrInfo.username)
-        .then((user: IUserPublicInfos) => {
+        .then((user: IUserPublic) => {
           state.setUsrInfo(user);
         })
         .catch((error) => {
@@ -221,7 +221,7 @@ export default function PublicProfile({ login }: { login: string }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
 
-  const [userInfos, setUserInfos] = React.useState<IUserPublicInfos>({
+  const [userInfos, setUserInfos] = React.useState<IUserPublic>({
     login42: "",
     username: "",
     elo: 0,
@@ -236,7 +236,7 @@ export default function PublicProfile({ login }: { login: string }) {
   ) {
     userService
       .getOne(login)
-      .then((user: IUserPublicInfos) => {
+      .then((user: IUserPublic) => {
         setUserInfos(user);
       })
       .catch((error) => {

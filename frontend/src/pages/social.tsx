@@ -3,7 +3,7 @@ import { useSessionContext } from "../context/SessionContext";
 // import { DockGuest } from "../components/Dock/DockGuest";
 import React, { useState } from "react";
 
-import { IUserPublicInfos } from "../interfaces/IUser";
+import { IUserPublic } from "../interfaces/IUser";
 import userService from "../services/user";
 
 import { SocialMenu } from "../components/Social/menu";
@@ -22,14 +22,14 @@ function SocialPage({ menu }: { menu: string }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
-  const [blocked, setBlocked] = useState<IUserPublicInfos[]>([]);
-  const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
+  const [friends, setFriends] = useState<IUserPublic[]>([]);
+  const [blocked, setBlocked] = useState<IUserPublic[]>([]);
+  const [notifications, setNotifications] = useState<IUserPublic[]>([]);
 
   React.useEffect(() => {
     userService
       .getUserFriends(sessionContext.userLogin)
-      .then((friends: IUserPublicInfos[]) => {
+      .then((friends: IUserPublic[]) => {
         setFriends(friends);
       })
       .catch((error) => {
@@ -38,7 +38,7 @@ function SocialPage({ menu }: { menu: string }) {
 
     userService
       .getUserBlockedUsers(sessionContext.userLogin)
-      .then((users: IUserPublicInfos[]) => {
+      .then((users: IUserPublic[]) => {
         setBlocked(users);
       })
       .catch((error) => {
@@ -47,7 +47,7 @@ function SocialPage({ menu }: { menu: string }) {
 
     userService
       .getUserFriendRequestsReceived(sessionContext.userLogin)
-      .then((notifications: IUserPublicInfos[]) => {
+      .then((notifications: IUserPublic[]) => {
         setNotifications(notifications);
       })
       .catch((error) => {
@@ -57,7 +57,7 @@ function SocialPage({ menu }: { menu: string }) {
     socketContext.socket.on("update-leaderboard", () => {
       userService
         .getUserFriends(sessionContext.userLogin)
-        .then((friends: IUserPublicInfos[]) => {
+        .then((friends: IUserPublic[]) => {
           setFriends(friends);
         })
         .catch((error) => {
@@ -66,7 +66,7 @@ function SocialPage({ menu }: { menu: string }) {
 
       userService
         .getUserBlockedUsers(sessionContext.userLogin)
-        .then((users: IUserPublicInfos[]) => {
+        .then((users: IUserPublic[]) => {
           setBlocked(users);
         })
         .catch((error) => {
@@ -75,7 +75,7 @@ function SocialPage({ menu }: { menu: string }) {
 
       userService
         .getUserFriendRequestsReceived(sessionContext.userLogin)
-        .then((notifications: IUserPublicInfos[]) => {
+        .then((notifications: IUserPublic[]) => {
           setNotifications(notifications);
         })
         .catch((error) => {
@@ -86,7 +86,7 @@ function SocialPage({ menu }: { menu: string }) {
     socketContext.socket.on("update-relations", () => {
       userService
         .getUserFriends(sessionContext.userLogin)
-        .then((friends: IUserPublicInfos[]) => {
+        .then((friends: IUserPublic[]) => {
           setFriends(friends);
         })
         .catch((error) => {
@@ -95,7 +95,7 @@ function SocialPage({ menu }: { menu: string }) {
 
       userService
         .getUserBlockedUsers(sessionContext.userLogin)
-        .then((users: IUserPublicInfos[]) => {
+        .then((users: IUserPublic[]) => {
           setBlocked(users);
         })
         .catch((error) => {
@@ -104,7 +104,7 @@ function SocialPage({ menu }: { menu: string }) {
 
       userService
         .getUserFriendRequestsReceived(sessionContext.userLogin)
-        .then((notifications: IUserPublicInfos[]) => {
+        .then((notifications: IUserPublic[]) => {
           setNotifications(notifications);
         })
         .catch((error) => {

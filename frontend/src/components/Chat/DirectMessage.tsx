@@ -5,7 +5,7 @@ import { EmptyFriendList } from "../Social/emptyPages";
 import { DirectMessageMenu } from "./Menus";
 import { useSessionContext } from "../../context/SessionContext";
 import {
-  IUserPublicInfos,
+  IUserPublic,
   PrivateConv,
   Message,
   Invitation,
@@ -27,7 +27,7 @@ function FriendList({
   friends,
   setMenu,
 }: {
-  friends: IUserPublicInfos[];
+  friends: IUserPublic[];
   setMenu: (menu: string) => void;
 }) {
   if (typeof friends === "undefined" || friends.length === 0) {
@@ -46,26 +46,26 @@ function FriendList({
 function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
+  const [friends, setFriends] = useState<IUserPublic[]>([]);
 
   React.useEffect(() => {
     userService
       .getUserFriends(sessionContext.userLogin)
-      .then((friends: IUserPublicInfos[]) => {
+      .then((friends: IUserPublic[]) => {
         setFriends(friends);
       });
 
     socketContext.socket.on("update-leaderboard", () => {
       userService
         .getUserFriends(sessionContext.userLogin)
-        .then((friends: IUserPublicInfos[]) => {
+        .then((friends: IUserPublic[]) => {
           setFriends(friends);
         });
     });
     socketContext.socket.on("update-relations", () => {
       userService
         .getUserFriends(sessionContext.userLogin)
-        .then((friends: IUserPublicInfos[]) => {
+        .then((friends: IUserPublic[]) => {
           setFriends(friends);
         });
     });
@@ -133,7 +133,7 @@ function Messages({ dm }: { dm: PrivateConv }) {
 function CurrentDirectMessage({ menu }: { menu: string }) {
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [blockedList, setBlockedList] = React.useState<IUserPublicInfos[]>([]);
+  const [blockedList, setBlockedList] = React.useState<IUserPublic[]>([]);
   const [input, setInput] = React.useState("");
   const [privateConv, setPrivateConv] = useState<PrivateConv>();
   const users = menu.split("|");
@@ -142,7 +142,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
   React.useEffect(() => {
     userService
       .getUserBlockedUsers(sessionContext.userLogin)
-      .then((blocked: IUserPublicInfos[]) => {
+      .then((blocked: IUserPublic[]) => {
         setBlockedList(blocked);
       });
     privateConvService
@@ -154,7 +154,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
     socketContext.socket.on("update-relations", () => {
       userService
         .getUserBlockedUsers(sessionContext.userLogin)
-        .then((blocked: IUserPublicInfos[]) => {
+        .then((blocked: IUserPublic[]) => {
           setBlockedList(blocked);
         });
     });

@@ -1,14 +1,14 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos } from "../../interfaces/IUser";
+import { IUserPublic } from "../../interfaces/IUser";
 
 import Link from "next/link";
 
 import Avatar from "@mui/material/Avatar";
 import { ButtonsFriendRequest } from "../Buttons/ButtonsFriendRequest";
 
-export function CardFriendRequest({ userInfos }: { userInfos: IUserPublicInfos }) {
+export function CardFriendRequest({ userInfos }: { userInfos: IUserPublic }) {
   return (
     <div className={styles.social_friend_card} key={userInfos.login42}>
       <Link href={`/profile?login=${userInfos.login42}`}>

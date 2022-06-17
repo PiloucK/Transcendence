@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos, PrivateConv } from "../../interfaces/IUser";
+import { IUserPublic, PrivateConv } from "../../interfaces/IUser";
 
 import Avatar from "@mui/material/Avatar";
 // import profileIcon from "../../public/profile_icon.png";
@@ -13,7 +13,7 @@ export function CardUserDM({
   userInfos,
   setMenu,
 }: {
-  userInfos: IUserPublicInfos;
+  userInfos: IUserPublic;
   setMenu: (menu: string) => void;
 }) {
   const sessionContext = useSessionContext();

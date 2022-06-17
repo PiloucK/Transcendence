@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../styles/Home.module.css";
 
-import { IUserPublicInfos } from "../../interfaces/IUser";
+import { IUserPublic } from "../../interfaces/IUser";
 import { useSessionContext } from "../../context/SessionContext";
 import userService from "../../services/user";
 
@@ -13,7 +13,7 @@ import { useSocketContext } from "../../context/SocketContext";
 export function ButtonsFriendRequest({
   userInfos,
 }: {
-  userInfos: IUserPublicInfos;
+  userInfos: IUserPublic;
 }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
