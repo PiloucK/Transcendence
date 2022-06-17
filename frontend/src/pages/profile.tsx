@@ -11,27 +11,35 @@ import { AxiosError } from "axios";
 import { Interactions } from "../components/Profile/Interactions";
 import { UserStats } from "../components/Profile/UserStats";
 import { AccountDetails } from "../components/Profile/AccountDetails";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSocketContext } from "../context/SocketContext";
+import { defaultSessionState } from "../constants/defaultSessionState";
 
-export default async function ProfilePage() {
+export default function ProfilePage() {
   const router = useRouter();
   const { login } = router.query;
   const sessionContext = useSessionContext();
   // const socketContext = useSocketContext();
   const errorContext = useErrorContext();
-  let displayedUser: IUserPublic;
+  const [displayedUser, setDisplayedUser] = useState(
+    defaultSessionState.userSelf
+  );
 
-  if (login !== undefined && login !== sessionContext.userSelf.login42) {
-    displayedUser = await userService
-      .getOne(login)
-      .catch((error: Error | AxiosError<unknown, any>) => {
-        errorContext.newError?.(errorHandler(error, sessionContext));
-        // return <div>User not found</div>;
-      });
-  } else {
-    displayedUser = sessionContext.userSelf;
-  }
+  useEffect(() => {
+    if (login !== undefined && login !== sessionContext.userSelf.login42) {
+      userService
+        .getOne(login)
+        .then((user) => {
+          setDisplayedUser(user);
+        })
+        .catch((error: Error | AxiosError<unknown, any>) => {
+          errorContext.newError?.(errorHandler(error, sessionContext));
+          // return <div>User not found</div>;
+        });
+    } else {
+      setDisplayedUser(sessionContext.userSelf);
+    }
+  }, []);
 
   // useEffect(() => {
   //   socketContext.socket.on("update-leaderboard", () => {
