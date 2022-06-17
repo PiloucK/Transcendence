@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   StreamableFile,
+  Post,
 } from '@nestjs/common';
 
 import { User } from './user.entity';
