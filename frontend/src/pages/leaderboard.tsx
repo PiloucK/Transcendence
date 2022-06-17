@@ -35,9 +35,8 @@ function LeaderboardUserCard(props: {
     </Link>
   );
 }
-// Will create the five cards component to display the users and their scores.
+
 function createLeaderboard(users: IUserSlim[]): ReactElement {
-  // console.log(users);
   return (
     <div className={styles.leaderboard}>
       {users.map((user, index) => {

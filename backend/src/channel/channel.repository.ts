@@ -1,7 +1,7 @@
-import { ForbiddenException } from "@nestjs/common";
-import { User } from "src/users/user.entity";
-import { EntityRepository, Repository } from "typeorm";
-import { Channel } from "./channel.entity";
+import { ForbiddenException } from '@nestjs/common';
+import { User } from 'src/users/user.entity';
+import { EntityRepository, Repository } from 'typeorm';
+import { Channel } from './channel.entity';
 import {
   ChannelIdDto,
   ChannelInfoDto,
@@ -11,7 +11,7 @@ import {
   SendMessageDto,
   Message,
   restriction,
-} from "./dto/channel.dto";
+} from './dto/channel.dto';
 
 @EntityRepository(Channel)
 export class ChannelRepository extends Repository<Channel> {
@@ -19,14 +19,14 @@ export class ChannelRepository extends Repository<Channel> {
     channel.muted?.forEach(({ login, until }) => {
       if (until < Date.now()) {
         channel.muted = channel.muted?.filter(
-          (curMuted) => curMuted.login !== login
+          (curMuted) => curMuted.login !== login,
         );
       }
     });
     channel.banned?.forEach(({ login, until }) => {
       if (until < Date.now()) {
         channel.banned = channel.banned?.filter(
-          (curBanned) => curBanned.login !== login
+          (curBanned) => curBanned.login !== login,
         );
       }
     });
@@ -34,7 +34,7 @@ export class ChannelRepository extends Repository<Channel> {
 
   async createChannel(
     user: User,
-    createChannelDto: ChannelInfoDto
+    createChannelDto: ChannelInfoDto,
   ): Promise<Channel> {
     const channel = this.create({
       ...createChannelDto,
@@ -53,7 +53,7 @@ export class ChannelRepository extends Repository<Channel> {
   async updateChannel(
     user: User,
     channelId: string,
-    updateChannelDto: ChannelInfoDto
+    updateChannelDto: ChannelInfoDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
       id: channelId,
@@ -61,7 +61,7 @@ export class ChannelRepository extends Repository<Channel> {
     });
 
     if (!channel) {
-      throw new Error("Channel not found");
+      throw new Error('Channel not found');
     }
     this.resolveChannelRestrictions(channel);
 
@@ -75,10 +75,10 @@ export class ChannelRepository extends Repository<Channel> {
 
   async joinProtectedChannel(
     user: User,
-    joinProtectedChannelDto: JoinProtectedChannelDto
+    joinProtectedChannelDto: JoinProtectedChannelDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
-      relations: ["users"],
+      relations: ['users'],
       where: {
         id: joinProtectedChannelDto.channelId,
         password: joinProtectedChannelDto.password,
@@ -86,21 +86,21 @@ export class ChannelRepository extends Repository<Channel> {
     });
 
     if (!channel) {
-      throw new Error("Channel not found");
+      throw new Error('Channel not found');
     }
     this.resolveChannelRestrictions(channel);
 
     if (
       channel.banned?.find((bannedUser) => bannedUser.login === user.login42)
     ) {
-      throw new Error("You are banned from this channel");
+      throw new Error('You are banned from this channel');
     }
     if (channel.users.find(({ login42 }) => login42 === user.login42)) {
       return channel;
     }
     channel.users.push(user);
     channel.invitations = channel.invitations.filter(
-      (invitedUser) => invitedUser !== user.login42
+      (invitedUser) => invitedUser !== user.login42,
     );
     await this.save(channel);
     return channel;
@@ -108,31 +108,31 @@ export class ChannelRepository extends Repository<Channel> {
 
   async joinChannel(
     user: User,
-    joinChannelDto: ChannelIdDto
+    joinChannelDto: ChannelIdDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
-      relations: ["users"],
+      relations: ['users'],
       where: {
         id: joinChannelDto.channelId,
       },
     });
 
     if (!channel) {
-      throw new Error("Channel not found");
+      throw new Error('Channel not found');
     }
     this.resolveChannelRestrictions(channel);
 
     if (
       channel.banned?.find((bannedUser) => bannedUser.login === user.login42)
     ) {
-      throw new Error("You are banned from this channel");
+      throw new Error('You are banned from this channel');
     }
     if (channel.users.find(({ login42 }) => login42 === user.login42)) {
       return channel;
     }
     channel.users.push(user);
     channel.invitations = channel.invitations.filter(
-      (invitedUser) => invitedUser !== user.login42
+      (invitedUser) => invitedUser !== user.login42,
     );
     await this.save(channel);
     return channel;
@@ -140,24 +140,24 @@ export class ChannelRepository extends Repository<Channel> {
 
   async muteAChannelUser(
     user: User,
-    muteAChannelUserDto: RestrictionDto
+    muteAChannelUserDto: RestrictionDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
       id: muteAChannelUserDto.channelId,
     });
 
     if (!channel) {
-      throw new Error("Channel not found");
+      throw new Error('Channel not found');
     }
     this.resolveChannelRestrictions(channel);
 
     if (!channel.admins.includes(user.login42)) {
-      throw new Error("You are not an admin of this channel");
+      throw new Error('You are not an admin of this channel');
     }
 
     if (
       channel.muted?.find(
-        ({ login }) => login === muteAChannelUserDto.userLogin42
+        ({ login }) => login === muteAChannelUserDto.userLogin42,
       )
     ) {
       return channel;
@@ -172,24 +172,24 @@ export class ChannelRepository extends Repository<Channel> {
 
   async banAChannelUser(
     user: User,
-    banAChannelUserDto: RestrictionDto
+    banAChannelUserDto: RestrictionDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
       id: banAChannelUserDto.channelId,
     });
 
     if (!channel) {
-      throw new Error("Channel not found");
+      throw new Error('Channel not found');
     }
     this.resolveChannelRestrictions(channel);
 
     if (!channel.admins.includes(user.login42)) {
-      throw new Error("You are not an admin of this channel");
+      throw new Error('You are not an admin of this channel');
     }
 
     if (
       channel.banned?.find(
-        ({ login }) => login === banAChannelUserDto.userLogin42
+        ({ login }) => login === banAChannelUserDto.userLogin42,
       )
     ) {
       return channel;
@@ -204,7 +204,7 @@ export class ChannelRepository extends Repository<Channel> {
 
   async setAChannelAdmin(
     user: User,
-    setAChannelAdminDto: InteractionDto
+    setAChannelAdminDto: InteractionDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
       id: setAChannelAdminDto.channelId,
@@ -212,12 +212,12 @@ export class ChannelRepository extends Repository<Channel> {
     });
 
     if (!channel) {
-		throw new Error("Channel not found");
+      throw new Error('Channel not found');
     }
     this.resolveChannelRestrictions(channel);
 
     if (channel.owner !== user.login42) {
-      throw new Error("You are not the owner of this channel");
+      throw new Error('You are not the owner of this channel');
     }
     if (channel.admins.includes(setAChannelAdminDto.userLogin42)) {
       return channel;
@@ -229,7 +229,7 @@ export class ChannelRepository extends Repository<Channel> {
 
   async unsetAChannelAdmin(
     user: User,
-    unsetAChannelAdminDto: InteractionDto
+    unsetAChannelAdminDto: InteractionDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
       id: unsetAChannelAdminDto.channelId,
@@ -237,18 +237,18 @@ export class ChannelRepository extends Repository<Channel> {
     });
 
     if (!channel) {
-      throw new Error("Channel not found");
+      throw new Error('Channel not found');
     }
     this.resolveChannelRestrictions(channel);
 
     if (channel.owner !== user.login42) {
-      throw new Error("You are not the owner of this channel");
+      throw new Error('You are not the owner of this channel');
     }
     if (!channel.admins.includes(unsetAChannelAdminDto.userLogin42)) {
       return channel;
     }
     channel.admins = channel.admins.filter(
-      (channelAdmin) => channelAdmin !== unsetAChannelAdminDto.userLogin42
+      (channelAdmin) => channelAdmin !== unsetAChannelAdminDto.userLogin42,
     );
     await this.save(channel);
     return channel;
@@ -256,28 +256,28 @@ export class ChannelRepository extends Repository<Channel> {
 
   async sendMSGToChannel(
     user: User,
-    sendMSGToChannelDto: SendMessageDto
+    sendMSGToChannelDto: SendMessageDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
-      relations: ["users"],
+      relations: ['users'],
       where: {
         id: sendMSGToChannelDto.channelId,
       },
     });
 
     if (!channel) {
-      throw new Error("Channel not found");
+      throw new Error('Channel not found');
     }
     this.resolveChannelRestrictions(channel);
 
     if (channel.banned?.find(({ login }) => login === user.login42)) {
-      throw new ForbiddenException("You are banned from this channel");
+      throw new ForbiddenException('You are banned from this channel');
     }
     if (channel.muted?.find(({ login }) => login === user.login42)) {
-      throw new ForbiddenException("You are muted from this channel");
+      throw new ForbiddenException('You are muted from this channel');
     }
     if (!channel.users.find(({ login42 }) => login42 === user.login42)) {
-      throw new ForbiddenException("You are not in this channel");
+      throw new ForbiddenException('You are not in this channel');
     }
     channel.messages.push(sendMSGToChannelDto.message);
     await this.save(channel);
@@ -286,14 +286,14 @@ export class ChannelRepository extends Repository<Channel> {
 
   async getChannel(user: User, channelId: string): Promise<Channel> {
     const channel = await this.findOne({
-      relations: ["users"],
+      relations: ['users'],
       where: {
         id: channelId,
       },
     });
 
     if (!channel) {
-      throw new Error("Channel not found");
+      throw new Error('Channel not found');
     }
     this.resolveChannelRestrictions(channel);
 
@@ -303,17 +303,17 @@ export class ChannelRepository extends Repository<Channel> {
   async getInvitableFriends(
     user: User,
     userFriends: User[],
-    channelId: string
+    channelId: string,
   ): Promise<User[]> {
     const channel = await this.findOne({
-      relations: ["users"],
+      relations: ['users'],
       where: {
         id: channelId,
       },
     });
 
     if (!channel) {
-      throw new Error("Channel not found");
+      throw new Error('Channel not found');
     }
     this.resolveChannelRestrictions(channel);
 
@@ -321,7 +321,7 @@ export class ChannelRepository extends Repository<Channel> {
       (friend) =>
         !channel.users.find(({ login42 }) => login42 === friend.login42) &&
         !channel.invitations.includes(friend.login42) &&
-        !channel.banned?.find(({ login }) => login === friend.login42)
+        !channel.banned?.find(({ login }) => login === friend.login42),
     );
 
     return invitableFriends;
@@ -334,18 +334,17 @@ export class ChannelRepository extends Repository<Channel> {
       },
     });
 
-	console.log("channels before filter: ", channels);
-    const publicChannels =  channels.filter((channel) => {
+    const publicChannels = channels.filter((channel) => {
       this.resolveChannelRestrictions(channel);
       return !channel.banned.find(({ login }) => login === user.login42);
     });
-	return publicChannels;
+    return publicChannels;
   }
 
   async getJoinedChannels(user: User): Promise<Channel[]> {
-    return await this.createQueryBuilder("channel")
-      .leftJoin("channel.users", "user")
-      .where("user.login42 = :login", { login: user.login42 })
+    return await this.createQueryBuilder('channel')
+      .leftJoin('channel.users', 'user')
+      .where('user.login42 = :login', { login: user.login42 })
       .getMany();
   }
 }

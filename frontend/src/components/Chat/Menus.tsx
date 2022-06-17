@@ -8,6 +8,7 @@ import directMessage from "../../public/direct_message.png";
 import addChannel from "../../public/add_channel.png";
 
 import { useSessionContext } from "../../context/SessionContext";
+
 import { PrivateConv, Channel } from "../../interfaces/Chat.interfaces";
 import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
@@ -21,25 +22,33 @@ import { ButtonTxtSetAsAdmin } from "../Buttons/ButtonTxtSetAsAdmin";
 
 import ChannelSettings from "../Buttons/ChannelSettings";
 
+import Avatar from "@mui/material/Avatar";
+
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useSocketContext } from "../../context/SocketContext";
+import { IUserSelf, IUserSlim } from "../../interfaces/IUser";
 
-function SelectedDMMenu({
-  keyV,
-  userLogin,
-}: {
-  keyV: string;
-  userLogin: string;
-}) {
+function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUserSelf }) {
   return (
     <div key={keyV} className={styles.chat_direct_message_menu_dm_selected}>
-      {userLogin}
-      <ButtonTxtViewProfile login={userLogin} />
-      <ButtonTxtUserStatus login={userLogin} />
-      <ButtonTxtBlockUser login={userLogin} />
+      <Avatar
+        className={styles.chat_avatar}
+        src={user.image}
+        sx={{ width: "20px", height: "20px" }}
+      >
+        <Avatar
+          className={styles.chat_avatar}
+          src={user.photo42}
+          sx={{ width: "20px", height: "20px" }}
+        />
+      </Avatar>
+      {user.login42}
+      <ButtonTxtViewProfile login={user.login42} />
+      <ButtonTxtUserStatus login={user.login42} />
+      <ButtonTxtBlockUser login={user.login42} />
     </div>
   );
 }
@@ -57,19 +66,11 @@ function DMList({
 
   return openedDMs?.map((dm) => {
     const key = dm.userOne.login42 + "|" + dm.userTwo.login42;
-    const username =
-      dm.userOne.login42 === sessionContext.userLogin
-        ? dm.userTwo.username
-        : dm.userOne.username;
+    const user =
+      dm.userOne.login42 === sessionContext.userSelf.login42 ? dm.userTwo : dm.userOne;
 
     if (key === menu) {
-      return (
-        <SelectedDMMenu
-          key={"selectedDMMenu"}
-          keyV={key}
-          userLogin={username}
-        />
-      );
+      return <SelectedDMMenu key={"selectedDMMenu"} keyV={key} user={user} />;
     }
     return (
       <div
@@ -79,7 +80,18 @@ function DMList({
           setMenu(key);
         }}
       >
-        {username}
+        <Avatar
+          className={styles.chat_avatar}
+          src={user.image}
+          sx={{ width: "20px", height: "20px" }}
+        >
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.photo42}
+            sx={{ width: "20px", height: "20px" }}
+          />
+        </Avatar>
+        {user.login42}
       </div>
     );
   });
@@ -137,12 +149,12 @@ export function DirectMessageMenu(props: {
 }
 
 function SelectedUserMenu({
-  userLogin,
+  user,
   getUserStyle,
   setSelectedUser,
   channel,
 }: {
-  userLogin: string;
+  user: IUserSlim;
   getUserStyle: (userLogin: string) => any;
   setSelectedUser: (userLogin: string) => void;
   channel: Channel;
@@ -153,47 +165,80 @@ function SelectedUserMenu({
     return (
       <div className={styles.selected_user}>
         <div
-          className={getUserStyle(userLogin)}
+          className={getUserStyle(user.login42)}
           onClick={() => setSelectedUser("")}
         >
-          {userLogin}
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.image}
+            sx={{ width: "20px", height: "20px" }}
+          >
+            <Avatar
+              className={styles.chat_avatar}
+              src={user.photo42}
+              sx={{ width: "20px", height: "20px" }}
+            />
+          </Avatar>
+          {user.login42}
         </div>
-        <ButtonTxtViewProfile login={userLogin} />
-        <ButtonTxtUserStatus login={userLogin} />
-        <ButtonTxtBlockUser login={userLogin} />
-        <ButtonTxtMuteUser login={userLogin} channel={channel} />
-        <ButtonTxtBanUser login={userLogin} channel={channel} />
-        <ButtonTxtSetAsAdmin login={userLogin} channel={channel} />
+        <ButtonTxtViewProfile login={user.login42} />
+        <ButtonTxtUserStatus login={user.login42} />
+        <ButtonTxtBlockUser login={user.login42} />
+        <ButtonTxtMuteUser login={user.login42} channel={channel} />
+        <ButtonTxtBanUser login={user.login42} channel={channel} />
+        <ButtonTxtSetAsAdmin login={user.login42} channel={channel} />
       </div>
     );
-  } else if (channel?.admins?.includes(sessionContext.userLogin)) {
+  } else if (channel?.admin?.includes(sessionContext.userLogin)) {
     return (
       <div className={styles.selected_user}>
         <div
-          className={getUserStyle(userLogin)}
+          className={getUserStyle(user.login42)}
           onClick={() => setSelectedUser("")}
         >
-          {userLogin}
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.image}
+            sx={{ width: "20px", height: "20px" }}
+          >
+            <Avatar
+              className={styles.chat_avatar}
+              src={user.photo42}
+              sx={{ width: "20px", height: "20px" }}
+            />
+          </Avatar>
+          {user.login42}
         </div>
-        <ButtonTxtViewProfile login={userLogin} />
-        <ButtonTxtUserStatus login={userLogin} />
-        <ButtonTxtBlockUser login={userLogin} />
-        <ButtonTxtMuteUser login={userLogin} channel={channel} />
-        <ButtonTxtBanUser login={userLogin} channel={channel} />
+        <ButtonTxtViewProfile login={user.login42} />
+        <ButtonTxtUserStatus login={user.login42} />
+        <ButtonTxtBlockUser login={user.login42} />
+        <ButtonTxtMuteUser login={user.login42} channel={channel} />
+        <ButtonTxtBanUser login={user.login42} channel={channel} />
       </div>
     );
   } else {
     return (
       <div className={styles.selected_user}>
         <div
-          className={getUserStyle(userLogin)}
+          className={getUserStyle(user.login42)}
           onClick={() => setSelectedUser("")}
         >
-          {userLogin}
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.image}
+            sx={{ width: "20px", height: "20px" }}
+          >
+            <Avatar
+              className={styles.chat_avatar}
+              src={user.photo42}
+              sx={{ width: "20px", height: "20px" }}
+            />
+          </Avatar>
+          {user.login42}
         </div>
-        <ButtonTxtViewProfile login={userLogin} />
-        <ButtonTxtUserStatus login={userLogin} />
-        <ButtonTxtBlockUser login={userLogin} />
+        <ButtonTxtViewProfile login={user.login42} />
+        <ButtonTxtUserStatus login={user.login42} />
+        <ButtonTxtBlockUser login={user.login42} />
       </div>
     );
   }
@@ -201,12 +246,12 @@ function SelectedUserMenu({
 
 function UserList({ channel }: { channel: Channel }) {
   const sessionContext = useSessionContext();
-  const [selectedUser, setSelectedUser] = useState<String>("");
+  const [selectedUser, setSelectedUser] = useState<string>("");
 
   const getUserStyle = (userLogin: string) => {
     if (userLogin === channel?.owner) {
       return styles.owner;
-    } else if (channel?.admins?.includes(userLogin)) {
+    } else if (channel?.admin?.includes(userLogin)) {
       return styles.admins;
     } else {
       return styles.users;
@@ -217,6 +262,17 @@ function UserList({ channel }: { channel: Channel }) {
     if (user.login42 === sessionContext.userLogin) {
       return (
         <div key={user.login42} className={styles.connected_user}>
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.image}
+            sx={{ width: "20px", height: "20px" }}
+          >
+            <Avatar
+              className={styles.chat_avatar}
+              src={user.photo42}
+              sx={{ width: "20px", height: "20px" }}
+            />
+          </Avatar>
           {user.username}
         </div>
       );
@@ -224,7 +280,7 @@ function UserList({ channel }: { channel: Channel }) {
       return (
         <SelectedUserMenu
           key={user.login42}
-          userLogin={selectedUser}
+          user={user}
           getUserStyle={getUserStyle}
           setSelectedUser={setSelectedUser}
           channel={channel}
@@ -239,6 +295,17 @@ function UserList({ channel }: { channel: Channel }) {
             setSelectedUser(user.login42);
           }}
         >
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.image}
+            sx={{ width: "20px", height: "20px" }}
+          >
+            <Avatar
+              className={styles.chat_avatar}
+              src={user.photo42}
+              sx={{ width: "20px", height: "20px" }}
+            />
+          </Avatar>
           {user.username}
         </div>
       );
@@ -363,7 +430,21 @@ function ChannelList({
           setMenu?.(channel.id);
         }}
       >
-        <Image src={channelImage} alt="channel img" width={45} height={45} />
+        <Avatar
+          src={channel.image}
+          alt="channel image"
+          sx={{
+            width: 45,
+            height: 45,
+          }}
+        >
+          <Image
+            src={channelImage}
+            alt="channel image"
+            width="45"
+            height="45"
+          />
+        </Avatar>
       </div>
     );
   });

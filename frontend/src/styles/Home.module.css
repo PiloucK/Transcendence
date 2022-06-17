@@ -1305,9 +1305,9 @@ and should display them in columns of three cards max */
   overflow-x: hidden;
 
   position: absolute;
-  width: 100%;
+  width: 90%;
   height: 80%;
-  left: 0px;
+  left: 5%;
   top: 5%;
 }
 
@@ -1365,6 +1365,12 @@ and should display them in columns of three cards max */
   background: #fca311;
 }
 
+.message_friend .chat_avatar {
+  position: absolute;
+  /* left: 70px; */
+  right: -50px;
+}
+
 .message_system {
   flex-direction: column;
   align-items: center;
@@ -1374,6 +1380,7 @@ and should display them in columns of three cards max */
 
 .message_friend {
   box-sizing: border-box;
+  right: 50px;
   float: right;
   width: auto;
   max-width: 80%;
@@ -1755,12 +1762,17 @@ and should display them in columns of three cards max */
   cursor: pointer;
 }
 
+.channel_card .channel_image {
+	position: absolute;
+	top:10%;
+  }
+
 .channel_card .channel_name {
   position: absolute;
   /* left: 2.64%; */
   /* right: 2.55%; */
-  top: 71.32%;
-  bottom: 11.7%;
+  top: 78.32%;
+  bottom: 4.7%;
   left: 50%;
   transform: translate(-50%, 0%);
   /* Header 2 */
@@ -1902,12 +1914,9 @@ and should display them in columns of three cards max */
 
 .profile_user_account_details_username {
   position: absolute;
-  left: 29.59%;
-  right: 31.07%;
   top: 65.43%;
-  /* bottom: 55.12%; */
-
-  /* Header 2 */
+  left: 50%;
+  transform: translate(-50%, 0%);
 
   font-family: "Khand";
   font-style: normal;

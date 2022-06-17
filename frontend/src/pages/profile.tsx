@@ -19,81 +19,26 @@ import { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import PublicProfile from "../components/Profile/publicprofile";
 
+import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
 import { errorHandler } from "../errors/errorHandler";
 
 import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
 
-function MyUserName({ userInfos }: { userInfos: IUserSelf }) {
-  const errorContext = useErrorContext();
-  const sessionContext = useSessionContext();
-  const socketContext = useSocketContext();
-  const [isInModification, setIsInModification] = useState(false);
-  const [tmpUsername, setTmpUsername] = useState(""); // tmpUsername -> usernameInput?
-
-  const changeUsername: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-    setIsInModification(false);
-
-    if (tmpUsername !== "") {
-      userService
-        .updateUserUsername(sessionContext.userLogin, tmpUsername)
-        .then(() => {
-          setTmpUsername("");
-          socketContext.socket.emit("user:update-username");
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-    }
-  };
-
-  const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setTmpUsername(event.target.value);
-  };
-
-  if (sessionContext.userLogin === null) return null;
-  if (isInModification === false) {
-    return (
-      <div className={styles.profile_user_account_details_username}>
-        {userInfos.username}
-        <IconButton
-          className={styles.icons}
-          aria-label="userName edit"
-          onClick={() => setIsInModification(true)}
-        >
-          <CreateIcon />
-        </IconButton>
-      </div>
-    );
-  } else {
-    return (
-      <div className={styles.profile_user_account_details_username}>
-        <form onSubmit={changeUsername}>
-          <TextField
-            value={tmpUsername}
-            onChange={handleUsernameChange}
-            label={userInfos.username}
-          />
-          <IconButton type="submit">
-            <CheckIcon />
-          </IconButton>
-        </form>
-      </div>
-    );
-  }
-}
-
-function MyAvatar() {
+function MyAvatar({ userInfos }: { userInfos: IUser }) {
   return (
     <div className={styles.profile_user_account_details_avatar}>
       <Avatar
-        img="/public/profile_icon.png"
+        src={userInfos.image}
         alt="avatar"
         sx={{ width: 151, height: 151 }}
-      />
+      >
+        <Avatar
+          src={userInfos.photo42}
+          alt="avatar"
+          sx={{ width: 151, height: 151 }}
+        />
+      </Avatar>
     </div>
   );
 }
@@ -104,8 +49,10 @@ function MyAccountDetails({ userInfos }: { userInfos: IUserSelf }) {
       <div className={styles.profile_user_account_details_title}>
         Account details
       </div>
-      <MyAvatar />
-      <MyUserName userInfos={userInfos} />
+      <MyAvatar userInfos={userInfos} />
+      <div className={styles.profile_user_account_details_username}>
+        {userInfos.username}
+      </div>
     </div>
   );
 }
@@ -133,6 +80,7 @@ function Profile({
 }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
+  const [open, setOpen] = useState(false);
   const socketContext = useSocketContext();
 
   React.useEffect(() => {
@@ -154,6 +102,11 @@ function Profile({
         <MyAccountDetails userInfos={state.userInfos} />
         <UserStats userInfos={state.userInfos} />
         <ButtonLogout />
+        <ProfileSettingsDialog
+          user={state.userInfos}
+          open={open}
+          setOpen={setOpen}
+        />
       </div>
       <UserGameHistory userLogin={sessionContext.userLogin} />
     </>
@@ -176,6 +129,8 @@ export default function ProfilePage() {
   const [userInfos, setUserInfos] = useState<IUserSelf>({
     id: "",
     login42: "",
+    image: "",
+    photo42: "",
     token42: "",
     twoFa: false,
     username: "",
@@ -201,7 +156,6 @@ export default function ProfilePage() {
     }
   }, []);
 
-  // if (sessionContext.userLogin === null) return <DockGuest />;
   return (
     <Profile state={{ userInfos: userInfos, setUserInfos: setUserInfos }} />
   );

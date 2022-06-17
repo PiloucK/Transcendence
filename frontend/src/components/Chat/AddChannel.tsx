@@ -12,6 +12,8 @@ import { PasswordField } from "../Inputs/PasswordField";
 import { inputPFState } from "../../interfaces/inputPasswordField";
 
 import Switch from "@mui/material/Switch";
+import Avatar from "@mui/material/Avatar";
+import { styled } from "@mui/material/styles";
 
 import { ButtonCreateChannel } from "../Buttons/ButtonCreateChannel";
 import { Channel, ChannelCreation } from "../../interfaces/Chat.interfaces";
@@ -83,6 +85,32 @@ function CreateChannelForm() {
   const [textFieldError, setTextFieldError] = useState("");
   const [confirmationFieldError, setConfirmationFieldError] = useState("");
 
+  const [newImage, setNewImage] = useState<Blob>();
+  const [preview, setPreview] = useState("");
+
+  const updateNewImage = (event) => {
+    setNewImage(event.target.files[0]);
+    setPreview(URL.createObjectURL(event.target.files[0]));
+  };
+
+  const Input = styled("input")({
+    display: "none",
+  });
+
+  const buttonBrowse = () => {
+    return (
+      <label htmlFor="icon-button-file">
+        <Input
+          accept="image/*"
+          id="icon-button-file"
+          type="file"
+          onChange={updateNewImage}
+        />
+        <div className={styles.chat_create_channel_browse}>Browse</div>
+      </label>
+    );
+  };
+
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsPrivate(event.target.checked);
   };
@@ -111,58 +139,79 @@ function CreateChannelForm() {
           socketContext.socket.emit("user:update-public-channels");
           socketContext.socket.emit("user:update-joined-channel");
           sessionContext.setChatMenu?.(res.id);
+          if (newImage !== undefined) {
+            const formData = new FormData();
+            formData.append("file", newImage);
+            channelService
+              .updateChannelImage(sessionContext.userLogin, res.id, formData)
+              .then((res) => {
+                socketContext.socket.emit("user:update-public-channels");
+              });
+          }
         });
     }
   };
 
   return (
-    <div className={styles.chat_create_channel_form}>
-      <div className={styles.chat_create_channel_form_input}>
-        Channel Name
-        <TextField
-          value={channelName}
-          setValue={setChannelName}
-          error={textFieldError}
-        />
+    <>
+      <div className={styles.chat_create_channel_image}>
+          <Avatar
+            src={preview}
+            alt="channel image"
+            sx={{
+              width: 250,
+              height: 250,
+            }}
+          >
+            <Image
+              src={channelImage}
+              alt="channel image"
+              width="250"
+              height="250"
+            />
+          </Avatar>
       </div>
-      <div className={styles.chat_create_channel_form_input}>
-        Channel Password
-        <PasswordField
-          password={channelPassword}
-          setPassword={setChannelPassword}
-          id="channelPasswordField"
-          error=""
-        />
+      {buttonBrowse()}
+      <div className={styles.chat_create_channel_form}>
+        <div className={styles.chat_create_channel_form_input}>
+          Channel Name
+          <TextField
+            value={channelName}
+            setValue={setChannelName}
+            error={textFieldError}
+          />
+        </div>
+        <div className={styles.chat_create_channel_form_input}>
+          Channel Password
+          <PasswordField
+            password={channelPassword}
+            setPassword={setChannelPassword}
+            id="channelPasswordField"
+            error=""
+          />
+        </div>
+        <div className={styles.chat_create_channel_form_input}>
+          Confirm Password
+          <PasswordField
+            password={confirmation}
+            setPassword={setConfirmation}
+            id="channelPasswordConfirmationField"
+            error={confirmationFieldError}
+          />
+        </div>
+        <div className={styles.chat_create_channel_form_switch}>
+          Set channel as private{" "}
+          <Switch checked={isPrivate} onChange={handleSwitchChange} />
+        </div>
+        <ButtonCreateChannel createChannel={createChannel} />
       </div>
-      <div className={styles.chat_create_channel_form_input}>
-        Confirm Password
-        <PasswordField
-          password={confirmation}
-          setPassword={setConfirmation}
-          id="channelPasswordConfirmationField"
-          error={confirmationFieldError}
-        />
-      </div>
-      <div className={styles.chat_create_channel_form_switch}>
-        Set channel as private{" "}
-        <Switch checked={isPrivate} onChange={handleSwitchChange} />
-      </div>
-      <ButtonCreateChannel createChannel={createChannel} />
-    </div>
+    </>
   );
-}
-
-function ButtonBrowse() {
-  return <div className={styles.chat_create_channel_browse}>Browse</div>;
 }
 
 function CreateChannel() {
   return (
     <div className={styles.chat_create_channel}>
-      <div className={styles.chat_create_channel_image}>
-        <Image src={channelImage} alt="channel image" />
-      </div>
-      <ButtonBrowse />
       <CreateChannelForm />
     </div>
   );

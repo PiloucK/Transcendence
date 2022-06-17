@@ -18,6 +18,7 @@ import { CardUserDM } from "../Cards/CardUserDM";
 import Image from "next/image";
 import Rocket from "../../public/no_dm_content.png";
 import Blocked from "../../public/blocked.png";
+import Avatar from "@mui/material/Avatar";
 
 import { SendMessageField } from "../Inputs/SendMessageField";
 
@@ -113,6 +114,42 @@ function Messages({ dm }: { dm: PrivateConv }) {
     }
   };
 
+  const GetAvatar = ({ author }: { author: string }) => {
+    if (author === loginContext.userLogin) {
+      return null;
+    } else {
+      if (dm.userOne.username === author) {
+        return (
+          <div className={styles.chat_avatar}>
+            <Avatar
+              src={dm.userOne.image}
+              sx={{ width: "40px", height: "40px" }}
+            >
+              <Avatar
+                src={dm.userOne.photo42}
+                sx={{ width: "40px", height: "40px" }}
+              />
+            </Avatar>
+          </div>
+        );
+      } else {
+        return (
+          <div className={styles.chat_avatar}>
+            <Avatar
+              src={dm.userTwo.image}
+              sx={{ width: "40px", height: "40px" }}
+            >
+              <Avatar
+                src={dm.userTwo.photo42}
+                sx={{ width: "40px", height: "40px" }}
+              />
+            </Avatar>
+          </div>
+        );
+      }
+    }
+  };
+
   if (typeof window !== "undefined") {
     var messageBody = document.querySelector("#directMessageMsgArea");
     if (messageBody) {
@@ -125,6 +162,7 @@ function Messages({ dm }: { dm: PrivateConv }) {
       {dm.messages.map((message, index) => (
         <div className={getStyle(message.author)} key={index}>
           <MessageContent message={message} />
+          <GetAvatar author={message.author} />
         </div>
       ))}
     </div>

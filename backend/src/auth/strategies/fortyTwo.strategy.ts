@@ -24,6 +24,6 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy) {
     _refreshToken: string,
     profile: FortyTwoUserProfileDto,
   ): Promise<User> {
-    return this.authService.findOrCreate42UserInDatabase(profile.username);
+    return this.authService.findOrCreate42UserInDatabase(profile);
   }
 }

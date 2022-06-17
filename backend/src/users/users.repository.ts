@@ -24,12 +24,13 @@ export class UsersRepository extends Repository<User> {
     return user;
   }
 
-  async createUser(login42: string): Promise<User> {
+  async createUser(login42: string, photo42: string): Promise<User> {
     let user = await this.findOne(login42);
     if (!user) {
       user = this.create({
         login42,
         username: login42,
+        photo42: photo42,
       });
 
       await this.save(user);

@@ -13,29 +13,35 @@ export function CardUserChannelInvite({
   userInfos: IUserPublic;
   setSelectedFriends: (friends: IUserPublic) => void;
 }) {
-	const [isSelected, setIsSelected] = React.useState(false);
+  const [isSelected, setIsSelected] = React.useState(false);
 
-	const handleClick = () => {
-		setIsSelected(!isSelected);
-		setSelectedFriends(userInfos);
-	}
+  const handleClick = () => {
+    setIsSelected(!isSelected);
+    setSelectedFriends(userInfos);
+  };
 
-	const getStyle = () => {
-		if (isSelected) {
-			return styles.invite_user_card_selected;
-		} else {
-			return styles.invite_user_card;
-		}
-	}
+  const getStyle = () => {
+    if (isSelected) {
+      return styles.invite_user_card_selected;
+    } else {
+      return styles.invite_user_card;
+    }
+  };
 
   return (
-    <div
-      className={getStyle()}
-      onClick={handleClick}
-      key={userInfos.login42}
-    >
+    <div className={getStyle()} onClick={handleClick} key={userInfos.login42}>
       <div className={styles.user_card_avatar}>
-        <Avatar src={profileIcon} sx={{ width: "100px", height: "100px" }} />
+        <Avatar
+          src={userInfos.image}
+          alt="avatar"
+          sx={{ width: 100, height: 100 }}
+        >
+          <Avatar
+            src={userInfos.photo42}
+            alt="avatar"
+            sx={{ width: 100, height: 100 }}
+          />
+        </Avatar>
       </div>
       <div className={styles.user_card_username}>{userInfos.username}</div>
       <div className={styles.user_card_elo}>Elo: {userInfos.elo}</div>

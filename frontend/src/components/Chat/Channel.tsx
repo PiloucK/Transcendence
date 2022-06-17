@@ -10,6 +10,7 @@ import { CardUserDM } from "../Cards/CardUserDM";
 
 import Image from "next/image";
 import Rocket from "../../public/no_dm_content.png";
+import Avatar from "@mui/material/Avatar";
 
 import { SendMessageField } from "../Inputs/SendMessageField";
 import { useSocketContext } from "../../context/SocketContext";
@@ -34,6 +35,31 @@ function Messages({ channel }: { channel: Channel }) {
     }
   };
 
+  const GetAvatar = ({ author }: { author: string }) => {
+    if (author === loginContext.userLogin) {
+      return null;
+    } else {
+      const user = channel.users.find((user) => user.login42 === author);
+      if (user.image) {
+        return (
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.image}
+            sx={{ width: "40px", height: "40px" }}
+          />
+        );
+      } else {
+        return (
+          <Avatar
+            className={styles.chat_avatar}
+            src={user.photo42}
+            sx={{ width: "40px", height: "40px" }}
+          />
+        );
+      }
+    }
+  };
+
   const setScroll = () => {
     if (typeof window !== "undefined") {
       var elem = document.getElementById("channelMsgArea");
@@ -49,6 +75,7 @@ function Messages({ channel }: { channel: Channel }) {
         {channel.messages.map((message, index) => (
           <div className={getStyle(message.author)} key={index}>
             {message.content}
+            <GetAvatar author={message.author} />
           </div>
         ))}
       </div>
@@ -93,7 +120,6 @@ export function Channel({ id }: { id: string }) {
     });
   }, []);
 
-  console.log("channel: ", channel);
   return (
     <>
       <ChannelMenu channel={channel} />

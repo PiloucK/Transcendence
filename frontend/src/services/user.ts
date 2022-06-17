@@ -26,6 +26,21 @@ const getUserFriends = (login: string) => {
     .then((response) => response.data);
 };
 
+const updateUserImage = (login: string, file: FormData) => {
+  const request = axios.post(
+    `${baseUrl}/${login}/image`,
+    file,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
 const getUserFriendRequestsSent = (login: string) => {
   return axios
     .get(`${baseUrl}/${login}/friendRequestsSent`)
@@ -103,7 +118,6 @@ const unblockUser = (login: string, friendLogin42: string) => {
 export default {
   getAll,
   getOne,
-  updateUserUsername,
   getUserFriends,
   getUserFriendRequestsSent,
   getUserFriendRequestsReceived,
@@ -112,6 +126,8 @@ export default {
   acceptFriendRequest,
   declineFriendRequest,
   removeFriend,
+  updateUserUsername,
+  updateUserImage,
   getUserBlockedUsers,
   blockUser,
   unblockUser,

@@ -8,8 +8,7 @@ import { Message, ChannelCreation } from "../interfaces/Chat.interfaces";
 axios.defaults.withCredentials = true;
 
 const createChannel = (login: string, channelInfos: ChannelCreation) => {
-  console.log("Create channel: ", channelInfos);
-  const request = axios.patch(`${baseUrl}/${login}/createChannel`, {
+  const request = axios.post(`${baseUrl}/${login}/createChannel`, {
     name: channelInfos.name,
     password: channelInfos.password,
     isPrivate: channelInfos.isPrivate,
@@ -34,6 +33,15 @@ const updateChannel = (
       isPrivate: channelInfos.isPrivate,
     }
   );
+  return request
+    .then((response) => response.data)
+    .catch((e) => {
+      console.error(e);
+    });
+};
+
+const updateChannelImage = (login: string, channelId: string, file: Blob) => {
+  const request = axios.post(`${baseUrl}/${login}/image/${channelId}`, file);
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -224,6 +232,7 @@ const getJoinedChannels = (login: string) => {
 export default {
   createChannel,
   updateChannel,
+  updateChannelImage,
   joinProtectedChannel,
   joinChannel,
   inviteToChannel,

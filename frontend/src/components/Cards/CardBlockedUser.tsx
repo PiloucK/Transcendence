@@ -14,10 +14,16 @@ export function CardBlockedUser({ userInfos }: { userInfos: IUserPublic }) {
       <Link href={`/profile?login=${userInfos.login42}`}>
         <div className={styles.social_friend_card_avatar}>
           <Avatar
-            img="/public/profile_icon.png"
+            src={userInfos.image}
             alt="avatar"
             sx={{ width: 60, height: 60 }}
-          />
+          >
+            <Avatar
+              src={userInfos.photo42}
+              alt="avatar"
+              sx={{ width: 60, height: 60 }}
+            />
+          </Avatar>
         </div>
       </Link>
       <div className={styles.social_friend_card_username}>

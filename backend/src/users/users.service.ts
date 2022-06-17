@@ -9,12 +9,14 @@ import { User } from './user.entity';
 import { UsersRepository } from './users.repository';
 import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UsersRepository)
     private readonly usersRepository: UsersRepository,
+    private readonly configService: ConfigService,
   ) {}
 
   private restrictToReqUser(reqUser: User, login42: string): void {
@@ -79,6 +81,22 @@ export class UsersService {
     reqUser.username = username;
     await this.usersRepository.save(reqUser);
     return reqUser;
+  }
+
+  async updateUserImage(
+    reqUser: User,
+    login42: string,
+    file: Express.Multer.File,
+  ): Promise<User> {
+    this.restrictToReqUser(reqUser, login42);
+
+    const user = await this.getUserByLogin42(login42);
+    user.image =
+      `http://${this.configService.get('HOST')}:${this.configService.get(
+        'BACKEND_PORT',
+      )}/users/image/` + file.filename;
+    await this.usersRepository.save(user);
+    return user;
   }
 
   async updateUserElo(login42: string, elo: number): Promise<User> {
