@@ -3,7 +3,6 @@ import styles from "../styles/Home.module.css";
 import { useSessionContext } from "../context/SessionContext";
 import Router from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
-import { IUserPublic } from "../interfaces/IUser";
 import { useErrorContext } from "../context/ErrorContext";
 import { errorHandler } from "../errors/errorHandler";
 import userService from "../services/user";
@@ -12,8 +11,9 @@ import { ProfileInteractions } from "../components/Profile/ProfileInteractions";
 import { UserStats } from "../components/Profile/UserStats";
 import { AccountDetails } from "../components/Profile/AccountDetails";
 import { useEffect, useRef, useState } from "react";
-import { useSocketContext } from "../context/SocketContext";
+// import { useSocketContext } from "../context/SocketContext";
 import { defaultSessionState } from "../constants/defaultSessionState";
+import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
 
 export default function ProfilePage() {
   const { login } = Router.query;
@@ -24,6 +24,7 @@ export default function ProfilePage() {
     defaultSessionState.userSelf
   );
   const isFetched = useRef(false);
+  const [open, setOpen] = useState(false);
 
   const fetchDisplayedUser = async () => {
     if (login !== undefined && login !== sessionContext.userSelf.login42) {
@@ -71,7 +72,14 @@ export default function ProfilePage() {
             displayedUser={displayedUser}
           />
         ) : (
-          <ButtonLogout />
+          <>
+            <ButtonLogout />
+            <ProfileSettingsDialog
+              user={displayedUser}
+              open={open}
+              setOpen={setOpen}
+            />
+          </>
         )}
       </div>
       <UserGameHistory userLogin={sessionContext.userSelf.login42} />

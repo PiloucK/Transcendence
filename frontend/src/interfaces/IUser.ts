@@ -10,6 +10,8 @@ export interface IUserPublic extends IUserSlim {
   gamesWon: number;
   gamesLost: number;
 }
+  image: string | undefined;
+  photo42: string | undefined;
 
 export interface IUserSelf extends IUserPublic {
   friends: IUserSlim[];
