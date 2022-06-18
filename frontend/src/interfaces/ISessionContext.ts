@@ -2,6 +2,7 @@ import { IUserSelf } from "./IUser";
 
 export interface ISessionContext {
   userSelf: IUserSelf;
+  updateUserSelf?: () => void;
   chatMenu: string;
   setChatMenu?: (menu: string) => void;
   chatDM: string;

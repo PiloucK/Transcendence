@@ -20,6 +20,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useSocketContext } from "../../context/SocketContext";
 import { IUserSelf } from "../../interfaces/IUser";
+import { useSessionContext } from "../../context/SessionContext";
 
 export function ProfileSettingsDialog({
   user,
@@ -31,6 +32,7 @@ export function ProfileSettingsDialog({
   setOpen: (open: boolean) => void;
 }) {
   const socketContext = useSocketContext();
+  const sessionContext = useSessionContext();
   const [username, setUsername] = useState(user.username);
 
   const [textFieldError, setTextFieldError] = useState("");
@@ -73,6 +75,7 @@ export function ProfileSettingsDialog({
         });
       }
     }
+    sessionContext.updateUserSelf?.();
   };
 
   return (

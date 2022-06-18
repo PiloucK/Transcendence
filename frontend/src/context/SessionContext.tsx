@@ -1,22 +1,23 @@
 import { createContext, useContext, useState } from "react";
 import React from "react";
 import Router from "next/router";
-
 import Cookies from "js-cookie";
-
 import { useSocketContext } from "./SocketContext";
-
 import { ISessionContext } from "../interfaces/ISessionContext";
 import { defaultSessionState } from "../constants/defaultSessionState";
-
 import { IUserSelf } from "../interfaces/IUser";
+import authService from "../services/auth";
 
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
 const SessionContext = createContext<ISessionContext>(defaultSessionState);
 
-export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
+export const SessionProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const socketContext = useSocketContext();
   const [userSelf, setUserSelf] = useState(defaultSessionState.userSelf);
   const [chatMenu, setChatMenu] = useState(defaultSessionState.chatMenu);
@@ -39,10 +40,18 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     });
   };
 
+  const updateUserSelf = async () => {
+    const user = await authService.getLoggedInUser().catch(() => {
+      return;
+    });
+    setUserSelf(user);
+  };
+
   return (
     <SessionContext.Provider
       value={{
         userSelf,
+        updateUserSelf,
         chatMenu,
         setChatMenu,
         chatDM,
