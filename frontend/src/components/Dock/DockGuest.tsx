@@ -10,6 +10,7 @@ import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
 export function DockGuest() {
+  console.log("dockguest");
   return (
     <>
       <Dock>
