@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import { SecondFactorLogin } from "../components/Alerts/SecondFactorLogin";
 import { DockSelector } from "../components/Dock/DockSelector";
 
 export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
@@ -14,7 +13,6 @@ export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
         <div className={styles.play}>PLAY</div>
       </Link>
       <DockSelector />
-      <SecondFactorLogin />
     </>
   );
 };

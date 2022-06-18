@@ -18,7 +18,9 @@ import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
+import { SecondFactorLogin } from "../Alerts/SecondFactorLogin";
 import getConfig from "next/config";
+
 const { publicRuntimeConfig } = getConfig();
 
 export function DockGuest() {
@@ -45,16 +47,19 @@ export function DockGuest() {
   }, [sessionContext]);
 
   return (
-    <Dock>
-      <Link
-        href={`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/auth`}
-      >
-        <Tooltip title="Login with your 42 account">
-          <IconButton className={styles.icons} aria-label="Authentication">
-            <Image src={FTLogo} alt="42 logo" layout={"fill"} />
-          </IconButton>
-        </Tooltip>
-      </Link>
-    </Dock>
+    <>
+      <Dock>
+        <Link
+          href={`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/auth`}
+        >
+          <Tooltip title="Login with your 42 account">
+            <IconButton className={styles.icons} aria-label="Authentication">
+              <Image src={FTLogo} alt="42 logo" layout={"fill"} />
+            </IconButton>
+          </Tooltip>
+        </Link>
+      </Dock>
+      <SecondFactorLogin />
+    </>
   );
 }
