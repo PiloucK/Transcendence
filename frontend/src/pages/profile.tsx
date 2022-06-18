@@ -1,7 +1,7 @@
 import { ButtonLogout } from "../components/Buttons/ButtonLogout";
 import styles from "../styles/Home.module.css";
 import { useSessionContext } from "../context/SessionContext";
-import Router, { useRouter } from "next/router";
+import Router from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import { IUserPublic } from "../interfaces/IUser";
 import { useErrorContext } from "../context/ErrorContext";
@@ -16,8 +16,7 @@ import { useSocketContext } from "../context/SocketContext";
 import { defaultSessionState } from "../constants/defaultSessionState";
 
 export default function ProfilePage() {
-  const router = useRouter();
-  const { login } = router.query;
+  const { login } = Router.query;
   const sessionContext = useSessionContext();
   // const socketContext = useSocketContext();
   const errorContext = useErrorContext();

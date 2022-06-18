@@ -18,17 +18,13 @@ export function ButtonUnblock({
   const sessionContext = useSessionContext();
 
   const unblockAUser = async () => {
-    // if (
-    // sessionContext.userSelf.login42 !== null &&
-    // userSelf.login42 !== displayedUser.login42
-    // ) {
     await userService
       .unblockUser(userSelf.login42, displayedUser.login42)
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });
+
     socketContext.socket.emit("user:update-relations");
-    // }
   };
 
   return (

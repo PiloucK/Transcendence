@@ -18,17 +18,13 @@ export function ButtonRemoveFriend({
   const socketContext = useSocketContext();
 
   const removeFromFriend = async () => {
-    // if (
-    //   sessionContext.userSelf.login42 !== null &&
-    //   sessionContext.userSelf.login42 !== userInfos.login42
-    // ) {
     await userService
       .removeFriend(userSelf.login42, displayedUser.login42)
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });
+
     socketContext.socket.emit("user:update-relations");
-    // }
   };
 
   return (

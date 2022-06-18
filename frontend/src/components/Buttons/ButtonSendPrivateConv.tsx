@@ -20,21 +20,17 @@ export function ButtonSendPrivateConv({
   const socketContext = useSocketContext();
 
   const sendPrivateMessage = async () => {
-    // if (
-    //   sessionContext.userSelf.login42 !== null &&
-    //   sessionContext.userSelf.login42 !== userInfos.login42
-    // ) {
     const privateConv: PrivateConv = await privateConvService
       .createPrivateConv(userSelf.login42, displayedUser.login42)
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });
+
     sessionContext.setChatDM?.(
       privateConv.userOne.login42 + "|" + privateConv.userTwo.login42
     );
     socketContext.socket.emit("user:update-direct-messages");
     Router.push("/chat");
-    // }
   };
 
   return (

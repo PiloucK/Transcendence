@@ -18,17 +18,13 @@ export function ButtonBlock({
   const socketContext = useSocketContext();
 
   const blockAUser = async () => {
-    // if (
-    // sessionContext.userSelf.login42 !== null &&
-    // sessionContext.userSelf.login42 !== userInfos.login42
-    // ) {
     await userService
       .blockUser(userSelf.login42, displayedUser.login42)
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });
+
     socketContext.socket.emit("user:update-relations");
-    // }
   };
 
   return (
