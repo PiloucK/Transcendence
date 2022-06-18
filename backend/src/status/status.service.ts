@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
 import { StoredLiveStatus } from './status.type';
 
 interface StatusMetrics {
@@ -14,8 +13,6 @@ type SocketId = string;
 export class StatusService {
   private sockets = new Map<SocketId, Login42>();
   private statuses = new Map<Login42, StatusMetrics>();
-
-  constructor(private readonly usersService: UsersService) {}
 
   add(socketId: SocketId, userLogin42: Login42): 'EMIT' | 'QUIET' {
     this.sockets.set(socketId, userLogin42);
