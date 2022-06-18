@@ -37,7 +37,7 @@ export function ChannelSettingsDialog({
   const [setPassword, setSetPassword] = React.useState(false);
   const [height, setHeight] = React.useState("400px");
   const [channelPassword, setChannelPassword] = useState<inputPFState>({
-    password: channel.password,
+    password: "",
     showPassword: false,
   });
   const [confirmation, setConfirmation] = useState<inputPFState>({
