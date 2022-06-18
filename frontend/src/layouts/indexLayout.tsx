@@ -1,22 +1,8 @@
 import React from "react";
-import Router from "next/router";
-import { DockGuest } from "../components/Dock/DockGuest";
-import { useSessionContext } from "../context/SessionContext";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-import { defaultSessionState } from "../constants/defaultSessionState";
 import { SecondFactorLogin } from "../components/Alerts/SecondFactorLogin";
-import { DockUser } from "../components/Dock/DockUser";
-
-function DockSelector() {
-  const sessionContext = useSessionContext();
-
-  if (sessionContext.userSelf != defaultSessionState.userSelf) {
-    return <DockUser />;
-  } else {
-    return <DockGuest />;
-  }
-}
+import { DockSelector } from "../components/Dock/DockSelector";
 
 export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
   return (
