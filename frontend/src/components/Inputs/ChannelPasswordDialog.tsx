@@ -54,7 +54,15 @@ export function ChannelPasswordDialog({
   };
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog
+        PaperProps={{
+          style: {
+            backgroundColor: "#163F5B",
+          },
+        }}
+        open={open}
+        onClose={handleClose}
+      >
         <DialogTitle>Protected channel</DialogTitle>
         <DialogContent>
           <DialogContentText>
