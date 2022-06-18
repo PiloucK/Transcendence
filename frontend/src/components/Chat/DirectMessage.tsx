@@ -4,6 +4,8 @@ import { EmptyFriendList } from "../Social/emptyPages";
 
 import { DirectMessageMenu } from "./Menus";
 import { useLoginContext } from "../../context/LoginContext";
+import { errorHandler } from "../../errors/errorHandler";
+import { useErrorContext } from "../../context/ErrorContext";
 import {
   IUserPublicInfos,
   PrivateConv,
@@ -45,6 +47,7 @@ function FriendList({
 }
 
 function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
@@ -54,6 +57,9 @@ function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
       .getUserFriends(loginContext.userLogin)
       .then((friends: IUserPublicInfos[]) => {
         setFriends(friends);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     socketContext.socket.on("update-leaderboard", () => {
@@ -61,14 +67,20 @@ function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
-        });
+        })
+		.catch((error) => {
+		  errorContext.newError?.(errorHandler(error, loginContext));
+		});
     });
     socketContext.socket.on("update-relations", () => {
       userService
         .getUserFriends(loginContext.userLogin)
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
-        });
+        })
+		.catch((error) => {
+		  errorContext.newError?.(errorHandler(error, loginContext));
+		});
     });
   }, []);
 
@@ -176,6 +188,7 @@ function Messages({ dm }: { dm: PrivateConv }) {
 }
 
 function CurrentDirectMessage({ menu }: { menu: string }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [blockedList, setBlockedList] = React.useState<IUserPublicInfos[]>([]);
@@ -189,6 +202,9 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
       .getUserBlockedUsers(loginContext.userLogin)
       .then((blocked: IUserPublicInfos[]) => {
         setBlockedList(blocked);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
     privateConvService
       .getPrivateConv(loginContext.userLogin, friend)
@@ -201,7 +217,10 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
         .getUserBlockedUsers(loginContext.userLogin)
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
-        });
+        })
+		.catch((error) => {
+		  errorContext.newError?.(errorHandler(error, loginContext));
+		});
     });
     socketContext.socket.on("update-direct-messages", () => {
       privateConvService
