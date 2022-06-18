@@ -2,10 +2,11 @@ import axios, { AxiosError } from "axios";
 import { defaultErrorData } from "../constants/defaultErrorData";
 import { HttpStatusCodes } from "../constants/httpStatusCodes";
 import { IErrorData } from "../interfaces/IErrorData";
+import { ISessionContext } from "../interfaces/ISessionContext";
 
 export function errorHandler(
   error: Error | AxiosError,
-  sessionContext: any
+  sessionContext: ISessionContext,
 ): IErrorData {
   // TODO: sessionContext define the type
   let errorData: IErrorData = defaultErrorData;
