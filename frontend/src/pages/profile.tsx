@@ -8,10 +8,10 @@ import { useErrorContext } from "../context/ErrorContext";
 import { errorHandler } from "../errors/errorHandler";
 import userService from "../services/user";
 import { AxiosError } from "axios";
-import { Interactions } from "../components/Profile/Interactions";
+import { ProfileInteractions } from "../components/Profile/ProfileInteractions";
 import { UserStats } from "../components/Profile/UserStats";
 import { AccountDetails } from "../components/Profile/AccountDetails";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSocketContext } from "../context/SocketContext";
 import { defaultSessionState } from "../constants/defaultSessionState";
 
@@ -24,20 +24,26 @@ export default function ProfilePage() {
   const [displayedUser, setDisplayedUser] = useState(
     defaultSessionState.userSelf
   );
+  const isFetched = useRef(false);
 
-  useEffect(() => {
+  const fetchDisplayedUser = async () => {
     if (login !== undefined && login !== sessionContext.userSelf.login42) {
-      userService
+      const user = await userService
         .getOne(login)
-        .then((user) => {
-          setDisplayedUser(user);
-        })
         .catch((error: Error | AxiosError<unknown, any>) => {
           errorContext.newError?.(errorHandler(error, sessionContext));
           // return <div>User not found</div>;
         });
+      setDisplayedUser(user);
     } else {
       setDisplayedUser(sessionContext.userSelf);
+    }
+  };
+
+  useEffect(() => {
+    if (isFetched.current !== true) {
+      fetchDisplayedUser();
+      isFetched.current = true;
     }
   }, []);
 
@@ -60,7 +66,7 @@ export default function ProfilePage() {
         <AccountDetails displayedUser={displayedUser} />
         <UserStats displayedUser={displayedUser} />
         {login !== undefined && login !== sessionContext.userSelf.login42 ? (
-          <Interactions
+          <ProfileInteractions
             userSelf={sessionContext.userSelf}
             displayedUser={displayedUser}
           />

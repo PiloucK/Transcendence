@@ -14,7 +14,7 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 import { useEffect } from "react";
 
-export function Interactions({
+export function ProfileInteractions({
   userSelf,
   displayedUser,
 }: {
@@ -118,8 +118,8 @@ export function Interactions({
   return (
     <div className={styles.public_profile_buttons}>
       <ButtonUserStatus displayedUser={displayedUser} />
-      {/* {friendButtons()}
-      {blockButton()} */}
+      {friendButtons()}
+      {blockButton()}
     </div>
   );
 }
