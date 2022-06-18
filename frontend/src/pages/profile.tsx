@@ -1,7 +1,7 @@
 import { ButtonLogout } from "../components/Buttons/ButtonLogout";
 import styles from "../styles/Home.module.css";
 import { useSessionContext } from "../context/SessionContext";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import { IUserPublic } from "../interfaces/IUser";
 import { useErrorContext } from "../context/ErrorContext";
@@ -32,7 +32,8 @@ export default function ProfilePage() {
         .getOne(login)
         .catch((error: Error | AxiosError<unknown, any>) => {
           errorContext.newError?.(errorHandler(error, sessionContext));
-          // return <div>User not found</div>;
+          Router.push("/");
+          return <></>;
         });
       setDisplayedUser(user);
     } else {
