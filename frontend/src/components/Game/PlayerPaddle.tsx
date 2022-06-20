@@ -9,6 +9,10 @@ const PlayerPaddle = (  ) => {
       document.addEventListener("mousemove", e => {
         setPlayerPosition((e.y / window.innerHeight) * 100)
       })
+
+      return () => {
+        window.removeEventListener('mousemove', () => {});
+      }
     }, []);
   
     useEffect(() => {

@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersService } from 'src/users/users.service';
-import { WebsocketsGateway } from 'src/websockets/websockets.gateway';
+import { WebsocketsGateway } from 'src/websockets/main.gateway';
 import { Repository } from 'typeorm';
 import { UserStatus } from './status.entity';
 
