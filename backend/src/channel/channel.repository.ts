@@ -176,13 +176,6 @@ export class ChannelRepository extends Repository<Channel> {
       throw new Error('You are not an admin of this channel');
     }
 
-    if (
-      channel.muted?.find(
-        ({ login }) => login === muteAChannelUserDto.userLogin42,
-      )
-    ) {
-      return channel;
-    }
     channel.muted?.push({
       login: muteAChannelUserDto.userLogin42,
       until: muteAChannelUserDto.duration * 1000 + Date.now(),
