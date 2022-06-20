@@ -15,12 +15,13 @@ import { StatusService } from 'src/status/status.service';
 export class WebsocketsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
+  @WebSocketServer()
+  protected server!: Server;
+
   constructor(
     @Inject(forwardRef(() => StatusService))
     private readonly statusService: StatusService,
   ) {}
-  @WebSocketServer()
-  server!: Server;
 
   handleConnection(@ConnectedSocket() client: Socket) {
     console.log('connection', client.id);
