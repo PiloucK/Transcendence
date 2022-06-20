@@ -311,6 +311,17 @@ export class ChannelRepository extends Repository<Channel> {
     }
     this.resolveChannelRestrictions(channel);
 
+    if (
+      typeof user.blockedUsers !== undefined &&
+      user.blockedUsers?.length > 0
+    ) {
+      channel.messages = channel.messages.filter(
+        (message) =>
+          !user.blockedUsers
+            .map((user) => user.login42)
+            .includes(message.author),
+      );
+    }
     return channel;
   }
 

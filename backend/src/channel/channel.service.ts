@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PrivateConvService } from 'src/privateConv/privateConv.service';
 import { User } from 'src/users/user.entity';
+import { UsersRepository } from 'src/users/users.repository';
 import { UsersService } from 'src/users/users.service';
 import { threadId } from 'worker_threads';
 import { Channel } from './channel.entity';
@@ -21,6 +22,7 @@ export class ChannelService {
   constructor(
     @InjectRepository(ChannelRepository)
     private readonly channelRepository: ChannelRepository,
+    private readonly usersRepository: UsersRepository,
     private readonly usersService: UsersService,
     private readonly privateConvService: PrivateConvService,
     private readonly configService: ConfigService,
@@ -222,7 +224,9 @@ export class ChannelService {
   }
 
   async getChannel(login42: string, channelId: string): Promise<Channel> {
-    const user = await this.usersService.getUserByLogin42(login42);
+    const user = await this.usersRepository.getUserWithRelations(login42, [
+      'blockedUsers',
+    ]);
     return this.channelRepository.getChannel(user, channelId);
   }
 

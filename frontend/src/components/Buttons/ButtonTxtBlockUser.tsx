@@ -42,6 +42,8 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
     if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
       userService.blockUser(loginContext.userLogin, login).then(() => {
         socketContext.socket.emit("user:update-relations");
+        socketContext.socket.emit("user:update-direct-messages");
+        socketContext.socket.emit("user:update-channel-content");
       });
     }
   };
