@@ -37,7 +37,7 @@ function MenuButtons({
     setAnchorEl(null);
     channelService.leaveChannel(loginContext.userLogin, channel.id).then(() => {
       socketContext.socket.emit("user:update-channel-content");
-      socketContext.socket.emit("user:update-joined-channel");
+      socketContext.socket.emit("user:update-joined-channels");
     });
   };
 

@@ -118,7 +118,7 @@ function CreateChannelForm() {
   const createChannel = () => {
     const channel: ChannelCreation = {
       name: channelName,
-	  setPassword: true,
+      setPassword: true,
       password: channelPassword.password,
       isPrivate: isPrivate,
     };
@@ -138,7 +138,7 @@ function CreateChannelForm() {
         .createChannel(loginContext.userLogin, channel)
         .then((res) => {
           socketContext.socket.emit("user:update-public-channels");
-          socketContext.socket.emit("user:update-joined-channel");
+          socketContext.socket.emit("user:update-joined-channels");
           loginContext.setChatMenu?.(res.id);
           if (newImage !== undefined) {
             const formData = new FormData();
@@ -147,6 +147,7 @@ function CreateChannelForm() {
               .updateChannelImage(loginContext.userLogin, res.id, formData)
               .then((res) => {
                 socketContext.socket.emit("user:update-public-channels");
+                socketContext.socket.emit("user:update-joined-channels");
               });
           }
         });
@@ -156,21 +157,21 @@ function CreateChannelForm() {
   return (
     <>
       <div className={styles.chat_create_channel_image}>
-          <Avatar
-            src={preview}
+        <Avatar
+          src={preview}
+          alt="channel image"
+          sx={{
+            width: 250,
+            height: 250,
+          }}
+        >
+          <Image
+            src={channelImage}
             alt="channel image"
-            sx={{
-              width: 250,
-              height: 250,
-            }}
-          >
-            <Image
-              src={channelImage}
-              alt="channel image"
-              width="250"
-              height="250"
-            />
-          </Avatar>
+            width="250"
+            height="250"
+          />
+        </Avatar>
       </div>
       {buttonBrowse()}
       <div className={styles.chat_create_channel_form}>

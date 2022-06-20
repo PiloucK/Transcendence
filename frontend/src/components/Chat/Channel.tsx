@@ -103,31 +103,35 @@ function ChannelContent({ channel }: { channel: Channel }) {
   );
 }
 
-export function Channel({ id }: { id: string }) {
+export function ChannelPage({ channel }: { channel: Channel }) {
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
-  const [channel, setChannel] = useState<Channel>();
+  const [currentChannel, setCurrentChannel] = React.useState<Channel>();
 
   React.useEffect(() => {
-    channelService
-      .getChannelById(loginContext.userLogin, id)
-      .then((channel: Channel) => {
-        setChannel(channel);
-      });
-
-    socketContext.socket.on("update-channel-content", () => {
+    if (channel) {
       channelService
-        .getChannelById(loginContext.userLogin, id)
+        .getChannelById(loginContext.userLogin, channel.id)
         .then((channel: Channel) => {
-          setChannel(channel);
+          setCurrentChannel(channel);
         });
-    });
-  }, []);
+      socketContext.socket.on("update-channel-content", () => {
+        channelService
+          .getChannelById(loginContext.userLogin, channel.id)
+          .then((channel: Channel) => {
+            setCurrentChannel(channel);
+          });
+      });
+    }
+  }, [channel]);
 
+  if (typeof currentChannel === "undefined") {
+    return <div>Loading</div>;
+  }
   return (
     <>
-      <ChannelMenu channel={channel} />
-      <ChannelContent channel={channel} />
+      <ChannelMenu channel={currentChannel} />
+      <ChannelContent channel={currentChannel} />
     </>
   );
 }

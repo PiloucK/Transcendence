@@ -45,7 +45,7 @@ export function ButtonTxtBanUser({
       .banAChannelUser(loginContext.userLogin, channel.id, login, time)
       .then(() => {
         socketContext.socket.emit("user:update-public-channels");
-        socketContext.socket.emit("user:update-joined-channel");
+        socketContext.socket.emit("user:update-joined-channels");
         socketContext.socket.emit("user:update-channel-content");
       })
       .catch((err) => {

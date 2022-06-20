@@ -84,7 +84,7 @@ export function ChannelSettingsDialog({
         .updateChannel(loginContext.userLogin, channel.id, channelInfos)
         .then((res) => {
           socketContext.socket.emit("user:update-public-channels");
-          socketContext.socket.emit("user:update-joined-channel");
+          socketContext.socket.emit("user:update-joined-channels");
           socketContext.socket.emit("user:update-channel-content");
         });
     }

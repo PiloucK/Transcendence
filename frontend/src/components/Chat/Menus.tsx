@@ -262,7 +262,7 @@ function UserList({ channel }: { channel: Channel }) {
     }
   };
 
-  return channel?.users?.map((user) => {
+  return channel.users.map((user) => {
     if (user.login42 === loginContext.userLogin) {
       return (
         <div key={user.login42} className={styles.connected_user}>
@@ -417,21 +417,21 @@ export function AddChannelMenu(props: {
 
 function ChannelList({
   getStyle,
-  setMenu,
   channels,
 }: {
   getStyle: (key: string) => string;
-  setMenu: ((menu: string) => void) | undefined;
   channels: Channel[];
 }) {
-  if (channels.length === 0) return null;
+  const loginContext = useLoginContext();
+
+  if (typeof channels === 'undefined' || channels?.length === 0) return null;
   return channels?.map((channel) => {
     return (
       <div
         key={channel.id}
         className={getStyle(channel.id)}
         onClick={() => {
-          setMenu?.(channel.id);
+          loginContext.setChatMenu?.(channel.id);
         }}
       >
         <Avatar
@@ -454,31 +454,12 @@ function ChannelList({
   });
 }
 
-export function ChatMenu(props: {
-  menu: string;
-  setMenu: ((menu: string) => void) | undefined;
-}) {
-  const [channels, setChannels] = useState<Channel[]>([]);
+export function ChatMenu(props: { channels: Channel[] }) {
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
 
-  React.useEffect(() => {
-    channelService
-      .getJoinedChannels(loginContext.userLogin)
-      .then((currentChannels: Channel[]) => {
-        setChannels(currentChannels);
-      });
-    socketContext.socket.on("update-channels-list", () => {
-      channelService
-        .getJoinedChannels(loginContext.userLogin)
-        .then((currentChannels: Channel[]) => {
-          setChannels(currentChannels);
-        });
-    });
-  }, []);
-
   const getStyle = (key: string) => {
-    if (props.menu === key) {
+    if (loginContext.chatMenu === key) {
       return styles.chat_menu_button_selected;
     } else {
       return styles.chat_menu_button;
@@ -489,7 +470,7 @@ export function ChatMenu(props: {
       <div
         className={getStyle("direct_message")}
         onClick={() => {
-          props.setMenu?.("direct_message");
+          loginContext.setChatMenu?.("direct_message");
         }}
       >
         <Image
@@ -499,15 +480,11 @@ export function ChatMenu(props: {
           height={55}
         />
       </div>
-      <ChannelList
-        getStyle={getStyle}
-        setMenu={props.setMenu}
-        channels={channels}
-      />
+      <ChannelList getStyle={getStyle} channels={props.channels} />
       <div
         className={getStyle("add_channel")}
         onClick={() => {
-          props.setMenu?.("add_channel");
+          loginContext.setChatMenu?.("add_channel");
         }}
       >
         <Image src={addChannel} alt="add channel" width={45} height={45} />
