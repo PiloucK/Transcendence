@@ -37,63 +37,14 @@ const PlayerPaddle = (  ) => {
       //   setPlayerPosition((e.y / window.innerHeight) * 100)
       // })
 
-      // document.addEventListener("keydown", function (event) {
-      //   if (event.defaultPrevented) {
-      //     return; // Ne devrait rien faire si l'événement de la touche était déjà consommé.
-      //   }
+      document.addEventListener("keydown", function (event) {
+        if (event.defaultPrevented) {
+          return; // Ne devrait rien faire si l'événement de la touche était déjà consommé.
+        }
       
-      //   switch (event.key) {
-      //     case "ArrowDown":
-      //       setPlayerPosition(prevState => {
-      //         if (prevState < 100)
-      //           return (prevState + moveSpeed);
-      //         else if (prevState + moveSpeed > 100)
-      //           return (100);
-      //         else
-      //           return (prevState);              
-      //       });
-      //       break;
-      //     case "ArrowUp":
-      //       setPlayerPosition(prevState => {
-      //         if (prevState > 0)
-      //           return (prevState - moveSpeed);
-      //         else if (prevState - moveSpeed < 100)
-      //           return (0);
-      //         else
-      //           return (prevState);              
-      //       });
-      //       break;
-      //     case "Escape":
-      //       // Faire quelque chose pour la touche "esc" pressée.
-      //       break;
-      //     default:
-      //       return; // Quitter lorsque cela ne gère pas l'événement touche.
-      //   }
-      
-      //   event.preventDefault();
-      // }, true);
-    
-    }, []);
-
-    const upPressed = useKeyPress('ArrowUp');
-    const downPressed = useKeyPress('ArrowDown')
-
-    
-  
-    useEffect(() => {
-
-      if (upPressed) {
-                    setPlayerPosition(prevState => {
-              if (prevState > 0)
-                return (prevState - moveSpeed);
-              else if (prevState - moveSpeed < 100)
-                return (0);
-              else
-                return (prevState);              
-            });
-      }
-      else if (downPressed) {
-                    setPlayerPosition(prevState => {
+        switch (event.key) {
+          case "ArrowDown":
+            setPlayerPosition(prevState => {
               if (prevState < 100)
                 return (prevState + moveSpeed);
               else if (prevState + moveSpeed > 100)
@@ -101,7 +52,56 @@ const PlayerPaddle = (  ) => {
               else
                 return (prevState);              
             });
-      }
+            break;
+          case "ArrowUp":
+            setPlayerPosition(prevState => {
+              if (prevState > 0)
+                return (prevState - moveSpeed);
+              else if (prevState - moveSpeed < 100)
+                return (0);
+              else
+                return (prevState);              
+            });
+            break;
+          case "Escape":
+            // Faire quelque chose pour la touche "esc" pressée.
+            break;
+          default:
+            return; // Quitter lorsque cela ne gère pas l'événement touche.
+        }
+      
+        event.preventDefault();
+      }, true);
+    
+    }, []);
+
+    // const upPressed = useKeyPress('ArrowUp');
+    // const downPressed = useKeyPress('ArrowDown')
+
+    
+  
+    useEffect(() => {
+
+      // if (upPressed) {
+      //               setPlayerPosition(prevState => {
+      //         if (prevState > 0)
+      //           return (prevState - moveSpeed);
+      //         else if (prevState - moveSpeed < 100)
+      //           return (0);
+      //         else
+      //           return (prevState);              
+      //       });
+      // }
+      // else if (downPressed) {
+      //               setPlayerPosition(prevState => {
+      //         if (prevState < 100)
+      //           return (prevState + moveSpeed);
+      //         else if (prevState + moveSpeed > 100)
+      //           return (100);
+      //         else
+      //           return (prevState);              
+      //       });
+      // }
 
       const paddleElem = document.getElementById("player-paddle") as HTMLElement;
       paddleElem.style.setProperty("--position", playerPosition.toString());
