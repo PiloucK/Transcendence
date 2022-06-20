@@ -40,7 +40,7 @@ export class ChannelRepository extends Repository<Channel> {
     const channel = this.create({
       name: createChannelDto.name,
       isPrivate: createChannelDto.isPrivate,
-      password: await bcrypt.hash(createChannelDto.password, 10),
+      password: '',
       owner: user.login42,
       admins: [user.login42],
       muted: [],
@@ -49,6 +49,9 @@ export class ChannelRepository extends Repository<Channel> {
       invitations: [],
       users: [user],
     });
+    if (createChannelDto.password !== '') {
+      channel.password = await bcrypt.hash(createChannelDto.password, 10);
+    }
     await this.save(channel);
     return channel;
   }
