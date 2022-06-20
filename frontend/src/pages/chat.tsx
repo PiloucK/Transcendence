@@ -35,19 +35,28 @@ export default function Chat() {
   const [channels, setChannels] = React.useState<Channel[]>([]);
 
   React.useEffect(() => {
-    channelService
-      .getJoinedChannels(loginContext.userLogin)
-      .then((currentChannels: Channel[]) => {
-        setChannels(currentChannels);
-      });
-    socketContext.socket.on("update-channels-list", () => {
+    if (loginContext.userLogin) {
       channelService
         .getJoinedChannels(loginContext.userLogin)
         .then((currentChannels: Channel[]) => {
           setChannels(currentChannels);
         });
-    });
-  }, [loginContext]);
+      socketContext.socket.on("update-channels-list", () => {
+        channelService
+          .getJoinedChannels(loginContext.userLogin)
+          .then((currentChannels: Channel[]) => {
+            setChannels(currentChannels);
+          });
+      });
+      socketContext.socket.on("update-channel-content", () => {
+        channelService
+          .getJoinedChannels(loginContext.userLogin)
+          .then((currentChannels: Channel[]) => {
+            setChannels(currentChannels);
+          });
+      });
+    }
+  }, [loginContext.userLogin]);
 
   if (loginContext.userLogin === null) {
     return <DockGuest />;

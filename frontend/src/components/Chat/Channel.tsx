@@ -40,6 +40,9 @@ function Messages({ channel }: { channel: Channel }) {
       return null;
     } else {
       const user = channel.users.find((user) => user.login42 === author);
+      if (typeof user === "undefined") {
+        return null;
+      }
       if (user.image) {
         return (
           <Avatar
