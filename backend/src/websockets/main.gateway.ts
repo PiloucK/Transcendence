@@ -16,7 +16,7 @@ export class WebsocketsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer()
-  protected server!: Server;
+  private server!: Server;
 
   constructor(
     @Inject(forwardRef(() => StatusService))
