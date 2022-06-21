@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { ICoordinates } from "../../interfaces/ICoordinates";
 import styles from './Ball.module.css';
+import { io, Socket } from "socket.io-client";
 
 const INITIAL_VELOCITY = 0.035;
 
-const Ball = ({updateScore} : {updateScore : (winner : string) => void}) => {
+const Ball = ({updateScore, gameSocket} : {updateScore : (winner : string) => void, gameSocket : Socket}) => {
 
   const [ballPosition, setBallPosition] = useState<ICoordinates>({x: 50, y: 50});
 
@@ -105,6 +106,7 @@ const Ball = ({updateScore} : {updateScore : (winner : string) => void}) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     resetBall();
+	gameSocket.emit('test ball');
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current);
   }, []); // Make sure the effect runs only once

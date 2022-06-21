@@ -18,8 +18,10 @@ const Pong = () => {
   const [playerScore, setPlayerScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
   const gameSocket = useRef<Socket>();
+
   const LoginContext = useLoginContext();
   const toto = useRef(true);
+  const [startGame, setStartGame] = useState(false);
 
   function updateScore(winner: string) {
     if (winner === "player") setPlayerScore((prevState) => prevState + 1);
@@ -27,16 +29,12 @@ const Pong = () => {
   }
 
   if (gameSocket.current && toto.current) {
-    console.log('toto', playerScore);
+    console.log("toto", playerScore);
     gameSocket.current.emit("game:point", LoginContext.userLogin);
-  toto.current = !toto.current;
-  gameSocket.current.emit("game:toto", `event toto depuis ${LoginContext.userLogin}`);
-  console.log(`${LoginContext.userLogin}, emitted toto`);
+    toto.current = !toto.current;
   } else {
-  toto.current = !toto.current;
+    toto.current = !toto.current;
   }
-
-
 
   useEffect(() => {
     if (gameSocket.current === undefined) {
@@ -44,28 +42,44 @@ const Pong = () => {
         `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}/game`,
         { transports: ["websocket"] }
       );
+      gameSocket.current.on("game:start", () => {
+        setStartGame(true);
+        console.log("GAME STARTING FROM FRONT...");
+      });
 
-      gameSocket.current.emit("game:enter", 'vlugand-', 'mvidal-a', LoginContext.userLogin);
-	  gameSocket.current.on("game:toto", (userLogin : string) => {
-		console.log('received toto from ', userLogin );
-		
-	  })
+      gameSocket.current.emit(
+        "game:enter",
+        "vlugand-",
+        "mvidal-a",
+        LoginContext.userLogin
+      );
     }
   }, []);
 
-  
-
-  return (
-    <>
-      <div className={styles.mainLayout_left_background} />
-      <div className={styles.mainLayout_right_background} />
-      <Score player={playerScore} opponent={opponentScore} />
-      <Ball updateScore={updateScore} />
-      <PlayerPaddle />
-      {/* <ComputerPaddle computerLvl={computerLvl} /> */}
-      <OpponentPaddle/>
-    </>
-  );
+  if (gameSocket.current === undefined || startGame === false) {
+    return (
+      <>
+        <div className={styles.mainLayout_left_background} />
+        <div className={styles.mainLayout_right_background} />
+        <Score player={playerScore} opponent={opponentScore} />
+        <PlayerPaddle />
+        {/* <ComputerPaddle computerLvl={computerLvl} /> */}
+        <OpponentPaddle />
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div className={styles.mainLayout_left_background} />
+        <div className={styles.mainLayout_right_background} />
+        <Score player={playerScore} opponent={opponentScore} />
+        <Ball updateScore={updateScore} gameSocket={gameSocket.current} />
+        <PlayerPaddle />
+        {/* <ComputerPaddle computerLvl={computerLvl} /> */}
+        <OpponentPaddle />
+      </>
+    );
+  }
 };
 
 export default dynamic(() => Promise.resolve(Pong), {

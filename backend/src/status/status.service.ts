@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersService } from 'src/users/users.service';
-import { WebsocketsGateway } from 'src/websockets/main.gateway';
+import { MainGateway } from 'src/websockets/main.gateway';
 import { Repository } from 'typeorm';
 import { UserStatus } from './status.entity';
 
@@ -11,8 +11,8 @@ export class StatusService {
     @InjectRepository(UserStatus)
     private readonly statusRepository: Repository<UserStatus>,
     private readonly usersService: UsersService,
-    @Inject(forwardRef(() => WebsocketsGateway))
-    private readonly websocketsGateway: WebsocketsGateway,
+    @Inject(forwardRef(() => MainGateway))
+    private readonly websocketsGateway: MainGateway,
   ) {}
 
   async add(socketId: string, userLogin42: string): Promise<UserStatus> {

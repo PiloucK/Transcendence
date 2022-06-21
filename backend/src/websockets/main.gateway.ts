@@ -12,7 +12,7 @@ import { Server, Socket } from 'socket.io';
 import { StatusService } from 'src/status/status.service';
 
 @WebSocketGateway(3002, { transports: ['websocket'] })
-export class WebsocketsGateway
+export class MainGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer()
