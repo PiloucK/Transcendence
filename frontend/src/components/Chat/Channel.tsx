@@ -80,7 +80,7 @@ function Messages({ channel }: { channel: Channel }) {
 
   React.useEffect(() => {
     setScroll();
-  }, []);
+  }, [channel]);
 
   return (
     <>
