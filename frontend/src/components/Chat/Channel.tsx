@@ -14,6 +14,7 @@ import Avatar from "@mui/material/Avatar";
 
 import { SendMessageField } from "../Inputs/SendMessageField";
 import { useSocketContext } from "../../context/SocketContext";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function Messages({ channel }: { channel: Channel }) {
   const loginContext = useLoginContext();
@@ -112,7 +113,7 @@ export function ChannelPage({ channel }: { channel: Channel }) {
   const [currentChannel, setCurrentChannel] = React.useState<Channel>();
 
   React.useEffect(() => {
-    if (channel) {
+    if (typeof channel !== "undefined") {
       channelService
         .getChannelById(loginContext.userLogin, channel.id)
         .then((channel: Channel) => {
@@ -128,8 +129,12 @@ export function ChannelPage({ channel }: { channel: Channel }) {
     }
   }, [channel]);
 
-  if (typeof currentChannel === "undefined") {
-    return <div>Loading</div>;
+  if (typeof currentChannel === "undefined" || typeof channel === "undefined") {
+    return (
+		<div className={styles.play}>
+		  <CircularProgress />
+		</div>
+	  );
   }
   return (
     <>

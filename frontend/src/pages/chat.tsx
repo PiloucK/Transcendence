@@ -1,6 +1,7 @@
 import React from "react";
 
 import { ChatMenu } from "../components/Chat/Menus";
+import styles from "../styles/Home.module.css";
 
 import { Channel } from "../interfaces/users";
 import { DirectMessage } from "../components/Chat/DirectMessage";
@@ -10,6 +11,7 @@ import { useLoginContext } from "../context/LoginContext";
 import { DockGuest } from "../components/Dock/DockGuest";
 import { useSocketContext } from "../context/SocketContext";
 import channelService from "../services/channel";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function ChatContent({
   menu,
@@ -62,8 +64,12 @@ export default function Chat() {
     return <DockGuest />;
   }
 
-  if (typeof channels === "undefined" || channels.length === 0) {
-    return <div>Loading</div>;
+  if (typeof channels === "undefined") {
+    return (
+      <div className={styles.play}>
+        <CircularProgress />
+      </div>
+    );
   }
   return (
     <>

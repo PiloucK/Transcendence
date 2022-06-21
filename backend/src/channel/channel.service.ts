@@ -163,14 +163,17 @@ export class ChannelService {
       (channelAdmin) => channelAdmin !== user.login42,
     );
     if (channel.owner === user.login42) {
-      if (channel.admins.length > 0) {
+      if (channel.users.length <= 0) {
+        this.channelRepository.delete(channel.id);
+        return channel;
+      } else if (channel.admins.length > 0) {
         const firstAdmin = await this.usersService.getUserByLogin42(
           channel.admins[0],
         );
         channel.owner = firstAdmin.login42;
       } else {
-        this.channelRepository.delete(channel.id);
-        return channel;
+        channel.owner = channel.users[0].login42;
+        channel.admins.push(channel.users[0].login42);
       }
     }
     await this.channelRepository.save(channel);
