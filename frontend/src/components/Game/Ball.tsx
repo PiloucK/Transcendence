@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { ICoordinates } from "../../interfaces/ICoordinates";
 import styles from './Ball.module.css';
 
-const INITIAL_VELOCITY = 0.065;
+const INITIAL_VELOCITY = 0.035;
 
 const Ball = ({updateScore} : {updateScore : (winner : string) => void}) => {
 

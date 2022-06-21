@@ -30,9 +30,13 @@ const Pong = () => {
     console.log('toto', playerScore);
     gameSocket.current.emit("game:point", LoginContext.userLogin);
   toto.current = !toto.current;
+  gameSocket.current.emit("game:toto", `event toto depuis ${LoginContext.userLogin}`);
+  console.log(`${LoginContext.userLogin}, emitted toto`);
   } else {
   toto.current = !toto.current;
   }
+
+
 
   useEffect(() => {
     if (gameSocket.current === undefined) {
@@ -41,7 +45,11 @@ const Pong = () => {
         { transports: ["websocket"] }
       );
 
-      gameSocket.current.emit("game:enter", LoginContext.userLogin);
+      gameSocket.current.emit("game:enter", 'vlugand-', 'mvidal-a', LoginContext.userLogin);
+	  gameSocket.current.on("game:toto", (userLogin : string) => {
+		console.log('received toto from ', userLogin );
+		
+	  })
     }
   }, []);
 

@@ -28,10 +28,25 @@ export class GameNamespace
 
   @SubscribeMessage('game:enter')
   onGameEnter(
-    @MessageBody() userLogin42: string,
+    @MessageBody() data: string[], 
     @ConnectedSocket() client: Socket,
   ) {
-    client.join(userLogin42);
+
+	const [player1, player2, userSelf] = data;
+
+	if (player1 < player2) {
+    	client.join(player1 + player2);
+		console.log(userSelf, 'has joined the game of', player1, 'and', player2);
+		
+	}
+	else {
+    	client.join(player2 + player1);
+		console.log(userSelf, 'has joined the game of', player2, 'and', player1);
+
+	}
+
+
+	
   }
 
   @SubscribeMessage('game:point')
@@ -40,5 +55,14 @@ export class GameNamespace
     @ConnectedSocket() client: Socket,
   ) {
     console.log('point for', userLogin42);
+  }
+
+  @SubscribeMessage('game:toto')
+  onGameToto(
+	@MessageBody() str: string,
+	@ConnectedSocket() client: Socket,
+  ) {
+	console.log(str);
+	client.to('42').emit("game:toto", str);
   }
 }
