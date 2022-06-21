@@ -41,7 +41,7 @@ export type Channel = {
   password: string;
   isPrivate: boolean;
   owner: string;
-  admin: Array<string>;
+  admins: Array<string>;
   muted: Array<restriction>;
   banned: Array<restriction>;
   users: Array<IUserForLeaderboard>;

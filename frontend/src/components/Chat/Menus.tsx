@@ -193,7 +193,7 @@ function SelectedUserMenu({
         <ButtonTxtSetAsAdmin login={user.login42} channel={channel} />
       </div>
     );
-  } else if (channel?.admin?.includes(loginContext.userLogin)) {
+  } else if (channel?.admins?.includes(loginContext.userLogin)) {
     return (
       <div className={styles.selected_user}>
         <div
@@ -255,7 +255,7 @@ function UserList({ channel }: { channel: Channel }) {
   const getUserStyle = (userLogin: string) => {
     if (userLogin === channel?.owner) {
       return styles.owner;
-    } else if (channel?.admin?.includes(userLogin)) {
+    } else if (channel?.admins?.includes(userLogin)) {
       return styles.admins;
     } else {
       return styles.users;
