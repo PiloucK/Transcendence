@@ -61,16 +61,6 @@ export default function Chat() {
             errorContext.newError?.(errorHandler(error, loginContext));
           });
       });
-      socketContext.socket.on("update-channel-content", () => {
-        channelService
-          .getJoinedChannels(loginContext.userLogin)
-          .then((currentChannels: Channel[]) => {
-            setChannels(currentChannels);
-          })
-          .catch((error) => {
-            errorContext.newError?.(errorHandler(error, loginContext));
-          });
-      });
     }
   }, [loginContext.userLogin]);
 
