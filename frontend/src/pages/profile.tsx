@@ -44,7 +44,6 @@ export default function ProfilePage() {
   useEffect(() => {
     if (isFetched.current !== true) {
       fetchDisplayedUser();
-      isFetched.current = true;
     }
   }, []);
 

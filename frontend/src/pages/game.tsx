@@ -1,6 +1,6 @@
 import styles from "../styles/Home.module.css";
 import { useSessionContext } from "../context/SessionContext";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import userService from "../services/user";
 
 import { errorHandler } from "../errors/errorHandler";
@@ -13,6 +13,7 @@ import PlayerPaddle from "../components/Game/PlayerPaddle";
 import OpponentPaddle from "../components/Game/OpponentPaddle";
 import Score  from "../components/Game/Score";
 import { useSocketContext } from "../context/SocketContext";
+import { InGameLayout } from "../layouts/inGameLayout";
 
 
 const INITIAL_VELOCITY = 0.055;
@@ -131,8 +132,10 @@ const Pong = () => {
   );
 };
 
-
-
 export default dynamic(() => Promise.resolve(Pong), {
   ssr: false
 })
+
+Pong.getLayout = function getLayout(page: ReactElement) {
+  return <InGameLayout>{page}</InGameLayout>;
+};

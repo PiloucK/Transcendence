@@ -14,6 +14,10 @@ export class StatusService {
   private sockets = new Map<SocketId, Login42>();
   private statuses = new Map<Login42, StatusMetrics>();
 
+  getStatuses(): Map<Login42, StatusMetrics> {
+    return this.statuses;
+  }
+
   add(socketId: SocketId, userLogin42: Login42): 'EMIT' | 'QUIET' {
     this.sockets.set(socketId, userLogin42);
 
