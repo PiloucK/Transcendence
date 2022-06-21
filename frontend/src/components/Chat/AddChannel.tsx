@@ -20,6 +20,10 @@ import { Channel, ChannelCreation } from "../../interfaces/users";
 import { CardPublicChannel } from "../Cards/CardPublicChannel";
 
 import channelService from "../../services/channel";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useLoginContext } from "../../context/LoginContext";
 import { useSocketContext } from "../../context/SocketContext";
 
@@ -45,6 +49,7 @@ function PublicChannelsList({ channels }: { channels: Channel[] }) {
 }
 
 function PublicChannels() {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [channels, setChannels] = useState<Channel[]>([]);
@@ -54,6 +59,9 @@ function PublicChannels() {
       .getPublicChannels(loginContext.userLogin)
       .then((channels: Channel[]) => {
         setChannels(channels);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     socketContext.socket.on("update-public-channels", () => {
@@ -61,6 +69,9 @@ function PublicChannels() {
         .getPublicChannels(loginContext.userLogin)
         .then((channels: ChannelCreation[]) => {
           setChannels(channels);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   }, []);
@@ -69,6 +80,7 @@ function PublicChannels() {
 }
 
 function CreateChannelForm() {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [channelName, setChannelName] = useState("");
@@ -148,8 +160,14 @@ function CreateChannelForm() {
               .then((res) => {
                 socketContext.socket.emit("user:update-public-channels");
                 socketContext.socket.emit("user:update-joined-channels");
+              })
+              .catch((error) => {
+                errorContext.newError?.(errorHandler(error, loginContext));
               });
           }
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     }
   };

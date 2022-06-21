@@ -21,6 +21,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { CardUserChannelInvite } from "../Cards/CardUserChannelInvite";
 
 import { EmptyInvitableFriendList } from "../Social/emptyPages";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 function FriendList({
@@ -64,6 +68,7 @@ export function ChannelInviteDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [friends, setFriends] = useState<IUserForLeaderboard[]>([]);
@@ -76,6 +81,9 @@ export function ChannelInviteDialog({
       .getChannelInvitableFriends(loginContext.userLogin, channel.id)
       .then((friends: IUserForLeaderboard[]) => {
         setFriends(friends);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     socketContext.socket.on("update-channel-content", () => {
@@ -83,6 +91,9 @@ export function ChannelInviteDialog({
         .getChannelInvitableFriends(loginContext.userLogin, channel.id)
         .then((friends: IUserForLeaderboard[]) => {
           setFriends(friends);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
     socketContext.socket.on("update-relations", () => {
@@ -90,6 +101,9 @@ export function ChannelInviteDialog({
         .getChannelInvitableFriends(loginContext.userLogin, channel.id)
         .then((friends: IUserForLeaderboard[]) => {
           setFriends(friends);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   }, []);
@@ -122,8 +136,8 @@ export function ChannelInviteDialog({
         .then(() => {
           socketContext.socket.emit("user:update-channel-content");
         })
-        .catch((err: Error) => {
-          console.log(err);
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   };

@@ -6,6 +6,10 @@ import MenuItem from "@mui/material/MenuItem";
 
 import channelService from "../../services/channel";
 import { Channel } from "../../interfaces/users";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useLoginContext } from "../../context/LoginContext";
 
 import { ChannelSettingsDialog } from "../Inputs/ChannelSettingsDialog";
@@ -19,6 +23,7 @@ function MenuButtons({
   channel: Channel;
   setAnchorEl: (anchorEl: any) => void;
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [settingsOpen, setSettingsOpen] = React.useState(false);
@@ -35,10 +40,15 @@ function MenuButtons({
   const handleLeaveChannel = () => {
     loginContext.setChatMenu?.("direct_message");
     setAnchorEl(null);
-    channelService.leaveChannel(loginContext.userLogin, channel.id).then(() => {
-      socketContext.socket.emit("user:update-channel-content");
-      socketContext.socket.emit("user:update-joined-channels");
-    });
+    channelService
+      .leaveChannel(loginContext.userLogin, channel.id)
+      .then(() => {
+        socketContext.socket.emit("user:update-channel-content");
+        socketContext.socket.emit("user:update-joined-channels");
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
+      });
   };
 
   if (loginContext.userLogin === channel.owner) {

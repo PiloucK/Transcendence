@@ -9,6 +9,10 @@ import { AddChannel } from "../components/Chat/AddChannel";
 import { ChannelPage } from "../components/Chat/Channel";
 import { useLoginContext } from "../context/LoginContext";
 import { DockGuest } from "../components/Dock/DockGuest";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
 import channelService from "../services/channel";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -32,6 +36,7 @@ function ChatContent({
 }
 
 export default function Chat() {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [channels, setChannels] = React.useState<Channel[]>([]);
@@ -42,12 +47,18 @@ export default function Chat() {
         .getJoinedChannels(loginContext.userLogin)
         .then((currentChannels: Channel[]) => {
           setChannels(currentChannels);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
       socketContext.socket.on("update-channels-list", () => {
         channelService
           .getJoinedChannels(loginContext.userLogin)
           .then((currentChannels: Channel[]) => {
             setChannels(currentChannels);
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, loginContext));
           });
       });
       socketContext.socket.on("update-channel-content", () => {
@@ -55,6 +66,9 @@ export default function Chat() {
           .getJoinedChannels(loginContext.userLogin)
           .then((currentChannels: Channel[]) => {
             setChannels(currentChannels);
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, loginContext));
           });
       });
     }

@@ -15,6 +15,9 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useLoginContext } from "../../context/LoginContext";
 import channelService from "../../services/channel";
 import { useSocketContext } from "../../context/SocketContext";
@@ -26,6 +29,7 @@ export function ButtonTxtBanUser({
   login: string;
   channel: Channel;
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [open, setOpen] = React.useState(false);
@@ -48,8 +52,8 @@ export function ButtonTxtBanUser({
         socketContext.socket.emit("user:update-joined-channels");
         socketContext.socket.emit("user:update-channel-content");
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   };
 

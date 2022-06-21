@@ -13,6 +13,10 @@ import { useLoginContext } from "../../context/LoginContext";
 
 import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -31,6 +35,7 @@ export function SendMessageField({
   setInput: (input: string) => void;
   channel: string;
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [error, setError] = React.useState(false);
@@ -71,7 +76,10 @@ export function SendMessageField({
           .then(() => {
             socketContext.socket.emit("user:update-direct-messages");
             setInput("");
-          });
+          })
+		  .catch((error) => {
+			errorContext.newError?.(errorHandler(error, loginContext));
+		  });
       }
     }
   };

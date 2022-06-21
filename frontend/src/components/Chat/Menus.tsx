@@ -33,6 +33,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUser }) {
@@ -105,6 +109,7 @@ export function DirectMessageMenu(props: {
   menu: string;
   setMenu: (menu: string) => void;
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [openedDMs, setOpenedDMs] = React.useState<PrivateConv[]>([]);
@@ -114,6 +119,9 @@ export function DirectMessageMenu(props: {
       .getPrivateConvs(loginContext.userLogin)
       .then((currentDMs: PrivateConv[]) => {
         setOpenedDMs(currentDMs);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     socketContext.socket.on("update-direct-messages", () => {
@@ -121,6 +129,9 @@ export function DirectMessageMenu(props: {
         .getPrivateConvs(loginContext.userLogin)
         .then((currentDMs: PrivateConv[]) => {
           setOpenedDMs(currentDMs);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   }, []);
@@ -424,7 +435,7 @@ function ChannelList({
 }) {
   const loginContext = useLoginContext();
 
-  if (typeof channels === 'undefined' || channels?.length === 0) return null;
+  if (typeof channels === "undefined" || channels?.length === 0) return null;
   return channels?.map((channel) => {
     return (
       <div

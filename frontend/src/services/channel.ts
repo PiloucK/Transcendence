@@ -16,9 +16,6 @@ const createChannel = (login: string, channelInfos: ChannelCreation) => {
   });
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const updateChannel = (
@@ -37,18 +34,12 @@ const updateChannel = (
   );
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const updateChannelImage = (login: string, channelId: string, file: Blob) => {
   const request = axios.post(`${baseUrl}/${login}/image/${channelId}`, file);
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const joinProtectedChannel = (
@@ -62,9 +53,6 @@ const joinProtectedChannel = (
   });
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const joinChannel = (login: string, channelId: string) => {
@@ -90,9 +78,6 @@ const inviteToChannel = (
   });
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const leaveChannel = (login: string, channelId: string) => {
@@ -101,9 +86,6 @@ const leaveChannel = (login: string, channelId: string) => {
   });
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const muteAChannelUser = (
@@ -119,9 +101,6 @@ const muteAChannelUser = (
   });
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const banAChannelUser = (
@@ -137,9 +116,6 @@ const banAChannelUser = (
   });
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const setAChannelAdmin = (
@@ -153,9 +129,6 @@ const setAChannelAdmin = (
   });
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const unsetAChannelAdmin = (
@@ -169,9 +142,6 @@ const unsetAChannelAdmin = (
   });
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const sendMSGToChannel = (
@@ -197,9 +167,6 @@ const getChannelById = (login: string, channelId: string) => {
   const request = axios.get(`${baseUrl}/${login}/channel/${channelId}`);
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const getChannelInvitableFriends = (login: string, channelId: string) => {
@@ -208,27 +175,18 @@ const getChannelInvitableFriends = (login: string, channelId: string) => {
   );
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const getPublicChannels = (login: string) => {
   const request = axios.get(`${baseUrl}/${login}/publicChannels`);
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 const getJoinedChannels = (login: string) => {
   const request = axios.get(`${baseUrl}/${login}/joinedChannels`);
   return request
     .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
 };
 
 export default {

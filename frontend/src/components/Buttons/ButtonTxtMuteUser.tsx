@@ -15,6 +15,9 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useLoginContext } from "../../context/LoginContext";
 import channelService from "../../services/channel";
 
@@ -25,6 +28,7 @@ export function ButtonTxtMuteUser({
   login: string;
   channel: Channel;
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const [open, setOpen] = React.useState(false);
   const [time, setTime] = React.useState<number | string>(300);
@@ -41,8 +45,8 @@ export function ButtonTxtMuteUser({
     channelService
       .muteAChannelUser(loginContext.userLogin, channel.id, login, 0)
       .then(() => {})
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   };
 
@@ -51,8 +55,8 @@ export function ButtonTxtMuteUser({
     channelService
       .muteAChannelUser(loginContext.userLogin, channel.id, login, time)
       .then(() => {})
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   };
 

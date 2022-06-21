@@ -10,9 +10,14 @@ import { useLoginContext } from "../../context/LoginContext";
 import channelService from "../../services/channel";
 
 import { ChannelPasswordDialog } from "../Inputs/ChannelPasswordDialog";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [open, setOpen] = React.useState(false);
@@ -28,6 +33,9 @@ export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
             loginContext.setChatMenu?.(channel.id);
             socketContext.socket.emit("user:update-joined-channels");
             socketContext.socket.emit("user:update-channel-content");
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, loginContext));
           });
       }
     }

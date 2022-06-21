@@ -17,7 +17,7 @@ export function ButtonsFriendRequest({
 }) {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
-const socketContext = useSocketContext();
+  const socketContext = useSocketContext();
 
   const acceptFriend = () => {
     if (

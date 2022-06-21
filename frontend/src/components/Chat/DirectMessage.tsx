@@ -68,9 +68,9 @@ function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
         })
-		.catch((error) => {
-		  errorContext.newError?.(errorHandler(error, loginContext));
-		});
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
+        });
     });
     socketContext.socket.on("update-relations", () => {
       userService
@@ -78,9 +78,9 @@ function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
         .then((friends: IUserPublicInfos[]) => {
           setFriends(friends);
         })
-		.catch((error) => {
-		  errorContext.newError?.(errorHandler(error, loginContext));
-		});
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
+        });
     });
   }, []);
 
@@ -210,6 +210,9 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
       .getPrivateConv(loginContext.userLogin, friend)
       .then((privateConv: PrivateConv) => {
         setPrivateConv(privateConv);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
 
     socketContext.socket.on("update-relations", () => {
@@ -218,15 +221,18 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
         .then((blocked: IUserPublicInfos[]) => {
           setBlockedList(blocked);
         })
-		.catch((error) => {
-		  errorContext.newError?.(errorHandler(error, loginContext));
-		});
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
+        });
     });
     socketContext.socket.on("update-direct-messages", () => {
       privateConvService
         .getPrivateConv(loginContext.userLogin, friend)
         .then((privateConv: PrivateConv) => {
           setPrivateConv(privateConv);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     });
   }, [friend]);

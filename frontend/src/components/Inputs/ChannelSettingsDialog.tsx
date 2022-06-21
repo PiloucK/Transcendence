@@ -19,6 +19,10 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 export function ChannelSettingsDialog({
@@ -30,6 +34,7 @@ export function ChannelSettingsDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [channelName, setChannelName] = useState(channel.name);
@@ -61,7 +66,7 @@ export function ChannelSettingsDialog({
   const updateChannel = () => {
     const channelInfos: ChannelCreation = {
       name: channelName,
-	  setPassword: setPassword,
+      setPassword: setPassword,
       password: channelPassword.password,
       isPrivate: isPrivate,
     };
@@ -72,12 +77,12 @@ export function ChannelSettingsDialog({
       setTextFieldError("Channel name is required.");
       error = true;
     }
-	if (setPassword === true) {
-		if (channelInfos.password !== confirmation.password) {
-			setConfirmationFieldError("Passwords do not match.");
-			error = true;
-		}
-	}
+    if (setPassword === true) {
+      if (channelInfos.password !== confirmation.password) {
+        setConfirmationFieldError("Passwords do not match.");
+        error = true;
+      }
+    }
     if (error === false) {
       setOpen(false);
       channelService
@@ -86,6 +91,9 @@ export function ChannelSettingsDialog({
           socketContext.socket.emit("user:update-public-channels");
           socketContext.socket.emit("user:update-joined-channels");
           socketContext.socket.emit("user:update-channel-content");
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     }
   };

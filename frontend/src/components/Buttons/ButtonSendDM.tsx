@@ -6,10 +6,14 @@ import { IUserPublicInfos, PrivateConv } from "../../interfaces/users";
 
 import privateConvService from "../../services/privateConv";
 
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useLoginContext } from "../../context/LoginContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 export function ButtonSendDM({ userInfos }: { userInfos: IUserPublicInfos }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
 
@@ -27,6 +31,9 @@ export function ButtonSendDM({ userInfos }: { userInfos: IUserPublicInfos }) {
           );
           socketContext.socket.emit("user:update-direct-messages");
           Router.push("/chat");
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
     }
   };

@@ -13,6 +13,10 @@ import Rocket from "../../public/no_dm_content.png";
 import Avatar from "@mui/material/Avatar";
 
 import { SendMessageField } from "../Inputs/SendMessageField";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -108,6 +112,7 @@ function ChannelContent({ channel }: { channel: Channel }) {
 }
 
 export function ChannelPage({ channel }: { channel: Channel }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [currentChannel, setCurrentChannel] = React.useState<Channel>();
@@ -118,12 +123,18 @@ export function ChannelPage({ channel }: { channel: Channel }) {
         .getChannelById(loginContext.userLogin, channel.id)
         .then((channel: Channel) => {
           setCurrentChannel(channel);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
         });
       socketContext.socket.on("update-channel-content", () => {
         channelService
           .getChannelById(loginContext.userLogin, channel.id)
           .then((channel: Channel) => {
             setCurrentChannel(channel);
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, loginContext));
           });
       });
     }
@@ -131,10 +142,10 @@ export function ChannelPage({ channel }: { channel: Channel }) {
 
   if (typeof currentChannel === "undefined" || typeof channel === "undefined") {
     return (
-		<div className={styles.play}>
-		  <CircularProgress />
-		</div>
-	  );
+      <div className={styles.play}>
+        <CircularProgress />
+      </div>
+    );
   }
   return (
     <>

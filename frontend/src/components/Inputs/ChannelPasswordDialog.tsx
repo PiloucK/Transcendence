@@ -12,6 +12,10 @@ import channelService from "../../services/channel";
 import { Channel } from "../../interfaces/users";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -30,6 +34,7 @@ export function ChannelPasswordDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
+  const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [input, setInput] = React.useState("");
@@ -48,8 +53,8 @@ export function ChannelPasswordDialog({
         socketContext.socket.emit("user:update-joined-channels");
         socketContext.socket.emit("user:update-channel-content");
       })
-      .catch((err: Error) => {
-        setError(true);
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
       });
   };
   return (
