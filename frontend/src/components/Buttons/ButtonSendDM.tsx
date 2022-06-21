@@ -21,7 +21,10 @@ export function ButtonSendDM({ userInfos }: { userInfos: IUserPublicInfos }) {
       privateConvService
         .createPrivateConv(loginContext.userLogin, userInfos.login42)
         .then((dm: PrivateConv) => {
-          loginContext.setChatDM(dm.userOne.login42 + "|" + dm.userTwo.login42);
+          loginContext.setChatMenu?.("direct_message");
+          loginContext.setChatDM?.(
+            dm.userOne.login42 + "|" + dm.userTwo.login42
+          );
           socketContext.socket.emit("user:update-direct-messages");
           Router.push("/chat");
         });
@@ -30,7 +33,7 @@ export function ButtonSendDM({ userInfos }: { userInfos: IUserPublicInfos }) {
 
   return (
     <div className={styles.send_dm_button} onClick={sendPrivateMessage}>
-      Send PrivateConv
+      Send message
     </div>
   );
 }
