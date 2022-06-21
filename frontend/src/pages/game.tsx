@@ -9,6 +9,7 @@ import OpponentPaddle from "../components/Game/OpponentPaddle";
 import Score from "../components/Game/Score";
 import { io, Socket } from "socket.io-client";
 import getConfig from "next/config";
+import { useLoginContext } from "../context/LoginContext";
 const { publicRuntimeConfig } = getConfig();
 
 const Pong = () => {
@@ -17,10 +18,20 @@ const Pong = () => {
   const [playerScore, setPlayerScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
   const gameSocket = useRef<Socket>();
+  const LoginContext = useLoginContext();
+  const toto = useRef(true);
 
   function updateScore(winner: string) {
     if (winner === "player") setPlayerScore((prevState) => prevState + 1);
     if (winner === "opponent") setOpponentScore((prevState) => prevState + 1);
+  }
+
+  if (gameSocket.current && toto.current) {
+    console.log('toto', playerScore);
+    gameSocket.current.emit("game:point", LoginContext.userLogin);
+  toto.current = !toto.current;
+  } else {
+  toto.current = !toto.current;
   }
 
   useEffect(() => {
@@ -29,6 +40,8 @@ const Pong = () => {
         `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}/game`,
         { transports: ["websocket"] }
       );
+
+      gameSocket.current.emit("game:enter", LoginContext.userLogin);
     }
   }, []);
 

@@ -1,22 +1,44 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { Namespace } from 'socket.io';
+import { forwardRef, Inject } from '@nestjs/common';
+import {
+  ConnectedSocket,
+  MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+} from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
 import { StatusService } from 'src/status/status.service';
-import { WebsocketsGateway } from './main.gateway';
 
-@Injectable()
-export class GameNamespaces extends WebsocketsGateway {
-  private gameNamespace: Namespace;
-  constructor(
-    @Inject(forwardRef(() => StatusService))
-    statusService: StatusService,
+@WebSocketGateway(3002, { transports: ['websocket'], namespace: 'game' })
+export class GameNamespace
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
+  @WebSocketServer()
+  protected server!: Server;
+
+  handleConnection(@ConnectedSocket() client: Socket) {
+    console.log('game-connection', client.id);
+  }
+
+  handleDisconnect(@ConnectedSocket() client: Socket) {
+    console.log('game-disconnection', client.id);
+  }
+
+  @SubscribeMessage('game:enter')
+  onGameEnter(
+    @MessageBody() userLogin42: string,
+    @ConnectedSocket() client: Socket,
   ) {
-    super(statusService);
+    client.join(userLogin42);
+  }
 
-    console.log(this.server);
-    
-    this.gameNamespace = this.server.of(/^\/gameRoom_[\w-]+_\w+$/);
-    this.gameNamespace.on('connection', () => {
-      console.log('game connected!');
-    });
+  @SubscribeMessage('game:point')
+  onGamePoint(
+    @MessageBody() userLogin42: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    console.log('point for', userLogin42);
   }
 }
