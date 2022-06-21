@@ -14,6 +14,7 @@ import { ButtonAddFriend } from "../Buttons/ButtonAddFriend";
 import { ButtonSendDM } from "../Buttons/ButtonSendDM";
 import { ButtonRemoveFriend } from "../Buttons/ButtonRemoveFriend";
 import { ButtonCancelRequest } from "../Buttons/ButtonCancelRequest";
+import { ButtonProfileAcceptRequest } from "../Buttons/ButtonProfileAcceptRequest";
 
 import { ButtonUserStatus } from "../Buttons/ButtonUserStatus";
 import { ButtonBlock } from "../Buttons/ButtonBlock";
@@ -86,6 +87,7 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
   const socketContext = useSocketContext();
   const [friendList, setFriendList] = React.useState<[]>([]);
   const [sentRList, setSentRList] = React.useState<[]>([]);
+  const [receivedRList, setReceivedRList] = React.useState<[]>([]);
   const [blockedList, setBlockedList] = React.useState<[]>([]);
 
   React.useEffect(() => {
@@ -101,6 +103,14 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
       .getUserFriendRequestsSent(loginContext.userLogin)
       .then((requests: IUserPublicInfos[]) => {
         setSentRList(requests);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, loginContext));
+      });
+    userService
+      .getUserFriendRequestsReceived(loginContext.userLogin)
+      .then((requests: IUserPublicInfos[]) => {
+        setReceivedRList(requests);
       })
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, loginContext));
@@ -127,6 +137,14 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
         .getUserFriendRequestsSent(loginContext.userLogin)
         .then((requests: IUserPublicInfos[]) => {
           setSentRList(requests);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, loginContext));
+        });
+      userService
+        .getUserFriendRequestsReceived(loginContext.userLogin)
+        .then((requests: IUserPublicInfos[]) => {
+          setReceivedRList(requests);
         })
         .catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
@@ -160,6 +178,12 @@ function Interactions({ userInfos }: { userInfos: IUserPublicInfos }) {
       )
     ) {
       return <ButtonCancelRequest userInfos={userInfos} />;
+    } else if (
+      receivedRList.find(
+        (friend: IUserPublicInfos) => friend.login42 === userInfos.login42
+      )
+    ) {
+      return <ButtonProfileAcceptRequest userInfos={userInfos} />;
     } else {
       return <ButtonAddFriend userInfos={userInfos} />;
     }
