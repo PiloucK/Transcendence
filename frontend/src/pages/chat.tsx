@@ -10,9 +10,9 @@ import { ChannelPage } from "../components/Chat/Channel";
 import { useLoginContext } from "../context/LoginContext";
 import { DockGuest } from "../components/Dock/DockGuest";
 
-import { errorHandler } from "../../errors/errorHandler";
+import { errorHandler } from "../errors/errorHandler";
 
-import { useErrorContext } from "../../context/ErrorContext";
+import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
 import channelService from "../services/channel";
 import CircularProgress from "@mui/material/CircularProgress";
