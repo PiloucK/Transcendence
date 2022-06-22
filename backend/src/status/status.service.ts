@@ -1,13 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { StoredLiveStatus } from './status.type';
-
-interface StatusMetrics {
-  socketCount: number;
-  status: StoredLiveStatus;
-}
-
-type Login42 = string;
-type SocketId = string;
+import { Login42, SocketId, StatusMetrics } from './status.type';
 
 @Injectable()
 export class StatusService {
