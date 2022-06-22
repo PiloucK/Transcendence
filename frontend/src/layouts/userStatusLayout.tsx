@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSessionContext } from "../context/SessionContext";
 import { useErrorContext } from "../context/ErrorContext";
-import { useSocketContext } from "../context/SocketContext";
 import { showOverlayOnEscape } from "../events/showOverlayOnEscape";
 import { createContext, useContext } from "react";
 import userStatusService from "../services/userStatus";
@@ -27,7 +26,6 @@ export const UserStatusLayout = ({
 }) => {
   const sessionContext = useSessionContext();
   const errorContext = useErrorContext();
-  // const socketContext = useSocketContext();
   const [userStatuses, setUserStatuses] = useState(
     new Map<Login42, StatusMetrics>()
   );
@@ -36,6 +34,7 @@ export const UserStatusLayout = ({
     userStatusService
       .getAll()
       .then((statuses) => {
+        console.log("then() in useeffect status layout", statuses);
         setUserStatuses(statuses);
       })
       .catch((error) => {
@@ -47,10 +46,13 @@ export const UserStatusLayout = ({
 
   showOverlayOnEscape(showOverlay, setShowOverlay);
 
-  // have to always show children and overlay if the is activated !! lags come from rerendering all components in the page
   return (
     <UserStatusContext.Provider value={userStatuses}>
       {children}
     </UserStatusContext.Provider>
   );
 };
+
+export function useUserStatusContext() {
+  return useContext(UserStatusContext);
+}

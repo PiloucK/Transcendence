@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
-import Link from "next/link";
 import { DockSelector } from "../components/Dock/DockSelector";
 import { useSessionContext } from "../context/SessionContext";
 import { useErrorContext } from "../context/ErrorContext";

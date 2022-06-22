@@ -8,7 +8,6 @@ export function errorHandler(
   error: Error | AxiosError,
   sessionContext: ISessionContext,
 ): IErrorData {
-  // TODO: sessionContext define the type
   let errorData: IErrorData = defaultErrorData;
 
   if (axios.isAxiosError(error)) {
@@ -21,8 +20,6 @@ export function errorHandler(
         } else if (errorData.message === 'Not double-authenticated') {
           sessionContext.setShowSecondFactorLogin?.(true);
         }
-        // } else if (error.response.status === NOT_FOUND) {
-        // } else if (error.response.status === CONFLICT) {
       }
     } else if (error.request) {
       // Request made but no response received

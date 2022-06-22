@@ -1,7 +1,7 @@
 import { ButtonLogout } from "../components/Buttons/ButtonLogout";
 import styles from "../styles/Home.module.css";
 import { useSessionContext } from "../context/SessionContext";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
 import { useErrorContext } from "../context/ErrorContext";
 import { errorHandler } from "../errors/errorHandler";
@@ -10,21 +10,52 @@ import { AxiosError } from "axios";
 import { ProfileInteractions } from "../components/Profile/ProfileInteractions";
 import { UserStats } from "../components/Profile/UserStats";
 import { AccountDetails } from "../components/Profile/AccountDetails";
-import { useEffect, useRef, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 // import { useSocketContext } from "../context/SocketContext";
 import { defaultSessionState } from "../constants/defaultSessionState";
 import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
+import {
+  UserStatusLayout,
+  useUserStatusContext,
+} from "../layouts/userStatusLayout";
+import { DefaultLayout } from "../layouts/defaultLayout";
+
+export type StoredLiveStatus = "ONLINE" | "IN_GAME" | "IN_QUEUE";
+
+interface StatusMetrics {
+  socketCount: number;
+  status: StoredLiveStatus;
+}
+
+type Login42 = string;
+
+// const DisplayStatuses = ({
+//   statuses,
+// }: {
+//   statuses: Map<Login42, StatusMetrics>;
+// }) => {
+// const iterator =
+// statuses.forEach((value, key) => {console.log(value, key)})
+
+//   return (
+//     <>
+//       <p>statuses:</p>
+//       {/* <p>{iterator.next().value}</p> */}
+//     </>
+//   );
+// };
 
 export default function ProfilePage() {
-  const { login } = Router.query;
+  const { login } = useRouter().query;
   const sessionContext = useSessionContext();
   // const socketContext = useSocketContext();
   const errorContext = useErrorContext();
   const [displayedUser, setDisplayedUser] = useState(
     defaultSessionState.userSelf
   );
-  const isFetched = useRef(false);
   const [open, setOpen] = useState(false);
+
+  const statuses = useUserStatusContext();
 
   const fetchDisplayedUser = async () => {
     if (login !== undefined && login !== sessionContext.userSelf.login42) {
@@ -42,11 +73,12 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    if (isFetched.current !== true) {
-      fetchDisplayedUser();
-    }
-  }, []);
+    fetchDisplayedUser();
+  }, [sessionContext]);
 
+  if (statuses.size !== 0) {
+    console.log(statuses);
+  }
   // useEffect(() => {
   //   socketContext.socket.on("update-leaderboard", () => {
   //     userService
@@ -80,8 +112,19 @@ export default function ProfilePage() {
             />
           </>
         )}
+        {/* <UserStatusContext.Consumer>
+          {(statuses) => <DisplayStatuses statuses={statuses} />}
+        </UserStatusContext.Consumer> */}
       </div>
       <UserGameHistory userLogin={sessionContext.userSelf.login42} />
     </>
   );
 }
+
+ProfilePage.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <DefaultLayout>
+      <UserStatusLayout>{page}</UserStatusLayout>
+    </DefaultLayout>
+  );
+};

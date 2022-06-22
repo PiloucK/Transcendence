@@ -6,6 +6,7 @@ import { SessionProvider } from "../context/SessionContext";
 import { ErrorProvider } from "../context/ErrorContext";
 import { SocketProvider } from "../context/SocketContext";
 import { DefaultLayout } from "../layouts/defaultLayout";
+import { ErrorSnackbar } from "../components/Alerts/ErrorSnackbar";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -22,6 +23,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <ErrorProvider>
+      <ErrorSnackbar/>
       <SocketProvider>
         <SessionProvider>
           {getLayout(<Component {...pageProps} />)}
