@@ -27,7 +27,6 @@ export default function ProfilePage() {
     defaultSessionState.userSelf
   );
   const [open, setOpen] = useState(false);
-
   const statuses = useUserStatusContext();
 
   const fetchDisplayedUser = async () => {
@@ -58,7 +57,9 @@ export default function ProfilePage() {
           <ProfileInteractions
             userSelf={sessionContext.userSelf}
             displayedUser={displayedUser}
-            userStatus={statuses ? statuses[displayedUser.login42] : undefined}
+            userStatus={
+              statuses ? statuses.get(displayedUser.login42) : undefined
+            }
           />
         ) : (
           <>
