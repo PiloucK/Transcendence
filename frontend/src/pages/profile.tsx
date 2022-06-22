@@ -11,7 +11,6 @@ import { ProfileInteractions } from "../components/Profile/ProfileInteractions";
 import { UserStats } from "../components/Profile/UserStats";
 import { AccountDetails } from "../components/Profile/AccountDetails";
 import { ReactElement, useEffect, useRef, useState } from "react";
-// import { useSocketContext } from "../context/SocketContext";
 import { defaultSessionState } from "../constants/defaultSessionState";
 import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
 import {
@@ -20,26 +19,9 @@ import {
 } from "../layouts/userStatusLayout";
 import { DefaultLayout } from "../layouts/defaultLayout";
 
-// const DisplayStatuses = ({
-//   statuses,
-// }: {
-//   statuses: Map<Login42, StatusMetrics>;
-// }) => {
-// const iterator =
-// statuses.forEach((value, key) => {console.log(value, key)})
-
-//   return (
-//     <>
-//       <p>statuses:</p>
-//       {/* <p>{iterator.next().value}</p> */}
-//     </>
-//   );
-// };
-
 export default function ProfilePage() {
   const { login } = useRouter().query;
   const sessionContext = useSessionContext();
-  // const socketContext = useSocketContext();
   const errorContext = useErrorContext();
   const [displayedUser, setDisplayedUser] = useState(
     defaultSessionState.userSelf
@@ -67,22 +49,6 @@ export default function ProfilePage() {
     fetchDisplayedUser();
   }, [sessionContext]);
 
-  if (statuses.size !== 0) {
-    console.log(statuses);
-  }
-  // useEffect(() => {
-  //   socketContext.socket.on("update-leaderboard", () => {
-  //     userService
-  //       .getOne(state.usrInfo.username)
-  //       .then((user: IUserPublic) => {
-  //         state.setUsrInfo(user);
-  //       })
-  //       .catch((error) => {
-  //         errorContext.newError?.(errorHandler(error, sessionContext));
-  //       });
-  //   });
-  // }, []);
-
   return (
     <>
       <div className={styles.profile_user}>
@@ -92,7 +58,7 @@ export default function ProfilePage() {
           <ProfileInteractions
             userSelf={sessionContext.userSelf}
             displayedUser={displayedUser}
-            userStatus={statuses.get(displayedUser.login42)}
+            userStatus={statuses ? statuses[displayedUser.login42] : undefined}
           />
         ) : (
           <>
@@ -104,9 +70,6 @@ export default function ProfilePage() {
             />
           </>
         )}
-        {/* <UserStatusContext.Consumer>
-          {(statuses) => <DisplayStatuses statuses={statuses} />}
-        </UserStatusContext.Consumer> */}
       </div>
       <UserGameHistory userLogin={sessionContext.userSelf.login42} />
     </>

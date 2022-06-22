@@ -22,7 +22,7 @@ export function ProfileInteractions({
 }: {
   userSelf: IUserSelf;
   displayedUser: IUserPublic;
-  userStatus: StatusMetrics;
+  userStatus: StatusMetrics | undefined;
 }) {
   // const errorContext = useErrorContext();
   const sessionContext = useSessionContext();

@@ -7,7 +7,7 @@ import userStatusService from "../services/userStatus";
 import { errorHandler } from "../errors/errorHandler";
 import { Login42, StatusMetrics } from "../interfaces/status.types";
 
-const UserStatusContext = createContext<Map<Login42, StatusMetrics>>(
+const UserStatusContext = createContext<any>(
   new Map<Login42, StatusMetrics>()
 );
 
