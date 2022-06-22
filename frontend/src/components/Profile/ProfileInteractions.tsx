@@ -13,13 +13,16 @@ import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 import { useEffect } from "react";
+import { StatusMetrics } from "../../interfaces/status.types";
 
 export function ProfileInteractions({
   userSelf,
   displayedUser,
+  userStatus,
 }: {
   userSelf: IUserSelf;
   displayedUser: IUserPublic;
+  userStatus: StatusMetrics;
 }) {
   // const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
@@ -117,7 +120,7 @@ export function ProfileInteractions({
 
   return (
     <div className={styles.public_profile_buttons}>
-      <ButtonUserStatus displayedUser={displayedUser} />
+      <ButtonUserStatus userStatus={userStatus}/>
       {friendButtons()}
       {blockButton()}
     </div>

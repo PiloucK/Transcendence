@@ -5,15 +5,7 @@ import { showOverlayOnEscape } from "../events/showOverlayOnEscape";
 import { createContext, useContext } from "react";
 import userStatusService from "../services/userStatus";
 import { errorHandler } from "../errors/errorHandler";
-
-export type StoredLiveStatus = "ONLINE" | "IN_GAME" | "IN_QUEUE";
-
-interface StatusMetrics {
-  socketCount: number;
-  status: StoredLiveStatus;
-}
-
-type Login42 = string;
+import { Login42, StatusMetrics } from "../interfaces/status.types";
 
 const UserStatusContext = createContext<Map<Login42, StatusMetrics>>(
   new Map<Login42, StatusMetrics>()

@@ -20,15 +20,6 @@ import {
 } from "../layouts/userStatusLayout";
 import { DefaultLayout } from "../layouts/defaultLayout";
 
-export type StoredLiveStatus = "ONLINE" | "IN_GAME" | "IN_QUEUE";
-
-interface StatusMetrics {
-  socketCount: number;
-  status: StoredLiveStatus;
-}
-
-type Login42 = string;
-
 // const DisplayStatuses = ({
 //   statuses,
 // }: {
@@ -101,6 +92,7 @@ export default function ProfilePage() {
           <ProfileInteractions
             userSelf={sessionContext.userSelf}
             displayedUser={displayedUser}
+            userStatus={statuses.get(displayedUser.login42)}
           />
         ) : (
           <>

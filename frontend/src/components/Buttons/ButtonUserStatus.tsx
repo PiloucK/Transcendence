@@ -1,13 +1,20 @@
 import styles from "../../styles/Home.module.css";
 
 import { IUserPublic } from "../../interfaces/IUser";
+import { StatusMetrics } from "../../interfaces/status.types";
 
 export function ButtonUserStatus({
-  displayedUser,
+  userStatus,
 }: {
-  displayedUser: IUserPublic;
+  userStatus: StatusMetrics;
 }) {
-  if (displayedUser.online === true) {
+  if (!userStatus || userStatus.status === "OFFLINE") {
+    return (
+      <div className={styles.offline_button} onClick={() => {}}>
+        Offline
+      </div>
+    );
+  } else if (userStatus.status === "ONLINE") {
     return (
       <div className={styles.social_friend_card_button} onClick={() => {}}>
         Defy
@@ -19,11 +26,5 @@ export function ButtonUserStatus({
     //       Spectate
     //     </div>
     //   );
-  } else {
-    return (
-      <div className={styles.offline_button} onClick={() => {}}>
-        Offline
-      </div>
-    );
   }
 }
