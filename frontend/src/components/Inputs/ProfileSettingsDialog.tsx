@@ -67,14 +67,16 @@ export function ProfileSettingsDialog({
     }
     if (error === false) {
       setOpen(false);
-      userService
-        .updateUserUsername(user.login42, username)
-        .then(() => {
-          socket.emit("user:update-username");
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
+      if (username !== user.username) {
+        userService
+          .updateUserUsername(user.login42, username)
+          .then(() => {
+            socket.emit("user:update-username");
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, loginContext));
+          });
+      }
       if (newImage !== undefined) {
         const formData = new FormData();
         formData.append("file", newImage);
