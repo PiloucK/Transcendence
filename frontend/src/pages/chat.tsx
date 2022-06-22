@@ -24,7 +24,14 @@ function ChatContent({
   menu: string;
   channels: Channel[];
 }) {
-  if (menu === "direct_message") {
+  if (typeof channels === "undefined") {
+    return null;
+  } else if (
+    menu === "direct_message" ||
+    (menu !== "direct_message" &&
+      menu !== "add_channel" &&
+      channels.length === 0)
+  ) {
     return <DirectMessage />;
   } else if (menu === "add_channel") {
     return <AddChannel />;
@@ -74,11 +81,12 @@ export default function Chat() {
         <CircularProgress />
       </div>
     );
+  } else {
+    return (
+      <>
+        <ChatMenu channels={channels} />
+        <ChatContent channels={channels} menu={loginContext.chatMenu} />
+      </>
+    );
   }
-  return (
-    <>
-      <ChatMenu channels={channels} />
-      <ChatContent channels={channels} menu={loginContext.chatMenu} />
-    </>
-  );
 }

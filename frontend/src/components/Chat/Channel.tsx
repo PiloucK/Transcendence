@@ -111,13 +111,13 @@ function ChannelContent({ channel }: { channel: Channel }) {
   );
 }
 
-export function ChannelPage({ channel }: { channel: Channel }) {
+export function ChannelPage({ channel }: { channel: Channel | undefined }) {
   const errorContext = useErrorContext();
   const loginContext = useLoginContext();
   const socketContext = useSocketContext();
   const [currentChannel, setCurrentChannel] = React.useState<Channel>();
 
-  React.useEffect(() => {
+  const fetchCurrentChannel = () => {
     if (typeof channel !== "undefined") {
       channelService
         .getChannelById(loginContext.userLogin, channel.id)
@@ -127,18 +127,20 @@ export function ChannelPage({ channel }: { channel: Channel }) {
         .catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
         });
-      socketContext.socket.on("update-channel-content", () => {
-        channelService
-          .getChannelById(loginContext.userLogin, channel.id)
-          .then((channel: Channel) => {
-            setCurrentChannel(channel);
-          })
-          .catch((error) => {
-            errorContext.newError?.(errorHandler(error, loginContext));
-          });
-      });
     }
-  }, [channel]);
+  };
+
+  React.useEffect(fetchCurrentChannel, [channel]);
+
+  React.useEffect(() => {
+    socketContext.socket.on("update-channel-content", fetchCurrentChannel);
+    return () => {
+      socketContext.socket.removeListener(
+        "update-channel-content",
+        fetchCurrentChannel
+      );
+    };
+  }, []);
 
   if (typeof currentChannel === "undefined" || typeof channel === "undefined") {
     return (

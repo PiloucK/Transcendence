@@ -77,16 +77,7 @@ export function ChannelInviteDialog({
   );
 
   React.useEffect(() => {
-    channelService
-      .getChannelInvitableFriends(loginContext.userLogin, channel.id)
-      .then((friends: IUserForLeaderboard[]) => {
-        setFriends(friends);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
-      });
-
-    socketContext.socket.on("update-channel-content", () => {
+    if (typeof channel !== "undefined") {
       channelService
         .getChannelInvitableFriends(loginContext.userLogin, channel.id)
         .then((friends: IUserForLeaderboard[]) => {
@@ -95,17 +86,7 @@ export function ChannelInviteDialog({
         .catch((error) => {
           errorContext.newError?.(errorHandler(error, loginContext));
         });
-    });
-    socketContext.socket.on("update-relations", () => {
-      channelService
-        .getChannelInvitableFriends(loginContext.userLogin, channel.id)
-        .then((friends: IUserForLeaderboard[]) => {
-          setFriends(friends);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
-    });
+    }
   }, []);
 
   const handleClose = () => {
