@@ -15,7 +15,7 @@ export const InGameLayout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     authenticate(errorContext, socketContext, sessionContext);
-  }, [sessionContext]);
+  }, []);
 
   const [showOverlay, setShowOverlay] = useState(false);
 

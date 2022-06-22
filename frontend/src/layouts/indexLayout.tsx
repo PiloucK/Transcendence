@@ -14,7 +14,7 @@ export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     authenticate(errorContext, socketContext, sessionContext);
-  }, [sessionContext]);
+  }, []);
 
   return (
     <>
