@@ -1,4 +1,3 @@
-import { forwardRef, Inject } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -9,7 +8,6 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { StatusService } from 'src/status/status.service';
 
 interface IGame {
   player1: string | undefined;
@@ -31,7 +29,32 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
+    
     console.log('game-disconnection', client.id);
+
+  }
+
+  @SubscribeMessage('game:unmount')
+  onGameUnmount (
+    @MessageBody() userSelf: string,
+    @ConnectedSocket() client: Socket,
+  )
+  {
+
+    this.runningGames.forEach((value, key) => {
+      if (value.player1 === userSelf || value.player2 === userSelf) {
+        this.runningGames.delete(key);
+        console.log(key, 'deleted');
+        
+        return ; 
+      }
+    });
+
+
+
+    client.disconnect();
+    console.log('game:unmount');
+    
   }
 
   @SubscribeMessage('game:enter')
@@ -49,11 +72,9 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     console.log('after:', data);
-
+    
     const [player1, player2, userSelf] = data;
     const gameName = player1 + player2;
-
-
 
     client.join(gameName);
     console.log(userSelf, 'has joined the game of', gameName);
@@ -104,6 +125,15 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('game:ball')
   onGameBall(@MessageBody() ball: string, @ConnectedSocket() client: Socket) {
     console.log('ball details:', ball);
+  }
+
+  @SubscribeMessage('game:paddles')
+  onGamePaddles(
+    @MessageBody() data: string[], //data[0] = user, data[1] = paddle position
+    @ConnectedSocket() client: Socket,
+  ) {
+    console.log('data');
+    
   }
 
   //   @SubscribeMessage('game:toto')

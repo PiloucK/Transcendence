@@ -21,6 +21,7 @@ const Pong = () => {
 
   const LoginContext = useLoginContext();
   const toto = useRef(true);
+  const secondMount = useRef(false);
   const [startGame, setStartGame] = useState(false);
 
   function updateScore(winner: string) {
@@ -37,6 +38,8 @@ const Pong = () => {
   }
 
   useEffect(() => {
+    console.log("USE EFFECT PONG");
+
     if (gameSocket.current === undefined) {
       gameSocket.current = io(
         `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}/game`,
@@ -54,6 +57,17 @@ const Pong = () => {
         LoginContext.userLogin
       );
     }
+    return () => {
+      if (secondMount.current !== true) {
+        secondMount.current = true;
+      } else {
+        console.log("unmounting game");
+        if (gameSocket.current != undefined) {
+          gameSocket.current.emit("game:unmount", LoginContext.userLogin);
+          console.log("closing socket");
+        }
+      }
+    };
   }, []);
 
   if (gameSocket.current === undefined || startGame === false) {
@@ -62,9 +76,9 @@ const Pong = () => {
         <div className={styles.mainLayout_left_background} />
         <div className={styles.mainLayout_right_background} />
         <Score player={playerScore} opponent={opponentScore} />
-        <PlayerPaddle />
+        {/* <PlayerPaddle gameSocket={gameSocket.current} /> */}
         {/* <ComputerPaddle computerLvl={computerLvl} /> */}
-        <OpponentPaddle />
+        {/* <OpponentPaddle /> */}
       </>
     );
   } else {
@@ -74,7 +88,7 @@ const Pong = () => {
         <div className={styles.mainLayout_right_background} />
         <Score player={playerScore} opponent={opponentScore} />
         <Ball updateScore={updateScore} gameSocket={gameSocket.current} />
-        <PlayerPaddle />
+        <PlayerPaddle gameSocket={gameSocket.current} />
         {/* <ComputerPaddle computerLvl={computerLvl} /> */}
         <OpponentPaddle />
       </>

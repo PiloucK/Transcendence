@@ -1,28 +1,29 @@
 import { useEffect, useState } from "react";
-import styles from './PaddleLeft.module.css'
+import styles from "./PaddleLeft.module.css";
+import { io, Socket } from "socket.io-client";
+import { useLoginContext } from "../../context/LoginContext";
 
+const PlayerPaddle = ({ gameSocket }: { gameSocket: Socket }) => {
+  const [playerPosition, setPlayerPosition] = useState(50);
+  const LoginContext = useLoginContext();
 
-const PlayerPaddle = (  ) => {
-    const [playerPosition, setPlayerPosition] = useState(50);
-  
-    useEffect(() => {
-      document.addEventListener("mousemove", e => {
-        setPlayerPosition((e.y / window.innerHeight) * 100)
-      })
-
-      return () => {
-        window.removeEventListener('mousemove', () => {});
-      }
-    }, []);
-  
-    useEffect(() => {
-      const paddleElem = document.getElementById("player-paddle") as HTMLElement;
-      paddleElem.style.setProperty("--position", playerPosition.toString());
+  useEffect(() => {
+    document.addEventListener("mousemove", (e) => {
+      setPlayerPosition((e.y / window.innerHeight) * 100);
     });
 
-    return (
-      <div className={styles.paddleLeft} id="player-paddle"></div>
-    );
- };
+    return () => {
+      window.removeEventListener("mousemove", () => {});
+    };
+  }, []);
+
+  useEffect(() => {
+    const paddleElem = document.getElementById("player-paddle") as HTMLElement;
+    paddleElem.style.setProperty("--position", playerPosition.toString());
+    gameSocket.emit("game:paddles", LoginContext.userLogin, playerPosition.toString());
+  });
+
+  return <div className={styles.paddleLeft} id="player-paddle"></div>;
+};
 
 export default PlayerPaddle;
