@@ -11,6 +11,12 @@ export class StatusService {
   }
 
   add(socketId: SocketId, userLogin42: Login42): 'EMIT' | 'QUIET' {
+    console.log('add', this.statuses);
+
+    if (this.sockets.has(socketId)) {
+      return 'QUIET';
+    }
+
     this.sockets.set(socketId, userLogin42);
 
     const currentUserMetrics = this.statuses.get(userLogin42);
@@ -30,6 +36,8 @@ export class StatusService {
   }
 
   remove(socketId: SocketId): Login42 | undefined {
+    console.log('remove', this.statuses);
+
     const currentUserLogin42 = this.sockets.get(socketId);
     if (!currentUserLogin42) {
       console.log('socket not found');
