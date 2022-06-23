@@ -16,7 +16,7 @@ export function ButtonAddFriend({
   const socketContext = useSocketContext();
 
   const sendFriendRequest = async () => {
-    userService
+    await userService
       .sendFriendRequest(sessionContext.userSelf.login42, displayedUser.login42)
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
