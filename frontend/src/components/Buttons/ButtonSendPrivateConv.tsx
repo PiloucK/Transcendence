@@ -22,6 +22,7 @@ export function ButtonSendPrivateConv({
       .createPrivateConv(sessionContext.userSelf.login42, displayedUser.login42)
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
+        return;
       });
 
     sessionContext.setChatDM?.(

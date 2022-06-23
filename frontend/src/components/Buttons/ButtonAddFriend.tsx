@@ -20,6 +20,7 @@ export function ButtonAddFriend({
       .sendFriendRequest(sessionContext.userSelf.login42, displayedUser.login42)
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
+        return;
       });
 
     socketContext.socket.emit("user:update-relations");
