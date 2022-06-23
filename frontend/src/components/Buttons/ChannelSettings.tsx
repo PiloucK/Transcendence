@@ -52,35 +52,48 @@ function MenuButtons({
   };
 
   if (loginContext.userLogin === channel.owner) {
-    return (
-      <>
-        <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
-        <MenuItem onClick={handleSettings}>Admin settings</MenuItem>
-        <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
+    if (settingsOpen === true) {
+      return (
         <ChannelSettingsDialog
           channel={channel}
           open={settingsOpen}
           setOpen={setSettingsOpen}
         />
+      );
+    } else if (invitationOpen === true) {
+      return (
         <ChannelInviteDialog
           channel={channel}
           open={invitationOpen}
           setOpen={setInvitationOpen}
         />
-      </>
-    );
+      );
+    } else {
+      return (
+        <>
+          <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
+          <MenuItem onClick={handleSettings}>Admin settings</MenuItem>
+          <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
+        </>
+      );
+    }
   } else if (channel?.admins?.includes(loginContext.userLogin)) {
-    return (
-      <>
-        <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
-        <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
+    if (invitationOpen === true) {
+      return (
         <ChannelInviteDialog
           channel={channel}
           open={invitationOpen}
           setOpen={setInvitationOpen}
         />
-      </>
-    );
+      );
+    } else {
+      return (
+        <>
+          <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
+          <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
+        </>
+      );
+    }
   } else {
     return (
       <>
