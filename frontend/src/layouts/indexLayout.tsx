@@ -13,8 +13,6 @@ export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
   const socketContext = useSocketContext();
 
   useEffect(() => {
-    console.log('index layout authenticate');
-    
     authenticate(errorContext, socketContext, sessionContext);
   }, []);
 

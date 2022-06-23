@@ -14,8 +14,6 @@ export const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
   const socketContext = useSocketContext();
 
   useEffect(() => {
-    console.log("useeffect defaultlayout");
-
     authenticate(errorContext, socketContext, sessionContext);
   }, []);
 

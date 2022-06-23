@@ -11,8 +11,6 @@ export class StatusService {
   }
 
   add(socketId: SocketId, userLogin42: Login42): 'EMIT' | 'QUIET' {
-    console.log('add', this.statuses);
-
     if (this.sockets.has(socketId)) {
       return 'QUIET';
     }
@@ -25,22 +23,16 @@ export class StatusService {
         socketCount: 1,
         status: 'ONLINE',
       });
-      console.log('online!');
-
       return 'EMIT';
     } else {
       ++currentUserMetrics.socketCount;
-      console.log('online dup');
       return 'QUIET';
     }
   }
 
   remove(socketId: SocketId): Login42 | undefined {
-    console.log('remove', this.statuses);
-
     const currentUserLogin42 = this.sockets.get(socketId);
     if (!currentUserLogin42) {
-      console.log('socket not found');
       return undefined;
     }
 
@@ -48,18 +40,15 @@ export class StatusService {
 
     const currentUserMetrics = this.statuses.get(currentUserLogin42);
     if (!currentUserMetrics) {
-      console.log('offline!');
       return currentUserLogin42;
     }
 
     --currentUserMetrics.socketCount;
     if (currentUserMetrics.socketCount === 0) {
       this.statuses.delete(currentUserLogin42);
-      console.log('offline!');
 
       return currentUserLogin42;
     } else {
-      console.log('still online');
       return undefined;
     }
   }
