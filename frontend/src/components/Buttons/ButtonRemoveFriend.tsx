@@ -7,10 +7,8 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 export function ButtonRemoveFriend({
-  userSelf,
   displayedUser,
 }: {
-  userSelf: IUserSelf;
   displayedUser: IUserPublic;
 }) {
   const errorContext = useErrorContext();
@@ -19,7 +17,7 @@ export function ButtonRemoveFriend({
 
   const removeFromFriend = async () => {
     await userService
-      .removeFriend(userSelf.login42, displayedUser.login42)
+      .removeFriend(sessionContext.userSelf.login42, displayedUser.login42)
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });

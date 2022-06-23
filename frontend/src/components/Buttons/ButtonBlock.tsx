@@ -6,20 +6,14 @@ import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
-export function ButtonBlock({
-  userSelf,
-  displayedUser,
-}: {
-  userSelf: IUserSelf;
-  displayedUser: IUserPublic;
-}) {
+export function ButtonBlock({ displayedUser }: { displayedUser: IUserPublic }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   const blockAUser = async () => {
     await userService
-      .blockUser(userSelf.login42, displayedUser.login42)
+      .blockUser(sessionContext.userSelf.login42, displayedUser.login42)
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });

@@ -7,10 +7,8 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 export function ButtonCancelRequest({
-  userSelf,
   displayedUser,
 }: {
-  userSelf: IUserSelf;
   displayedUser: IUserPublic;
 }) {
   const errorContext = useErrorContext();
@@ -19,7 +17,10 @@ export function ButtonCancelRequest({
 
   const cancelRequest = async () => {
     await userService
-      .cancelFriendRequest(userSelf.login42, displayedUser.login42)
+      .cancelFriendRequest(
+        sessionContext.userSelf.login42,
+        displayedUser.login42
+      )
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });

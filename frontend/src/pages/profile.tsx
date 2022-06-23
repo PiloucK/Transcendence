@@ -53,7 +53,6 @@ export default function ProfilePage() {
         <UserStats displayedUser={displayedUser} />
         {login !== undefined && login !== sessionContext.userSelf.login42 ? (
           <ProfileInteractions
-            userSelf={sessionContext.userSelf}
             displayedUser={displayedUser}
             userStatus={
               userStatusContext.statuses

@@ -9,10 +9,8 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { errorHandler } from "../../errors/errorHandler";
 
 export function ButtonSendPrivateConv({
-  userSelf,
   displayedUser,
 }: {
-  userSelf: IUserSelf;
   displayedUser: IUserPublic;
 }) {
   const errorContext = useErrorContext();
@@ -21,7 +19,7 @@ export function ButtonSendPrivateConv({
 
   const sendPrivateMessage = async () => {
     const privateConv: PrivateConv = await privateConvService
-      .createPrivateConv(userSelf.login42, displayedUser.login42)
+      .createPrivateConv(sessionContext.userSelf.login42, displayedUser.login42)
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });

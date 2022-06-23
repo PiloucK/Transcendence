@@ -16,11 +16,9 @@ import { useEffect } from "react";
 import { StatusMetrics } from "../../interfaces/status.types";
 
 export function ProfileInteractions({
-  userSelf,
   displayedUser,
   userStatus,
 }: {
-  userSelf: IUserSelf;
   displayedUser: IUserPublic;
   userStatus: StatusMetrics | undefined;
 }) {
@@ -60,68 +58,42 @@ export function ProfileInteractions({
 
   const friendButtons = () => {
     if (
-      userSelf.friends.find(
+      sessionContext.userSelf.friends.find(
         (friend: IUserSlim) => friend.login42 === displayedUser.login42
       )
     ) {
       return (
         <>
-          <ButtonSendPrivateConv
-            userSelf={sessionContext.userSelf}
-            displayedUser={displayedUser}
-          />
-          <ButtonRemoveFriend
-            userSelf={sessionContext.userSelf}
-            displayedUser={displayedUser}
-          />
+          <ButtonSendPrivateConv displayedUser={displayedUser} />
+          <ButtonRemoveFriend displayedUser={displayedUser} />
         </>
       );
     } else if (
-      userSelf.friendRequestsSent.find(
+      sessionContext.userSelf.friendRequestsSent.find(
         (friend: IUserSlim) => friend.login42 === displayedUser.login42
       )
     ) {
-      return (
-        <ButtonCancelRequest
-          userSelf={sessionContext.userSelf}
-          displayedUser={displayedUser}
-        />
-      );
+      return <ButtonCancelRequest displayedUser={displayedUser} />;
     } else {
-      return (
-        <ButtonAddFriend
-          userSelf={sessionContext.userSelf}
-          displayedUser={displayedUser}
-        />
-      );
+      return <ButtonAddFriend displayedUser={displayedUser} />;
     }
   };
 
   const blockButton = () => {
     if (
-      userSelf.blockedUsers.find(
+      sessionContext.userSelf.blockedUsers.find(
         (blocked: IUserSlim) => blocked.login42 === displayedUser.login42
       )
     ) {
-      return (
-        <ButtonUnblock
-          userSelf={sessionContext.userSelf}
-          displayedUser={displayedUser}
-        />
-      );
+      return <ButtonUnblock displayedUser={displayedUser} />;
     } else {
-      return (
-        <ButtonBlock
-          userSelf={sessionContext.userSelf}
-          displayedUser={displayedUser}
-        />
-      );
+      return <ButtonBlock displayedUser={displayedUser} />;
     }
   };
 
   return (
     <div className={styles.public_profile_buttons}>
-      <ButtonUserStatus userStatus={userStatus}/>
+      <ButtonUserStatus userStatus={userStatus} />
       {friendButtons()}
       {blockButton()}
     </div>
