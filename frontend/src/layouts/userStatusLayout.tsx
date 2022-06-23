@@ -32,7 +32,17 @@ export const UserStatusLayout = ({
       socketContext.socket.on(
         "user:update-status",
         (userLogin42: Login42, userStatus: EmittedLiveStatus) => {
-          userStatusContext.handleStatusUpdate?.(userLogin42, userStatus);
+          userStatusService
+            .getAll()
+            .then((statuses) => {
+              userStatusContext.setStatuses?.(
+                new Map(Object.entries(statuses))
+              );
+            })
+            .catch((error) => {
+              errorContext.newError?.(errorHandler(error, sessionContext));
+            });
+          // userStatusContext.handleStatusUpdate?.(userLogin42, userStatus);
 
           // console.log(
           //   "login",
