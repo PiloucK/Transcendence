@@ -1,6 +1,6 @@
 import styles from "../../styles/Home.module.css";
 import Router from "next/router";
-import { IUserPublic, IUserSelf } from "../../interfaces/IUser";
+import { IUserSlim } from "../../interfaces/IUser";
 import { PrivateConv } from "../../interfaces/Chat.interfaces";
 import privateConvService from "../../services/privateConv";
 import { useSessionContext } from "../../context/SessionContext";
@@ -11,7 +11,7 @@ import { errorHandler } from "../../errors/errorHandler";
 export function ButtonSendPrivateConv({
   displayedUser,
 }: {
-  displayedUser: IUserPublic;
+  displayedUser: IUserSlim;
 }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();

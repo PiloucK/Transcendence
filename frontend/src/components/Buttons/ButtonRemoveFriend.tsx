@@ -1,15 +1,15 @@
 import styles from "../../styles/Home.module.css";
-import { IUserPublic, IUserSelf } from "../../interfaces/IUser";
 import userService from "../../services/user";
 import { useSessionContext } from "../../context/SessionContext";
 import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
+import { IUserSlim } from "../../interfaces/IUser";
 
 export function ButtonRemoveFriend({
   displayedUser,
 }: {
-  displayedUser: IUserPublic;
+  displayedUser: IUserSlim;
 }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();

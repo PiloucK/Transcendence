@@ -1,54 +1,37 @@
 import React from "react";
 import styles from "../../styles/Home.module.css";
-
-import { IUserPublic } from "../../interfaces/IUser";
+import { IUserSlim } from "../../interfaces/IUser";
 import { useSessionContext } from "../../context/SessionContext";
 import userService from "../../services/user";
-
 import { errorHandler } from "../../errors/errorHandler";
-
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
-export function ButtonsFriendRequest({
-  userInfos,
-}: {
-  userInfos: IUserPublic;
-}) {
+export function ButtonsFriendRequest({ userInfos }: { userInfos: IUserSlim }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
-const socketContext = useSocketContext();
+  const socketContext = useSocketContext();
 
   const acceptFriend = () => {
-    if (
-      sessionContext.userSelf.login42 !== null &&
-      sessionContext.userSelf.login42 !== userInfos.login42
-    ) {
-      userService
-        .acceptFriendRequest(sessionContext.userSelf.login42, userInfos.login42)
-        .then(() => {
-          socketContext.socket.emit("user:update-relations");
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-    }
+    userService
+      .acceptFriendRequest(sessionContext.userSelf.login42, userInfos.login42)
+      .then(() => {
+        socketContext.socket.emit("user:update-relations");
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
+      });
   };
 
   const declineRequest = () => {
-    if (
-      sessionContext.userSelf.login42 !== null &&
-      sessionContext.userSelf.login42 !== userInfos.login42
-    ) {
-      userService
-        .declineFriendRequest(sessionContext.userSelf.login42, userInfos.login42)
-        .then(() => {
-          socketContext.socket.emit("user:update-relations");
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-    }
+    userService
+      .declineFriendRequest(sessionContext.userSelf.login42, userInfos.login42)
+      .then(() => {
+        socketContext.socket.emit("user:update-relations");
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
+      });
   };
 
   return (

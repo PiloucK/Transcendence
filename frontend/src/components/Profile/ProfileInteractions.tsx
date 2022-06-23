@@ -1,6 +1,5 @@
 import styles from "../../styles/Home.module.css";
-import userService from "../../services/user";
-import { IUserPublic, IUserSelf, IUserSlim } from "../../interfaces/IUser";
+import { IUserPublic, IUserSlim } from "../../interfaces/IUser";
 import { ButtonAddFriend } from "../Buttons/ButtonAddFriend";
 import { ButtonSendPrivateConv } from "../Buttons/ButtonSendPrivateConv";
 import { ButtonRemoveFriend } from "../Buttons/ButtonRemoveFriend";
@@ -9,50 +8,20 @@ import { ButtonUserStatus } from "../Buttons/ButtonUserStatus";
 import { ButtonBlock } from "../Buttons/ButtonBlock";
 import { ButtonUnblock } from "../Buttons/ButtonUnblock";
 import { useSessionContext } from "../../context/SessionContext";
-import { errorHandler } from "../../errors/errorHandler";
-import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 import { useEffect } from "react";
-import { StatusMetrics } from "../../interfaces/status.types";
 
 export function ProfileInteractions({
   displayedUser,
-  userStatus,
 }: {
   displayedUser: IUserPublic;
-  userStatus: StatusMetrics | undefined;
 }) {
-  const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   useEffect(() => {
     socketContext.socket.on("update-relations", () => {
       sessionContext.updateUserSelf?.();
-      // userService
-      //   .getUserFriends(sessionContext.userSelf.login42)
-      //   .then((friends: IUserPublic[]) => {
-      //     setFriendList(friends);
-      //   })
-      //   .catch((error) => {
-      //     errorContext.newError?.(errorHandler(error, sessionContext));
-      //   });
-      // userService
-      //   .getUserFriendRequestsSent(sessionContext.userSelf.login42)
-      //   .then((requests: IUserPublic[]) => {
-      //     setSentRList(requests);
-      //   })
-      //   .catch((error) => {
-      //     errorContext.newError?.(errorHandler(error, sessionContext));
-      //   });
-      // userService
-      //   .getUserBlockedUsers(sessionContext.userSelf.login42)
-      //   .then((blocked: IUserPublic[]) => {
-      //     setBlockedList(blocked);
-      //   })
-      //   .catch((error) => {
-      //     errorContext.newError?.(errorHandler(error, sessionContext));
-      //   });
     });
   }, []);
 
@@ -93,7 +62,7 @@ export function ProfileInteractions({
 
   return (
     <div className={styles.public_profile_buttons}>
-      <ButtonUserStatus userStatus={userStatus} />
+      <ButtonUserStatus displayedUser={displayedUser} />
       {friendButtons()}
       {blockButton()}
     </div>

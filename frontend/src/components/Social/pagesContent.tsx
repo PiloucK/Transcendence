@@ -1,31 +1,23 @@
-import React from "react";
 import styles from "../../styles/Home.module.css";
-
-import { IUserPublic } from "../../interfaces/IUser";
-
+import { IUserSlim } from "../../interfaces/IUser";
 import {
   EmptyFriendList,
   EmptyBlockedList,
   EmptyNotificationcenter,
 } from "./emptyPages";
-
 import { CardUserSocial } from "../Cards/CardUserSocial";
 import { CardFriendRequest } from "../Cards/CardFriendRequest";
 import { CardBlockedUser } from "../Cards/CardBlockedUser";
 
-function FriendList({ friends }: { friends: IUserPublic[] }) {
+function FriendList({ friends }: { friends: IUserSlim[] }) {
   return (
     <div className={styles.social_content}>
-      {friends.map((friend) => {
-        console.log('online?', friend.online);
-        
-        return CardUserSocial({ userInfos: friend });
-      })}
+      {friends.map((friend) => CardUserSocial({ userInfos: friend }))}
     </div>
   );
 }
 
-function BlockedList({ users }: { users: IUserPublic[] }) {
+function BlockedList({ users }: { users: IUserSlim[] }) {
   return (
     <div className={styles.social_content}>
       {users.map((user) => CardBlockedUser({ userInfos: user }))}
@@ -33,7 +25,7 @@ function BlockedList({ users }: { users: IUserPublic[] }) {
   );
 }
 
-function NotificationList({ requests }: { requests: IUserPublic[] }) {
+function NotificationList({ requests }: { requests: IUserSlim[] }) {
   return (
     <div className={styles.social_content}>
       {requests.map((request) => CardFriendRequest({ userInfos: request }))}
@@ -41,7 +33,7 @@ function NotificationList({ requests }: { requests: IUserPublic[] }) {
   );
 }
 
-export function FriendContent({ friends }: { friends: IUserPublic[] }) {
+export function FriendContent({ friends }: { friends: IUserSlim[] }) {
   if (typeof friends === "undefined" || friends.length === 0) {
     return <EmptyFriendList />;
   } else {
@@ -49,7 +41,7 @@ export function FriendContent({ friends }: { friends: IUserPublic[] }) {
   }
 }
 
-export function BlockedContent({ users }: { users: IUserPublic[] }) {
+export function BlockedContent({ users }: { users: IUserSlim[] }) {
   if (typeof users === "undefined" || users.length === 0) {
     return <EmptyBlockedList />;
   } else {
@@ -61,8 +53,8 @@ export function NotificationContent({
   blockedUsers,
   notifications,
 }: {
-  blockedUsers: IUserPublic[];
-  notifications: IUserPublic[];
+  blockedUsers: IUserSlim[];
+  notifications: IUserSlim[];
 }) {
   const requests = notifications?.filter(
     (notification) =>

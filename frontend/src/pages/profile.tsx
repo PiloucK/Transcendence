@@ -15,7 +15,6 @@ import { defaultSessionState } from "../constants/defaultSessionState";
 import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
 import { UserStatusLayout } from "../layouts/userStatusLayout";
 import { DefaultLayout } from "../layouts/defaultLayout";
-import { useUserStatusContext } from "../context/UserStatusContext";
 
 export default function ProfilePage() {
   const { login } = useRouter().query;
@@ -25,7 +24,6 @@ export default function ProfilePage() {
     defaultSessionState.userSelf
   );
   const [open, setOpen] = useState(false);
-  const userStatusContext = useUserStatusContext();
 
   const fetchDisplayedUser = async () => {
     if (login !== undefined && login !== sessionContext.userSelf.login42) {
@@ -52,14 +50,7 @@ export default function ProfilePage() {
         <AccountDetails displayedUser={displayedUser} />
         <UserStats displayedUser={displayedUser} />
         {login !== undefined && login !== sessionContext.userSelf.login42 ? (
-          <ProfileInteractions
-            displayedUser={displayedUser}
-            userStatus={
-              userStatusContext.statuses
-                ? userStatusContext.statuses.get(displayedUser.login42)
-                : undefined
-            }
-          />
+          <ProfileInteractions displayedUser={displayedUser} />
         ) : (
           <>
             <ButtonLogout />

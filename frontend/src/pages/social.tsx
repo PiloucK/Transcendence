@@ -1,10 +1,6 @@
 import styles from "../styles/Home.module.css";
 import { useSessionContext } from "../context/SessionContext";
-// import { DockGuest } from "../components/Dock/DockGuest";
-import React, { useState } from "react";
-
-import { IUserPublic } from "../interfaces/IUser";
-import userService from "../services/user";
+import { ReactElement, useEffect, useState } from "react";
 
 import { SocialMenu } from "../components/Social/menu";
 import {
@@ -13,124 +9,68 @@ import {
   NotificationContent,
 } from "../components/Social/pagesContent";
 
-import { errorHandler } from "../errors/errorHandler";
-
-import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
+import { DefaultLayout } from "../layouts/defaultLayout";
+import { UserStatusLayout } from "../layouts/userStatusLayout";
+import { useUserStatusContext } from "../context/UserStatusContext";
 
 function SocialPage({ menu }: { menu: string }) {
-  const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [friends, setFriends] = useState<IUserPublic[]>([]);
-  const [blocked, setBlocked] = useState<IUserPublic[]>([]);
-  const [notifications, setNotifications] = useState<IUserPublic[]>([]);
+  const userStatusContext = useUserStatusContext();
 
-  React.useEffect(() => {
-    userService
-      .getUserFriends(sessionContext.userSelf.login42)
-      .then((friends: IUserPublic[]) => {
-        setFriends(friends);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, sessionContext));
-      });
-
-    userService
-      .getUserBlockedUsers(sessionContext.userSelf.login42)
-      .then((users: IUserPublic[]) => {
-        setBlocked(users);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, sessionContext));
-      });
-
-    userService
-      .getUserFriendRequestsReceived(sessionContext.userSelf.login42)
-      .then((notifications: IUserPublic[]) => {
-        setNotifications(notifications);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, sessionContext));
-      });
-
+  useEffect(() => {
     socketContext.socket.on("update-leaderboard", () => {
-      userService
-        .getUserFriends(sessionContext.userSelf.login42)
-        .then((friends: IUserPublic[]) => {
-          setFriends(friends);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-
-      userService
-        .getUserBlockedUsers(sessionContext.userSelf.login42)
-        .then((users: IUserPublic[]) => {
-          setBlocked(users);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-
-      userService
-        .getUserFriendRequestsReceived(sessionContext.userSelf.login42)
-        .then((notifications: IUserPublic[]) => {
-          setNotifications(notifications);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
+      sessionContext.updateUserSelf?.();
     });
 
     socketContext.socket.on("update-relations", () => {
-      userService
-        .getUserFriends(sessionContext.userSelf.login42)
-        .then((friends: IUserPublic[]) => {
-          setFriends(friends);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-
-      userService
-        .getUserBlockedUsers(sessionContext.userSelf.login42)
-        .then((users: IUserPublic[]) => {
-          setBlocked(users);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-
-      userService
-        .getUserFriendRequestsReceived(sessionContext.userSelf.login42)
-        .then((notifications: IUserPublic[]) => {
-          setNotifications(notifications);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
+      sessionContext.updateUserSelf?.();
     });
   }, []);
 
-  if (menu === "all" || menu === "online" || menu === "offline") {
-    return <FriendContent friends={friends} />;
+  if (menu === "all") {
+    return <FriendContent friends={sessionContext.userSelf.friends} />;
+  } else if (menu === "online") {
+    return (
+      <FriendContent
+        friends={sessionContext.userSelf.friends.filter((friend) => {
+          const status = userStatusContext.statuses.get(friend.login42);
+          if (status && status.status === "ONLINE") {
+            return true;
+          }
+          return false;
+        })}
+      />
+    );
+  } else if (menu === "offline") {
+    return (
+      <FriendContent
+        friends={sessionContext.userSelf.friends.filter((friend) => {
+          const status = userStatusContext.statuses.get(friend.login42);
+          if (!status || status.status === "OFFLINE") {
+            return true;
+          }
+          return false;
+        })}
+      />
+    );
   } else if (menu === "blocked") {
-    return <BlockedContent users={blocked} />;
+    return <BlockedContent users={sessionContext.userSelf.blockedUsers} />;
   } else if (menu === "notifications") {
     return (
       <NotificationContent
-        blockedUsers={blocked}
-        notifications={notifications}
+        blockedUsers={sessionContext.userSelf.blockedUsers}
+        notifications={sessionContext.userSelf.friendRequestsReceived}
       />
     );
+  } else {
+    return <></>;
   }
 }
 
 export default function Social() {
   const [menu, setMenu] = useState("all");
-  const errorContext = useErrorContext();
-  const sessionContext = useSessionContext();
 
   if (typeof window !== "undefined") {
     document.body.style.backgroundColor = "#00213D";
@@ -144,3 +84,10 @@ export default function Social() {
     </>
   );
 }
+Social.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <DefaultLayout>
+      <UserStatusLayout>{page}</UserStatusLayout>
+    </DefaultLayout>
+  );
+};

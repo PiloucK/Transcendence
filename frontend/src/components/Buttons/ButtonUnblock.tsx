@@ -1,16 +1,12 @@
 import styles from "../../styles/Home.module.css";
-import { IUserPublic, IUserSelf } from "../../interfaces/IUser";
+import { IUserSlim } from "../../interfaces/IUser";
 import userService from "../../services/user";
 import { useSessionContext } from "../../context/SessionContext";
 import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
-export function ButtonUnblock({
-  displayedUser,
-}: {
-  displayedUser: IUserPublic;
-}) {
+export function ButtonUnblock({ displayedUser }: { displayedUser: IUserSlim }) {
   const errorContext = useErrorContext();
   const socketContext = useSocketContext();
   const sessionContext = useSessionContext();

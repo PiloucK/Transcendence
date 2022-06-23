@@ -1,14 +1,14 @@
 import styles from "../../styles/Home.module.css";
-
-import { IUserPublic } from "../../interfaces/IUser";
-import { StatusMetrics } from "../../interfaces/status.types";
+import { IUserSlim } from "../../interfaces/IUser";
+import { useUserStatusContext } from "../../context/UserStatusContext";
 
 export function ButtonUserStatus({
-  userStatus,
+  displayedUser,
 }: {
-  userStatus: StatusMetrics | undefined;
+  displayedUser: IUserSlim;
 }) {
-  console.log("button", userStatus);
+  const userStatusContext = useUserStatusContext();
+  const userStatus = userStatusContext.statuses.get(displayedUser.login42);
 
   if (userStatus?.status === "ONLINE" || userStatus?.status === "IN_QUEUE") {
     return (
