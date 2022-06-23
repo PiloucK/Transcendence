@@ -8,6 +8,9 @@ import {
   Query,
   Delete,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  StreamableFile,
 } from '@nestjs/common';
 
 import { User } from './user.entity';
@@ -17,6 +20,10 @@ import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwtAuth.guard';
 import { GetReqUser } from 'src/auth/decorators/getReqUser.decorator';
+import { Express } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -54,6 +61,24 @@ export class UsersController {
       login42,
       updateUsernameDto,
     );
+  }
+
+  @Post('/:login42/image')
+  @UseInterceptors(FileInterceptor('file'))
+  updateUserImage(
+    @Param('login42') login42: string,
+    @GetReqUser() reqUser: User,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<User> {
+    return this.usersService.updateUserImage(reqUser, login42, file);
+  }
+
+  @Get('/image/:imageId')
+  getUserImage(@Param('imageId') imageId: string): StreamableFile {
+    const file = createReadStream(
+      join(process.cwd(), `/src/uploads/${imageId}`),
+    );
+    return new StreamableFile(file);
   }
 
   @Get('/:login42/friends')

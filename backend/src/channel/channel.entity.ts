@@ -1,14 +1,25 @@
 import { User } from 'src/users/user.entity';
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Message, restriction } from './dto/channel.dto';
 
 @Entity()
 export class Channel {
-	@PrimaryGeneratedColumn('uuid')
-	id!: string;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Column()
   name!: string;
+
+  @Column({ nullable: true })
+  image!: string;
 
   @Column()
   password!: string;

@@ -4,4 +4,7 @@ export class FortyTwoUserProfileDto {
   @IsNotEmpty()
   @IsString()
   username!: string;
+
+  @IsNotEmpty()
+  photos!: Array<{ value: string }>;
 }

@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { FortyTwoUserProfileDto } from './dto/fortyTwoUserProfile.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,8 +13,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async findOrCreate42UserInDatabase(login42: string): Promise<User> {
-    return await this.usersService.createUser({ login42 });
+  async findOrCreate42UserInDatabase(fortyTwoUserProfileDto: FortyTwoUserProfileDto): Promise<User> {
+    return await this.usersService.createUser({login42: fortyTwoUserProfileDto.username, photo42: fortyTwoUserProfileDto.photos[0].value});
   }
 
   issueJwtToken(login42: string, isSecondFactorAuthenticated = false): string {
