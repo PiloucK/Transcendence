@@ -11,9 +11,6 @@ const Ball = ({updateScore} : {updateScore : (winner : string) => void}) => {
   let ballDirection = useRef<ICoordinates>({x: 0.75, y: 0.5});
   let ballVelocity = INITIAL_VELOCITY;
 
-  const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
-  const ballRadiusHeightRatio = window.innerHeight / window.innerHeight;
-
   const requestRef = useRef(0);
   const previousTimeRef = useRef(0);
 
@@ -48,6 +45,9 @@ const Ball = ({updateScore} : {updateScore : (winner : string) => void}) => {
 
     let currentPaddle = ballRect.x < window.innerWidth / 2 ? playerRect : opponentRect;
 
+    const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
+    const ballRadiusHeightRatio = window.innerHeight / window.innerHeight;
+
     if (ballRect?.bottom > window.innerHeight) {
       ballDirection.current.y *= -1
       setBallPosition(prevState => ({x: prevState.x, y: 100 - ballRadiusHeightRatio}))
@@ -58,10 +58,7 @@ const Ball = ({updateScore} : {updateScore : (winner : string) => void}) => {
     }
     else if (paddleCollision(currentPaddle, ballRect)) {
 
-      let newDirection = ballDirection.current.x < 0 ? 1 : -1;
-
-      console.log(ballDirection.current.x);
-      
+      let newDirection = ballDirection.current.x < 0 ? 1 : -1;     
 
       let collidePoint = ballRect.y - (currentPaddle.y + currentPaddle.height / 2);
       collidePoint /= currentPaddle.height / 2;
