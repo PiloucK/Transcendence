@@ -18,7 +18,7 @@ export const InGameLayout = ({ children }: { children: React.ReactNode }) => {
 
   const [showOverlay, setShowOverlay] = useState(false);
 
-  showOverlayOnEscape(showOverlay, setShowOverlay);
+  // showOverlayOnEscape(showOverlay, setShowOverlay);
 
   // have to always show children and overlay if the is activated !! lags come from rerendering all components in the page
   return (
