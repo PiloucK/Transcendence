@@ -1,9 +1,8 @@
 import { createContext, useContext, useState } from "react";
 import React from "react";
-import {
-  defaultSocketState,
-  ISocketContext,
-} from "../interfaces/ISocketContext";
+
+import { ISocketContext } from "../interfaces/ISocketContext";
+import { defaultSocketState } from "../constants/defaultSocketState";
 
 const SocketContext = createContext<ISocketContext>(defaultSocketState);
 

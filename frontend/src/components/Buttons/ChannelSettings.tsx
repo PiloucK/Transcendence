@@ -5,8 +5,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 import channelService from "../../services/channel";
-import { Channel } from "../../interfaces/users";
-import { useLoginContext } from "../../context/LoginContext";
+import { Channel } from "../../interfaces/Chat.interfaces";
+import { useSessionContext } from "../../context/SessionContext";
 
 import { ChannelSettingsDialog } from "../Inputs/ChannelSettingsDialog";
 import { ChannelInviteDialog } from "../Inputs/ChannelInviteDialog";
@@ -19,7 +19,7 @@ function MenuButtons({
   channel: Channel;
   setAnchorEl: (anchorEl: any) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [settingsOpen, setSettingsOpen] = React.useState(false);
   const [invitationOpen, setInvitationOpen] = React.useState(false);
@@ -33,15 +33,15 @@ function MenuButtons({
   };
 
   const handleLeaveChannel = () => {
-    loginContext.setChatMenu?.("direct_message");
+    sessionContext.setChatMenu?.("direct_message");
     setAnchorEl(null);
-    channelService.leaveChannel(loginContext.userLogin, channel.id).then(() => {
+    channelService.leaveChannel(sessionContext.userSelf.login42, channel.id).then(() => {
       socketContext.socket.emit("user:update-channel-content");
       socketContext.socket.emit("user:update-joined-channel");
     });
   };
 
-  if (loginContext.userLogin === channel.owner) {
+  if (sessionContext.userSelf.login42 === channel.owner) {
     return (
       <>
         <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
@@ -59,7 +59,7 @@ function MenuButtons({
         />
       </>
     );
-  } else if (channel?.admin?.includes(loginContext.userLogin)) {
+  } else if (channel?.admins?.includes(sessionContext.userSelf.login42)) {
     return (
       <>
         <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>

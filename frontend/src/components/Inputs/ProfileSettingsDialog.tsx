@@ -8,10 +8,8 @@ import Avatar from "@mui/material/Avatar";
 import Image from "next/image";
 
 import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
-import { IUser } from "../../interfaces/users";
 
 import userService from "../../services/user";
-import { useLoginContext } from "../../context/LoginContext";
 
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
@@ -20,21 +18,21 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+import { useSocketContext } from "../../context/SocketContext";
+import { IUserSelf } from "../../interfaces/IUser";
+import { useSessionContext } from "../../context/SessionContext";
 
 export function ProfileSettingsDialog({
   user,
   open,
   setOpen,
 }: {
-  user: IUser;
+  user: IUserSelf;
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
-  const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
+  const sessionContext = useSessionContext();
   const [username, setUsername] = useState(user.username);
 
   const [textFieldError, setTextFieldError] = useState("");
@@ -65,7 +63,7 @@ export function ProfileSettingsDialog({
     if (error === false) {
       setOpen(false);
       userService.updateUserUsername(user.login42, username).then(() => {
-        socket.emit("user:update-username");
+        socketContext.socket.emit("user:update-username");
       });
       if (newImage !== undefined) {
         const formData = new FormData();
@@ -73,10 +71,11 @@ export function ProfileSettingsDialog({
         userService.updateUserImage(user.login42, formData).then(() => {
           setNewImage(undefined);
           setPreview("");
-          socket.emit("user:update-image");
+          socketContext.socket.emit("user:update-image");
         });
       }
     }
+    sessionContext.updateUserSelf?.();
   };
 
   return (

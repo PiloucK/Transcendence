@@ -1,16 +1,6 @@
-import React, { useState } from "react";
-import styles from "../../styles/Home.module.css";
-
-import { useLoginContext } from "../../context/LoginContext";
-import { IUserPublicInfos } from "../../interfaces/users";
-
+import { useEffect } from "react";
+import { useSessionContext } from "../../context/SessionContext";
 import Badge from "@mui/material/Badge";
-
-import userService from "../../services/user";
-
-import { errorHandler } from "../../errors/errorHandler";
-
-import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 export const NotificationChip = ({
@@ -18,53 +8,18 @@ export const NotificationChip = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
-  const [blockedUsers, setBlockedUsers] = useState<IUserPublicInfos[]>([]);
 
-  React.useEffect(() => {
-    userService
-      .getUserFriendRequestsReceived(loginContext.userLogin)
-      .then((notifications: IUserPublicInfos[]) => {
-        setNotifications(notifications);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
-      });
-    userService
-      .getUserBlockedUsers(loginContext.userLogin)
-      .then((blocked: IUserPublicInfos[]) => {
-        setBlockedUsers(blocked);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
-      });
-
+  useEffect(() => {
     socketContext.socket.on("update-relations", () => {
-      userService
-        .getUserFriendRequestsReceived(loginContext.userLogin)
-        .then((notifications: IUserPublicInfos[]) => {
-          setNotifications(notifications);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
-      userService
-        .getUserBlockedUsers(loginContext.userLogin)
-        .then((blocked: IUserPublicInfos[]) => {
-          setBlockedUsers(blocked);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
+      sessionContext.updateUserSelf?.();
     });
   }, []);
 
-  const requests = notifications?.filter(
+  const requests = sessionContext.userSelf.friendRequestsReceived?.filter(
     (notification) =>
-      !blockedUsers?.some(
+      !sessionContext.userSelf.blockedUsers?.some(
         (blockedUser) => blockedUser.login42 === notification.login42
       )
   );

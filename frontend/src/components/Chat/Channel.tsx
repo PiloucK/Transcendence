@@ -3,8 +3,8 @@ import styles from "../../styles/Home.module.css";
 import { EmptyFriendList } from "../Social/emptyPages";
 
 import { ChannelMenu } from "./Menus";
-import { useLoginContext } from "../../context/LoginContext";
-import { IUserPublicInfos, Channel, Message } from "../interfaces/users";
+import { useSessionContext } from "../../context/SessionContext";
+import { Channel, Message } from "../../interfaces/Chat.interfaces";
 import channelService from "../../services/channel";
 import { CardUserDM } from "../Cards/CardUserDM";
 
@@ -16,7 +16,7 @@ import { SendMessageField } from "../Inputs/SendMessageField";
 import { useSocketContext } from "../../context/SocketContext";
 
 function Messages({ channel }: { channel: Channel }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   if (typeof channel === "undefined" || channel.messages.length === 0) {
     return (
@@ -28,7 +28,7 @@ function Messages({ channel }: { channel: Channel }) {
   }
 
   const getStyle = (author: string) => {
-    if (author === loginContext.userLogin) {
+    if (author === sessionContext.userSelf.login42) {
       return styles.message_author;
     } else {
       return styles.message_friend;
@@ -36,7 +36,7 @@ function Messages({ channel }: { channel: Channel }) {
   };
 
   const GetAvatar = ({ author }: { author: string }) => {
-    if (author === loginContext.userLogin) {
+    if (author === sessionContext.userLogin) {
       return null;
     } else {
       const user = channel.users.find((user) => user.login42 === author);
@@ -100,20 +100,20 @@ function ChannelContent({ channel }: { channel: Channel }) {
 }
 
 export function Channel({ id }: { id: string }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [channel, setChannel] = useState<Channel>();
 
   React.useEffect(() => {
     channelService
-      .getChannelById(loginContext.userLogin, id)
+      .getChannelById(sessionContext.userSelf.login42, id)
       .then((channel: Channel) => {
         setChannel(channel);
       });
 
     socketContext.socket.on("update-channel-content", () => {
       channelService
-        .getChannelById(loginContext.userLogin, id)
+        .getChannelById(sessionContext.userSelf.login42, id)
         .then((channel: Channel) => {
           setChannel(channel);
         });

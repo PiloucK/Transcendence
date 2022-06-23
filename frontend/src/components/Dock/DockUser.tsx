@@ -1,10 +1,5 @@
 import Link from "next/link";
-import React, {
-  ChangeEventHandler,
-  FormEventHandler,
-  useEffect,
-  useState,
-} from "react";
+import React from "react";
 import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -15,79 +10,14 @@ import CheckIcon from "@mui/icons-material/Check";
 
 import { Dock } from "./Dock";
 import styles from "../../styles/Home.module.css";
-import { useLoginContext } from "../../context/LoginContext";
 
-import userService from "../../services/user";
-import authService from "../../services/auth";
-import { IUser, IUserCredentials } from "../../interfaces/users";
-import { Button, TextField, Tooltip } from "@mui/material";
-
-import { errorHandler } from "../../errors/errorHandler";
-
-import { useErrorContext } from "../../context/ErrorContext";
-import { useSocketContext } from "../../context/SocketContext";
+import { Tooltip } from "@mui/material";
 
 function NavigationDock({
   setIsInNavigation,
 }: {
   setIsInNavigation: (mode: boolean) => void;
 }) {
-  const loginContext = useLoginContext();
-  const errorContext = useErrorContext();
-  const socketContext = useSocketContext();
-
-  const [username, setUsername] = useState("");
-
-  const addUser: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-
-    const newUserCredentials: IUserCredentials = {
-      login42: username,
-      photo42: "https://cdn.intra.42.fr/users/chdespon.jpg",
-    };
-
-    userService
-      .addOne(newUserCredentials)
-      .then((user: IUser) => {
-        loginContext.login?.(user.login42);
-        socketContext.socket.emit("user:new", username);
-        setUsername("");
-
-        authService
-          .getToken(newUserCredentials.login42)
-          .then((login42: string) => {
-            console.log("new token for", login42, "stored in cookie");
-          })
-          .catch((error) => {
-            errorContext.newError?.(errorHandler(error, loginContext));
-            // errorContext.newError(errorParse)
-          });
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
-      });
-  };
-
-  const deleteAllUsers = () => {
-    userService
-      .deleteAll()
-      .then(() => {
-        console.log("all users deleted");
-        loginContext.logout?.();
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
-      });
-  };
-
-  const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    if (event.target.value) {
-      setUsername(event.target.value);
-    }
-  };
-
   return (
     <>
       <Dock>
@@ -133,18 +63,6 @@ function NavigationDock({
           </IconButton>
         </Tooltip>
       </Dock>
-
-      <div>
-        <form onSubmit={addUser}>
-          <TextField
-            value={username}
-            onChange={handleUsernameChange}
-            label="Login"
-          />
-          <Button type="submit">add</Button>
-        </form>
-        <Button onClick={deleteAllUsers}>remove all users and logout</Button>
-      </div>
     </>
   );
 }

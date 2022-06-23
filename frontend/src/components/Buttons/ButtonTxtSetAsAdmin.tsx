@@ -2,9 +2,9 @@ import React from "react";
 
 import styles from "../../styles/Home.module.css";
 
-import { IUserPublicInfos, Channel } from "../../interfaces/users";
+import { Channel } from "../../interfaces/Chat.interfaces";
 import channelService from "../../services/channel";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 export function ButtonTxtSetAsAdmin({
@@ -14,13 +14,13 @@ export function ButtonTxtSetAsAdmin({
   login: string;
   channel: Channel;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   const handleRemoveOnClick = () => {
-    if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
+    if (sessionContext.userSelf.login42 !== null && sessionContext.userSelf.login42 !== login) {
       channelService
-        .unsetAChannelAdmin(loginContext.userLogin, channel.id, login)
+        .unsetAChannelAdmin(sessionContext.userSelf.login42, channel.id, login)
         .then(() => {
           socketContext.socket.emit("user:update-channel-content");
         })
@@ -31,9 +31,9 @@ export function ButtonTxtSetAsAdmin({
   };
 
   const handleAddOnClick = () => {
-    if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
+    if (sessionContext.userSelf.login42 !== null && sessionContext.userSelf.login42 !== login) {
       channelService
-        .setAChannelAdmin(loginContext.userLogin, channel.id, login)
+        .setAChannelAdmin(sessionContext.userSelf.login42, channel.id, login)
         .then(() => {
           socketContext.socket.emit("user:update-channel-content");
         })
