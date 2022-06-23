@@ -58,14 +58,17 @@ const Ball = ({updateScore} : {updateScore : (winner : string) => void}) => {
     }
     else if (paddleCollision(currentPaddle, ballRect)) {
 
-      let direction = (ballRect.x < window.innerWidth / 2) ? 1 : -1;
+      let newDirection = ballDirection.current.x < 0 ? 1 : -1;
+
+      console.log(ballDirection.current.x);
+      
 
       let collidePoint = ballRect.y - (currentPaddle.y + currentPaddle.height / 2);
       collidePoint /= currentPaddle.height / 2;
 
       let angleRad = collidePoint * Math.PI / 4;
- 
-      ballDirection.current.x = direction * Math.cos(angleRad);
+
+      ballDirection.current.x = newDirection * Math.cos(angleRad);
       ballDirection.current.y = Math.sin(angleRad);
 
       if (currentPaddle === playerRect)
