@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Login42, SocketId, StatusMetrics } from './status.type';
+import { Login42, SocketId, StatusMap, StatusMetrics } from './status.type';
 
 @Injectable()
 export class StatusService {
   private sockets = new Map<SocketId, Login42>();
   private statuses = new Map<Login42, StatusMetrics>();
 
-  getStatuses(): Map<Login42, StatusMetrics> {
+  getStatuses(): StatusMap {
     return this.statuses;
   }
 

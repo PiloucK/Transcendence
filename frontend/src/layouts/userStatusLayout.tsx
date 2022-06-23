@@ -1,68 +1,65 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useSessionContext } from "../context/SessionContext";
-import { useErrorContext } from "../context/ErrorContext";
-import { showOverlayOnEscape } from "../events/showOverlayOnEscape";
-import { createContext, useContext } from "react";
+import React, { useEffect, useRef } from "react";
+import { useSocketContext } from "../context/SocketContext";
+import { useUserStatusContext } from "../context/UserStatusContext";
+import { EmittedLiveStatus, Login42 } from "../interfaces/status.types";
 import userStatusService from "../services/userStatus";
 import { errorHandler } from "../errors/errorHandler";
-import {
-  EmittedLiveStatus,
-  Login42,
-  StatusMetrics,
-} from "../interfaces/status.types";
-import { useSocketContext } from "../context/SocketContext";
-
-const UserStatusContext = createContext<any>(new Map<Login42, StatusMetrics>());
+import { useErrorContext } from "../context/ErrorContext";
+import { useSessionContext } from "../context/SessionContext";
 
 export const UserStatusLayout = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const sessionContext = useSessionContext();
-  const errorContext = useErrorContext();
   const socketContext = useSocketContext();
-  const [userStatuses, setUserStatuses] = useState(
-    new Map<Login42, StatusMetrics>()
-  );
+  const errorContext = useErrorContext();
+  const sessionContext = useSessionContext();
+  const userStatusContext = useUserStatusContext();
   const isListeningToStatuses = useRef(false);
 
   useEffect(() => {
     userStatusService
       .getAll()
       .then((statuses) => {
-        setUserStatuses(new Map(Object.entries(statuses)));
+        userStatusContext.setStatuses?.(new Map(Object.entries(statuses)));
       })
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });
+
     if (isListeningToStatuses.current !== true) {
       socketContext.socket.on(
         "user:update-status",
         (userLogin42: Login42, userStatus: EmittedLiveStatus) => {
-          console.log(userStatuses);
+          userStatusContext.handleStatusUpdate?.(userLogin42, userStatus);
 
-          const tmp = userStatuses.get(userLogin42);
-          if (tmp) {
-            tmp.status = userStatus;
-          }
+          // console.log(
+          //   "login",
+          //   userLogin42,
+          //   "status",
+          //   userStatus,
+          //   "entry in statuses",
+          //   userStatusContext.statuses.get(userLogin42)
+          // );
+          //     userStatusContext.statuses.set(userLogin42, {
+          //       socketCount: -1,
+          //       status: userStatus,
+          //     });
+
+          //     console.log(
+          //       "aeouaoeuaoeuaoeuaoeuaoeuaoeuaoeuaoeu login",
+          //       userLogin42,
+          //       "status",
+          //       userStatus,
+          //       "entry in statuses",
+          //       userStatusContext.statuses.get(userLogin42)
+          //     );
         }
       );
       isListeningToStatuses.current = true;
     }
   }, []);
 
-  const [showOverlay, setShowOverlay] = useState(false);
-
-  showOverlayOnEscape(showOverlay, setShowOverlay);
-
-  return (
-    <UserStatusContext.Provider value={userStatuses}>
-      {children}
-    </UserStatusContext.Provider>
-  );
+  return <>{children}</>;
 };
-
-export function useUserStatusContext() {
-  return useContext(UserStatusContext);
-}

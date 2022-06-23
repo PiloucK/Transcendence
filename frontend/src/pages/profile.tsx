@@ -13,11 +13,9 @@ import { AccountDetails } from "../components/Profile/AccountDetails";
 import { ReactElement, useEffect, useRef, useState } from "react";
 import { defaultSessionState } from "../constants/defaultSessionState";
 import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
-import {
-  UserStatusLayout,
-  useUserStatusContext,
-} from "../layouts/userStatusLayout";
+import { UserStatusLayout } from "../layouts/userStatusLayout";
 import { DefaultLayout } from "../layouts/defaultLayout";
+import { useUserStatusContext } from "../context/UserStatusContext";
 
 export default function ProfilePage() {
   const { login } = useRouter().query;
@@ -27,7 +25,7 @@ export default function ProfilePage() {
     defaultSessionState.userSelf
   );
   const [open, setOpen] = useState(false);
-  const statuses = useUserStatusContext();
+  const userStatusContext = useUserStatusContext();
 
   const fetchDisplayedUser = async () => {
     if (login !== undefined && login !== sessionContext.userSelf.login42) {
@@ -58,7 +56,9 @@ export default function ProfilePage() {
             userSelf={sessionContext.userSelf}
             displayedUser={displayedUser}
             userStatus={
-              statuses ? statuses.get(displayedUser.login42) : undefined
+              userStatusContext.statuses
+                ? userStatusContext.statuses.get(displayedUser.login42)
+                : undefined
             }
           />
         ) : (

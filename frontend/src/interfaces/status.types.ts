@@ -6,3 +6,5 @@ export interface StatusMetrics {
 }
 
 export type Login42 = string;
+
+export type StatusMap = Map<Login42, StatusMetrics>;
