@@ -24,6 +24,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import io from "socket.io-client";
+import TwoFactorAuth from "../../pages/twoFactorAuth";
 
 const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
 
@@ -175,6 +176,7 @@ export function ProfileSettingsDialog({
           <DialogActions>
             <ButtonUpdateChannel updateChannel={updateUser} />
           </DialogActions>
+		  <TwoFactorAuth />
         </Dialog>
       </div>
     </>
