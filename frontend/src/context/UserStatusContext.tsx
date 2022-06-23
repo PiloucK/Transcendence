@@ -5,7 +5,6 @@ import { defaultUserStatusState } from "../constants/defaultUserStatusState";
 import {
   EmittedLiveStatus,
   Login42,
-  StatusMap,
   StatusMetrics,
 } from "../interfaces/status.types";
 

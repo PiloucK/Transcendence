@@ -24,38 +24,39 @@ export function ProfileInteractions({
   displayedUser: IUserPublic;
   userStatus: StatusMetrics | undefined;
 }) {
-  // const errorContext = useErrorContext();
+  const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
-  // const socketContext = useSocketContext();
+  const socketContext = useSocketContext();
 
-  // useEffect(() => {
-  //   socketContext.socket.on("update-relations", () => {
-  //     userService
-  //       .getUserFriends(sessionContext.userSelf.login42)
-  //       .then((friends: IUserPublic[]) => {
-  //         setFriendList(friends);
-  //       })
-  //       .catch((error) => {
-  //         errorContext.newError?.(errorHandler(error, sessionContext));
-  //       });
-  //     userService
-  //       .getUserFriendRequestsSent(sessionContext.userSelf.login42)
-  //       .then((requests: IUserPublic[]) => {
-  //         setSentRList(requests);
-  //       })
-  //       .catch((error) => {
-  //         errorContext.newError?.(errorHandler(error, sessionContext));
-  //       });
-  //     userService
-  //       .getUserBlockedUsers(sessionContext.userSelf.login42)
-  //       .then((blocked: IUserPublic[]) => {
-  //         setBlockedList(blocked);
-  //       })
-  //       .catch((error) => {
-  //         errorContext.newError?.(errorHandler(error, sessionContext));
-  //       });
-  //   });
-  // }, []);
+  useEffect(() => {
+    socketContext.socket.on("update-relations", () => {
+      sessionContext.updateUserSelf?.();
+      // userService
+      //   .getUserFriends(sessionContext.userSelf.login42)
+      //   .then((friends: IUserPublic[]) => {
+      //     setFriendList(friends);
+      //   })
+      //   .catch((error) => {
+      //     errorContext.newError?.(errorHandler(error, sessionContext));
+      //   });
+      // userService
+      //   .getUserFriendRequestsSent(sessionContext.userSelf.login42)
+      //   .then((requests: IUserPublic[]) => {
+      //     setSentRList(requests);
+      //   })
+      //   .catch((error) => {
+      //     errorContext.newError?.(errorHandler(error, sessionContext));
+      //   });
+      // userService
+      //   .getUserBlockedUsers(sessionContext.userSelf.login42)
+      //   .then((blocked: IUserPublic[]) => {
+      //     setBlockedList(blocked);
+      //   })
+      //   .catch((error) => {
+      //     errorContext.newError?.(errorHandler(error, sessionContext));
+      //   });
+    });
+  }, []);
 
   const friendButtons = () => {
     if (
