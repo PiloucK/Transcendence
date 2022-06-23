@@ -20,11 +20,10 @@ const Ball = ({
   let ballDirection = useRef<ICoordinates>({ x: 0.75, y: 0.5 });
   let ballVelocity = INITIAL_VELOCITY;
 
-  const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
-  const ballRadiusHeightRatio = window.innerHeight / window.innerHeight;
-
   const requestRef = useRef(0);
   const previousTimeRef = useRef(0);
+
+
 
   function randomNumberBetween(min: number, max: number) {
     return Math.random() * (max - min) + min;
@@ -67,6 +66,9 @@ const Ball = ({
     let currentPaddle =
       ballRect.x < window.innerWidth / 2 ? playerRect : opponentRect;
 
+    const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
+    const ballRadiusHeightRatio = window.innerHeight / window.innerHeight;
+
     if (ballRect?.bottom > window.innerHeight) {
       ballDirection.current.y *= -1;
       setBallPosition((prevState) => ({
@@ -80,7 +82,7 @@ const Ball = ({
         y: ballRadiusHeightRatio,
       }));
     } else if (paddleCollision(currentPaddle, ballRect)) {
-      let direction = ballRect.x < window.innerWidth / 2 ? 1 : -1;
+      let newDirection = ballDirection.current.x < 0 ? 1 : -1;
 
       let collidePoint =
         ballRect.y - (currentPaddle.y + currentPaddle.height / 2);
@@ -88,7 +90,7 @@ const Ball = ({
 
       let angleRad = (collidePoint * Math.PI) / 4;
 
-      ballDirection.current.x = direction * Math.cos(angleRad);
+      ballDirection.current.x = newDirection * Math.cos(angleRad);
       ballDirection.current.y = Math.sin(angleRad);
 
       if (currentPaddle === playerRect)

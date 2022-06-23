@@ -18,6 +18,7 @@ const Pong = () => {
   const [playerScore, setPlayerScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
   const gameSocket = useRef<Socket>();
+  const gameID = useRef("null");
 
   const LoginContext = useLoginContext();
   const toto = useRef(true);
@@ -37,6 +38,12 @@ const Pong = () => {
     toto.current = !toto.current;
   }
 
+  if (gameSocket.current) {
+    gameSocket.current.onAny((event, ...args) => {
+      console.log(event, args);
+    });
+  }
+
   useEffect(() => {
     console.log("USE EFFECT PONG");
 
@@ -45,8 +52,9 @@ const Pong = () => {
         `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}/game`,
         { transports: ["websocket"] }
       );
-      gameSocket.current.on("game:start", () => {
+      gameSocket.current.on("game:start", (newGameID) => {
         setStartGame(true);
+        gameID.current = newGameID;
         console.log("GAME STARTING FROM FRONT...");
       });
 
@@ -88,9 +96,9 @@ const Pong = () => {
         <div className={styles.mainLayout_right_background} />
         <Score player={playerScore} opponent={opponentScore} />
         <Ball updateScore={updateScore} gameSocket={gameSocket.current} />
-        <PlayerPaddle gameSocket={gameSocket.current} />
+        <PlayerPaddle gameSocket={gameSocket.current} gameID={gameID.current}/>
         {/* <ComputerPaddle computerLvl={computerLvl} /> */}
-        <OpponentPaddle />
+        <OpponentPaddle gameSocket={gameSocket.current}  />
       </>
     );
   }
