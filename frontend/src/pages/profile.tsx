@@ -66,11 +66,3 @@ export default function ProfilePage() {
     </>
   );
 }
-
-ProfilePage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <DefaultLayout>
-      <UserStatusLayout>{page}</UserStatusLayout>
-    </DefaultLayout>
-  );
-};

@@ -78,10 +78,3 @@ export default function Social() {
     </>
   );
 }
-Social.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <DefaultLayout>
-      <UserStatusLayout>{page}</UserStatusLayout>
-    </DefaultLayout>
-  );
-};
