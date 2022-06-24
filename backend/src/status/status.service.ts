@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { User } from 'src/users/user.entity';
+import { WebsocketsGateway } from 'src/websockets/websockets.gateway';
 import { Login42, SocketId, StatusMap, StatusMetrics } from './status.type';
 
 @Injectable()
@@ -8,6 +10,27 @@ export class StatusService {
 
   getStatuses(): StatusMap {
     return this.statuses;
+  }
+
+  getOpponent(userLogin42: Login42) {
+    for (const [opponentLogin42, opponentStatusMetrics] of this.statuses) {
+      if (opponentStatusMetrics.status === 'IN_QUEUE'
+        && opponentLogin42 !== userLogin42) {
+        const userStatusMetrics = this.statuses.get(userLogin42);
+        if (userStatusMetrics) {
+          opponentStatusMetrics.status = 'IN_GAME';
+          userStatusMetrics.status = 'IN_GAME';
+          return opponentLogin42;
+        } else {
+          return undefined;
+        }
+      }
+    }
+    const userStatusMetrics = this.statuses.get(userLogin42);
+    if (userStatusMetrics) {
+      userStatusMetrics.status = 'IN_QUEUE';
+    }
+    return undefined;
   }
 
   add(socketId: SocketId, userLogin42: Login42): 'EMIT' | 'QUIET' {

@@ -31,9 +31,25 @@ export class WebsocketsGateway
     }
   }
 
-  updateStatus(userLogin42: string, status: EmittedLiveStatus) {
-    this.server.emit('user:update-status', userLogin42, status);
+  updateStatus(userLogin42: string, status: EmittedLiveStatus,
+    opponentLogin42: string | undefined = undefined) {
+    this.server.emit('user:update-status', userLogin42, status, opponentLogin42);
   }
+
+  @SubscribeMessage('user:find-match')
+  onUserFindMatch(
+    @MessageBody() userLogin42: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    const opponentLogin42 = this.statusService.getOpponent(userLogin42);
+    if (!opponentLogin42) {
+      this.updateStatus(userLogin42, 'IN_QUEUE');
+    } else {
+      this.updateStatus(userLogin42, 'IN_GAME', opponentLogin42);
+      this.updateStatus(opponentLogin42, 'IN_GAME', userLogin42);
+    }
+  }
+
 
   @SubscribeMessage('user:login')
   onUserLogin(

@@ -31,47 +31,19 @@ export const UserStatusLayout = ({
     if (isListeningToStatuses.current !== true) {
       socketContext.socket.on(
         "user:update-status",
-        (userLogin42: Login42, userStatus: EmittedLiveStatus) => {
-          userStatusContext.setStatuses?.(
-            new Map(userStatusContext.statuses.set(userLogin42,
-              {
-                socketCount: -1,
-                status: userStatus
-              }))
-          );
-       //   userStatusService
-       //     .getAll()
-       //     .then((statuses) => {
-       //       userStatusContext.setStatuses?.(
-       //         new Map(Object.entries(statuses))
-       //       );
-       //     })
-       //     .catch((error) => {
-       //       errorContext.newError?.(errorHandler(error, sessionContext));
-       //     });
-          // userStatusContext.handleStatusUpdate?.(userLogin42, userStatus);
+        (userLogin42: Login42, userStatus: EmittedLiveStatus,
+          opponentLogin42: Login42 | undefined) => {
 
-          // console.log(
-          //   "login",
-          //   userLogin42,
-          //   "status",
-          //   userStatus,
-          //   "entry in statuses",
-          //   userStatusContext.statuses.get(userLogin42)
-          // );
-          //     userStatusContext.statuses.set(userLogin42, {
-          //       socketCount: -1,
-          //       status: userStatus,
-          //     });
+            userStatusContext.setStatuses?.(
+              new Map(userStatusContext.statuses.set(userLogin42,
+                {
+                  socketCount: -1,
+                  status: userStatus
+                }))
+            );
+            if (opponentLogin42) {
 
-          //     console.log(
-          //       "aeouaoeuaoeuaoeuaoeuaoeuaoeuaoeuaoeu login",
-          //       userLogin42,
-          //       "status",
-          //       userStatus,
-          //       "entry in statuses",
-          //       userStatusContext.statuses.get(userLogin42)
-          //     );
+            }
         }
       );
       isListeningToStatuses.current = true;
