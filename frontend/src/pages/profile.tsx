@@ -28,7 +28,7 @@ export default function ProfilePage() {
   const fetchDisplayedUser = async () => {
     if (login !== undefined && login !== sessionContext.userSelf.login42) {
       const user = await userService
-        .getOne(login)
+        .getOne(Array.isArray(login) ? login[0] : login)
         .catch((error: Error | AxiosError<unknown, any>) => {
           errorContext.newError?.(errorHandler(error, sessionContext));
           Router.push("/");

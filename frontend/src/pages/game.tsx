@@ -6,12 +6,16 @@ import PlayerPaddle from "../components/Game/PlayerPaddle";
 import ComputerPaddle from "../components/Game/ComputerPaddle";
 import Score from "../components/Game/Score";
 import { InGameLayout } from "../layouts/inGameLayout";
+import { useRouter } from "next/router";
+import { useSessionContext } from "../context/SessionContext";
 
 const Pong = () => {
   const computerLvl = 3; // peut aller de 1 a 3 EASY MEDIUM HARD
 
   const [playerScore, setPlayerScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
+  const sessionContext = useSessionContext();
+  const router = useRouter();
 
   function updateScore(winner: string) {
     if (winner === "player") setPlayerScore((prevState) => prevState + 1);
@@ -22,8 +26,9 @@ const Pong = () => {
     <>
       <div className={styles.mainLayout_left_background} />
       <div className={styles.mainLayout_right_background} />
-      <Score player={playerScore} opponent={opponentScore} />
-      <Ball updateScore={updateScore} />
+      <Score player={sessionContext.userSelf.login42}
+        opponent={Array.isArray(router.query) ? router.query[0] : router.query} />
+      {/* <Ball updateScore={updateScore} /> */}
       <PlayerPaddle />
       <ComputerPaddle computerLvl={computerLvl} />
     </>

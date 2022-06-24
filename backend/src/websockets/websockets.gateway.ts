@@ -31,9 +31,17 @@ export class WebsocketsGateway
     }
   }
 
-  updateStatus(userLogin42: string, status: EmittedLiveStatus,
-    opponentLogin42: string | undefined = undefined) {
-    this.server.emit('user:update-status', userLogin42, status, opponentLogin42);
+  updateStatus(
+    userLogin42: string,
+    status: EmittedLiveStatus,
+    opponentLogin42: string | undefined = undefined,
+  ) {
+    this.server.emit(
+      'user:update-status',
+      userLogin42,
+      status,
+      opponentLogin42,
+    );
   }
 
   @SubscribeMessage('user:find-match')
@@ -49,7 +57,6 @@ export class WebsocketsGateway
       this.updateStatus(opponentLogin42, 'IN_GAME', userLogin42);
     }
   }
-
 
   @SubscribeMessage('user:login')
   onUserLogin(

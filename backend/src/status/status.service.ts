@@ -14,8 +14,10 @@ export class StatusService {
 
   getOpponent(userLogin42: Login42) {
     for (const [opponentLogin42, opponentStatusMetrics] of this.statuses) {
-      if (opponentStatusMetrics.status === 'IN_QUEUE'
-        && opponentLogin42 !== userLogin42) {
+      if (
+        opponentStatusMetrics.status === 'IN_QUEUE' &&
+        opponentLogin42 !== userLogin42
+      ) {
         const userStatusMetrics = this.statuses.get(userLogin42);
         if (userStatusMetrics) {
           opponentStatusMetrics.status = 'IN_GAME';

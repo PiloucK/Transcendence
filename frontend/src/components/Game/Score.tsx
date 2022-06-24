@@ -1,6 +1,6 @@
 import styles from './Score.module.css'
 
-const Score = ({player, opponent} : {player : number, opponent : number}) => {
+const Score = ({player, opponent} : {player : string, opponent : string}) => {
     return (
       <div className={styles.score}>
         <div id="player-score">{player}</div>
