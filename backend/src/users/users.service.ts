@@ -10,12 +10,19 @@ import { UsersRepository } from './users.repository';
 import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 import { ConfigService } from '@nestjs/config';
+import { Repository } from 'typeorm';
+
+type UserRelations =
+  | 'friends'
+  | 'friendRequestsSent'
+  | 'friendRequestsReceived'
+  | 'blockedUsers';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(UsersRepository)
-    private readonly usersRepository: UsersRepository,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
     private readonly configService: ConfigService,
   ) {}
 
