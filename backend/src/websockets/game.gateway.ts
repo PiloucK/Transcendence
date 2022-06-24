@@ -9,6 +9,12 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
+
+interface ICoordinates {
+  x: number;
+  y: number;
+}
+
 interface IGame {
   player1: string | undefined;
   player2: string | undefined;
@@ -17,7 +23,7 @@ interface IGame {
   player1ID: string;
   player2ID: string;
   gameStatus: 'WAITING' | 'RUNNING' | 'FINISHED';
-}
+} // EXPORTER INTERFACE DANS UN FICHIER
 
 @WebSocketGateway(3002, { transports: ['websocket'], namespace: 'game' })
 export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
@@ -68,6 +74,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     const gameID = player1 + player2;
 
     client.join(gameID);
+
     console.log(userSelf, 'has joined the game of', gameID);
 
     let currentGame = this.runningGames.get(gameID);
@@ -122,15 +129,13 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     console.log('ball details:', ball);
   }
 
-  @SubscribeMessage('game:paddles')
-  onGamePaddles(
-    @MessageBody() data: string[], //data[0] = user, data[1] = paddle position
+  @SubscribeMessage('game:paddleMove')
+  onGamePaddleMove(
+    @MessageBody() data: string[],
     @ConnectedSocket() client: Socket,
   ) {
-    console.log(data);
-
-    const [userSelf, paddlePosition, gameID] = data;
-
+  
+    const [paddlePosition, gameID] = data;
 
     let dest = gameID;
 
@@ -139,17 +144,11 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     else if (this.runningGames.get(gameID)?.player2ID === client.id)
       dest = this.runningGames.get(gameID)?.player1ID as string;
 
-    this.server.to(dest).emit('game:paddlePosition', paddlePosition);
+    this.server.to(dest).emit('game:opponentPosition', paddlePosition);
 
-    
   }
 
-  //   @SubscribeMessage('game:toto')
-  //   onGameToto(
-  // 	@MessageBody() str: string,
-  // 	@ConnectedSocket() client: Socket,
-  //   ) {
-  // 	console.log(str);
-  // 	client.to('42').emit("game:toto", str);
-  //   }
+
+
+
 }

@@ -9,7 +9,7 @@ const OpponentPaddle = ({ gameSocket}: { gameSocket: Socket}) => {
  
   const [paddlePosition, setPaddlePosition] = useState(50);
 
-  gameSocket.on("game:paddlePosition", (newPaddlePosition) => {
+  gameSocket.on("game:opponentPosition", (newPaddlePosition) => {
     setPaddlePosition(newPaddlePosition);
    
   });

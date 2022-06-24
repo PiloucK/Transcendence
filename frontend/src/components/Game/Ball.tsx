@@ -23,7 +23,7 @@ const Ball = ({
   const requestRef = useRef(0);
   const previousTimeRef = useRef(0);
 
-
+  const gameName = useRef("null");
 
   function randomNumberBetween(min: number, max: number) {
     return Math.random() * (max - min) + min;

@@ -20,7 +20,7 @@ const PlayerPaddle = ({ gameSocket, gameID}: { gameSocket: Socket, gameID : stri
   useEffect(() => {
     const paddleElem = document.getElementById("player-paddle") as HTMLElement;
     paddleElem.style.setProperty("--position", playerPosition.toString());
-    gameSocket.emit("game:paddles", LoginContext.userLogin, playerPosition.toString(), gameID);
+    gameSocket.emit("game:paddleMove", playerPosition.toString(), gameID);
   });
 
   return <div className={styles.paddleLeft} id="player-paddle"></div>;

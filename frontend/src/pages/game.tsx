@@ -21,7 +21,6 @@ const Pong = () => {
   const gameID = useRef("null");
 
   const LoginContext = useLoginContext();
-  const toto = useRef(true);
   const secondMount = useRef(false);
   const [startGame, setStartGame] = useState(false);
 
@@ -30,13 +29,6 @@ const Pong = () => {
     if (winner === "opponent") setOpponentScore((prevState) => prevState + 1);
   }
 
-  if (gameSocket.current && toto.current) {
-    console.log("toto", playerScore);
-    gameSocket.current.emit("game:point", LoginContext.userLogin);
-    toto.current = !toto.current;
-  } else {
-    toto.current = !toto.current;
-  }
 
   if (gameSocket.current) {
     gameSocket.current.onAny((event, ...args) => {
