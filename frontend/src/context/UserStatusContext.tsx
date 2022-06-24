@@ -25,6 +25,7 @@ export const UserStatusProvider = ({
   ) => {
     console.log("statuses handletruc", statuses);
     const tmp = statuses.get(userLogin42);
+    console.log('tmp =', tmp);
     if (tmp) {
       tmp.status = status;
     }

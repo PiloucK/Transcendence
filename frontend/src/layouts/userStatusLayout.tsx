@@ -32,16 +32,23 @@ export const UserStatusLayout = ({
       socketContext.socket.on(
         "user:update-status",
         (userLogin42: Login42, userStatus: EmittedLiveStatus) => {
-          userStatusService
-            .getAll()
-            .then((statuses) => {
-              userStatusContext.setStatuses?.(
-                new Map(Object.entries(statuses))
-              );
-            })
-            .catch((error) => {
-              errorContext.newError?.(errorHandler(error, sessionContext));
-            });
+          userStatusContext.setStatuses?.(
+            new Map(userStatusContext.statuses.set(userLogin42,
+              {
+                socketCount: -1,
+                status: userStatus
+              }))
+          );
+       //   userStatusService
+       //     .getAll()
+       //     .then((statuses) => {
+       //       userStatusContext.setStatuses?.(
+       //         new Map(Object.entries(statuses))
+       //       );
+       //     })
+       //     .catch((error) => {
+       //       errorContext.newError?.(errorHandler(error, sessionContext));
+       //     });
           // userStatusContext.handleStatusUpdate?.(userLogin42, userStatus);
 
           // console.log(

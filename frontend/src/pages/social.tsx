@@ -36,10 +36,7 @@ function SocialPage({ menu }: { menu: string }) {
       <FriendContent
         friends={sessionContext.userSelf.friends.filter((friend) => {
           const status = userStatusContext.statuses.get(friend.login42);
-          if (status && status.status === "ONLINE") {
-            return true;
-          }
-          return false;
+          return status?.status === "ONLINE";
         })}
       />
     );
@@ -48,10 +45,7 @@ function SocialPage({ menu }: { menu: string }) {
       <FriendContent
         friends={sessionContext.userSelf.friends.filter((friend) => {
           const status = userStatusContext.statuses.get(friend.login42);
-          if (!status || status.status === "OFFLINE") {
-            return true;
-          }
-          return false;
+          return !status || status.status === "OFFLINE";
         })}
       />
     );
