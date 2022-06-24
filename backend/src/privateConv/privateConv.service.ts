@@ -34,7 +34,7 @@ export class PrivateConvService {
       senderLogin42,
       receiverLogin42
     );
-    if (typeof privateConv !== "undefined") {
+    if (privateConv !== null) {
       return privateConv;
     }
 
@@ -58,7 +58,7 @@ export class PrivateConvService {
       sendPrivateMessageDto.receiver
     );
 
-    if (typeof privateConv === "undefined") {
+    if (privateConv === null) {
       privateConv = await this.createPrivateConv(
         sendPrivateMessageDto.sender,
         sendPrivateMessageDto.receiver
@@ -79,7 +79,7 @@ export class PrivateConvService {
       sendChannelInvitationDto.receiver
     );
 
-    if (typeof privateConv === "undefined") {
+    if (privateConv === null) {
       privateConv = await this.createPrivateConv(
         sendChannelInvitationDto.sender,
         sendChannelInvitationDto.receiver
@@ -100,7 +100,7 @@ export class PrivateConvService {
       getPrivateConvDto.fLogin42
     );
 
-    if (typeof privateConv === "undefined") {
+    if (privateConv === null) {
       throw new Error("Private conversation not found");
     }
     return privateConv;

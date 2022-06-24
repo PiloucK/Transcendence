@@ -6,7 +6,7 @@ export class PrivateConvRepository extends Repository<PrivateConv> {
   async getPrivateConv(
     senderLogin42: string,
     receiverLogin42: string
-  ): Promise<PrivateConv | undefined> {
+  ): Promise<PrivateConv | null> {
     let privateConv = await this.findOne({
       relations: ["userOne", "userTwo"],
       where: {
@@ -18,7 +18,7 @@ export class PrivateConvRepository extends Repository<PrivateConv> {
         },
       },
     });
-		if (typeof privateConv !== "undefined") {
+		if (privateConv !== null) {
 			return privateConv;
 		}
 		privateConv = await this.findOne({

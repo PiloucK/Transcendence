@@ -56,8 +56,10 @@ export class ChannelRepository extends Repository<Channel> {
     updateChannelDto: ChannelInfoDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
-      id: channelId,
-      owner: user.login42,
+      where: {
+        id: channelId,
+        owner: user.login42,
+      }
     });
 
     if (!channel) {
@@ -143,7 +145,9 @@ export class ChannelRepository extends Repository<Channel> {
     muteAChannelUserDto: RestrictionDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
-      id: muteAChannelUserDto.channelId,
+      where: {
+        id: muteAChannelUserDto.channelId,
+      }
     });
 
     if (!channel) {
@@ -175,7 +179,9 @@ export class ChannelRepository extends Repository<Channel> {
     banAChannelUserDto: RestrictionDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
-      id: banAChannelUserDto.channelId,
+      where: {
+        id: banAChannelUserDto.channelId,
+      }
     });
 
     if (!channel) {
@@ -207,8 +213,10 @@ export class ChannelRepository extends Repository<Channel> {
     setAChannelAdminDto: InteractionDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
-      id: setAChannelAdminDto.channelId,
-      owner: user.login42,
+      where: {
+        id: setAChannelAdminDto.channelId,
+        owner: user.login42,
+      }
     });
 
     if (!channel) {
@@ -232,8 +240,10 @@ export class ChannelRepository extends Repository<Channel> {
     unsetAChannelAdminDto: InteractionDto,
   ): Promise<Channel> {
     const channel = await this.findOne({
-      id: unsetAChannelAdminDto.channelId,
-      owner: user.login42,
+      where: {
+        id: unsetAChannelAdminDto.channelId,
+        owner: user.login42,
+      }
     });
 
     if (!channel) {
