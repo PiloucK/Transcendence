@@ -22,8 +22,12 @@ interface IGame {
   player2Score: number;
   player1ID: string;
   player2ID: string;
-  gameStatus: 'WAITING' | 'RUNNING' | 'FINISHED';
+  gameStatus: 'WAITING' | 'RUNNING' | 'RESET';
 } // EXPORTER INTERFACE DANS UN FICHIER
+
+function randomNumberBetween(min: number, max: number) {
+  return Math.random() * (max - min) + min;
+}
 
 @WebSocketGateway(3002, { transports: ['websocket'], namespace: 'game' })
 export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
@@ -145,7 +149,29 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       dest = this.runningGames.get(gameID)?.player1ID as string;
 
     this.server.to(dest).emit('game:opponentPosition', paddlePosition);
+  }
 
+
+
+  @SubscribeMessage('game:ballReset')
+  onGameBallReset(
+    @MessageBody() gameID: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+
+    // if not a spectator:
+    let currentGame = this.runningGames.get(gameID);
+
+    if (currentGame && currentGame.gameStatus === 'RESET') {
+      console.log('reseting ball');
+      
+      currentGame.gameStatus = 'RUNNING'
+      const y = randomNumberBetween(10, 90);
+      this.server.to(gameID).emit('game:newBall', y);
+    }
+    else if (currentGame && currentGame.gameStatus === 'RUNNING') {
+      currentGame.gameStatus = 'RESET'
+    }
   }
 
 

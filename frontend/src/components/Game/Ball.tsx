@@ -23,8 +23,6 @@ const Ball = ({
   const requestRef = useRef(0);
   const previousTimeRef = useRef(0);
 
-  const gameName = useRef("null");
-
   function randomNumberBetween(min: number, max: number) {
     return Math.random() * (max - min) + min;
   }
@@ -132,7 +130,6 @@ const Ball = ({
   useEffect(() => {
     document.body.style.overflow = "hidden";
     resetBall();
-    gameSocket.emit("game:ball", "test ball");
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current);
   }, []); // Make sure the effect runs only once

@@ -17,13 +17,11 @@ function DockToShow() {
 //Show a Big play button to start the game in the middle of the screen.
 export default function MainMenu() {
   return (
-    <>
-      <div className={styles.mainLayout_left_background} />
-      <div className={styles.mainLayout_right_background} />
+    <div className={styles.mainLayout_background} >
       <Link href="/game">
         <div className={styles.play}>PLAY</div>
       </Link>
       <DockToShow />
-    </>
+    </div>
   );
 }

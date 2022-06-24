@@ -12,6 +12,15 @@ import getConfig from "next/config";
 import { useLoginContext } from "../context/LoginContext";
 const { publicRuntimeConfig } = getConfig();
 
+
+const Matchmaking = () => {
+  return (
+    <div className={styles.mainLayout_background} >
+      Waiting for an opponent...
+    </div>
+  )
+} 
+
 const Pong = () => {
   const computerLvl = 3; // peut aller de 1 a 3 EASY MEDIUM HARD
 
@@ -22,19 +31,22 @@ const Pong = () => {
 
   const LoginContext = useLoginContext();
   const secondMount = useRef(false);
-  const [startGame, setStartGame] = useState(false);
+  const [playGame, setPlayGame] = useState(false);
+
 
   function updateScore(winner: string) {
-    if (winner === "player") setPlayerScore((prevState) => prevState + 1);
-    if (winner === "opponent") setOpponentScore((prevState) => prevState + 1);
+    if (winner === "player")
+      setPlayerScore((prevState) => prevState + 1);
+    if (winner === "opponent")
+      setOpponentScore((prevState) => prevState + 1);
+    setPlayGame(false);
   }
 
-
-  if (gameSocket.current) {
-    gameSocket.current.onAny((event, ...args) => {
-      console.log(event, args);
-    });
-  }
+  // if (gameSocket.current) {
+  //   gameSocket.current.onAny((event, ...args) => {
+  //     console.log(event, args);
+  //   });
+  // }
 
   useEffect(() => {
     console.log("USE EFFECT PONG");
@@ -45,7 +57,7 @@ const Pong = () => {
         { transports: ["websocket"] }
       );
       gameSocket.current.on("game:start", (newGameID) => {
-        setStartGame(true);
+        setPlayGame(true);
         gameID.current = newGameID;
         console.log("GAME STARTING FROM FRONT...");
       });
@@ -70,28 +82,32 @@ const Pong = () => {
     };
   }, []);
 
-  if (gameSocket.current === undefined || startGame === false) {
+  if (gameSocket.current === undefined) {
     return (
-      <>
-        <div className={styles.mainLayout_left_background} />
-        <div className={styles.mainLayout_right_background} />
-        <Score player={playerScore} opponent={opponentScore} />
-        {/* <PlayerPaddle gameSocket={gameSocket.current} /> */}
-        {/* <ComputerPaddle computerLvl={computerLvl} /> */}
-        {/* <OpponentPaddle /> */}
-      </>
+      <Matchmaking/>
     );
-  } else {
+  } 
+  else if (playGame === true) {
     return (
-      <>
-        <div className={styles.mainLayout_left_background} />
-        <div className={styles.mainLayout_right_background} />
+      <div className={styles.mainLayout_background} >
         <Score player={playerScore} opponent={opponentScore} />
-        <Ball updateScore={updateScore} gameSocket={gameSocket.current} />
-        <PlayerPaddle gameSocket={gameSocket.current} gameID={gameID.current}/>
+        <Ball
+          updateScore={updateScore}
+          gameSocket={gameSocket.current}
+        />
+        <PlayerPaddle gameSocket={gameSocket.current} gameID={gameID.current} />
         {/* <ComputerPaddle computerLvl={computerLvl} /> */}
-        <OpponentPaddle gameSocket={gameSocket.current}  />
-      </>
+        <OpponentPaddle gameSocket={gameSocket.current} />
+      </div>
+    );
+  }
+  else {
+    return (
+      <div className={styles.mainLayout_background} >
+        <Score player={playerScore} opponent={opponentScore} />
+        <PlayerPaddle gameSocket={gameSocket.current} gameID={gameID.current} />
+        <OpponentPaddle gameSocket={gameSocket.current} />
+      </div>
     );
   }
 };
