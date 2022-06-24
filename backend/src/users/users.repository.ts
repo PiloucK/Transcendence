@@ -25,16 +25,20 @@ export class UsersRepository extends Repository<User> {
   }
 
   async createUser(login42: string, photo42: string): Promise<User> {
-    let user = await this.findOne(login42);
-    if (!user) {
-      user = this.create({
+//    let user = await this.findOne(login42);
+//    if (!user) {
+      const user = this.create({
         login42,
         username: login42,
         photo42: photo42,
       });
 
-      await this.save(user);
-    }
+    console.log('yoo', user);
+
+      await this.save(user).catch(() => {
+        console.error('sql error, probablement doublon');
+      });
+//    }
 
     return user;
   }

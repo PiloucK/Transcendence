@@ -2,14 +2,15 @@ import {
   Body,
   Controller,
   Get,
+  Post,
   Param,
   Patch,
   Query,
+  Delete,
   UseGuards,
   UseInterceptors,
   UploadedFile,
   StreamableFile,
-  Post,
 } from '@nestjs/common';
 
 import { User } from './user.entity';
@@ -24,7 +25,7 @@ import { createReadStream } from 'fs';
 import { join } from 'path';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard)
+//@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -36,6 +37,16 @@ export class UsersController {
   @Get('/:login42')
   getUserByLogin42(@Param('login42') login42: string): Promise<User> {
     return this.usersService.getUserByLogin42(login42);
+  }
+
+  @Post()
+  createUser(@Body() login42Object: any): Promise<User> {
+    return this.usersService.createUser('coucou', "");
+  }
+
+  @Delete() // dev
+  deleteAllUsers(): Promise<void> {
+    return this.usersService.deleteAllUsers();
   }
 
   @Patch('/:login42/username')

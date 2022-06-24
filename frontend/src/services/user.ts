@@ -14,6 +14,15 @@ const getOne = (login: string) => {
   return axios.get(`${baseUrl}/${login}`).then((response) => response.data);
 };
 
+const addOne = (login42: string) => {
+  return axios.post(baseUrl, login42).then((response) => response.data);
+};
+
+// dev
+const deleteAll = () => {
+  return axios.delete(baseUrl).then((response) => response.data);
+};
+
 const updateUserUsername = (login: string, username: string) => {
   return axios
     .patch(`${baseUrl}/${login}/username`, { username })
@@ -118,6 +127,8 @@ const unblockUser = (login: string, friendLogin42: string) => {
 export default {
   getAll,
   getOne,
+  addOne,
+  deleteAll,
   getUserFriends,
   getUserFriendRequestsSent,
   getUserFriendRequestsReceived,
