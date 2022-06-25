@@ -15,7 +15,7 @@ const getOne = (login: string) => {
 };
 
 const addOne = (login42: string) => {
-  return axios.post(baseUrl, login42).then((response) => response.data);
+  return axios.post(`${baseUrl}/${login42}`).then((response) => response.data);
 };
 
 // dev

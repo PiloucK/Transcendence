@@ -22,10 +22,16 @@ const Pong = () => {
     <>
       <div className={styles.mainLayout_left_background} />
       <div className={styles.mainLayout_right_background} />
+<<<<<<< HEAD
       <Score player={playerScore} opponent={opponentScore} />
       <Ball updateScore={updateScore} />
+=======
+       <Score player={sessionContext.userSelf.login42}
+        opponent={Array.isArray(router.query) ? router.query[0] : router.query} />
+      {/* <Ball updateScore={updateScore} /> 
+>>>>>>> c44188e... restore the test feature to add users manually
       <PlayerPaddle />
-      <ComputerPaddle computerLvl={computerLvl} />
+      <ComputerPaddle computerLvl={computerLvl} /> */}
     </>
   );
 };

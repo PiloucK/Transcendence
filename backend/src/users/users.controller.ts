@@ -39,9 +39,9 @@ export class UsersController {
     return this.usersService.getUserByLogin42(login42);
   }
 
-  @Post()
-  createUser(@Body() login42Object: any): Promise<User> {
-    return this.usersService.createUser('coucou', "");
+  @Post('/:login42')
+  createUser(@Param('login42') login42: string): Promise<User> {
+    return this.usersService.createUser(login42, "");
   }
 
   @Delete() // dev

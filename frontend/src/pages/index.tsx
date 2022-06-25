@@ -6,5 +6,5 @@ export default function IndexPage() {
 }
 
 IndexPage.getLayout = function getLayout(page: ReactElement) {
-  return <IndexLayout>{page}</IndexLayout>;
+  return <IndexLayout>{page}</IndexLayout>
 };
