@@ -1,3 +1,4 @@
+retirer le scroll dans le leaderboard
 REMETTRE le UseGuards dans users.controller!!
 retirer le champ d'ajout d'user dans le dock
 retirer la route createUser, le dto CreateUserDto et le call axios addUser

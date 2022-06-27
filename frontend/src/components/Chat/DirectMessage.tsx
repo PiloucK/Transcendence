@@ -51,10 +51,13 @@ function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
   const [friends, setFriends] = useState<IUserPublic[]>([]);
 
   React.useEffect(() => {
+    console.log('ueiw', sessionContext.userSelf.login42);
+    
     userService
       .getUserFriends(sessionContext.userSelf.login42)
       .then((friends: IUserPublic[]) => {
         setFriends(friends);
+      }).catch(() => {console.log('cest celui la');
       });
 
     socketContext.socket.on("update-leaderboard", () => {
