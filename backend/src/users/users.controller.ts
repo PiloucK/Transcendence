@@ -4,7 +4,6 @@ import {
   Get,
   Param,
   Patch,
-  Query,
   UseGuards,
   UseInterceptors,
   UploadedFile,
