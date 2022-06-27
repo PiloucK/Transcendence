@@ -15,22 +15,27 @@ const Pong = () => {
   const [playerScore, setPlayerScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
   const sessionContext = useSessionContext();
-  const router = useRouter();
+  const { opponentLogin42 } = useRouter().query;
 
   function updateScore(winner: string) {
     if (winner === "player") setPlayerScore((prevState) => prevState + 1);
     if (winner === "opponent") setOpponentScore((prevState) => prevState + 1);
   }
+  console.log("router query", opponentLogin42);
 
   return (
     <>
       <div className={styles.mainLayout_left_background} />
       <div className={styles.mainLayout_right_background} />
-      <Score player={sessionContext.userSelf.login42}
-        opponent={Array.isArray(router.query) ? router.query[0] : router.query} />
+      <Score
+        player={sessionContext.userSelf.login42}
+        opponent={
+          Array.isArray(opponentLogin42) ? opponentLogin42[0] : opponentLogin42
+        }
+      />
       {/* <Ball updateScore={updateScore} /> */}
-      <PlayerPaddle />
-      <ComputerPaddle computerLvl={computerLvl} />
+      {/* <PlayerPaddle />
+      <ComputerPaddle computerLvl={computerLvl} /> */}
     </>
   );
 };
