@@ -44,7 +44,7 @@ function NavigationDock({
     userService
       .addOne(username)
       .then((user: IUserSelf) => {
-        sessionContext.login?.(user.login42);
+        sessionContext.login?.(user);
         socketContext.socket.emit("user:new", username);
         setUsername("");
 

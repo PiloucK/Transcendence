@@ -15,6 +15,7 @@ import {IUserSelf} from "../../interfaces/IUser";
 import { Button } from "@mui/material";
 import {errorHandler} from "../../errors/errorHandler";
 import React, {
+  EventHandler,
   FormEventHandler,
   useState,
 } from "react";
@@ -29,12 +30,10 @@ export function DockGuest() {
   const [username, setUsername] = useState("");
 
   const addUser = (event) => {
-    event.preventDefault();
-
     userService
       .addOne('coucou')
       .then((user: IUserSelf) => {
-        sessionContext.login?.(user.login42);
+        sessionContext.login?.(user);
         socketContext.socket.emit("user:new", username);
         setUsername("");
 
@@ -65,7 +64,7 @@ export function DockGuest() {
             </IconButton>
           </Tooltip>
         </Link>
-          <Button type="submit" onClick={addUser}>create coucou</Button>
+          <Button onClick={addUser}>create coucou</Button>
       </Dock>
       <SecondFactorLogin />
     </>
