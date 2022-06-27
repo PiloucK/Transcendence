@@ -55,7 +55,7 @@ export const UserStatusLayout = ({
           errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
-  }, []);
+  }, [sessionContext]);
 
   return <>{children}</>;
 };
