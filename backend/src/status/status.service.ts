@@ -13,7 +13,17 @@ export class StatusService {
   }
 
   getOpponent(userLogin42: Login42) {
-    for (const [opponentLogin42, opponentStatusMetrics] of this.statuses) {
+    for (const [
+      opponentLogin42,
+      opponentStatusMetrics,
+    ] of this.statuses.entries()) {
+      console.log(
+        'getOpponent',
+        this.statuses,
+        opponentLogin42,
+        opponentStatusMetrics,
+      );
+
       if (
         opponentStatusMetrics.status === 'IN_QUEUE' &&
         opponentLogin42 !== userLogin42

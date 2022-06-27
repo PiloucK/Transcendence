@@ -27,31 +27,33 @@ export const UserStatusLayout = ({
         .getAll()
         .then((statuses) => {
           userStatusContext.setStatuses?.(new Map(Object.entries(statuses)));
+
+          if (isListeningToStatuses.current !== true) {
+            socketContext.socket.on(
+              "user:update-status",
+              (userLogin42: Login42, userStatus: EmittedLiveStatus,
+                opponentLogin42: Login42 | undefined) => {
+                  console.log("event user:update-status", opponentLogin42, userLogin42, userStatus);
+                  
+                  userStatusContext.setStatuses?.(
+                    new Map(userStatusContext.statuses.set(userLogin42,
+                      {
+                        socketCount: -1,
+                        status: userStatus
+                      }))
+                  );
+                  if (opponentLogin42 && userLogin42 === sessionContext.userSelf.login42) {
+                    router.push({pathname: "/game", query: opponentLogin42});
+                  }
+              }
+            );
+
+            isListeningToStatuses.current = true;
+          }
         })
         .catch((error) => {
           errorContext.newError?.(errorHandler(error, sessionContext));
         });
-
-      if (isListeningToStatuses.current !== true) {
-        socketContext.socket.on(
-          "user:update-status",
-          (userLogin42: Login42, userStatus: EmittedLiveStatus,
-            opponentLogin42: Login42 | undefined) => {
-
-              userStatusContext.setStatuses?.(
-                new Map(userStatusContext.statuses.set(userLogin42,
-                  {
-                    socketCount: -1,
-                    status: userStatus
-                  }))
-              );
-              if (opponentLogin42 && userLogin42 === sessionContext.userSelf.login42) {
-                router.push({pathname: "/game", query: opponentLogin42});
-              }
-          }
-        );
-        isListeningToStatuses.current = true;
-      }
     }
   }, []);
 
