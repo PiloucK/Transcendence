@@ -19,9 +19,12 @@ export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const findMatch = () => {
-    console.log('find-match function button play');
-    
-    socketContext.socket.emit("user:find-match", sessionContext.userSelf.login42);
+    console.log("find-match function button play");
+
+    socketContext.socket.emit(
+      "user:find-match",
+      sessionContext.userSelf.login42
+    );
   };
 
   return (
@@ -29,12 +32,12 @@ export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
       {children}
       <div className={styles.mainLayout_left_background} />
       <div className={styles.mainLayout_right_background} />
-          {userStatusContext.statuses.get(sessionContext.userSelf.login42)
-            ?.status !== "IN_QUEUE" && (
-              <div className={styles.play} onClick={findMatch}>
-                PLAY
-              </div>
-          )}
+      {userStatusContext.statuses.get(sessionContext.userSelf.login42)
+        ?.status !== "IN_QUEUE" && (
+        <div className={styles.play} onClick={findMatch}>
+          PLAY
+        </div>
+      )}
       <DockSelector />
     </>
   );

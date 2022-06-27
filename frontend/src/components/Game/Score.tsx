@@ -7,8 +7,6 @@ const Score = ({
   player: string;
   opponent: string | undefined;
 }) => {
-  console.log("player", player, "oppo", opponent);
-
   return (
     <div className={styles.score}>
       <div id="player-score">{player}</div>

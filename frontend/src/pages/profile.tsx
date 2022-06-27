@@ -10,11 +10,9 @@ import { AxiosError } from "axios";
 import { ProfileInteractions } from "../components/Profile/ProfileInteractions";
 import { UserStats } from "../components/Profile/UserStats";
 import { AccountDetails } from "../components/Profile/AccountDetails";
-import { ReactElement, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { defaultSessionState } from "../constants/defaultSessionState";
 import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
-import { UserStatusLayout } from "../layouts/userStatusLayout";
-import { DefaultLayout } from "../layouts/defaultLayout";
 
 export default function ProfilePage() {
   const { login } = useRouter().query;

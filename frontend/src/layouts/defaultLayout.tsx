@@ -21,7 +21,10 @@ export const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
   const [showOverlay, setShowOverlay] = useState(false);
 
   const findMatch = () => {
-    socketContext.socket.emit("user:find-match", sessionContext.userSelf.login42);
+    socketContext.socket.emit(
+      "user:find-match",
+      sessionContext.userSelf.login42
+    );
   };
   // showOverlayOnEscape(showOverlay, setShowOverlay);
 
@@ -34,9 +37,9 @@ export const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
           <div className={styles.mainLayout_right_background} />
           {userStatusContext.statuses.get(sessionContext.userSelf.login42)
             ?.status === "ONLINE" && (
-              <div className={styles.play} onClick={findMatch}>
-                PLAY
-              </div>
+            <div className={styles.play} onClick={findMatch}>
+              PLAY
+            </div>
           )}
           <DockSelector />
         </>

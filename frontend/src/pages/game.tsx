@@ -21,7 +21,6 @@ const Pong = () => {
     if (winner === "player") setPlayerScore((prevState) => prevState + 1);
     if (winner === "opponent") setOpponentScore((prevState) => prevState + 1);
   }
-  console.log("router query", opponentLogin42);
 
   return (
     <>
