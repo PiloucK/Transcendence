@@ -48,6 +48,7 @@ export const UserStatusLayout = ({
                     userStatusContext.statuses.set(userLogin42, {
                       socketCount: -1,
                       status: userStatus,
+					  opponentLogin42
                     })
                   )
                 );

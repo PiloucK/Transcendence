@@ -19,7 +19,7 @@ export function ButtonUserStatus({
   } else if (userStatus?.status === "IN_GAME") {
     return (
       <div className={styles.social_friend_card_button} onClick={() => {}}>
-        Spectate
+        Spectate / {userStatus.opponentLogin42}
       </div>
     );
   } else {
