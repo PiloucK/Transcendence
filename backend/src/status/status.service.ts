@@ -1,6 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { User } from 'src/users/user.entity';
-import { WebsocketsGateway } from 'src/websockets/websockets.gateway';
+import { Injectable } from '@nestjs/common';
 import { Login42, SocketId, StatusMap, StatusMetrics } from './status.type';
 
 @Injectable()

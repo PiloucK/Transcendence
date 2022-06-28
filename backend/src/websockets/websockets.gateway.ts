@@ -36,8 +36,14 @@ export class WebsocketsGateway
     status: EmittedLiveStatus,
     opponentLogin42: string | undefined = undefined,
   ) {
-    console.log('server user:update-status', userLogin42, status, opponentLogin42, this.statusService.getStatuses());
-    
+    console.log(
+      'server user:update-status',
+      userLogin42,
+      status,
+      opponentLogin42,
+      this.statusService.getStatuses(),
+    );
+
     this.server.emit(
       'user:update-status',
       userLogin42,
@@ -52,7 +58,7 @@ export class WebsocketsGateway
     @ConnectedSocket() client: Socket,
   ) {
     console.log('user:find-match', userLogin42);
-    
+
     const opponentLogin42 = this.statusService.getOpponent(userLogin42);
     if (!opponentLogin42) {
       this.updateStatus(userLogin42, 'IN_QUEUE');
