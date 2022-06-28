@@ -58,7 +58,7 @@ export const UserStatusLayout = ({
                 ) {
                   router.push({
                     pathname: "/game",
-                    query: { opponentLogin42 },
+                    query: { userLogin42, opponentLogin42 },
                   });
                 }
               }

@@ -20,7 +20,7 @@ const Pong = () => {
   const gameID = useRef("null");
 
   const sessionContext = useSessionContext();
-  const { opponentLogin42 } = useRouter().query;
+  const { userLogin42, opponentLogin42 } = useRouter().query;
 
   const secondMount = useRef(false);
   const [playGame, setPlayGame] = useState(false);
@@ -53,8 +53,8 @@ const Pong = () => {
 
       gameSocket.current.emit(
         "game:enter",
-        "vlugand-",
-        "coucou",
+        userLogin42,
+        opponentLogin42,
         sessionContext.userSelf.login42
       );
     }
