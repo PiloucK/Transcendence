@@ -30,15 +30,16 @@ const Pong = () => {
 
   const secondMount = useRef(false);
   const [playGame, setPlayGame] = useState(false);
-  const [ballStartPos, setBallStartPos] = useState<IBallStartInfo>({positionY : 0, direction : {x : 0, y : 0}});
-
+  const [ballStartPos, setBallStartPos] = useState<IBallStartInfo>({
+    positionY: 0,
+    direction: { x: 0, y: 0 },
+  });
 
   function updateScore(winner: string) {
     if (winner === "player") setPlayerScore((prevState) => prevState + 1);
     if (winner === "opponent") setOpponentScore((prevState) => prevState + 1);
     setPlayGame(false);
   }
-
 
   // if (gameSocket.current) {
   //   gameSocket.current.onAny((event, ...args) => {
@@ -64,24 +65,21 @@ const Pong = () => {
           if (p2 === sessionContext.userSelf.login42) {
             player1.current = p2;
             player2.current = p1;
-			invert.current = -1;
+            invert.current = -1;
           } else {
             player1.current = p1;
             player2.current = p2;
-			invert.current = 1;
+            invert.current = 1;
           }
           console.log("GAME STARTING FROM FRONT...");
         }
       );
 
-      gameSocket.current.on(
-        "game:point-start",
-        (data : IBallStartInfo) => {
-          setBallStartPos(data);
-			setPlayGame(true);
-          console.log("NEW POINT", data);
-        }
-      );
+      gameSocket.current.on("game:point-start", (data: IBallStartInfo) => {
+        setBallStartPos(data);
+        setPlayGame(true);
+        console.log("NEW POINT", data);
+      });
 
       console.log(
         "queries: ",
@@ -123,9 +121,17 @@ const Pong = () => {
   return (
     <div className={styles.mainLayout_background}>
       <Score player={playerScore} opponent={opponentScore} />
-      {playGame === true && (
-        <Ball updateScore={updateScore} ballStartPos={ballStartPos} gameSocket={gameSocket.current} />
-      )}
+      {/* {playGame === true
+	   && (
+        <Ball
+          updateScore={updateScore}
+          ballStartPos={ballStartPos}
+          gameSocket={gameSocket.current}
+          gameID={gameID.current}
+		  player1={player1.current}
+		  player2={player2.current}
+        />
+      )} */}
       <PlayerPaddle
         gameSocket={gameSocket.current}
         gameID={gameID.current}

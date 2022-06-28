@@ -10,10 +10,16 @@ const Ball = ({
   updateScore,
   ballStartPos,
   gameSocket,
+  gameID,
+  player1,
+  player2,
 }: {
   updateScore: (winner: string) => void;
   ballStartPos: IBallStartInfo;
   gameSocket: Socket;
+  gameID: string;
+  player1: string;
+  player2: string;
 }) => {
   const [ballPosition, setBallPosition] = useState<ICoordinates>({
     x: 50,
@@ -39,17 +45,11 @@ const Ball = ({
     let ballRect = document
       .getElementById("ball")
       ?.getBoundingClientRect() as DOMRect;
-    let playerRect = document
+    let playerPaddle = document
       .getElementById("player-paddle")
       ?.getBoundingClientRect() as DOMRect;
-    let opponentRect = document
-      .getElementById("opponent-paddle")
-      ?.getBoundingClientRect() as DOMRect;
 
-    let paddleBorderRatio = (playerRect.right / window.innerWidth) * 100;
-
-    let currentPaddle =
-      ballRect.x < window.innerWidth / 2 ? playerRect : opponentRect;
+    let paddleBorderRatio = (playerPaddle.right / window.innerWidth) * 100;
 
     const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
     const ballRadiusHeightRatio = window.innerHeight / window.innerHeight;
@@ -66,28 +66,27 @@ const Ball = ({
         x: prevState.x,
         y: ballRadiusHeightRatio,
       }));
-    } else if (paddleCollision(currentPaddle, ballRect)) {
-      let newDirection = ballDirection.current.x < 0 ? 1 : -1;
+    } else if (paddleCollision(playerPaddle, ballRect)) {
 
       let collidePoint =
-        ballRect.y - (currentPaddle.y + currentPaddle.height / 2);
-      collidePoint /= currentPaddle.height / 2;
+        ballRect.y - (playerPaddle.y + playerPaddle.height / 2);
+      collidePoint /= playerPaddle.height / 2;
 
       let angleRad = (collidePoint * Math.PI) / 4;
 
-      ballDirection.current.x = newDirection * Math.cos(angleRad);
-      ballDirection.current.y = Math.sin(angleRad);
+    //   ballDirection.current.x =  Math.cos(angleRad);
+    //   ballDirection.current.y = Math.sin(angleRad);
 
-      if (currentPaddle === playerRect)
-        setBallPosition((prevState) => ({
+		gameSocket.emit("game:ballCountered", angleRad, gameID);
+
+    	setBallPosition((prevState) => ({
           x: paddleBorderRatio + ballRadiusWidthRatio,
           y: prevState.y,
         }));
-      else
-        setBallPosition((prevState) => ({
-          x: 100 - paddleBorderRatio - ballRadiusWidthRatio,
-          y: prevState.y,
-        }));
+
+
+
+    
     } else if (ballRect?.left <= 0) {
       updateScore("opponent");
       //   resetBall();
@@ -116,6 +115,11 @@ const Ball = ({
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
+	gameSocket.on("game:newBallDirection", (newDirection : ICoordinates, player) => {
+		ballDirection.current.x = newDirection.x;
+		ballDirection.current.y = newDirection.y;
+	})
+
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current);
   }, []); // Make sure the effect runs only once

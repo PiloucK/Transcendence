@@ -162,22 +162,18 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       .emit('game:newPaddlePosition', paddlePosition, player);
   }
 
-  @SubscribeMessage('game:ballReset')
+  @SubscribeMessage('game:ballCountered')
   onGameBallReset(
-    @MessageBody() gameID: string,
+    @MessageBody() data: string[],
     @ConnectedSocket() client: Socket,
   ) {
-    // if not a spectator:
-    let currentGame = this.runningGames.get(gameID);
+	const [angleRad, gameID, player] = data;
 
-    if (currentGame && currentGame.gameStatus === 'RESET') {
-      console.log('reseting ball');
+	const directionX =  Math.cos(parseInt(angleRad));
+	const directionY = Math.sin(parseInt(angleRad));
 
-      currentGame.gameStatus = 'RUNNING';
-      const y = randomNumberBetween(10, 90);
-      this.server.to(gameID).emit('game:newBall', y);
-    } else if (currentGame && currentGame.gameStatus === 'RUNNING') {
-      currentGame.gameStatus = 'RESET';
-    }
+    this.server
+      .to(gameID)
+      .emit('game:newBallDirection', {x : directionX, y : directionY}, player);
   }
 }
