@@ -2,42 +2,29 @@ import { useEffect, useState, useRef } from "react";
 import { ICoordinates } from "../../interfaces/ICoordinates";
 import styles from "./Ball.module.css";
 import { io, Socket } from "socket.io-client";
+import { IBallStartInfo } from "../../interfaces/IBallStartInfo";
 
 const INITIAL_VELOCITY = 0.035;
 
 const Ball = ({
   updateScore,
+  ballStartPos,
   gameSocket,
 }: {
   updateScore: (winner: string) => void;
+  ballStartPos: IBallStartInfo;
   gameSocket: Socket;
 }) => {
   const [ballPosition, setBallPosition] = useState<ICoordinates>({
     x: 50,
-    y: 50,
+    y: ballStartPos.positionY,
   });
 
-  let ballDirection = useRef<ICoordinates>({ x: 0.75, y: 0.5 });
+  let ballDirection = useRef<ICoordinates>(ballStartPos.direction);
   let ballVelocity = INITIAL_VELOCITY;
 
   const requestRef = useRef(0);
   const previousTimeRef = useRef(0);
-
-  function randomNumberBetween(min: number, max: number) {
-    return Math.random() * (max - min) + min;
-  }
-
-  const resetBall = () => {
-    setBallPosition({ x: 50, y: randomNumberBetween(10, 90) });
-    ballDirection.current.x = 0;
-    while (
-      Math.abs(ballDirection.current.x) <= 0.2 ||
-      Math.abs(ballDirection.current.x) >= 0.9
-    ) {
-      const heading = randomNumberBetween(0, 2 * Math.PI);
-      ballDirection.current = { x: Math.cos(heading), y: Math.sin(heading) };
-    }
-  };
 
   const paddleCollision = (paddle: DOMRect, ball: DOMRect) => {
     return (
@@ -103,13 +90,13 @@ const Ball = ({
         }));
     } else if (ballRect?.left <= 0) {
       updateScore("opponent");
-      resetBall();
-      ballDirection.current.x = Math.abs(ballDirection.current.x);
-      ballDirection.current.x *= -1;
+      //   resetBall();
+      //   ballDirection.current.x = Math.abs(ballDirection.current.x);
+      //   ballDirection.current.x *= -1;
     } else if (ballRect?.right >= window.innerWidth) {
       updateScore("player");
-      resetBall();
-      ballDirection.current.x = Math.abs(ballDirection.current.x);
+      //   resetBall();
+      //   ballDirection.current.x = Math.abs(ballDirection.current.x);
     }
   };
 
@@ -129,7 +116,6 @@ const Ball = ({
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    resetBall();
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current);
   }, []); // Make sure the effect runs only once

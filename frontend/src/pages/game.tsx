@@ -11,6 +11,8 @@ import { useSessionContext } from "../context/SessionContext";
 import { io, Socket } from "socket.io-client";
 import getConfig from "next/config";
 import { Login42 } from "../interfaces/status.types";
+import { ICoordinates } from "../interfaces/ICoordinates";
+import { IBallStartInfo } from "../interfaces/IBallStartInfo";
 
 const { publicRuntimeConfig } = getConfig();
 const Pong = () => {
@@ -21,18 +23,22 @@ const Pong = () => {
   const gameID = useRef("null");
   const player1 = useRef("null");
   const player2 = useRef("null");
+  const invert = useRef(1);
 
   const sessionContext = useSessionContext();
   const { userLogin42, opponentLogin42 } = useRouter().query;
 
   const secondMount = useRef(false);
   const [playGame, setPlayGame] = useState(false);
+  const [ballStartPos, setBallStartPos] = useState<IBallStartInfo>({positionY : 0, direction : {x : 0, y : 0}});
+
 
   function updateScore(winner: string) {
     if (winner === "player") setPlayerScore((prevState) => prevState + 1);
     if (winner === "opponent") setOpponentScore((prevState) => prevState + 1);
     setPlayGame(false);
   }
+
 
   // if (gameSocket.current) {
   //   gameSocket.current.onAny((event, ...args) => {
@@ -50,20 +56,30 @@ const Pong = () => {
         `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}/game`,
         { transports: ["websocket"] }
       );
-      // edit for spectating
+
       gameSocket.current.on(
-        "game:start",
+        "game:init",
         (newGameID: string, p1: Login42, p2: Login42) => {
-          setPlayGame(true);
           gameID.current = newGameID;
           if (p2 === sessionContext.userSelf.login42) {
             player1.current = p2;
             player2.current = p1;
+			invert.current = -1;
           } else {
             player1.current = p1;
             player2.current = p2;
+			invert.current = 1;
           }
           console.log("GAME STARTING FROM FRONT...");
+        }
+      );
+
+      gameSocket.current.on(
+        "game:point-start",
+        (data : IBallStartInfo) => {
+          setBallStartPos(data);
+			setPlayGame(true);
+          console.log("NEW POINT", data);
         }
       );
 
@@ -108,7 +124,7 @@ const Pong = () => {
     <div className={styles.mainLayout_background}>
       <Score player={playerScore} opponent={opponentScore} />
       {playGame === true && (
-        <Ball updateScore={updateScore} gameSocket={gameSocket.current} />
+        <Ball updateScore={updateScore} ballStartPos={ballStartPos} gameSocket={gameSocket.current} />
       )}
       <PlayerPaddle
         gameSocket={gameSocket.current}
