@@ -1,44 +1,33 @@
 import styles from "../styles/Home.module.css";
-import React, { useEffect, useRef, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Ball from "../components/Game/Ball";
 import PlayerPaddle from "../components/Game/PlayerPaddle";
-import ComputerPaddle from "../components/Game/ComputerPaddle";
 import OpponentPaddle from "../components/Game/OpponentPaddle";
-
 import Score from "../components/Game/Score";
+import { InGameLayout } from "../layouts/inGameLayout";
+import { useRouter } from "next/router";
+import { useSessionContext } from "../context/SessionContext";
 import { io, Socket } from "socket.io-client";
 import getConfig from "next/config";
-import { useLoginContext } from "../context/LoginContext";
+
 const { publicRuntimeConfig } = getConfig();
-
-
-const Matchmaking = () => {
-  return (
-    <div className={styles.mainLayout_background} >
-      Waiting for an opponent...
-    </div>
-  )
-} 
-
 const Pong = () => {
-  const computerLvl = 3; // peut aller de 1 a 3 EASY MEDIUM HARD
-
   const [playerScore, setPlayerScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
+
   const gameSocket = useRef<Socket>();
   const gameID = useRef("null");
 
-  const LoginContext = useLoginContext();
+  const sessionContext = useSessionContext();
+  const { opponentLogin42 } = useRouter().query;
+
   const secondMount = useRef(false);
   const [playGame, setPlayGame] = useState(false);
 
-
   function updateScore(winner: string) {
-    if (winner === "player")
-      setPlayerScore((prevState) => prevState + 1);
-    if (winner === "opponent")
-      setOpponentScore((prevState) => prevState + 1);
+    if (winner === "player") setPlayerScore((prevState) => prevState + 1);
+    if (winner === "opponent") setOpponentScore((prevState) => prevState + 1);
     setPlayGame(false);
   }
 
@@ -56,7 +45,7 @@ const Pong = () => {
         `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}/game`,
         { transports: ["websocket"] }
       );
-      gameSocket.current.on("game:start", (newGameID) => {
+      gameSocket.current.on("game:start", (newGameID: string) => {
         setPlayGame(true);
         gameID.current = newGameID;
         console.log("GAME STARTING FROM FRONT...");
@@ -65,8 +54,8 @@ const Pong = () => {
       gameSocket.current.emit(
         "game:enter",
         "vlugand-",
-        "mvidal-a",
-        LoginContext.userLogin
+        "coucou",
+        sessionContext.userSelf.login42
       );
     }
     return () => {
@@ -75,7 +64,10 @@ const Pong = () => {
       } else {
         console.log("unmounting game");
         if (gameSocket.current != undefined) {
-          gameSocket.current.emit("game:unmount", LoginContext.userLogin);
+          gameSocket.current.emit(
+            "game:unmount",
+            sessionContext.userSelf.login42
+          );
           console.log("closing socket");
         }
       }
@@ -84,27 +76,32 @@ const Pong = () => {
 
   if (gameSocket.current === undefined) {
     return (
-      <Matchmaking/>
-    );
-  } 
-  else if (playGame === true) {
-    return (
-      <div className={styles.mainLayout_background} >
-        <Score player={playerScore} opponent={opponentScore} />
-        <Ball
-          updateScore={updateScore}
-          gameSocket={gameSocket.current}
+      <div className={styles.mainLayout_background}>
+        <Score
+          player={playerScore.toString()}
+          opponent={opponentScore.toString()}
         />
+      </div>
+    );
+  } else if (playGame === true) {
+    return (
+      <div className={styles.mainLayout_background}>
+        <Score
+          player={playerScore.toString()}
+          opponent={opponentScore.toString()}
+        />
+        <Ball updateScore={updateScore} gameSocket={gameSocket.current} />
         <PlayerPaddle gameSocket={gameSocket.current} gameID={gameID.current} />
-        {/* <ComputerPaddle computerLvl={computerLvl} /> */}
         <OpponentPaddle gameSocket={gameSocket.current} />
       </div>
     );
-  }
-  else {
+  } else {
     return (
-      <div className={styles.mainLayout_background} >
-        <Score player={playerScore} opponent={opponentScore} />
+      <div className={styles.mainLayout_background}>
+        <Score
+          player={playerScore.toString()}
+          opponent={opponentScore.toString()}
+        />
         <PlayerPaddle gameSocket={gameSocket.current} gameID={gameID.current} />
         <OpponentPaddle gameSocket={gameSocket.current} />
       </div>
@@ -115,3 +112,11 @@ const Pong = () => {
 export default dynamic(() => Promise.resolve(Pong), {
   ssr: false,
 });
+
+Pong.getLayout = function getLayout(page: ReactElement) {
+  return <InGameLayout>{page}</InGameLayout>;
+};
+
+// opponent={
+//   Array.isArray(opponentLogin42) ? opponentLogin42[0] : opponentLogin42
+// }

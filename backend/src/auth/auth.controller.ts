@@ -51,10 +51,6 @@ export class AuthController {
       )}`,
     );
   }
-  // if (req.user.enableTwoFactorAuth === false) {
-  //   res.cookie('two_factor_auth', true, {
-  //     httpOnly: false,
-  //   });
 
   // dev
   @Get('getToken/:login42')
@@ -70,7 +66,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('getLoggedInUser')
-  getLoggedInUser(@GetReqUser() reqUser: User): string {
-    return reqUser.login42;
+  async getLoggedInUser(@GetReqUser() reqUser: User): Promise<User> {
+    return await this.usersService.getUserWithAllRelations(reqUser.login42);
   }
 }

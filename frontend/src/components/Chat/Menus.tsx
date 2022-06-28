@@ -7,14 +7,9 @@ import channelImage from "../../public/channel_image.png";
 import directMessage from "../../public/direct_message.png";
 import addChannel from "../../public/add_channel.png";
 
-import { useLoginContext } from "../../context/LoginContext";
-import {
-  IUserPublicInfos,
-  IUserForLeaderboard,
-  PrivateConv,
-  Channel,
-  IUser,
-} from "../../interfaces/users";
+import { useSessionContext } from "../../context/SessionContext";
+
+import { PrivateConv, Channel } from "../../interfaces/Chat.interfaces";
 import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
 
@@ -34,8 +29,9 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useSocketContext } from "../../context/SocketContext";
+import { IUserSelf, IUserSlim } from "../../interfaces/IUser";
 
-function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUser }) {
+function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUserSelf }) {
   return (
     <div key={keyV} className={styles.chat_direct_message_menu_dm_selected}>
       <Avatar
@@ -66,12 +62,12 @@ function DMList({
   menu: string;
   setMenu: (menu: string) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   return openedDMs?.map((dm) => {
     const key = dm.userOne.login42 + "|" + dm.userTwo.login42;
     const user =
-      dm.userOne.login42 === loginContext.userLogin ? dm.userTwo : dm.userOne;
+      dm.userOne.login42 === sessionContext.userSelf.login42 ? dm.userTwo : dm.userOne;
 
     if (key === menu) {
       return <SelectedDMMenu key={"selectedDMMenu"} keyV={key} user={user} />;
@@ -105,20 +101,20 @@ export function DirectMessageMenu(props: {
   menu: string;
   setMenu: (menu: string) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [openedDMs, setOpenedDMs] = React.useState<PrivateConv[]>([]);
 
   React.useEffect(() => {
     privateConvService
-      .getPrivateConvs(loginContext.userLogin)
+      .getPrivateConvs(sessionContext.userSelf.login42)
       .then((currentDMs: PrivateConv[]) => {
         setOpenedDMs(currentDMs);
       });
 
     socketContext.socket.on("update-direct-messages", () => {
       privateConvService
-        .getPrivateConvs(loginContext.userLogin)
+        .getPrivateConvs(sessionContext.userSelf.login42)
         .then((currentDMs: PrivateConv[]) => {
           setOpenedDMs(currentDMs);
         });
@@ -158,14 +154,14 @@ function SelectedUserMenu({
   setSelectedUser,
   channel,
 }: {
-  user: IUserForLeaderboard;
+  user: IUserSlim;
   getUserStyle: (userLogin: string) => any;
   setSelectedUser: (userLogin: string) => void;
   channel: Channel;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
-  if (loginContext.userLogin === channel?.owner) {
+  if (sessionContext.userSelf.login42 === channel?.owner) {
     return (
       <div className={styles.selected_user}>
         <div
@@ -193,7 +189,7 @@ function SelectedUserMenu({
         <ButtonTxtSetAsAdmin login={user.login42} channel={channel} />
       </div>
     );
-  } else if (channel?.admin?.includes(loginContext.userLogin)) {
+  } else if (channel?.admin?.includes(sessionContext.userSelf.login42)) {
     return (
       <div className={styles.selected_user}>
         <div
@@ -249,7 +245,7 @@ function SelectedUserMenu({
 }
 
 function UserList({ channel }: { channel: Channel }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const [selectedUser, setSelectedUser] = useState<string>("");
 
   const getUserStyle = (userLogin: string) => {
@@ -263,7 +259,7 @@ function UserList({ channel }: { channel: Channel }) {
   };
 
   return channel?.users?.map((user) => {
-    if (user.login42 === loginContext.userLogin) {
+    if (user.login42 === sessionContext.userSelf.login42) {
       return (
         <div key={user.login42} className={styles.connected_user}>
           <Avatar
@@ -459,18 +455,18 @@ export function ChatMenu(props: {
   setMenu: ((menu: string) => void) | undefined;
 }) {
   const [channels, setChannels] = useState<Channel[]>([]);
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   React.useEffect(() => {
     channelService
-      .getJoinedChannels(loginContext.userLogin)
+      .getJoinedChannels(sessionContext.userSelf.login42)
       .then((currentChannels: Channel[]) => {
         setChannels(currentChannels);
       });
     socketContext.socket.on("update-channels-list", () => {
       channelService
-        .getJoinedChannels(loginContext.userLogin)
+        .getJoinedChannels(sessionContext.userSelf.login42)
         .then((currentChannels: Channel[]) => {
           setChannels(currentChannels);
         });

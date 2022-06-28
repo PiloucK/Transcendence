@@ -7,12 +7,12 @@ import {
   useState,
 } from "react";
 import { useErrorContext } from "../context/ErrorContext";
-import { useLoginContext } from "../context/LoginContext";
+import { useSessionContext } from "../context/SessionContext";
 import { errorHandler } from "../errors/errorHandler";
 import twoFactorAuthService from "../services/twoFactorAuth";
 
 export default function TwoFactorAuth() {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const errorContext = useErrorContext();
 
   const [image, setImage] = useState("");
@@ -26,7 +26,7 @@ export default function TwoFactorAuth() {
         setEnabled(response.data);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
   useEffect(checkIfEnabled, []);
@@ -38,7 +38,7 @@ export default function TwoFactorAuth() {
         setImage(qrCode);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 
@@ -52,7 +52,7 @@ export default function TwoFactorAuth() {
         checkIfEnabled();
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 
@@ -67,7 +67,7 @@ export default function TwoFactorAuth() {
         checkIfEnabled();
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 

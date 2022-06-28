@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import styles from "./PaddleLeft.module.css";
-import { io, Socket } from "socket.io-client";
-import { useLoginContext } from "../../context/LoginContext";
+import { Socket } from "socket.io-client";
 
 const PlayerPaddle = ({ gameSocket, gameID}: { gameSocket: Socket, gameID : string }) => {
   const [playerPosition, setPlayerPosition] = useState(50);
-  const LoginContext = useLoginContext();
 
   useEffect(() => {
     document.addEventListener("mousemove", (e) => {

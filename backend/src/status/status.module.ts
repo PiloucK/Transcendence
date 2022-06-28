@@ -1,16 +1,9 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { StatusController } from './status.controller';
 import { StatusService } from './status.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserStatus } from './status.entity';
-import { UsersModule } from 'src/users/users.module';
-import { WebsocketsModule } from 'src/websockets/websockets.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserStatus]),
-    UsersModule,
-    forwardRef(() => WebsocketsModule),
-  ],
+  controllers: [StatusController],
   providers: [StatusService],
   exports: [StatusService],
 })

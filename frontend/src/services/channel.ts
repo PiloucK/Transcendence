@@ -4,7 +4,7 @@ const { publicRuntimeConfig } = getConfig();
 const baseUrl = `http://${publicRuntimeConfig.HOST}\
 :${publicRuntimeConfig.BACKEND_PORT}\
 /channel`;
-import { Message, ChannelCreation } from "../interfaces/users";
+import { Message, ChannelCreation } from "../interfaces/Chat.interfaces";
 axios.defaults.withCredentials = true;
 
 const createChannel = (login: string, channelInfos: ChannelCreation) => {

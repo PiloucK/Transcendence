@@ -15,11 +15,11 @@ import CheckIcon from "@mui/icons-material/Check";
 
 import { Dock } from "./Dock";
 import styles from "../../styles/Home.module.css";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 import userService from "../../services/user";
 import authService from "../../services/auth";
-import { IUser, IUserCredentials } from "../../interfaces/users";
+import { IUserSelf } from "../../interfaces/IUser";
 import { Button, TextField, Tooltip } from "@mui/material";
 
 import { errorHandler } from "../../errors/errorHandler";
@@ -32,7 +32,7 @@ function NavigationDock({
 }: {
   setIsInNavigation: (mode: boolean) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const errorContext = useErrorContext();
   const socketContext = useSocketContext();
 
@@ -41,30 +41,25 @@ function NavigationDock({
   const addUser: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
-    const newUserCredentials: IUserCredentials = {
-      login42: username,
-      photo42: "https://cdn.intra.42.fr/users/chdespon.jpg",
-    };
-
     userService
-      .addOne(newUserCredentials)
-      .then((user: IUser) => {
-        loginContext.login?.(user.login42);
+      .addOne(username)
+      .then((user: IUserSelf) => {
+        sessionContext.login?.(user);
         socketContext.socket.emit("user:new", username);
         setUsername("");
 
         authService
-          .getToken(newUserCredentials.login42)
+          .getToken(username)
           .then((login42: string) => {
             console.log("new token for", login42, "stored in cookie");
           })
           .catch((error) => {
-            errorContext.newError?.(errorHandler(error, loginContext));
+            errorContext.newError?.(errorHandler(error, sessionContext));
             // errorContext.newError(errorParse)
           });
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 
@@ -73,10 +68,10 @@ function NavigationDock({
       .deleteAll()
       .then(() => {
         console.log("all users deleted");
-        loginContext.logout?.();
+        sessionContext.logout?.();
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 

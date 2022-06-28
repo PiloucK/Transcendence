@@ -1,11 +1,12 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos, PrivateConv } from "../../interfaces/users";
+import { IUserPublic } from "../../interfaces/IUser";
+import { PrivateConv } from "../../interfaces/Chat.interfaces";
 
 import Avatar from "@mui/material/Avatar";
 // import profileIcon from "../../public/profile_icon.png";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import privateConvService from "../../services/privateConv";
 import { useSocketContext } from "../../context/SocketContext";
 
@@ -13,19 +14,19 @@ export function CardUserDM({
   userInfos,
   setMenu,
 }: {
-  userInfos: IUserPublicInfos;
+  userInfos: IUserPublic;
   setMenu: (menu: string) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   const createPrivateConv = () => {
     if (
-      loginContext.userLogin !== null &&
-      loginContext.userLogin !== userInfos.login42
+      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       privateConvService
-        .createPrivateConv(loginContext.userLogin, userInfos.login42)
+        .createPrivateConv(sessionContext.userSelf.login42, userInfos.login42)
         .then((privateConv: PrivateConv) => {
           setMenu(
             privateConv.userOne.login42 + "|" + privateConv.userTwo.login42

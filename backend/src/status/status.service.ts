@@ -1,66 +1,88 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UsersService } from 'src/users/users.service';
-import { MainGateway } from 'src/websockets/main.gateway';
-import { Repository } from 'typeorm';
-import { UserStatus } from './status.entity';
+import { Injectable } from '@nestjs/common';
+import { Login42, SocketId, StatusMap, StatusMetrics } from './status.type';
 
 @Injectable()
 export class StatusService {
-  constructor(
-    @InjectRepository(UserStatus)
-    private readonly statusRepository: Repository<UserStatus>,
-    private readonly usersService: UsersService,
-    @Inject(forwardRef(() => MainGateway))
-    private readonly websocketsGateway: MainGateway,
-  ) {}
+  private sockets = new Map<SocketId, Login42>();
+  private statuses = new Map<Login42, StatusMetrics>();
 
-  async add(socketId: string, userLogin42: string): Promise<UserStatus> {
-    let status = await this.statusRepository.findOne(socketId);
-    if (!status) {
-      const user = await this.usersService.getUserWithStatus(userLogin42);
-      status = this.statusRepository.create({
-        socketId,
-        user,
-      });
-      await this.statusRepository.save(status).catch(() => {
-        console.log(
-          'dirty fix: if you want more, change status implementation',
-        );
-      });
-      console.log('save status');
-      if (user.status.length === 0) {
-        console.log('online');
-        this.usersService.updateOnlineStatus(user.login42, true);
-        this.websocketsGateway.updateStatus(user.login42, true);
-      }
-    }
-
-    return status;
+  getStatuses(): StatusMap {
+    return this.statuses;
   }
 
-  async remove(socketId: string): Promise<void> {
-    const status = await this.statusRepository.findOne(socketId, {
-      relations: ['user'],
-    });
-    if (status) {
-      const userLogin42 = status.user.login42;
-      await this.statusRepository.remove(status);
-      console.log('remove status');
-      const user = await this.usersService.getUserWithStatus(userLogin42);
-      if (user.status.length === 0) {
-        console.log('offline');
-        this.usersService.updateOnlineStatus(user.login42, false);
-        this.websocketsGateway.updateStatus(user.login42, false);
+  getOpponent(userLogin42: Login42) {
+    for (const [
+      opponentLogin42,
+      opponentStatusMetrics,
+    ] of this.statuses.entries()) {
+      console.log(
+        'getOpponent',
+        this.statuses,
+        opponentLogin42,
+        opponentStatusMetrics,
+      );
+
+      if (
+        opponentStatusMetrics.status === 'IN_QUEUE' &&
+        opponentLogin42 !== userLogin42
+      ) {
+        const userStatusMetrics = this.statuses.get(userLogin42);
+        if (userStatusMetrics) {
+          opponentStatusMetrics.status = 'IN_GAME';
+          userStatusMetrics.status = 'IN_GAME';
+          return opponentLogin42;
+        } else {
+          return undefined;
+        }
       }
+    }
+    const userStatusMetrics = this.statuses.get(userLogin42);
+    if (userStatusMetrics) {
+      userStatusMetrics.status = 'IN_QUEUE';
+    }
+    return undefined;
+  }
+
+  add(socketId: SocketId, userLogin42: Login42): 'EMIT' | 'QUIET' {
+    if (this.sockets.has(socketId)) {
+      return 'QUIET';
+    }
+
+    this.sockets.set(socketId, userLogin42);
+
+    const currentUserMetrics = this.statuses.get(userLogin42);
+    if (!currentUserMetrics) {
+      this.statuses.set(userLogin42, {
+        socketCount: 1,
+        status: 'ONLINE',
+      });
+      return 'EMIT';
+    } else {
+      ++currentUserMetrics.socketCount;
+      return 'QUIET';
     }
   }
 
-  // findAll(): Promise<UserStatus[]> {
-  //   return this.statusRepository.find();
-  // }
+  remove(socketId: SocketId): Login42 | undefined {
+    const currentUserLogin42 = this.sockets.get(socketId);
+    if (!currentUserLogin42) {
+      return undefined;
+    }
 
-  // findOne(id: string): Promise<UserStatus | void> {
-  //   return this.statusRepository.findOne(id);
-  // }
+    this.sockets.delete(socketId);
+
+    const currentUserMetrics = this.statuses.get(currentUserLogin42);
+    if (!currentUserMetrics) {
+      return currentUserLogin42;
+    }
+
+    --currentUserMetrics.socketCount;
+    if (currentUserMetrics.socketCount === 0) {
+      this.statuses.delete(currentUserLogin42);
+
+      return currentUserLogin42;
+    } else {
+      return undefined;
+    }
+  }
 }

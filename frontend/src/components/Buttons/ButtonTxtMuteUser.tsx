@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos, Channel } from "../../interfaces/users";
+import { Channel } from "../../interfaces/Chat.interfaces";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -15,7 +15,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import channelService from "../../services/channel";
 
 export function ButtonTxtMuteUser({
@@ -25,7 +25,7 @@ export function ButtonTxtMuteUser({
   login: string;
   channel: Channel;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const [open, setOpen] = React.useState(false);
   const [time, setTime] = React.useState<number | string>(300);
 
@@ -39,7 +39,7 @@ export function ButtonTxtMuteUser({
 
   const handleUnmuteUser = () => {
     channelService
-      .muteAChannelUser(loginContext.userLogin, channel.id, login, 0)
+      .muteAChannelUser(sessionContext.userSelf.login42, channel.id, login, 0)
       .then(() => {})
       .catch((err) => {
         console.log(err);
@@ -49,7 +49,7 @@ export function ButtonTxtMuteUser({
   const handleMuteUser = () => {
     setOpen(false);
     channelService
-      .muteAChannelUser(loginContext.userLogin, channel.id, login, time)
+      .muteAChannelUser(sessionContext.userSelf.login42, channel.id, login, time)
       .then(() => {})
       .catch((err) => {
         console.log(err);

@@ -23,8 +23,6 @@ export class TwoFactorAuthService {
     );
 
     this.usersService.setTwoFactorAuthTemporarySecret(secret, reqUser);
-    console.log('temporary secret', secret);
-
     return otpauthUrl;
   }
 
@@ -36,13 +34,6 @@ export class TwoFactorAuthService {
     authCode: string | undefined,
     reqUser: User,
   ): Promise<boolean> {
-    console.log(
-      'temporary secret',
-      reqUser.twoFactorAuthTemporarySecret,
-      'authcode',
-      authCode,
-    );
-
     if (authCode) {
       return authenticator.verify({
         token: authCode,

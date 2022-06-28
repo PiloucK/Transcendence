@@ -8,10 +8,12 @@ import { inputPFState } from "../../interfaces/inputPasswordField";
 import Switch from "@mui/material/Switch";
 
 import { ButtonChannelInvite } from "../Buttons/ButtonChannelInvite";
-import { Channel, IUserForLeaderboard } from "../../interfaces/users";
+import { IUserSlim } from "../../interfaces/IUser";
+
+import { Channel } from "../../interfaces/Chat.interfaces";
 
 import channelService from "../../services/channel";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -27,8 +29,8 @@ function FriendList({
   friends,
   setSelectedFriends,
 }: {
-  friends: IUserForLeaderboard[];
-  setSelectedFriends: (friends: IUserForLeaderboard) => void;
+  friends: IUserSlim[];
+  setSelectedFriends: (friends: IUserSlim) => void;
 }) {
   return (
     <div className={styles.social_content}>
@@ -43,8 +45,8 @@ export function FriendContent({
   friends,
   setSelectedFriends,
 }: {
-  friends: IUserForLeaderboard[];
-  setSelectedFriends: (friends: IUserForLeaderboard) => void;
+  friends: IUserSlim[];
+  setSelectedFriends: (friends: IUserSlim) => void;
 }) {
   if (typeof friends === "undefined" || friends.length === 0) {
     return <EmptyInvitableFriendList />;
@@ -64,31 +66,31 @@ export function ChannelInviteDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [friends, setFriends] = useState<IUserForLeaderboard[]>([]);
-  const [selectedFriends, setSelectedFriends] = useState<IUserForLeaderboard[]>(
+  const [friends, setFriends] = useState<IUserSlim[]>([]);
+  const [selectedFriends, setSelectedFriends] = useState<IUserSlim[]>(
     []
   );
 
   React.useEffect(() => {
     channelService
-      .getChannelInvitableFriends(loginContext.userLogin, channel.id)
-      .then((friends: IUserForLeaderboard[]) => {
+      .getChannelInvitableFriends(sessionContext.userSelf.login42, channel.id)
+      .then((friends: IUserSlim[]) => {
         setFriends(friends);
       });
 
     socketContext.socket.on("update-channel-content", () => {
       channelService
-        .getChannelInvitableFriends(loginContext.userLogin, channel.id)
-        .then((friends: IUserForLeaderboard[]) => {
+        .getChannelInvitableFriends(sessionContext.userSelf.login42, channel.id)
+        .then((friends: IUserSlim[]) => {
           setFriends(friends);
         });
     });
     socketContext.socket.on("update-relations", () => {
       channelService
-        .getChannelInvitableFriends(loginContext.userLogin, channel.id)
-        .then((friends: IUserForLeaderboard[]) => {
+        .getChannelInvitableFriends(sessionContext.userSelf.login42, channel.id)
+        .then((friends: IUserSlim[]) => {
           setFriends(friends);
         });
     });
@@ -98,15 +100,15 @@ export function ChannelInviteDialog({
     setOpen(false);
   };
 
-  const addSelectedFriend = (friend: IUserForLeaderboard) => {
+  const addSelectedFriend = (friend: IUserSlim) => {
     if (
       selectedFriends.find(
-        (f: IUserForLeaderboard) => f.login42 === friend.login42
+        (f: IUserSlim) => f.login42 === friend.login42
       )
     ) {
       setSelectedFriends(
         selectedFriends.filter(
-          (f: IUserForLeaderboard) => f.login42 !== friend.login42
+          (f: IUserSlim) => f.login42 !== friend.login42
         )
       );
     } else {
@@ -116,9 +118,9 @@ export function ChannelInviteDialog({
 
   const handleInvite = () => {
     setOpen(false);
-    selectedFriends.forEach((friend: IUserForLeaderboard) => {
+    selectedFriends.forEach((friend: IUserSlim) => {
       channelService
-        .inviteToChannel(loginContext.userLogin, channel.id, friend.login42)
+        .inviteToChannel(sessionContext.userSelf.login42, channel.id, friend.login42)
         .then(() => {
           socketContext.socket.emit("user:update-channel-content");
         })

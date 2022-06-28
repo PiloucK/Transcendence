@@ -5,8 +5,8 @@ import { ChatMenu } from "../components/Chat/Menus";
 import { DirectMessage } from "../components/Chat/DirectMessage";
 import { AddChannel } from "../components/Chat/AddChannel";
 import { Channel } from "../components/Chat/Channel";
-import { useLoginContext } from "../context/LoginContext";
-import { DockGuest } from "../components/Dock/DockGuest";
+import { useSessionContext } from "../context/SessionContext";
+// import { DockGuest } from "../components/Dock/DockGuest";
 
 function ChatContent({ menu }: { menu: string }) {
   if (menu === "direct_message") {
@@ -19,13 +19,13 @@ function ChatContent({ menu }: { menu: string }) {
 }
 
 export default function Chat() {
-	const loginContext = useLoginContext();
+	const sessionContext = useSessionContext();
 
-  if (loginContext.userLogin === null) return <DockGuest />;
+  // if (sessionContext.userSelf.login42 === null) return <DockGuest />;
   return (
     <>
-      <ChatMenu menu={loginContext.chatMenu} setMenu={loginContext.setChatMenu} />
-      <ChatContent menu={loginContext.chatMenu} />
+      <ChatMenu menu={sessionContext.chatMenu} setMenu={sessionContext.setChatMenu} />
+      <ChatContent menu={sessionContext.chatMenu} />
     </>
   );
 }

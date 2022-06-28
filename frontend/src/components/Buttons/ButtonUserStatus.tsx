@@ -1,23 +1,22 @@
-import React from "react";
 import styles from "../../styles/Home.module.css";
-
-import { IUserPublicInfos } from "../../interfaces/users";
+import { IUserSlim } from "../../interfaces/IUser";
+import { useUserStatusContext } from "../../context/UserStatusContext";
 
 export function ButtonUserStatus({
-  userInfos,
+  displayedUser,
 }: {
-  userInfos: IUserPublicInfos;
+  displayedUser: IUserSlim;
 }) {
-  // Will check the status of the user and display the right button
-  const status = Math.random();
+  const userStatusContext = useUserStatusContext();
+  const userStatus = userStatusContext.statuses.get(displayedUser.login42);
 
-  if (status < 0.33) {
+  if (userStatus?.status === "ONLINE" || userStatus?.status === "IN_QUEUE") {
     return (
       <div className={styles.social_friend_card_button} onClick={() => {}}>
         Defy
       </div>
     );
-  } else if (status < 0.66) {
+  } else if (userStatus?.status === "IN_GAME") {
     return (
       <div className={styles.social_friend_card_button} onClick={() => {}}>
         Spectate
