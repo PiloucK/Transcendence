@@ -75,6 +75,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     const [player1, player2, userSelf] = data;
+	
     const gameID = player1 + player2;
 
     client.join(gameID);
@@ -103,8 +104,8 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       currentGame.player2 = userSelf;
       currentGame.player2ID = client.id; 
     } else {
-      client.emit('game:state', currentGame);
-      return;
+      client.emit('game:start',  gameID, currentGame.player1, currentGame.player2);
+	  return ;
     }
 
     if (
@@ -112,7 +113,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       currentGame.player1 &&
       currentGame.player2
     ) {
-      this.server.to(gameID).emit('game:start', gameID);
+      this.server.to(gameID).emit('game:start', gameID, currentGame.player1, currentGame.player2);
       currentGame.gameStatus = 'RUNNING';
       console.log('sending game start', userSelf);
 
@@ -139,16 +140,16 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
   ) {
   
-    const [paddlePosition, gameID] = data;
+    const [paddlePosition, gameID, player] = data;
 
-    let dest = gameID;
+    // let dest = gameID;
 
-    if (this.runningGames.get(gameID)?.player1ID === client.id)
-      dest = this.runningGames.get(gameID)?.player2ID as string;
-    else if (this.runningGames.get(gameID)?.player2ID === client.id)
-      dest = this.runningGames.get(gameID)?.player1ID as string;
+    // if (this.runningGames.get(gameID)?.player1ID === client.id)
+    //   dest = this.runningGames.get(gameID)?.player2ID as string;
+    // else if (this.runningGames.get(gameID)?.player2ID === client.id)
+    //   dest = this.runningGames.get(gameID)?.player1ID as string;
 
-    this.server.to(dest).emit('game:opponentPosition', paddlePosition);
+    this.server.to(gameID).emit('game:newPaddlePosition', paddlePosition, player);
   }
 
 

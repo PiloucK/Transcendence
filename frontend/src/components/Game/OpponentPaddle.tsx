@@ -1,27 +1,40 @@
 import { useEffect, useRef, useState } from "react";
-import styles from './PaddleRight.module.css'
-import { io, Socket } from "socket.io-client";
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
+import styles from "./PaddleRight.module.css";
+import { Socket } from "socket.io-client";
+import { Login42 } from "../../interfaces/status.types";
 
-
-const OpponentPaddle = ({ gameSocket}: { gameSocket: Socket}) => {
- 
+const OpponentPaddle = ({
+  gameSocket,
+  player2,
+}: {
+  gameSocket: Socket;
+  player2: Login42;
+}) => {
   const [paddlePosition, setPaddlePosition] = useState(50);
-
-  gameSocket.on("game:opponentPosition", (newPaddlePosition) => {
-    setPaddlePosition(newPaddlePosition);
-   
-  });
+  const paddleElem = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    const paddleElem = document.getElementById("opponent-paddle") as HTMLElement;
-    paddleElem.style.setProperty("--position", paddlePosition.toString());
+    if (paddleElem.current === null) {
+      paddleElem.current = document.getElementById("opponent-paddle");
+      gameSocket.on(
+        "game:newPaddlePosition",
+        (newPaddlePosition, playerLogin42) => {
+          if (playerLogin42 === player2) {
+            setPaddlePosition(newPaddlePosition);
+          }
+        }
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    paddleElem.current?.style.setProperty(
+      "--position",
+      paddlePosition.toString()
+    );
   });
 
-    return (
-      <div className={styles.paddleRight} id="opponent-paddle"></div>
-    );
+  return <div className={styles.paddleRight} id="opponent-paddle"></div>;
 };
 
 export default OpponentPaddle;

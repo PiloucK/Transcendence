@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { useSessionContext } from "../context/SessionContext";
 import { io, Socket } from "socket.io-client";
 import getConfig from "next/config";
+import { Login42 } from "../interfaces/status.types";
 
 const { publicRuntimeConfig } = getConfig();
 const Pong = () => {
@@ -18,6 +19,8 @@ const Pong = () => {
 
   const gameSocket = useRef<Socket>();
   const gameID = useRef("null");
+  const player1 = useRef("null");
+  const player2 = useRef("null");
 
   const sessionContext = useSessionContext();
   const { userLogin42, opponentLogin42 } = useRouter().query;
@@ -37,6 +40,8 @@ const Pong = () => {
   //   });
   // }
 
+  console.log("gamesock", gameSocket.current);
+
   useEffect(() => {
     console.log("USE EFFECT PONG");
 
@@ -45,20 +50,38 @@ const Pong = () => {
         `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}/game`,
         { transports: ["websocket"] }
       );
-      gameSocket.current.on("game:start", (newGameID: string) => {
-        setPlayGame(true);
-        gameID.current = newGameID;
-        console.log("GAME STARTING FROM FRONT...");
-      });
+      // edit for spectating
+      gameSocket.current.on(
+        "game:start",
+        (newGameID: string, p1: Login42, p2: Login42) => {
+          setPlayGame(true);
+          gameID.current = newGameID;
+          if (p2 === sessionContext.userSelf.login42) {
+            player1.current = p2;
+            player2.current = p1;
+          } else {
+            player1.current = p1;
+            player2.current = p2;
+          }
+          console.log("GAME STARTING FROM FRONT...");
+        }
+      );
+
+      console.log(
+        "queries: ",
+        Array.isArray(userLogin42) ? userLogin42[0] : userLogin42,
+        Array.isArray(opponentLogin42) ? opponentLogin42[0] : opponentLogin42
+      );
 
       gameSocket.current.emit(
         "game:enter",
-        userLogin42,
-        opponentLogin42,
+        Array.isArray(userLogin42) ? userLogin42[0] : userLogin42,
+        Array.isArray(opponentLogin42) ? opponentLogin42[0] : opponentLogin42,
         sessionContext.userSelf.login42
       );
     }
     return () => {
+      // edit unmounting logic for spectating and multiple windows on game
       if (secondMount.current !== true) {
         secondMount.current = true;
       } else {
@@ -77,36 +100,27 @@ const Pong = () => {
   if (gameSocket.current === undefined) {
     return (
       <div className={styles.mainLayout_background}>
-        <Score
-          player={playerScore.toString()}
-          opponent={opponentScore.toString()}
-        />
-      </div>
-    );
-  } else if (playGame === true) {
-    return (
-      <div className={styles.mainLayout_background}>
-        <Score
-          player={playerScore.toString()}
-          opponent={opponentScore.toString()}
-        />
-        <Ball updateScore={updateScore} gameSocket={gameSocket.current} />
-        <PlayerPaddle gameSocket={gameSocket.current} gameID={gameID.current} />
-        <OpponentPaddle gameSocket={gameSocket.current} />
-      </div>
-    );
-  } else {
-    return (
-      <div className={styles.mainLayout_background}>
-        <Score
-          player={playerScore.toString()}
-          opponent={opponentScore.toString()}
-        />
-        <PlayerPaddle gameSocket={gameSocket.current} gameID={gameID.current} />
-        <OpponentPaddle gameSocket={gameSocket.current} />
+        <Score player={playerScore} opponent={opponentScore} />
       </div>
     );
   }
+  return (
+    <div className={styles.mainLayout_background}>
+      <Score player={playerScore} opponent={opponentScore} />
+      {playGame === true && (
+        <Ball updateScore={updateScore} gameSocket={gameSocket.current} />
+      )}
+      <PlayerPaddle
+        gameSocket={gameSocket.current}
+        gameID={gameID.current}
+        player1={player1.current}
+      />
+      <OpponentPaddle
+        gameSocket={gameSocket.current}
+        player2={player2.current}
+      />
+    </div>
+  );
 };
 
 export default dynamic(() => Promise.resolve(Pong), {
@@ -116,7 +130,3 @@ export default dynamic(() => Promise.resolve(Pong), {
 Pong.getLayout = function getLayout(page: ReactElement) {
   return <InGameLayout>{page}</InGameLayout>;
 };
-
-// opponent={
-//   Array.isArray(opponentLogin42) ? opponentLogin42[0] : opponentLogin42
-// }

@@ -4,8 +4,8 @@ const Score = ({
   player,
   opponent,
 }: {
-  player: string;
-  opponent: string | undefined;
+  player: number;
+  opponent: number;
 }) => {
   return (
     <div className={styles.score}>
