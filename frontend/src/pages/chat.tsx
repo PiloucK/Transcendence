@@ -17,6 +17,9 @@ import { useSocketContext } from "../context/SocketContext";
 import channelService from "../services/channel";
 import CircularProgress from "@mui/material/CircularProgress";
 
+import { DefaultLayout } from "../layouts/defaultLayout";
+import { UserStatusLayout } from "../layouts/userStatusLayout";
+
 function ChatContent({
   menu,
   channels,
@@ -92,3 +95,11 @@ export default function Chat() {
     );
   }
 }
+
+Chat.getLayout = function getLayout(page: React.ReactElement) {
+	return (
+	  <DefaultLayout>
+		<UserStatusLayout>{page}</UserStatusLayout>
+	  </DefaultLayout>
+	);
+  };

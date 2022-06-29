@@ -31,6 +31,7 @@ import Box from "@mui/material/Box";
 import { errorHandler } from "../../errors/errorHandler";
 
 import { useErrorContext } from "../../context/ErrorContext";
+import { useUserStatusContext } from "../../context/UserStatusContext";
 import { useSocketContext } from "../../context/SocketContext";
 import { IUserSelf, IUserSlim } from "../../interfaces/IUser";
 
@@ -256,8 +257,9 @@ function SelectedUserMenu({
   }
 }
 
-function UserList({ channel }: { channel: Channel }) {
+function UserList({ channel, state }: { channel: Channel; state: string }) {
   const sessionContext = useSessionContext();
+  const userStatusContext = useUserStatusContext();
   const [selectedUser, setSelectedUser] = useState<string>("");
 
   const getUserStyle = (userLogin: string) => {
@@ -270,59 +272,71 @@ function UserList({ channel }: { channel: Channel }) {
     }
   };
 
-  return channel?.users?.map((user) => {
-    if (user.login42 === sessionContext.userSelf.login42) {
-      return (
-        <div key={user.login42} className={styles.connected_user}>
-          <Avatar
-            className={styles.chat_avatar}
-            src={user.image}
-            sx={{ width: "20px", height: "20px" }}
-          >
-            <Avatar
-              className={styles.chat_avatar}
-              src={user.photo42}
-              sx={{ width: "20px", height: "20px" }}
+  return (
+    <>
+      {channel?.users?.map((user) => {
+        const status = userStatusContext.statuses.get(user.login42);
+        if (
+          (status && status.status !== state) ||
+          (!status && state !== "OFFLINE")
+        ) {
+          return null;
+        }
+
+        if (user.login42 === sessionContext.userSelf.login42) {
+          return (
+            <div key={user.login42} className={styles.connected_user}>
+              <Avatar
+                className={styles.chat_avatar}
+                src={user.image}
+                sx={{ width: "20px", height: "20px" }}
+              >
+                <Avatar
+                  className={styles.chat_avatar}
+                  src={user.photo42}
+                  sx={{ width: "20px", height: "20px" }}
+                />
+              </Avatar>
+              {user.username}
+            </div>
+          );
+        } else if (user.login42 === selectedUser) {
+          return (
+            <SelectedUserMenu
+              key={user.login42}
+              user={user}
+              getUserStyle={getUserStyle}
+              setSelectedUser={setSelectedUser}
+              channel={channel}
             />
-          </Avatar>
-          {user.username}
-        </div>
-      );
-    } else if (user.login42 === selectedUser) {
-      return (
-        <SelectedUserMenu
-          key={user.login42}
-          user={user}
-          getUserStyle={getUserStyle}
-          setSelectedUser={setSelectedUser}
-          channel={channel}
-        />
-      );
-    } else {
-      return (
-        <div
-          key={user.login42}
-          className={getUserStyle(user.login42)}
-          onClick={() => {
-            setSelectedUser(user.login42);
-          }}
-        >
-          <Avatar
-            className={styles.chat_avatar}
-            src={user.image}
-            sx={{ width: "20px", height: "20px" }}
-          >
-            <Avatar
-              className={styles.chat_avatar}
-              src={user.photo42}
-              sx={{ width: "20px", height: "20px" }}
-            />
-          </Avatar>
-          {user.username}
-        </div>
-      );
-    }
-  });
+          );
+        } else {
+          return (
+            <div
+              key={user.login42}
+              className={getUserStyle(user.login42)}
+              onClick={() => {
+                setSelectedUser(user.login42);
+              }}
+            >
+              <Avatar
+                className={styles.chat_avatar}
+                src={user.image}
+                sx={{ width: "20px", height: "20px" }}
+              >
+                <Avatar
+                  className={styles.chat_avatar}
+                  src={user.photo42}
+                  sx={{ width: "20px", height: "20px" }}
+                />
+              </Avatar>
+              {user.username}
+            </div>
+          );
+        }
+      })}
+    </>
+  );
 }
 
 interface TabPanelProps {
@@ -376,10 +390,10 @@ export function ChannelMenu({ channel }: { channel: Channel }) {
         </Box>
       </div>
       <TabPanel value={value} index={0}>
-        <UserList channel={channel} />
+        <UserList channel={channel} state="ONLINE" />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <UserList channel={channel} />
+        <UserList channel={channel} state="OFFLINE" />
       </TabPanel>
     </div>
   );
