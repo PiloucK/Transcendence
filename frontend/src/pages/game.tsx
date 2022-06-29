@@ -23,14 +23,14 @@ const Pong = () => {
   const gameID = useRef("");
   const player1 = useRef("");
   const player2 = useRef("");
-  const invert = useRef(1);
+  const invert = useRef(0);
 
   const sessionContext = useSessionContext();
   const { userLogin42, opponentLogin42 } = useRouter().query;
 
   const secondMount = useRef(false);
   const [playGame, setPlayGame] = useState(false);
-  const [ballStartPos, setBallStartPos] = useState<IBallStartInfo>({
+  const ballStartPos = useRef<IBallStartInfo>({
     positionY: 0,
     direction: { x: 0, y: 0 },
   });
@@ -72,11 +72,14 @@ const Pong = () => {
             player2.current = p2;
             invert.current = 1;
           }
+		  gameSocket.current?.emit("game:new-point", gameID.current);
         }
+		
       );
 
       gameSocket.current.on("game:point-start", (data: IBallStartInfo) => {
-        setBallStartPos(data);
+		data.direction.x *= invert.current;	
+		ballStartPos.current = data;
         setPlayGame(true);
         console.log("NEW POINT", data);
       });
@@ -125,17 +128,18 @@ const Pong = () => {
   return (
     <div className={styles.mainLayout_background}>
       <Score player={playerScore} opponent={opponentScore} />
-      {/* {playGame === true
+      {playGame === true
 	   && (
         <Ball
           updateScore={updateScore}
-          ballStartPos={ballStartPos}
+          ballStartPos={ballStartPos.current}
           gameSocket={gameSocket.current}
           gameID={gameID.current}
 		  player1={player1.current}
 		  player2={player2.current}
+		  invert={invert.current}
         />
-      )} */}
+      )}
       <PlayerPaddle
         gameSocket={gameSocket.current}
         gameID={gameID.current}

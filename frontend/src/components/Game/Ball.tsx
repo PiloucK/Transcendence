@@ -13,6 +13,7 @@ const Ball = ({
   gameID,
   player1,
   player2,
+  invert,
 }: {
   updateScore: (winner: string) => void;
   ballStartPos: IBallStartInfo;
@@ -20,11 +21,14 @@ const Ball = ({
   gameID: string;
   player1: string;
   player2: string;
+  invert: number;
 }) => {
   const [ballPosition, setBallPosition] = useState<ICoordinates>({
     x: 50,
     y: ballStartPos.positionY,
   });
+
+  const firstRender = useRef(true);
 
   let ballDirection = useRef<ICoordinates>(ballStartPos.direction);
   let ballVelocity = INITIAL_VELOCITY;
@@ -67,26 +71,21 @@ const Ball = ({
         y: ballRadiusHeightRatio,
       }));
     } else if (paddleCollision(playerPaddle, ballRect)) {
-
       let collidePoint =
         ballRect.y - (playerPaddle.y + playerPaddle.height / 2);
       collidePoint /= playerPaddle.height / 2;
 
       let angleRad = (collidePoint * Math.PI) / 4;
 
-    //   ballDirection.current.x =  Math.cos(angleRad);
-    //   ballDirection.current.y = Math.sin(angleRad);
+      //   ballDirection.current.x =  Math.cos(angleRad);
+      //   ballDirection.current.y = Math.sin(angleRad);
 
-		gameSocket.emit("game:ballCountered", angleRad, gameID);
+      gameSocket.emit("game:ballCountered", angleRad, gameID, player1);
 
-    	setBallPosition((prevState) => ({
-          x: paddleBorderRatio + ballRadiusWidthRatio,
-          y: prevState.y,
-        }));
-
-
-
-    
+      setBallPosition((prevState) => ({
+        x: paddleBorderRatio + ballRadiusWidthRatio,
+        y: prevState.y,
+      }));
     } else if (ballRect?.left <= 0) {
       updateScore("opponent");
       //   resetBall();
@@ -114,11 +113,21 @@ const Ball = ({
   };
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
-	gameSocket.on("game:newBallDirection", (newDirection : ICoordinates, player) => {
-		ballDirection.current.x = newDirection.x;
-		ballDirection.current.y = newDirection.y;
-	})
+    if (firstRender.current === true) {
+      document.body.style.overflow = "hidden";
+
+      gameSocket.on(
+        "game:newBallDirection",
+        (newDirection: ICoordinates, player: string) => {
+          ballDirection.current.x = newDirection.x;
+          ballDirection.current.y = newDirection.y;
+		  console.log("player=", player, "player2= ", player2);
+			if (player === player2)
+				ballDirection.current.x *= -1;
+		}
+      );
+      firstRender.current = false;
+    }
 
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current);

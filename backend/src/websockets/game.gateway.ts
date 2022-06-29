@@ -130,22 +130,21 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       this.server
         .to(gameID)
         .emit('game:init', gameID, currentGame.player1, currentGame.player2);
-      this.server
-	  	.to(gameID)
-		.emit('game:point-start', initBall());
+
       currentGame.gameStatus = 'RUNNING';
       console.log('sending game start', userSelf);
 
-      // game start logic - emit ball trajectory
     }
   }
 
-  @SubscribeMessage('game:point')
+
+  @SubscribeMessage('game:new-point')
   onGamePoint(
-    @MessageBody() userLogin42: string,
-    @ConnectedSocket() client: Socket,
+    @MessageBody() gameID: string,
   ) {
-    console.log('point for', userLogin42);
+		this.server
+	  	.to(gameID)
+		.emit('game:point-start', initBall());
   }
 
   @SubscribeMessage('game:ball')
@@ -169,7 +168,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
 	const [angleRad, gameID, player] = data;
 
-	const directionX =  Math.cos(parseInt(angleRad));
+	const directionX = Math.cos(parseInt(angleRad));
 	const directionY = Math.sin(parseInt(angleRad));
 
     this.server
