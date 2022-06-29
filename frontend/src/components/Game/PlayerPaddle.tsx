@@ -18,21 +18,16 @@ const PlayerPaddle = ({
   const sessionContext = useSessionContext();
 
   useEffect(() => {
-	console.log('coucou UseEffect');
-	
     if (paddleElem.current === null) {
-	
-		
       paddleElem.current = document.getElementById("player-paddle");
 
       if (sessionContext.userSelf.login42 === player1) {
         document.addEventListener("mousemove", (e) => {
           setPlayerPosition((e.y / window.innerHeight) * 100);
         });
-		
+
         return () => {
           window.removeEventListener("mousemove", () => {});
-		  console.log('coucou du return');
         };
       } else {
         gameSocket.on(
@@ -45,6 +40,7 @@ const PlayerPaddle = ({
         );
       }
     }
+    return () => {};
   }, []);
 
   useEffect(() => {

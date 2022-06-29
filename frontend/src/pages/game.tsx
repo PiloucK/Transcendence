@@ -20,9 +20,9 @@ const Pong = () => {
   const [opponentScore, setOpponentScore] = useState(0);
 
   const gameSocket = useRef<Socket>();
-  const gameID = useRef("null");
-  const player1 = useRef("null");
-  const player2 = useRef("null");
+  const gameID = useRef("");
+  const player1 = useRef("");
+  const player2 = useRef("");
   const invert = useRef(1);
 
   const sessionContext = useSessionContext();
@@ -47,7 +47,7 @@ const Pong = () => {
   //   });
   // }
 
-  console.log("gamesock", gameSocket.current);
+  //console.log("gamesock", gameSocket.current);
 
   useEffect(() => {
     console.log("USE EFFECT PONG");
@@ -62,6 +62,7 @@ const Pong = () => {
         "game:init",
         (newGameID: string, p1: Login42, p2: Login42) => {
           gameID.current = newGameID;
+
           if (p2 === sessionContext.userSelf.login42) {
             player1.current = p2;
             player2.current = p1;
@@ -71,7 +72,6 @@ const Pong = () => {
             player2.current = p2;
             invert.current = 1;
           }
-          console.log("GAME STARTING FROM FRONT...");
         }
       );
 
@@ -111,7 +111,11 @@ const Pong = () => {
     };
   }, []);
 
-  if (gameSocket.current === undefined) {
+  if (
+    gameSocket.current === undefined ||
+    player1.current === "" ||
+    player2.current === ""
+  ) {
     return (
       <div className={styles.mainLayout_background}>
         <Score player={playerScore} opponent={opponentScore} />
