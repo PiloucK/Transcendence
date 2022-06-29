@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos, Channel } from "../../interfaces/users";
+import { Channel } from "../../interfaces/Chat.interfaces";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -18,7 +18,8 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { errorHandler } from "../../errors/errorHandler";
 
 import { useErrorContext } from "../../context/ErrorContext";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSocketContext } from "../../context/SocketContext";
+import { useSessionContext } from "../../context/SessionContext";
 import channelService from "../../services/channel";
 
 export function ButtonTxtMuteUser({
@@ -29,12 +30,13 @@ export function ButtonTxtMuteUser({
   channel: Channel;
 }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const socketContext = useSocketContext();
+  const sessionContext = useSessionContext();
   const [open, setOpen] = React.useState(false);
-  const [time, setTime] = React.useState<number | string>(300);
+  const [time, setTime] = React.useState<number>(300);
 
   const handleChange = (event: SelectChangeEvent<typeof time>) => {
-    setTime(Number(event.target.value) || "");
+    setTime(Number(event.target.value) || 0);
   };
 
   const handleClickOpen = () => {
@@ -43,20 +45,31 @@ export function ButtonTxtMuteUser({
 
   const handleUnmuteUser = () => {
     channelService
-      .muteAChannelUser(loginContext.userLogin, channel.id, login, 0)
-      .then(() => {})
+      .muteAChannelUser(sessionContext.userSelf.login42, channel.id, login, 0)
+      .then(() => {
+		// socketContext.socket.emit("user:update-joined-channels");
+		socketContext.socket.emit("user:update-channel-content");
+	})
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 
   const handleMuteUser = () => {
     setOpen(false);
     channelService
-      .muteAChannelUser(loginContext.userLogin, channel.id, login, time)
-      .then(() => {})
+      .muteAChannelUser(
+        sessionContext.userSelf.login42,
+        channel.id,
+        login,
+        time
+      )
+      .then(() => {
+          socketContext.socket.emit("user:update-channel-content");
+		//   socketContext.socket.emit("user:update-joined-channels");
+	  })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 

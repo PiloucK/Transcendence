@@ -3,8 +3,8 @@ import styles from "../../styles/Home.module.css";
 import { EmptyFriendList } from "../Social/emptyPages";
 
 import { ChannelMenu } from "./Menus";
-import { useLoginContext } from "../../context/LoginContext";
-import { IUserPublicInfos, Channel, Message } from "../interfaces/users";
+import { useSessionContext } from "../../context/SessionContext";
+import { Channel, Message } from "../../interfaces/Chat.interfaces";
 import channelService from "../../services/channel";
 import { CardUserDM } from "../Cards/CardUserDM";
 
@@ -21,7 +21,21 @@ import { useSocketContext } from "../../context/SocketContext";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function Messages({ channel }: { channel: Channel }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
+
+  const setScroll = () => {
+    if (typeof window !== "undefined") {
+      var messageBody = document.querySelector("#channelMsgArea");
+      if (messageBody) {
+        messageBody.scrollTop =
+          messageBody.scrollHeight - messageBody.clientHeight;
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    setScroll();
+  }, [channel]);
 
   if (typeof channel === "undefined" || channel.messages.length === 0) {
     return (
@@ -33,7 +47,7 @@ function Messages({ channel }: { channel: Channel }) {
   }
 
   const getStyle = (author: string) => {
-    if (author === loginContext.userLogin) {
+    if (author === sessionContext.userSelf.login42) {
       return styles.message_author;
     } else {
       return styles.message_friend;
@@ -41,7 +55,7 @@ function Messages({ channel }: { channel: Channel }) {
   };
 
   const GetAvatar = ({ author }: { author: string }) => {
-    if (author === loginContext.userLogin) {
+    if (author === sessionContext.userSelf.login42) {
       return null;
     } else {
       const user = channel.users.find((user) => user.login42 === author);
@@ -67,20 +81,6 @@ function Messages({ channel }: { channel: Channel }) {
       }
     }
   };
-
-  const setScroll = () => {
-    if (typeof window !== "undefined") {
-      var messageBody = document.querySelector("#channelMsgArea");
-      if (messageBody) {
-        messageBody.scrollTop =
-          messageBody.scrollHeight - messageBody.clientHeight;
-      }
-    }
-  };
-
-  React.useEffect(() => {
-    setScroll();
-  }, [channel]);
 
   return (
     <>
@@ -113,34 +113,33 @@ function ChannelContent({ channel }: { channel: Channel }) {
 
 export function ChannelPage({ channel }: { channel: Channel | undefined }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [currentChannel, setCurrentChannel] = React.useState<Channel>();
 
   const fetchCurrentChannel = () => {
     if (typeof channel !== "undefined") {
       channelService
-        .getChannelById(loginContext.userLogin, channel.id)
+        .getChannelById(sessionContext.userSelf.login42, channel.id)
         .then((channel: Channel) => {
           setCurrentChannel(channel);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
   };
 
-  React.useEffect(fetchCurrentChannel, [channel]);
-
   React.useEffect(() => {
-    socketContext.socket.on("update-channel-content", fetchCurrentChannel);
+    fetchCurrentChannel();
+	socketContext.socket.on("update-channel-content", fetchCurrentChannel);
     return () => {
       socketContext.socket.removeListener(
         "update-channel-content",
         fetchCurrentChannel
       );
     };
-  }, []);
+  }, [channel]);
 
   if (typeof currentChannel === "undefined" || typeof channel === "undefined") {
     return (

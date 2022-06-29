@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos } from "../../interfaces/users";
+import { IUserPublic } from "../../interfaces/IUser";
 
 import Avatar from "@mui/material/Avatar";
 import profileIcon from "../../public/profile_icon.png";
@@ -10,8 +10,8 @@ export function CardUserChannelInvite({
   userInfos,
   setSelectedFriends,
 }: {
-  userInfos: IUserPublicInfos;
-  setSelectedFriends: (friends: IUserPublicInfos) => void;
+  userInfos: IUserPublic;
+  setSelectedFriends: (friends: IUserPublic) => void;
 }) {
   const [isSelected, setIsSelected] = React.useState(false);
 

@@ -1,4 +1,3 @@
-import { forwardRef, Inject } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -10,15 +9,13 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { StatusService } from 'src/status/status.service';
+import { EmittedLiveStatus } from 'src/status/status.type';
 
 @WebSocketGateway(3002, { transports: ['websocket'] })
 export class WebsocketsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(
-    @Inject(forwardRef(() => StatusService))
-    private readonly statusService: StatusService,
-  ) {}
+  constructor(private readonly statusService: StatusService) {}
   @WebSocketServer()
   server!: Server;
 
@@ -28,11 +25,14 @@ export class WebsocketsGateway
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('disconnection', client.id);
-    this.statusService.remove(client.id);
+    const userLogin42 = this.statusService.remove(client.id);
+    if (userLogin42) {
+      this.updateStatus(userLogin42, 'OFFLINE');
+    }
   }
 
-  updateStatus(userLogin42: string, online: boolean) {
-    this.server.emit('update-status', userLogin42, online);
+  updateStatus(userLogin42: string, status: EmittedLiveStatus) {
+    this.server.emit('user:update-status', userLogin42, status);
   }
 
   @SubscribeMessage('user:login')
@@ -41,7 +41,9 @@ export class WebsocketsGateway
     @ConnectedSocket() client: Socket,
   ) {
     console.log('user:login', userLogin42, client.id);
-    this.statusService.add(client.id, userLogin42);
+    if (this.statusService.add(client.id, userLogin42) === 'EMIT') {
+      this.updateStatus(userLogin42, 'ONLINE');
+    }
   }
 
   @SubscribeMessage('user:logout')
@@ -50,7 +52,9 @@ export class WebsocketsGateway
     @ConnectedSocket() client: Socket,
   ) {
     console.log('user:logout', userLogin42, client.id);
-    this.statusService.remove(client.id);
+    if (this.statusService.remove(client.id) === 'EMIT') {
+      this.updateStatus(userLogin42, 'OFFLINE');
+    }
   }
 
   @SubscribeMessage('user:new')

@@ -3,15 +3,16 @@ import styles from "../../styles/Home.module.css";
 import { EmptyFriendList } from "../Social/emptyPages";
 
 import { DirectMessageMenu } from "./Menus";
-import { useLoginContext } from "../../context/LoginContext";
 import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
+import { useSessionContext } from "../../context/SessionContext";
+import { IUserPublic } from "../../interfaces/IUser";
 import {
-  IUserPublicInfos,
   PrivateConv,
   Message,
   Invitation,
-} from "../../interfaces/users";
+} from "../../interfaces/Chat.interfaces";
+
 import userService from "../../services/user";
 import privateConvService from "../../services/privateConv";
 import { CardUserDM } from "../Cards/CardUserDM";
@@ -23,6 +24,7 @@ import Avatar from "@mui/material/Avatar";
 
 import { SendMessageField } from "../Inputs/SendMessageField";
 
+import CircularProgress from "@mui/material/CircularProgress";
 import { ButtonAcceptChannelInvite } from "../Buttons/ButtonAcceptChannelInvite";
 import { useSocketContext } from "../../context/SocketContext";
 
@@ -30,7 +32,7 @@ function FriendList({
   friends,
   setMenu,
 }: {
-  friends: IUserPublicInfos[];
+  friends: IUserPublic[];
   setMenu: (menu: string) => void;
 }) {
   if (typeof friends === "undefined" || friends.length === 0) {
@@ -48,38 +50,38 @@ function FriendList({
 
 function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
+  const [friends, setFriends] = useState<IUserPublic[]>([]);
 
   React.useEffect(() => {
     userService
-      .getUserFriends(loginContext.userLogin)
-      .then((friends: IUserPublicInfos[]) => {
+      .getUserFriends(sessionContext.userSelf.login42)
+      .then((friends: IUserPublic[]) => {
         setFriends(friends);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
 
     socketContext.socket.on("update-leaderboard", () => {
       userService
-        .getUserFriends(loginContext.userLogin)
-        .then((friends: IUserPublicInfos[]) => {
+        .getUserFriends(sessionContext.userSelf.login42)
+        .then((friends: IUserPublic[]) => {
           setFriends(friends);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserFriends(loginContext.userLogin)
-        .then((friends: IUserPublicInfos[]) => {
+        .getUserFriends(sessionContext.userSelf.login42)
+        .then((friends: IUserPublic[]) => {
           setFriends(friends);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
   }, []);
@@ -92,8 +94,17 @@ function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
   );
 }
 
+function isMessage(
+  toBeDetermined: Message | Invitation
+): toBeDetermined is Message {
+  if ((toBeDetermined as Message).content) {
+    return true;
+  }
+  return false;
+}
+
 function MessageContent({ message }: { message: Message | Invitation }) {
-  if (typeof message.content === "string") {
+  if (isMessage(message)) {
     return <>{message.content}</>;
   } else {
     return (
@@ -105,61 +116,8 @@ function MessageContent({ message }: { message: Message | Invitation }) {
   }
 }
 
-function Messages({ dm }: { dm: PrivateConv }) {
-  const loginContext = useLoginContext();
-
-  if (typeof dm === "undefined" || dm.messages.length === 0) {
-    return (
-      <div className={styles.social_empty_page}>
-        <Image src={Rocket} />
-        Be the first one to send a message !
-      </div>
-    );
-  }
-
-  const getStyle = (author: string) => {
-    if (author === loginContext.userLogin) {
-      return styles.message_author;
-    } else {
-      return styles.message_friend;
-    }
-  };
-
-  const GetAvatar = ({ author }: { author: string }) => {
-    if (author === loginContext.userLogin) {
-      return null;
-    } else {
-      if (dm.userOne.username === author) {
-        return (
-          <div className={styles.chat_avatar}>
-            <Avatar
-              src={dm.userOne.image}
-              sx={{ width: "40px", height: "40px" }}
-            >
-              <Avatar
-                src={dm.userOne.photo42}
-                sx={{ width: "40px", height: "40px" }}
-              />
-            </Avatar>
-          </div>
-        );
-      } else {
-        return (
-          <div className={styles.chat_avatar}>
-            <Avatar
-              src={dm.userTwo.image}
-              sx={{ width: "40px", height: "40px" }}
-            >
-              <Avatar
-                src={dm.userTwo.photo42}
-                sx={{ width: "40px", height: "40px" }}
-              />
-            </Avatar>
-          </div>
-        );
-      }
-    }
-  };
+function Messages({ pc }: { pc: PrivateConv }) {
+  const sessionContext = useSessionContext();
 
   const setScroll = () => {
     if (typeof window !== "undefined") {
@@ -173,11 +131,64 @@ function Messages({ dm }: { dm: PrivateConv }) {
 
   React.useEffect(() => {
     setScroll();
-  }, []);
+  }, [pc]);
+
+  if (typeof pc === "undefined" || pc.messages.length === 0) {
+    return (
+      <div className={styles.social_empty_page}>
+        <Image src={Rocket} />
+        Be the first one to send a message !
+      </div>
+    );
+  }
+
+  const getStyle = (author: string) => {
+    if (author === sessionContext.userSelf.login42) {
+      return styles.message_author;
+    } else {
+      return styles.message_friend;
+    }
+  };
+
+  const GetAvatar = ({ author }: { author: string }) => {
+    if (author === sessionContext.userSelf.login42) {
+      return null;
+    } else {
+      if (pc.userOne.username === author) {
+        return (
+          <div className={styles.chat_avatar}>
+            <Avatar
+              src={pc.userOne.image}
+              sx={{ width: "40px", height: "40px" }}
+            >
+              <Avatar
+                src={pc.userOne.photo42}
+                sx={{ width: "40px", height: "40px" }}
+              />
+            </Avatar>
+          </div>
+        );
+      } else {
+        return (
+          <div className={styles.chat_avatar}>
+            <Avatar
+              src={pc.userTwo.image}
+              sx={{ width: "40px", height: "40px" }}
+            >
+              <Avatar
+                src={pc.userTwo.photo42}
+                sx={{ width: "40px", height: "40px" }}
+              />
+            </Avatar>
+          </div>
+        );
+      }
+    }
+  };
 
   return (
     <div className={styles.messages_area} id="directMessageMsgArea">
-      {dm.messages.map((message, index) => (
+      {pc.messages.map((message, index) => (
         <div className={getStyle(message.author)} key={index}>
           <MessageContent message={message} />
           <GetAvatar author={message.author} />
@@ -189,53 +200,54 @@ function Messages({ dm }: { dm: PrivateConv }) {
 
 function CurrentDirectMessage({ menu }: { menu: string }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [blockedList, setBlockedList] = React.useState<IUserPublicInfos[]>([]);
+  const [blockedList, setBlockedList] = React.useState<IUserPublic[]>([]);
   const [input, setInput] = React.useState("");
   const [privateConv, setPrivateConv] = useState<PrivateConv>();
   const users = menu.split("|");
+  const friend =
+    users[0] === sessionContext.userSelf.login42 ? users[1] : users[0];
 
-  const friend = users[0] === loginContext.userLogin ? users[1] : users[0];
-  React.useEffect(() => {
+  const fetchBlockedList = () => {
     userService
-      .getUserBlockedUsers(loginContext.userLogin)
-      .then((blocked: IUserPublicInfos[]) => {
+      .getUserBlockedUsers(sessionContext.userSelf.login42)
+      .then((blocked: IUserPublic[]) => {
         setBlockedList(blocked);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
+  };
+
+  const fetchPrivateConv = () => {
     privateConvService
-      .getPrivateConv(loginContext.userLogin, friend)
+      .getPrivateConv(sessionContext.userSelf.login42, friend)
       .then((privateConv: PrivateConv) => {
         setPrivateConv(privateConv);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
+  };
 
-    socketContext.socket.on("update-relations", () => {
-      userService
-        .getUserBlockedUsers(loginContext.userLogin)
-        .then((blocked: IUserPublicInfos[]) => {
-          setBlockedList(blocked);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
-    });
-    socketContext.socket.on("update-direct-messages", () => {
-      privateConvService
-        .getPrivateConv(loginContext.userLogin, friend)
-        .then((privateConv: PrivateConv) => {
-          setPrivateConv(privateConv);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
-    });
+  React.useEffect(() => {
+    fetchBlockedList();
+    fetchPrivateConv();
   }, [friend]);
+
+  React.useEffect(() => {
+    socketContext.socket.on("update-relations", fetchBlockedList);
+    socketContext.socket.on("update-direct-messages", fetchPrivateConv);
+
+    return () => {
+      socketContext.socket.removeListener("update-relations", fetchBlockedList);
+      socketContext.socket.removeListener(
+        "update-direct-messages",
+        fetchPrivateConv
+      );
+    };
+  }, []);
 
   const blockedFriend = blockedList?.find(
     (blocked) => blocked.login42 === friend
@@ -250,10 +262,17 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
       </div>
     );
   }
+  if (typeof privateConv === "undefined") {
+    return (
+      <div className={styles.play}>
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <div className={styles.chat_direct_message_content}>
       <SendMessageField input={input} setInput={setInput} channel={menu} />
-      <Messages dm={privateConv} />
+      <Messages pc={privateConv} />
     </div>
   );
 }
@@ -272,17 +291,17 @@ function DirectMessageContent({
 }
 
 export function DirectMessage() {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   return (
     <>
       <DirectMessageMenu
-        menu={loginContext.chatDM}
-        setMenu={loginContext.setChatDM}
+        menu={sessionContext.chatDM}
+        setMenu={sessionContext.setChatDM}
       />
       <DirectMessageContent
-        menu={loginContext.chatDM}
-        setMenu={loginContext.setChatDM}
+        menu={sessionContext.chatDM}
+        setMenu={sessionContext.setChatDM}
       />
     </>
   );

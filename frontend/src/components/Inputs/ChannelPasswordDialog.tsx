@@ -7,9 +7,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import channelService from "../../services/channel";
-import { Channel } from "../../interfaces/users";
+import { Channel } from "../../interfaces/Chat.interfaces";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
@@ -35,7 +35,7 @@ export function ChannelPasswordDialog({
   setOpen: (open: boolean) => void;
 }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [input, setInput] = React.useState("");
   const [error, setError] = React.useState(false);
@@ -47,14 +47,14 @@ export function ChannelPasswordDialog({
   const handleSubmit = () => {
     setOpen(false);
     channelService
-      .joinProtectedChannel(loginContext.userLogin, channelId, input)
+      .joinProtectedChannel(sessionContext.userSelf.login42, channelId, input)
       .then((channel: Channel) => {
-        loginContext.setChatMenu?.(channel.id);
+        sessionContext.setChatMenu?.(channel.id);
         socketContext.socket.emit("user:update-joined-channels");
         socketContext.socket.emit("user:update-channel-content");
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
   return (

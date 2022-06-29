@@ -7,7 +7,7 @@ import { Channel } from "../interfaces/users";
 import { DirectMessage } from "../components/Chat/DirectMessage";
 import { AddChannel } from "../components/Chat/AddChannel";
 import { ChannelPage } from "../components/Chat/Channel";
-import { useLoginContext } from "../context/LoginContext";
+import { useSessionContext } from "../context/SessionContext";
 import { DockGuest } from "../components/Dock/DockGuest";
 
 import { errorHandler } from "../errors/errorHandler";
@@ -44,34 +44,36 @@ function ChatContent({
 
 export default function Chat() {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [channels, setChannels] = React.useState<Channel[]>([]);
 
-  React.useEffect(() => {
-    if (loginContext.userLogin) {
+  const fetchChannels = () => {
+    if (sessionContext.userSelf.login42 !== "Norminet") {
       channelService
-        .getJoinedChannels(loginContext.userLogin)
+        .getJoinedChannels(sessionContext.userSelf.login42)
         .then((currentChannels: Channel[]) => {
           setChannels(currentChannels);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
-      socketContext.socket.on("update-channels-list", () => {
-        channelService
-          .getJoinedChannels(loginContext.userLogin)
-          .then((currentChannels: Channel[]) => {
-            setChannels(currentChannels);
-          })
-          .catch((error) => {
-            errorContext.newError?.(errorHandler(error, loginContext));
-          });
-      });
     }
-  }, [loginContext.userLogin]);
+  };
 
-  if (loginContext.userLogin === null) {
+  React.useEffect(fetchChannels, [sessionContext]);
+
+  React.useEffect(() => {
+    socketContext.socket.on("update-channels-list", fetchChannels);
+    return () => {
+      socketContext.socket.removeListener(
+        "update-channels-list",
+        fetchChannels
+      );
+    };
+  }, []);
+
+  if (sessionContext.userSelf.login42 === "Norminet") {
     return <DockGuest />;
   }
 
@@ -85,7 +87,7 @@ export default function Chat() {
     return (
       <>
         <ChatMenu channels={channels} />
-        <ChatContent channels={channels} menu={loginContext.chatMenu} />
+        <ChatContent channels={channels} menu={sessionContext.chatMenu} />
       </>
     );
   }

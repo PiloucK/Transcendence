@@ -13,8 +13,13 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async findOrCreate42UserInDatabase(fortyTwoUserProfileDto: FortyTwoUserProfileDto): Promise<User> {
-    return await this.usersService.createUser({login42: fortyTwoUserProfileDto.username, photo42: fortyTwoUserProfileDto.photos[0].value});
+  async findOrCreate42UserInDatabase(
+    fortyTwoUserProfileDto: FortyTwoUserProfileDto,
+  ): Promise<User> {
+    return await this.usersService.createUser(
+      fortyTwoUserProfileDto.username,
+      fortyTwoUserProfileDto.photos[0].value,
+    );
   }
 
   issueJwtToken(login42: string, isSecondFactorAuthenticated = false): string {

@@ -51,26 +51,10 @@ export class AuthController {
       )}`,
     );
   }
-  // if (req.user.enableTwoFactorAuth === false) {
-  //   res.cookie('two_factor_auth', true, {
-  //     httpOnly: false,
-  //   });
-
-  // dev
-  @Get('getToken/:login42')
-  getTokenForUser(
-    @Param('login42') login42: string,
-    @Res() response: Response,
-  ): void {
-    const jwtToken = this.authService.issueJwtToken(login42);
-    const cookie = this.authService.getAccessTokenCookie(jwtToken);
-    response.setHeader('Set-Cookie', cookie);
-    response.send(login42); // "return login42;" doesn't work
-  }
 
   @UseGuards(JwtAuthGuard)
   @Get('getLoggedInUser')
-  getLoggedInUser(@GetReqUser() reqUser: User): string {
-    return reqUser.login42;
+  async getLoggedInUser(@GetReqUser() reqUser: User): Promise<User> {
+    return await this.usersService.getUserWithAllRelations(reqUser.login42);
   }
 }

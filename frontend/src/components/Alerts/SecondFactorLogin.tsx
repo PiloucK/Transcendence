@@ -1,12 +1,12 @@
 import { Button, Dialog, TextField } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { useErrorContext } from "../../context/ErrorContext";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import { errorHandler } from "../../errors/errorHandler";
 import twoFactorAuthService from "../../services/twoFactorAuth";
 
 export const SecondFactorLogin = () => {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const errorContext = useErrorContext();
   const [code, setCode] = useState("");
 
@@ -16,10 +16,10 @@ export const SecondFactorLogin = () => {
     twoFactorAuthService
       .authenticate(code)
       .then(() => {
-        loginContext.setShowSecondFactorLogin?.(false);
+        sessionContext.setShowSecondFactorLogin?.(false);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 
@@ -28,7 +28,7 @@ export const SecondFactorLogin = () => {
   };
 
   return (
-    <Dialog open={loginContext.showSecondFactorLogin}>
+    <Dialog open={sessionContext.showSecondFactorLogin}>
       <form onSubmit={sendValidationCode}>
         <TextField value={code} onChange={handleCodeChange} />
         <Button type="submit">send validation code</Button>
