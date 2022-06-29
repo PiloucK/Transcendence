@@ -1,7 +1,4 @@
-import { Button } from "@mui/material";
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 import ToggleSwitch from "./ToggleSwitch";
 
 export function TwoFactorAuth() {
@@ -9,7 +6,7 @@ export function TwoFactorAuth() {
 
   return (
     <>
-        <ToggleSwitch checked={checked} setChecked={setChecked} />
+      <ToggleSwitch checked={checked} setChecked={setChecked} />
       {checked === true ? <> </> : <></>}
     </>
   );
