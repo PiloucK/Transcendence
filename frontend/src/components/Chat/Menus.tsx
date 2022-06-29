@@ -68,39 +68,45 @@ function DMList({
 }) {
   const sessionContext = useSessionContext();
 
-  return openedDMs?.map((dm) => {
-    const key = dm.userOne.login42 + "|" + dm.userTwo.login42;
-    const user =
-      dm.userOne.login42 === sessionContext.userSelf.login42
-        ? dm.userTwo
-        : dm.userOne;
+  return (
+    <>
+      {openedDMs?.map((dm) => {
+        const key = dm.userOne.login42 + "|" + dm.userTwo.login42;
+        const user =
+          dm.userOne.login42 === sessionContext.userSelf.login42
+            ? dm.userTwo
+            : dm.userOne;
 
-    if (key === menu) {
-      return <SelectedDMMenu key={"selectedDMMenu"} keyV={key} user={user} />;
-    }
-    return (
-      <div
-        key={key}
-        className={styles.chat_direct_message_menu_new_selected}
-        onClick={() => {
-          setMenu(key);
-        }}
-      >
-        <Avatar
-          className={styles.chat_avatar}
-          src={user.image}
-          sx={{ width: "20px", height: "20px" }}
-        >
-          <Avatar
-            className={styles.chat_avatar}
-            src={user.photo42}
-            sx={{ width: "20px", height: "20px" }}
-          />
-        </Avatar>
-        {user.login42}
-      </div>
-    );
-  });
+        if (key === menu) {
+          return (
+            <SelectedDMMenu key={"selectedDMMenu"} keyV={key} user={user} />
+          );
+        }
+        return (
+          <div
+            key={key}
+            className={styles.chat_direct_message_menu_new_selected}
+            onClick={() => {
+              setMenu(key);
+            }}
+          >
+            <Avatar
+              className={styles.chat_avatar}
+              src={user.image}
+              sx={{ width: "20px", height: "20px" }}
+            >
+              <Avatar
+                className={styles.chat_avatar}
+                src={user.photo42}
+                sx={{ width: "20px", height: "20px" }}
+              />
+            </Avatar>
+            {user.login42}
+          </div>
+        );
+      })}
+    </>
+  );
 }
 
 export function DirectMessageMenu(props: {
@@ -443,33 +449,37 @@ function ChannelList({
   const sessionContext = useSessionContext();
 
   if (typeof channels === "undefined" || channels?.length === 0) return null;
-  return channels?.map((channel) => {
-    return (
-      <div
-        key={channel.id}
-        className={getStyle(channel.id)}
-        onClick={() => {
-          sessionContext.setChatMenu?.(channel.id);
-        }}
-      >
-        <Avatar
-          src={channel.image}
-          alt="channel image"
-          sx={{
-            width: 45,
-            height: 45,
-          }}
-        >
-          <Image
-            src={channelImage}
-            alt="channel image"
-            width="45"
-            height="45"
-          />
-        </Avatar>
-      </div>
-    );
-  });
+  return (
+    <>
+      {channels?.map((channel) => {
+        return (
+          <div
+            key={channel.id}
+            className={getStyle(channel.id)}
+            onClick={() => {
+              sessionContext.setChatMenu?.(channel.id);
+            }}
+          >
+            <Avatar
+              src={channel.image}
+              alt="channel image"
+              sx={{
+                width: 45,
+                height: 45,
+              }}
+            >
+              <Image
+                src={channelImage}
+                alt="channel image"
+                width="45"
+                height="45"
+              />
+            </Avatar>
+          </div>
+        );
+      })}
+    </>
+  );
 }
 
 export function ChatMenu(props: { channels: Channel[] }) {
