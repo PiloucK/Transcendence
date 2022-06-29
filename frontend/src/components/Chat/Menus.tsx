@@ -34,7 +34,7 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 import { IUserSelf, IUserSlim } from "../../interfaces/IUser";
 
-function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUserSelf }) {
+function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUserSlim }) {
   return (
     <div key={keyV} className={styles.chat_direct_message_menu_dm_selected}>
       <Avatar
