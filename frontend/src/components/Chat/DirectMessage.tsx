@@ -116,10 +116,24 @@ function MessageContent({ message }: { message: Message | Invitation }) {
   }
 }
 
-function Messages({ dm }: { dm: PrivateConv }) {
+function Messages({ pc }: { pc: PrivateConv }) {
   const sessionContext = useSessionContext();
 
-  if (typeof dm === "undefined" || dm.messages.length === 0) {
+  const setScroll = () => {
+    if (typeof window !== "undefined") {
+      var messageBody = document.querySelector("#directMessageMsgArea");
+      if (messageBody) {
+        messageBody.scrollTop =
+          messageBody.scrollHeight - messageBody.clientHeight;
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    setScroll();
+  }, [pc]);
+
+  if (typeof pc === "undefined" || pc.messages.length === 0) {
     return (
       <div className={styles.social_empty_page}>
         <Image src={Rocket} />
@@ -140,15 +154,15 @@ function Messages({ dm }: { dm: PrivateConv }) {
     if (author === sessionContext.userSelf.login42) {
       return null;
     } else {
-      if (dm.userOne.username === author) {
+      if (pc.userOne.username === author) {
         return (
           <div className={styles.chat_avatar}>
             <Avatar
-              src={dm.userOne.image}
+              src={pc.userOne.image}
               sx={{ width: "40px", height: "40px" }}
             >
               <Avatar
-                src={dm.userOne.photo42}
+                src={pc.userOne.photo42}
                 sx={{ width: "40px", height: "40px" }}
               />
             </Avatar>
@@ -158,11 +172,11 @@ function Messages({ dm }: { dm: PrivateConv }) {
         return (
           <div className={styles.chat_avatar}>
             <Avatar
-              src={dm.userTwo.image}
+              src={pc.userTwo.image}
               sx={{ width: "40px", height: "40px" }}
             >
               <Avatar
-                src={dm.userTwo.photo42}
+                src={pc.userTwo.photo42}
                 sx={{ width: "40px", height: "40px" }}
               />
             </Avatar>
@@ -172,23 +186,9 @@ function Messages({ dm }: { dm: PrivateConv }) {
     }
   };
 
-  const setScroll = () => {
-    if (typeof window !== "undefined") {
-      var messageBody = document.querySelector("#directMessageMsgArea");
-      if (messageBody) {
-        messageBody.scrollTop =
-          messageBody.scrollHeight - messageBody.clientHeight;
-      }
-    }
-  };
-
-  React.useEffect(() => {
-    setScroll();
-  }, []);
-
   return (
     <div className={styles.messages_area} id="directMessageMsgArea">
-      {dm.messages.map((message, index) => (
+      {pc.messages.map((message, index) => (
         <div className={getStyle(message.author)} key={index}>
           <MessageContent message={message} />
           <GetAvatar author={message.author} />
@@ -206,10 +206,10 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
   const [input, setInput] = React.useState("");
   const [privateConv, setPrivateConv] = useState<PrivateConv>();
   const users = menu.split("|");
-
   const friend =
     users[0] === sessionContext.userSelf.login42 ? users[1] : users[0];
-  React.useEffect(() => {
+
+  const fetchBlockedList = () => {
     userService
       .getUserBlockedUsers(sessionContext.userSelf.login42)
       .then((blocked: IUserPublic[]) => {
@@ -218,6 +218,9 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });
+  };
+
+  const fetchPrivateConv = () => {
     privateConvService
       .getPrivateConv(sessionContext.userSelf.login42, friend)
       .then((privateConv: PrivateConv) => {
@@ -226,28 +229,25 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
       });
+  };
 
-    socketContext.socket.on("update-relations", () => {
-      userService
-        .getUserBlockedUsers(sessionContext.userSelf.login42)
-        .then((blocked: IUserPublic[]) => {
-          setBlockedList(blocked);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-    });
-    socketContext.socket.on("update-direct-messages", () => {
-      privateConvService
-        .getPrivateConv(sessionContext.userSelf.login42, friend)
-        .then((privateConv: PrivateConv) => {
-          setPrivateConv(privateConv);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-    });
+  React.useEffect(() => {
+    fetchBlockedList();
+    fetchPrivateConv();
   }, [friend]);
+
+  React.useEffect(() => {
+    socketContext.socket.on("update-relations", fetchBlockedList);
+    socketContext.socket.on("update-direct-messages", fetchPrivateConv);
+
+    return () => {
+      socketContext.socket.removeListener("update-relations", fetchBlockedList);
+      socketContext.socket.removeListener(
+        "update-direct-messages",
+        fetchPrivateConv
+      );
+    };
+  }, []);
 
   const blockedFriend = blockedList?.find(
     (blocked) => blocked.login42 === friend
@@ -272,7 +272,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
   return (
     <div className={styles.chat_direct_message_content}>
       <SendMessageField input={input} setInput={setInput} channel={menu} />
-      <Messages dm={privateConv} />
+      <Messages pc={privateConv} />
     </div>
   );
 }

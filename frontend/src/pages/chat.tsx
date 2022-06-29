@@ -48,7 +48,7 @@ export default function Chat() {
   const socketContext = useSocketContext();
   const [channels, setChannels] = React.useState<Channel[]>([]);
 
-  React.useEffect(() => {
+  const fetchChannels = () => {
     if (sessionContext.userSelf.login42 !== "Norminet") {
       channelService
         .getJoinedChannels(sessionContext.userSelf.login42)
@@ -59,21 +59,18 @@ export default function Chat() {
           errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
-  }, [sessionContext]);
+  };
+
+  React.useEffect(fetchChannels, [sessionContext]);
 
   React.useEffect(() => {
-    socketContext.socket.on("update-channels-list", () => {
-      if (sessionContext.userSelf.login42 !== "Norminet") {
-        channelService
-          .getJoinedChannels(sessionContext.userSelf.login42)
-          .then((currentChannels: Channel[]) => {
-            setChannels(currentChannels);
-          })
-          .catch((error) => {
-            errorContext.newError?.(errorHandler(error, sessionContext));
-          });
-      }
-    });
+    socketContext.socket.on("update-channels-list", fetchChannels);
+    return () => {
+      socketContext.socket.removeListener(
+        "update-channels-list",
+        fetchChannels
+      );
+    };
   }, []);
 
   if (sessionContext.userSelf.login42 === "Norminet") {

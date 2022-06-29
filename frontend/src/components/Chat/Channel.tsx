@@ -130,17 +130,16 @@ export function ChannelPage({ channel }: { channel: Channel | undefined }) {
     }
   };
 
-  React.useEffect(fetchCurrentChannel, [channel]);
-
   React.useEffect(() => {
-    socketContext.socket.on("update-channel-content", fetchCurrentChannel);
+    fetchCurrentChannel();
+	socketContext.socket.on("update-channel-content", fetchCurrentChannel);
     return () => {
       socketContext.socket.removeListener(
         "update-channel-content",
         fetchCurrentChannel
       );
     };
-  }, []);
+  }, [channel]);
 
   if (typeof currentChannel === "undefined" || typeof channel === "undefined") {
     return (
