@@ -3,16 +3,13 @@ import styles from "../../styles/Home.module.css";
 
 import { TextField } from "../Inputs/TextField";
 
-import Switch from "@mui/material/Switch";
-import Avatar from "@mui/material/Avatar";
-import Image from "next/image";
-
 import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
 
 import userService from "../../services/user";
 import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 
+import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -24,7 +21,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useSocketContext } from "../../context/SocketContext";
 import { IUserSelf } from "../../interfaces/IUser";
 import { useSessionContext } from "../../context/SessionContext";
-import TwoFactorAuth from "../../pages/twoFactorAuth";
+import { TwoFactorAuth } from "../TwoFactorAuthSettings/TwoFactorAuth";
 
 export function ProfileSettingsDialog({
   user,
