@@ -113,6 +113,7 @@ export function ChannelInviteDialog({
           friend.login42
         )
         .then(() => {
+          socketContext.socket.emit("user:update-direct-messages");
           socketContext.socket.emit("user:update-channel-content");
         })
         .catch((error) => {
