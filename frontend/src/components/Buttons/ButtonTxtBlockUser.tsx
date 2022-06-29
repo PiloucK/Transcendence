@@ -2,74 +2,78 @@ import React from "react";
 
 import styles from "../../styles/Home.module.css";
 
-import { IUserPublicInfos } from "../../interfaces/users";
+import { IUserPublic } from "../../interfaces/IUser";
 import userService from "../../services/user";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 export function ButtonTxtBlockUser({ login }: { login: string }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [blockedList, setBlockedList] = React.useState<[]>([]);
+  const [blockedList, setBlockedList] = React.useState<IUserPublic[]>([]);
 
   React.useEffect(() => {
     userService
-      .getUserBlockedUsers(loginContext.userLogin)
-      .then((blocked: IUserPublicInfos[]) => {
+      .getUserBlockedUsers(sessionContext.userSelf.login42)
+      .then((blocked: IUserPublic[]) => {
         setBlockedList(blocked);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
 
     socketContext.socket.on("update-relations", () => {
       userService
-        .getUserBlockedUsers(loginContext.userLogin)
-        .then((blocked: IUserPublicInfos[]) => {
+        .getUserBlockedUsers(sessionContext.userSelf.login42)
+        .then((blocked: IUserPublic[]) => {
           setBlockedList(blocked);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
   }, []);
 
   const handleUnblockOnClick = () => {
-    if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
+    if (
+      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== login
+    ) {
       userService
-        .unblockUser(loginContext.userLogin, login)
+        .unblockUser(sessionContext.userSelf.login42, login)
         .then(() => {
           socketContext.socket.emit("user:update-relations");
           socketContext.socket.emit("user:update-direct-messages");
           socketContext.socket.emit("user:update-channel-content");
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
   };
 
   const handleBlockOnClick = () => {
-    if (loginContext.userLogin !== null && loginContext.userLogin !== login) {
+    if (
+      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== login
+    ) {
       userService
-        .blockUser(loginContext.userLogin, login)
+        .blockUser(sessionContext.userSelf.login42, login)
         .then(() => {
           socketContext.socket.emit("user:update-relations");
           socketContext.socket.emit("user:update-direct-messages");
           socketContext.socket.emit("user:update-channel-content");
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
   };
 
-  if (
-    blockedList?.find((blocked: IUserPublicInfos) => blocked.login42 === login)
-  ) {
+  if (blockedList?.find((blocked: IUserPublic) => blocked.login42 === login)) {
     return (
       <div className={styles.buttons} onClick={handleUnblockOnClick}>
         Unblock

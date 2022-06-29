@@ -1,45 +1,34 @@
-import React from "react";
 import styles from "../../styles/Home.module.css";
-
-import { IUserPublicInfos } from "../../interfaces/users";
-
 import userService from "../../services/user";
-
-import { useLoginContext } from "../../context/LoginContext";
-
+import { useSessionContext } from "../../context/SessionContext";
 import { errorHandler } from "../../errors/errorHandler";
-
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
+import { IUserSlim } from "../../interfaces/IUser";
 
 export function ButtonRemoveFriend({
-  userInfos,
+  displayedUser,
 }: {
-  userInfos: IUserPublicInfos;
+  displayedUser: IUserSlim;
 }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
-  const removeFromFriend = () => {
-    if (
-      loginContext.userLogin !== null &&
-      loginContext.userLogin !== userInfos.login42
-    ) {
-      userService
-        .removeFriend(loginContext.userLogin, userInfos.login42)
-        .then(() => {
-          socketContext.socket.emit("user:update-relations");
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
-    }
+  const removeFromFriend = async () => {
+    await userService
+      .removeFriend(sessionContext.userSelf.login42, displayedUser.login42)
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
+        return;
+      });
+
+    socketContext.socket.emit("user:update-relations");
   };
 
   return (
-    <div className={styles.add_friend_button} onClick={removeFromFriend}>
+    <button className={styles.add_friend_button} onClick={removeFromFriend}>
       Remove friend
-    </div>
+    </button>
   );
 }

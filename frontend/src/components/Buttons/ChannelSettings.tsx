@@ -10,7 +10,7 @@ import { Channel } from "../../interfaces/users";
 import { errorHandler } from "../../errors/errorHandler";
 
 import { useErrorContext } from "../../context/ErrorContext";
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 import { ChannelSettingsDialog } from "../Inputs/ChannelSettingsDialog";
 import { ChannelInviteDialog } from "../Inputs/ChannelInviteDialog";
@@ -24,7 +24,7 @@ function MenuButtons({
   setAnchorEl: (anchorEl: any) => void;
 }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [settingsOpen, setSettingsOpen] = React.useState(false);
   const [invitationOpen, setInvitationOpen] = React.useState(false);
@@ -38,20 +38,20 @@ function MenuButtons({
   };
 
   const handleLeaveChannel = () => {
-    loginContext.setChatMenu?.("direct_message");
+    sessionContext.setChatMenu?.("direct_message");
     setAnchorEl(null);
     channelService
-      .leaveChannel(loginContext.userLogin, channel.id)
+      .leaveChannel(sessionContext.userSelf.login42, channel.id)
       .then(() => {
         socketContext.socket.emit("user:update-channel-content");
         socketContext.socket.emit("user:update-joined-channels");
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 
-  if (loginContext.userLogin === channel.owner) {
+  if (sessionContext.userSelf.login42 === channel.owner) {
     if (settingsOpen === true) {
       return (
         <ChannelSettingsDialog
@@ -77,7 +77,7 @@ function MenuButtons({
         </>
       );
     }
-  } else if (channel?.admins?.includes(loginContext.userLogin)) {
+  } else if (channel?.admins?.includes(sessionContext.userSelf.login42)) {
     if (invitationOpen === true) {
       return (
         <ChannelInviteDialog

@@ -9,7 +9,7 @@ import SendIcon from "@mui/icons-material/Send";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 
 import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
@@ -36,7 +36,7 @@ export function SendMessageField({
   channel: string;
 }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [error, setError] = React.useState(false);
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (
@@ -50,8 +50,8 @@ export function SendMessageField({
     if (input.length > 0) {
       if (channel.length === 36) {
         channelService
-          .sendMSGToChannel(loginContext.userLogin, channel, {
-            author: loginContext.userLogin,
+          .sendMSGToChannel(sessionContext.userSelf.login42, channel, {
+            author: sessionContext.userSelf.login42,
             content: input,
           })
           .then(() => {
@@ -66,20 +66,20 @@ export function SendMessageField({
       } else {
         const users = channel.split("|");
         const otherLogin =
-          users[0] === loginContext.userLogin ? users[1] : users[0];
+          users[0] === sessionContext.userSelf.login42 ? users[1] : users[0];
 
         privateConvService
-          .sendPrivateMessage(loginContext.userLogin, otherLogin, {
-            author: loginContext.userLogin,
+          .sendPrivateMessage(sessionContext.userSelf.login42, otherLogin, {
+            author: sessionContext.userSelf.login42,
             content: input,
           })
           .then(() => {
             socketContext.socket.emit("user:update-direct-messages");
             setInput("");
           })
-		  .catch((error) => {
-			errorContext.newError?.(errorHandler(error, loginContext));
-		  });
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, sessionContext));
+          });
       }
     }
   };
@@ -108,10 +108,7 @@ export function SendMessageField({
           label="Text message"
           endAdornment={
             <InputAdornment position="end" type="submit">
-              <IconButton
-                type="submit"
-                aria-label="send message"
-              >
+              <IconButton type="submit" aria-label="send message">
                 <SendIcon />
               </IconButton>
             </InputAdornment>

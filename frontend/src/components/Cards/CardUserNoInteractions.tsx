@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos } from "../../interfaces/users";
+import { IUserPublic } from "../../interfaces/IUser";
 
 import Avatar from "@mui/material/Avatar";
 import profileIcon from "../../public/profile_icon.png";
@@ -9,7 +9,7 @@ import profileIcon from "../../public/profile_icon.png";
 export function CardUserNoInteractions({
   userInfos,
 }: {
-  userInfos: IUserPublicInfos;
+  userInfos: IUserPublic;
 }) {
   return (
     <div className={styles.user_card} key={userInfos.login42}>

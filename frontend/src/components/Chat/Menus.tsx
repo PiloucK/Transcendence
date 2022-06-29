@@ -7,14 +7,9 @@ import channelImage from "../../public/channel_image.png";
 import directMessage from "../../public/direct_message.png";
 import addChannel from "../../public/add_channel.png";
 
-import { useLoginContext } from "../../context/LoginContext";
-import {
-  IUserPublicInfos,
-  IUserForLeaderboard,
-  PrivateConv,
-  Channel,
-  IUser,
-} from "../../interfaces/users";
+import { useSessionContext } from "../../context/SessionContext";
+
+import { PrivateConv, Channel } from "../../interfaces/Chat.interfaces";
 import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
 
@@ -37,8 +32,9 @@ import { errorHandler } from "../../errors/errorHandler";
 
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
+import { IUserSelf, IUserSlim } from "../../interfaces/IUser";
 
-function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUser }) {
+function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUserSelf }) {
   return (
     <div key={keyV} className={styles.chat_direct_message_menu_dm_selected}>
       <Avatar
@@ -69,12 +65,14 @@ function DMList({
   menu: string;
   setMenu: (menu: string) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   return openedDMs?.map((dm) => {
     const key = dm.userOne.login42 + "|" + dm.userTwo.login42;
     const user =
-      dm.userOne.login42 === loginContext.userLogin ? dm.userTwo : dm.userOne;
+      dm.userOne.login42 === sessionContext.userSelf.login42
+        ? dm.userTwo
+        : dm.userOne;
 
     if (key === menu) {
       return <SelectedDMMenu key={"selectedDMMenu"} keyV={key} user={user} />;
@@ -109,28 +107,28 @@ export function DirectMessageMenu(props: {
   setMenu: (menu: string) => void;
 }) {
   const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [openedDMs, setOpenedDMs] = React.useState<PrivateConv[]>([]);
 
   React.useEffect(() => {
     privateConvService
-      .getPrivateConvs(loginContext.userLogin)
+      .getPrivateConvs(sessionContext.userSelf.login42)
       .then((currentDMs: PrivateConv[]) => {
         setOpenedDMs(currentDMs);
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
 
     socketContext.socket.on("update-direct-messages", () => {
       privateConvService
-        .getPrivateConvs(loginContext.userLogin)
+        .getPrivateConvs(sessionContext.userSelf.login42)
         .then((currentDMs: PrivateConv[]) => {
           setOpenedDMs(currentDMs);
         })
         .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
   }, []);
@@ -168,14 +166,14 @@ function SelectedUserMenu({
   setSelectedUser,
   channel,
 }: {
-  user: IUserForLeaderboard;
+  user: IUserSlim;
   getUserStyle: (userLogin: string) => any;
   setSelectedUser: (userLogin: string) => void;
   channel: Channel;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
-  if (loginContext.userLogin === channel?.owner) {
+  if (sessionContext.userSelf.login42 === channel?.owner) {
     return (
       <div className={styles.selected_user}>
         <div
@@ -203,7 +201,7 @@ function SelectedUserMenu({
         <ButtonTxtSetAsAdmin login={user.login42} channel={channel} />
       </div>
     );
-  } else if (channel?.admins?.includes(loginContext.userLogin)) {
+  } else if (channel?.admins?.includes(sessionContext.userSelf.login42)) {
     return (
       <div className={styles.selected_user}>
         <div
@@ -259,7 +257,7 @@ function SelectedUserMenu({
 }
 
 function UserList({ channel }: { channel: Channel }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const [selectedUser, setSelectedUser] = useState<string>("");
 
   const getUserStyle = (userLogin: string) => {
@@ -272,8 +270,8 @@ function UserList({ channel }: { channel: Channel }) {
     }
   };
 
-  return channel.users.map((user) => {
-    if (user.login42 === loginContext.userLogin) {
+  return channel?.users?.map((user) => {
+    if (user.login42 === sessionContext.userSelf.login42) {
       return (
         <div key={user.login42} className={styles.connected_user}>
           <Avatar
@@ -344,11 +342,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -432,7 +426,7 @@ function ChannelList({
   getStyle: (key: string) => string;
   channels: Channel[];
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
   if (typeof channels === "undefined" || channels?.length === 0) return null;
   return channels?.map((channel) => {
@@ -441,7 +435,7 @@ function ChannelList({
         key={channel.id}
         className={getStyle(channel.id)}
         onClick={() => {
-          loginContext.setChatMenu?.(channel.id);
+          sessionContext.setChatMenu?.(channel.id);
         }}
       >
         <Avatar
@@ -465,11 +459,10 @@ function ChannelList({
 }
 
 export function ChatMenu(props: { channels: Channel[] }) {
-  const loginContext = useLoginContext();
-  const socketContext = useSocketContext();
+  const sessionContext = useSessionContext();
 
   const getStyle = (key: string) => {
-    if (loginContext.chatMenu === key) {
+    if (sessionContext.chatMenu === key) {
       return styles.chat_menu_button_selected;
     } else {
       return styles.chat_menu_button;
@@ -480,7 +473,7 @@ export function ChatMenu(props: { channels: Channel[] }) {
       <div
         className={getStyle("direct_message")}
         onClick={() => {
-          loginContext.setChatMenu?.("direct_message");
+          sessionContext.setChatMenu?.("direct_message");
         }}
       >
         <Image
@@ -494,7 +487,7 @@ export function ChatMenu(props: { channels: Channel[] }) {
       <div
         className={getStyle("add_channel")}
         onClick={() => {
-          loginContext.setChatMenu?.("add_channel");
+          sessionContext.setChatMenu?.("add_channel");
         }}
       >
         <Image src={addChannel} alt="add channel" width={45} height={45} />

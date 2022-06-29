@@ -1,4 +1,4 @@
-import { defaultErrorData, IErrorData } from "./IErrorData";
+import { IErrorData } from "./IErrorData";
 
 export interface IErrorContext {
   errorData: IErrorData;
@@ -6,8 +6,3 @@ export interface IErrorContext {
   hideError?: () => void;
   showError: boolean;
 }
-
-export const defaultErrorState: IErrorContext = {
-  errorData: defaultErrorData,
-  showError: false,
-};

@@ -1,7 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { Channel } from 'src/channel/channel.entity';
 import { PrivateConv } from 'src/privateConv/privateConv.entity';
-import { UserStatus } from 'src/status/status.entity';
 import {
   Column,
   Entity,
@@ -36,9 +35,6 @@ export class User {
   @Column({ default: 0 })
   gamesLost!: number;
 
-  @Column({ default: false })
-  online!: boolean;
-
   @ManyToMany(() => User)
   @JoinTable()
   friends!: User[];
@@ -66,9 +62,6 @@ export class User {
   // There is a many to many relation owned by the channel.
   @ManyToMany(() => Channel)
   users!: Channel[];
-
-  @OneToMany(() => UserStatus, (status) => status.user)
-  status!: UserStatus[];
 
   @Column({ default: false })
   isTwoFactorAuthEnabled!: boolean;

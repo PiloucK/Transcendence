@@ -1,10 +1,6 @@
 import styles from "../styles/Home.module.css";
-import { useLoginContext } from "../context/LoginContext";
-import { DockGuest } from "../components/Dock/DockGuest";
-import React, { useState } from "react";
-
-import { IUserPublicInfos } from "../interfaces/users";
-import userService from "../services/user";
+import { useSessionContext } from "../context/SessionContext";
+import { ReactElement, useEffect, useState } from "react";
 
 import { SocialMenu } from "../components/Social/menu";
 import {
@@ -13,138 +9,85 @@ import {
   NotificationContent,
 } from "../components/Social/pagesContent";
 
-import { errorHandler } from "../errors/errorHandler";
-
-import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
+import { DefaultLayout } from "../layouts/defaultLayout";
+import { UserStatusLayout } from "../layouts/userStatusLayout";
+import { useUserStatusContext } from "../context/UserStatusContext";
 
 function SocialPage({ menu }: { menu: string }) {
-  const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [friends, setFriends] = useState<IUserPublicInfos[]>([]);
-  const [blocked, setBlocked] = useState<IUserPublicInfos[]>([]);
-  const [notifications, setNotifications] = useState<IUserPublicInfos[]>([]);
+  const userStatusContext = useUserStatusContext();
 
-  React.useEffect(() => {
-    userService
-      .getUserFriends(loginContext.userLogin)
-      .then((friends: IUserPublicInfos[]) => {
-        setFriends(friends);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
-      });
-
-    userService
-      .getUserBlockedUsers(loginContext.userLogin)
-      .then((users: IUserPublicInfos[]) => {
-        setBlocked(users);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
-      });
-
-    userService
-      .getUserFriendRequestsReceived(loginContext.userLogin)
-      .then((notifications: IUserPublicInfos[]) => {
-        setNotifications(notifications);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, loginContext));
-      });
-
+  useEffect(() => {
     socketContext.socket.on("update-leaderboard", () => {
-      userService
-        .getUserFriends(loginContext.userLogin)
-        .then((friends: IUserPublicInfos[]) => {
-          setFriends(friends);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
-
-      userService
-        .getUserBlockedUsers(loginContext.userLogin)
-        .then((users: IUserPublicInfos[]) => {
-          setBlocked(users);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
-
-      userService
-        .getUserFriendRequestsReceived(loginContext.userLogin)
-        .then((notifications: IUserPublicInfos[]) => {
-          setNotifications(notifications);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
+      sessionContext.updateUserSelf?.();
     });
 
     socketContext.socket.on("update-relations", () => {
-      userService
-        .getUserFriends(loginContext.userLogin)
-        .then((friends: IUserPublicInfos[]) => {
-          setFriends(friends);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
-
-      userService
-        .getUserBlockedUsers(loginContext.userLogin)
-        .then((users: IUserPublicInfos[]) => {
-          setBlocked(users);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
-
-      userService
-        .getUserFriendRequestsReceived(loginContext.userLogin)
-        .then((notifications: IUserPublicInfos[]) => {
-          setNotifications(notifications);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, loginContext));
-        });
+      sessionContext.updateUserSelf?.();
     });
   }, []);
 
-  if (menu === "all" || menu === "online" || menu === "offline") {
-    return <FriendContent friends={friends} />;
+  if (menu === "all") {
+    return <FriendContent friends={sessionContext.userSelf.friends} />;
+  } else if (menu === "online") {
+    return (
+      <FriendContent
+        friends={sessionContext.userSelf.friends.filter((friend) => {
+          const status = userStatusContext.statuses.get(friend.login42);
+          if (status && status.status === "ONLINE") {
+            return true;
+          }
+          return false;
+        })}
+      />
+    );
+  } else if (menu === "offline") {
+    return (
+      <FriendContent
+        friends={sessionContext.userSelf.friends.filter((friend) => {
+          const status = userStatusContext.statuses.get(friend.login42);
+          if (!status || status.status === "OFFLINE") {
+            return true;
+          }
+          return false;
+        })}
+      />
+    );
   } else if (menu === "blocked") {
-    return <BlockedContent users={blocked} />;
+    return <BlockedContent users={sessionContext.userSelf.blockedUsers} />;
   } else if (menu === "notifications") {
     return (
       <NotificationContent
-        blockedUsers={blocked}
-        notifications={notifications}
+        blockedUsers={sessionContext.userSelf.blockedUsers}
+        notifications={sessionContext.userSelf.friendRequestsReceived}
       />
     );
+  } else {
+    return <></>;
   }
 }
 
 export default function Social() {
   const [menu, setMenu] = useState("all");
-  const errorContext = useErrorContext();
-  const loginContext = useLoginContext();
 
   if (typeof window !== "undefined") {
     document.body.style.backgroundColor = "#00213D";
   }
 
-  if (loginContext.userLogin === null) {
-    return <DockGuest />;
-  } else {
-    return (
-      <>
-        <div className={styles.social_title}>Friends</div>
-        <SocialMenu menu={menu} setMenu={setMenu} />
-        <SocialPage menu={menu} />
-      </>
-    );
-  }
+  return (
+    <>
+      <div className={styles.social_title}>Friends</div>
+      <SocialMenu menu={menu} setMenu={setMenu} />
+      <SocialPage menu={menu} />
+    </>
+  );
 }
+Social.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <DefaultLayout>
+      <UserStatusLayout>{page}</UserStatusLayout>
+    </DefaultLayout>
+  );
+};

@@ -1,14 +1,12 @@
 import {
   ConflictException,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from './user.entity';
 import { UsersRepository } from './users.repository';
-import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 import { ConfigService } from '@nestjs/config';
@@ -59,24 +57,17 @@ export class UsersService {
     return this.usersRepository.getUserWithRelations(login42, []);
   }
 
-  createUser(createUserDto: CreateUserDto): Promise<User> {
-    return this.usersRepository.createUser(createUserDto);
+  getUserWithAllRelations(login42: string): Promise<User> {
+    return this.usersRepository.getUserWithRelations(login42, [
+      'friends',
+      'friendRequestsSent',
+      'friendRequestsReceived',
+      'blockedUsers',
+    ]);
   }
 
-  async deleteAllUsers(): Promise<void> {
-    const users = await this.getAllUsers();
-    await this.usersRepository.remove(users);
-  }
-
-  async updateOnlineStatus(login42: string, online: boolean): Promise<void> {
-    const result = await this.usersRepository.update(login42, { online });
-    if (result.affected === 0) {
-      throw new NotFoundException(`User with login42 "${login42}" not found`);
-    }
-  }
-
-  getUserWithStatus(login42: string): Promise<User> {
-    return this.usersRepository.getUserWithRelations(login42, ['status']);
+  createUser(login42: string, photo42: string): Promise<User> {
+    return this.usersRepository.createUser(login42, photo42);
   }
 
   async updateUsername(
