@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublic } from "../../interfaces/IUser";
+import { IUserSlim } from "../../interfaces/IUser";
 import { PrivateConv } from "../../interfaces/Chat.interfaces";
 
 import Avatar from "@mui/material/Avatar";
@@ -17,7 +17,7 @@ export function CardUserDM({
   userInfos,
   setMenu,
 }: {
-  userInfos: IUserPublic;
+  userInfos: IUserSlim;
   setMenu: (menu: string) => void;
 }) {
   const errorContext = useErrorContext();
@@ -26,7 +26,7 @@ export function CardUserDM({
 
   const createPrivateConv = () => {
     if (
-      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== "Norminet" &&
       sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       privateConvService

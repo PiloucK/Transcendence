@@ -28,20 +28,16 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { ButtonAcceptChannelInvite } from "../Buttons/ButtonAcceptChannelInvite";
 import { useSocketContext } from "../../context/SocketContext";
 
-function FriendList({
-  friends,
-  setMenu,
-}: {
-  friends: IUserPublic[];
-  setMenu: (menu: string) => void;
-}) {
-  if (typeof friends === "undefined" || friends.length === 0) {
+function FriendList({ setMenu }: { setMenu: (menu: string) => void }) {
+  const sessionContext = useSessionContext();
+
+  if (sessionContext.userSelf.friends.length === 0) {
     return <EmptyFriendList />;
   }
 
   return (
     <div className={styles.social_content}>
-      {friends.map((friend) =>
+      {sessionContext.userSelf.friends.map((friend) =>
         CardUserDM({ userInfos: friend, setMenu: setMenu })
       )}
     </div>
@@ -49,47 +45,10 @@ function FriendList({
 }
 
 function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
-  const errorContext = useErrorContext();
-  const sessionContext = useSessionContext();
-  const socketContext = useSocketContext();
-  const [friends, setFriends] = useState<IUserPublic[]>([]);
-
-  React.useEffect(() => {
-    userService
-      .getUserFriends(sessionContext.userSelf.login42)
-      .then((friends: IUserPublic[]) => {
-        setFriends(friends);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, sessionContext));
-      });
-
-    socketContext.socket.on("update-leaderboard", () => {
-      userService
-        .getUserFriends(sessionContext.userSelf.login42)
-        .then((friends: IUserPublic[]) => {
-          setFriends(friends);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-    });
-    socketContext.socket.on("update-relations", () => {
-      userService
-        .getUserFriends(sessionContext.userSelf.login42)
-        .then((friends: IUserPublic[]) => {
-          setFriends(friends);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-    });
-  }, []);
-
   return (
     <div className={styles.chat_direct_message_content}>
       Select a friend to start a conversation
-      <FriendList friends={friends} setMenu={setMenu} />
+      <FriendList setMenu={setMenu} />
     </div>
   );
 }
