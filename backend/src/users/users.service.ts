@@ -70,6 +70,11 @@ export class UsersService {
     return this.usersRepository.createUser(login42, photo42);
   }
 
+  async deleteAllUsers(): Promise<void> {
+    const users = await this.getAllUsers();
+    await this.usersRepository.remove(users);
+  }
+
   async updateUsername(
     reqUser: User,
     login42: string,
