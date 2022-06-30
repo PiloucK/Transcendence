@@ -45,17 +45,17 @@ function NavigationDock({
       .addOne(username)
       .then((user: IUserSelf) => {
         sessionContext.login?.(user);
-        socketContext.socket.emit("user:new", username);
+        socketContext.socket.emit("user:new");
         setUsername("");
 
         authService
           .getToken(username)
           .then((login42: string) => {
             console.log("new token for", login42, "stored in cookie");
+            sessionContext.updateUserSelf?.();
           })
           .catch((error) => {
             errorContext.newError?.(errorHandler(error, sessionContext));
-            // errorContext.newError(errorParse)
           });
       })
       .catch((error) => {

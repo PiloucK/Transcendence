@@ -27,24 +27,22 @@ export function DockGuest() {
   const sessionContext = useSessionContext();
   const errorContext = useErrorContext();
   const socketContext = useSocketContext();
-  const [username, setUsername] = useState("");
 
   const addUser = (event) => {
     userService
       .addOne('coucou')
       .then((user: IUserSelf) => {
         sessionContext.login?.(user);
-        socketContext.socket.emit("user:new", username);
-        setUsername("");
+        socketContext.socket.emit("user:new");
 
         authService
           .getToken('coucou')
           .then((login42: string) => {
             console.log("new token for", login42, "stored in cookie");
+            sessionContext.updateUserSelf?.();
           })
           .catch((error) => {
             errorContext.newError?.(errorHandler(error, sessionContext));
-            // errorContext.newError(errorParse)
           });
       })
       .catch((error) => {
