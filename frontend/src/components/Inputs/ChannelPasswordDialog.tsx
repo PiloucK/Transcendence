@@ -31,8 +31,8 @@ export function ChannelPasswordDialog({
   setOpen,
 }: {
   channelId: string;
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  open: { state: boolean; id: string };
+  setOpen: (open: { state: boolean; id: string }) => void;
 }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
@@ -41,11 +41,11 @@ export function ChannelPasswordDialog({
   const [error, setError] = React.useState(false);
 
   const handleClose = () => {
-    setOpen(false);
+    setOpen({ state: false, id: "" });
   };
 
   const handleSubmit = () => {
-    setOpen(false);
+    setOpen({ state: false, id: "" });
     channelService
       .joinProtectedChannel(sessionContext.userSelf.login42, channelId, input)
       .then((channel: Channel) => {
@@ -65,7 +65,7 @@ export function ChannelPasswordDialog({
             backgroundColor: "#163F5B",
           },
         }}
-        open={open}
+        open={open.state}
         onClose={handleClose}
       >
         <DialogTitle>Protected channel</DialogTitle>
