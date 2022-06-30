@@ -5,7 +5,11 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 import channelService from "../../services/channel";
-import { Channel } from "../../interfaces/Chat.interfaces";
+import { Channel } from "../../interfaces/users";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSessionContext } from "../../context/SessionContext";
 
 import { ChannelSettingsDialog } from "../Inputs/ChannelSettingsDialog";
@@ -19,6 +23,7 @@ function MenuButtons({
   channel: Channel;
   setAnchorEl: (anchorEl: any) => void;
 }) {
+  const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [settingsOpen, setSettingsOpen] = React.useState(false);
@@ -35,42 +40,60 @@ function MenuButtons({
   const handleLeaveChannel = () => {
     sessionContext.setChatMenu?.("direct_message");
     setAnchorEl(null);
-    channelService.leaveChannel(sessionContext.userSelf.login42, channel.id).then(() => {
-      socketContext.socket.emit("user:update-channel-content");
-      socketContext.socket.emit("user:update-joined-channel");
-    });
+    channelService
+      .leaveChannel(sessionContext.userSelf.login42, channel.id)
+      .then(() => {
+        socketContext.socket.emit("user:update-channel-content");
+        socketContext.socket.emit("user:update-joined-channels");
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
+      });
   };
 
   if (sessionContext.userSelf.login42 === channel.owner) {
-    return (
-      <>
-        <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
-        <MenuItem onClick={handleSettings}>Admin settings</MenuItem>
-        <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
+    if (settingsOpen === true) {
+      return (
         <ChannelSettingsDialog
           channel={channel}
           open={settingsOpen}
           setOpen={setSettingsOpen}
         />
+      );
+    } else if (invitationOpen === true) {
+      return (
         <ChannelInviteDialog
           channel={channel}
           open={invitationOpen}
           setOpen={setInvitationOpen}
         />
-      </>
-    );
+      );
+    } else {
+      return (
+        <>
+          <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
+          <MenuItem onClick={handleSettings}>Admin settings</MenuItem>
+          <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
+        </>
+      );
+    }
   } else if (channel?.admins?.includes(sessionContext.userSelf.login42)) {
-    return (
-      <>
-        <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
-        <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
+    if (invitationOpen === true) {
+      return (
         <ChannelInviteDialog
           channel={channel}
           open={invitationOpen}
           setOpen={setInvitationOpen}
         />
-      </>
-    );
+      );
+    } else {
+      return (
+        <>
+          <MenuItem onClick={handleInvitation}>Invite friends</MenuItem>
+          <MenuItem onClick={handleLeaveChannel}>Leave channel</MenuItem>
+        </>
+      );
+    }
   } else {
     return (
       <>

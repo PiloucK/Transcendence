@@ -10,6 +10,10 @@ export class ChannelInfoDto {
   @IsString()
   name!: string;
 
+  @IsNotEmpty()
+  @IsBoolean()
+  setPassword!: boolean;
+
   @IsString()
   password!: string;
 

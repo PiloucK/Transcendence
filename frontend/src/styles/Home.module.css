@@ -2014,7 +2014,7 @@ and should display them in columns of three cards max */
 
 .public_profile_buttons {
   position: absolute;
-  top: 80%;
+  top: 85%;
   left: 50%;
   transform: translate(-50%, -50%);
   /* bottom: 5.51%; */

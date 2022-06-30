@@ -12,6 +12,7 @@ import {
   Message,
   restriction,
 } from './dto/channel.dto';
+import * as bcrypt from 'bcrypt';
 
 @EntityRepository(Channel)
 export class ChannelRepository extends Repository<Channel> {
@@ -37,7 +38,9 @@ export class ChannelRepository extends Repository<Channel> {
     createChannelDto: ChannelInfoDto,
   ): Promise<Channel> {
     const channel = this.create({
-      ...createChannelDto,
+      name: createChannelDto.name,
+      isPrivate: createChannelDto.isPrivate,
+      password: '',
       owner: user.login42,
       admins: [user.login42],
       muted: [],
@@ -46,6 +49,9 @@ export class ChannelRepository extends Repository<Channel> {
       invitations: [],
       users: [user],
     });
+    if (createChannelDto.password !== '') {
+      channel.password = await bcrypt.hash(createChannelDto.password, 10);
+    }
     await this.save(channel);
     return channel;
   }
@@ -66,7 +72,13 @@ export class ChannelRepository extends Repository<Channel> {
     this.resolveChannelRestrictions(channel);
 
     channel.name = updateChannelDto.name;
-    channel.password = updateChannelDto.password;
+    if (updateChannelDto.setPassword === true) {
+      if (updateChannelDto.password === '') {
+        channel.password = '';
+      } else {
+        channel.password = await bcrypt.hash(updateChannelDto.password, 10);
+      }
+    }
     channel.isPrivate = updateChannelDto.isPrivate;
 
     await this.save(channel);
@@ -81,7 +93,6 @@ export class ChannelRepository extends Repository<Channel> {
       relations: ['users'],
       where: {
         id: joinProtectedChannelDto.channelId,
-        password: joinProtectedChannelDto.password,
       },
     });
 
@@ -97,6 +108,16 @@ export class ChannelRepository extends Repository<Channel> {
     }
     if (channel.users.find(({ login42 }) => login42 === user.login42)) {
       return channel;
+    }
+    if (channel.password) {
+      if (
+        !(await bcrypt.compare(
+          joinProtectedChannelDto.password,
+          channel.password,
+        ))
+      ) {
+        throw new ForbiddenException('Wrong password');
+      }
     }
     channel.users.push(user);
     channel.invitations = channel.invitations.filter(
@@ -155,13 +176,6 @@ export class ChannelRepository extends Repository<Channel> {
       throw new Error('You are not an admin of this channel');
     }
 
-    if (
-      channel.muted?.find(
-        ({ login }) => login === muteAChannelUserDto.userLogin42,
-      )
-    ) {
-      return channel;
-    }
     channel.muted?.push({
       login: muteAChannelUserDto.userLogin42,
       until: muteAChannelUserDto.duration * 1000 + Date.now(),
@@ -297,6 +311,17 @@ export class ChannelRepository extends Repository<Channel> {
     }
     this.resolveChannelRestrictions(channel);
 
+    if (
+      typeof user.blockedUsers !== undefined &&
+      user.blockedUsers?.length > 0
+    ) {
+      channel.messages = channel.messages.filter(
+        (message) =>
+          !user.blockedUsers
+            .map((user) => user.login42)
+            .includes(message.author),
+      );
+    }
     return channel;
   }
 
