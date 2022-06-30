@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../../styles/Home.module.css";
+import styles from "./ProfileSettingsDialog.module.css";
 
 import { TextField } from "../Inputs/TextField";
 
@@ -115,7 +115,9 @@ export function ProfileSettingsDialog({
           open={open}
           onClose={handleClose}
         >
-          <DialogTitle>User settings</DialogTitle>
+          <DialogTitle className={styles.profileSettingsTitle}>
+              User settings
+          </DialogTitle>
           <DialogContent>
             <div className={styles.chat_create_channel_form_input}>
               Username

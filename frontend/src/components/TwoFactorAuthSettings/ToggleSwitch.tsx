@@ -10,14 +10,15 @@ export default function ToggleSwitch({
   checked: boolean;
   setChecked: Dispatch<SetStateAction<boolean>>;
 }) {
-  const doStuff = () => {
+
+  const onChange = () => {
     setChecked(!checked);
   };
 
   return (
     <FormControlLabel
       control={
-        <Switch className={style.switch} checked={checked} onChange={doStuff} />
+        <Switch className={style.switch} checked={checked} onChange={onChange} />
       }
       label="Two Factor Authentification"
     />
