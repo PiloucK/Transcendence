@@ -83,8 +83,9 @@ export class UsersService {
     this.restrictToReqUser(reqUser, login42);
 
     const { username } = updateUsernameDto;
-    reqUser.username = username;
-    await this.usersRepository.save(reqUser);
+    await this.usersRepository.update(login42, {
+      username,
+    });
     return reqUser;
   }
 
