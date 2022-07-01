@@ -5,7 +5,6 @@ import {
   Post,
   Param,
   Patch,
-  Query,
   Delete,
   UseGuards,
   UseInterceptors,
