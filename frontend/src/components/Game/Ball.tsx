@@ -21,10 +21,7 @@ const Ball = ({
 
 }) => {
   const firstRender = useRef(true);
-  const [ballPosition, setBallPosition] = useState<ICoordinates>({
-	x: 50,
-    y: ballInfo.position.y,
-	});
+  const [ballPosition, setBallPosition] = useState<ICoordinates>(ballInfo.position);
   let ballDirection = useRef<ICoordinates>(ballInfo.direction);
   let ballVelocity = INITIAL_VELOCITY;
 
@@ -72,11 +69,10 @@ const Ball = ({
 
       let angleRad = (collidePoint * Math.PI) / 4;
 
-	//   ballDirection.current.x = Math.cos(angleRad);
-	//   ballDirection.current.y = Math.sin(angleRad);
-
-
-      gameSocket.emit("game:ballCountered", {position : ballPosition, direction : ballDirection.current}, angleRad, gameID, player1);
+		// En utilisant rect on assure d'avoir la position acutelle car ballPosition ne renvoie pas la valeur la plus à jour (cf le console log du back dans ballCountered)
+	  let ballNowX = ballRect.x / window.innerHeight * 100;
+	  let ballNowY =  ballRect.y / window.innerWidth * 100;
+      gameSocket.emit("game:ballCountered", {position : {x: ballNowX, y: ballNowY}, direction : ballDirection.current}, angleRad, gameID, player1);
 
       setBallPosition((prevState) => ({
         x: paddleBorderRatio + ballRadiusWidthRatio,
@@ -111,10 +107,8 @@ const Ball = ({
         (ballInfo: IBallInfo, player: string) => {
           ballDirection.current.x = ballInfo.direction.x;
           ballDirection.current.y = ballInfo.direction.y;
-          console.log("player=", player, "player2= ", player2);
           if (player === player2) {
             ballDirection.current.x *= -1;
-			console.log('inside NEW BALL DIR');
 			
             let playerPaddle = document
               .getElementById("player-paddle")
@@ -138,7 +132,9 @@ const Ball = ({
     return () => {
       cancelAnimationFrame(requestRef.current);
     };
-  }, []); // Make sure the effect runs only once
+  }, []);
+
+// Utiliser un UseEffect pour recup les props et set pos et dir?
 
   useEffect(() => {
     const ballElem = document.getElementById("ball") as HTMLElement;

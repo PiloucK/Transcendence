@@ -30,12 +30,10 @@ const Pong = () => {
 
   const secondMount = useRef(false);
   const [playGame, setPlayGame] = useState(false);
-  const ballInfo = useRef<IBallInfo>({
+  const [ballInfo, setBallInfo] = useState<IBallInfo>({
     position: { x: 50, y: 50 },
     direction: { x: 0, y: 0 },
   });
-
-
 
   useEffect(() => {
     console.log("USE EFFECT PONG");
@@ -66,7 +64,7 @@ const Pong = () => {
 
       gameSocket.current.on("game:point-start", (data: IBallInfo) => {
         data.direction.x *= invert.current;
-        ballInfo.current = data;
+        setBallInfo(data); // utilisation d'un useState pour tester l'envoie des infos depuis game, sinon revenir sur un useRef
         setPlayGame(true);
         console.log("NEW POINT", data);
       });
@@ -74,13 +72,22 @@ const Pong = () => {
     //   gameSocket.current.on(
     //     "game:newBallInfo",
     //     (newBallInfo: IBallInfo, player: string) => {
-    //       ballInfo.current = newBallInfo;
+    //       let playerPaddle = document
+    //         .getElementById("player-paddle")
+    //         ?.getBoundingClientRect() as DOMRect;
 
-	// 		console.log(ballInfo.current);
-			
+    //       let paddleBorderRatio =
+    //         (playerPaddle.right / window.innerWidth) * 100;
+
+    //       const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
     //       if (player === player2.current) {
-    //         ballInfo.current.direction.x *= -1;
-    //       }
+    //         newBallInfo.direction.x *= -1;
+
+    //         newBallInfo.position.x =
+    //           100 - (paddleBorderRatio + ballRadiusWidthRatio);
+    //       } else
+    //         newBallInfo.position.x = paddleBorderRatio + ballRadiusWidthRatio;
+    //       setBallInfo(newBallInfo);
     //     }
     //   );
 
@@ -133,11 +140,11 @@ const Pong = () => {
       <Score player={playerScore} opponent={opponentScore} />
       {playGame === true && (
         <Ball
-          ballInfo={ballInfo.current}
+          ballInfo={ballInfo}
           gameSocket={gameSocket.current}
           gameID={gameID.current}
           player1={player1.current}
-		  player2={player2.current}
+          player2={player2.current}
         />
       )}
       <PlayerPaddle
