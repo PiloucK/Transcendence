@@ -22,9 +22,6 @@ export const SessionProvider = ({
   const [userSelf, setUserSelf] = useState(defaultSessionState.userSelf);
   const [chatMenu, setChatMenu] = useState(defaultSessionState.chatMenu);
   const [chatDM, setChatDM] = useState(defaultSessionState.chatDM);
-  const [showSecondFactorLogin, setShowSecondFactorLogin] = useState(
-    defaultSessionState.showSecondFactorLogin
-  );
 
   const login = (userSelf: IUserSelf) => {
     socketContext.socket.emit("user:login", userSelf.login42);
@@ -58,8 +55,6 @@ export const SessionProvider = ({
         setChatDM,
         login,
         logout,
-        showSecondFactorLogin,
-        setShowSecondFactorLogin,
       }}
     >
       {children}
