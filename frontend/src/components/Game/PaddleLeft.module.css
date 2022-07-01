@@ -6,6 +6,6 @@
     transform: translateY(-50%); /* makes the center of the paddle as the middle (and not the top) */
     width: 1vh;
     height: 10vh;
-    border-radius: 1vw;
+    border-radius: 1vh;
     left: 1vw; /* 1% of the screen away from left hand side */
 }

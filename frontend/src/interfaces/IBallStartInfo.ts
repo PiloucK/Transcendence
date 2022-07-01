@@ -1,6 +1,6 @@
 import { ICoordinates } from "./ICoordinates";
 
 export interface IBallStartInfo {
-	position: ICoordinates,
+	positionY: number,
 	direction: ICoordinates,
 }

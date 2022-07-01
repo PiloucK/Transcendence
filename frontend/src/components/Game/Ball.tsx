@@ -7,19 +7,25 @@ import { IBallStartInfo } from "../../interfaces/IBallStartInfo";
 const INITIAL_VELOCITY = 0.035;
 
 const Ball = ({
+  updateScore,
   ballStartPos,
   gameSocket,
   gameID,
   player1,
+  player2,
+  invert,
 }: {
+  updateScore: (winner: string) => void;
   ballStartPos: IBallStartInfo;
   gameSocket: Socket;
   gameID: string;
   player1: string;
+  player2: string;
+  invert: number;
 }) => {
   const [ballPosition, setBallPosition] = useState<ICoordinates>({
     x: 50,
-    y: ballStartPos.position?.y,
+    y: ballStartPos.positionY,
   });
 
   const firstRender = useRef(true);
@@ -48,23 +54,21 @@ const Ball = ({
       ?.getBoundingClientRect() as DOMRect;
 
     let paddleBorderRatio = (playerPaddle.right / window.innerWidth) * 100;
-    // console.log("borderRatio", paddleBorderRatio, playerPaddle.right, window.innerWidth, ballRect.left);
-    
 
     const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
-    // const ballRadiusHeightRatio = window.innerHeight / window.innerHeight;
+    const ballRadiusHeightRatio = window.innerHeight / window.innerHeight;
 
     if (ballRect?.bottom > window.innerHeight) {
       ballDirection.current.y *= -1;
       setBallPosition((prevState) => ({
         x: prevState.x,
-        y: 100 - 1,
+        y: 100 - ballRadiusHeightRatio,
       }));
     } else if (ballRect?.top < 0) {
       ballDirection.current.y *= -1;
       setBallPosition((prevState) => ({
         x: prevState.x,
-        y: 1,
+        y: ballRadiusHeightRatio,
       }));
     } else if (paddleCollision(playerPaddle, ballRect)) {
       let collidePoint =
@@ -73,31 +77,22 @@ const Ball = ({
 
       let angleRad = (collidePoint * Math.PI) / 4;
 
-      ballDirection.current.x = Math.cos(angleRad);
-      ballDirection.current.y = Math.sin(angleRad);
+      //   ballDirection.current.x =  Math.cos(angleRad);
+      //   ballDirection.current.y = Math.sin(angleRad);
+
+      gameSocket.emit("game:ballCountered", angleRad, gameID, player1);
 
       setBallPosition((prevState) => ({
         x: paddleBorderRatio + ballRadiusWidthRatio,
         y: prevState.y,
       }));
-
-      gameSocket.emit(
-        "game:ballCountered",
-        angleRad,
-        ballPosition.x,
-        ballPosition.y,
-        gameID,
-        player1,
-      );
-
     } else if (ballRect?.left <= 0) {
-      // updateScore("opponent");
-      gameSocket.emit("game:point-lost", gameID, player1);
+      updateScore("opponent");
       //   resetBall();
       //   ballDirection.current.x = Math.abs(ballDirection.current.x);
       //   ballDirection.current.x *= -1;
-      // } else if (ballRect?.right >= window.innerWidth) {
-      //   updateScore("player");
+    } else if (ballRect?.right >= window.innerWidth) {
+      updateScore("player");
       //   resetBall();
       //   ballDirection.current.x = Math.abs(ballDirection.current.x);
     }
@@ -121,28 +116,27 @@ const Ball = ({
     if (firstRender.current === true) {
       document.body.style.overflow = "hidden";
 
-      // console.log("player=", player, "player2= ", player2);
+      gameSocket.on(
+        "game:newBallDirection",
+        (newDirection: ICoordinates, player: string) => {
+          ballDirection.current.x = newDirection.x;
+          ballDirection.current.y = newDirection.y;
+		  console.log("player=", player, "player2= ", player2);
+			if (player === player2)
+				ballDirection.current.x *= -1;
+		}
+      );
       firstRender.current = false;
     }
-      requestRef.current = requestAnimationFrame(animate);
 
+    requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current);
   }, []); // Make sure the effect runs only once
 
   useEffect(() => {
-    ballDirection.current = ballStartPos.direction;
-    if (ballPosition.x !== 50) {
-      setBallPosition((prevState) => ({
-        x: prevState.x,
-        y: ballStartPos.position?.y,
-      }));
-    }
-  }, [ballStartPos]);
-
-  useEffect(() => {
     const ballElem = document.getElementById("ball") as HTMLElement;
     ballElem.style.setProperty("--x", ballPosition.x.toString());
-    ballElem.style.setProperty("--y", ballPosition.y?.toString());
+    ballElem.style.setProperty("--y", ballPosition.y.toString());
   });
 
   return <div className={styles.ball} id="ball"></div>;
