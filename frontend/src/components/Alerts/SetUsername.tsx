@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogTitle } from "@mui/material";
 import { AxiosError } from "axios";
 import { FormEventHandler, useState } from "react";
+import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSessionContext } from "../../context/SessionContext";
 import { errorHandler } from "../../errors/errorHandler";
@@ -27,7 +28,7 @@ export const SetUsernameDialog = () => {
         .catch((caughtError: Error | AxiosError) => {
           const parsedError = errorHandler(caughtError, sessionContext);
           if (
-            parsedError.statusCode === 409 &&
+            parsedError.statusCode === HttpStatusCodes.CONFLICT &&
             parsedError.message.startsWith(
               "duplicate key value violates unique constraint"
             )

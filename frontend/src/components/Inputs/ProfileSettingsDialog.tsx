@@ -24,6 +24,7 @@ import { useSocketContext } from "../../context/SocketContext";
 import { IUserSelf } from "../../interfaces/IUser";
 import { useSessionContext } from "../../context/SessionContext";
 import { AxiosError } from "axios";
+import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 
 export function ProfileSettingsDialog({
   user,
@@ -75,7 +76,7 @@ export function ProfileSettingsDialog({
           .catch((caughtError: Error | AxiosError) => {
             const parsedError = errorHandler(caughtError, sessionContext);
             if (
-              parsedError.statusCode === 409 &&
+              parsedError.statusCode === HttpStatusCodes.CONFLICT &&
               parsedError.message.startsWith(
                 "duplicate key value violates unique constraint"
               )
