@@ -228,6 +228,11 @@ export class ChannelService {
     }
     this.resolveChannelRestrictions(channel);
 
+    if (
+      channel.owner !== user.login42 &&
+      !channel.admins.includes(user.login42)
+    )
+      throw new Error('Only admins can invite friends');
     if (channel.invitations.includes(inviteToChannelDto.userLogin42)) {
       return channel;
     }
