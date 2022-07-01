@@ -11,10 +11,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSessionContext } from "../../context/SessionContext";
 import channelService from "../../services/channel";
 import { useSocketContext } from "../../context/SocketContext";
@@ -26,13 +28,14 @@ export function ButtonTxtBanUser({
   login: string;
   channel: Channel;
 }) {
+  const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [open, setOpen] = React.useState(false);
-  const [time, setTime] = React.useState<number | string>(300);
+  const [time, setTime] = React.useState<number>(300);
 
   const handleChange = (event: SelectChangeEvent<typeof time>) => {
-    setTime(Number(event.target.value) || "");
+    setTime(Number(event.target.value) || 0);
   };
 
   const handleClickOpen = () => {
@@ -45,11 +48,11 @@ export function ButtonTxtBanUser({
       .banAChannelUser(sessionContext.userSelf.login42, channel.id, login, time)
       .then(() => {
         socketContext.socket.emit("user:update-public-channels");
-        socketContext.socket.emit("user:update-joined-channel");
+        socketContext.socket.emit("user:update-joined-channels");
         socketContext.socket.emit("user:update-channel-content");
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 

@@ -10,24 +10,40 @@ import channelImage from "../../public/channel_image.png";
 import channelService from "../../services/channel";
 
 import { ChannelPasswordDialog } from "../Inputs/ChannelPasswordDialog";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
-export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
+export function CardPublicChannel({
+  channelInfos,
+  open,
+  setOpen,
+}: {
+  channelInfos: Channel;
+  open: { state: boolean; id: string };
+  setOpen: (open: { state: boolean; id: string }) => void;
+}) {
+  const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [open, setOpen] = React.useState(false);
+  //   const [open, setOpen] = React.useState(false);
 
   const joinChannel = () => {
     if (sessionContext.userSelf.login42 !== null) {
       if (channelInfos.password !== "") {
-        setOpen(true);
+        setOpen({ state: true, id: channelInfos.id });
       } else {
         channelService
           .joinChannel(sessionContext.userSelf.login42, channelInfos.id)
           .then((channel: Channel) => {
             sessionContext.setChatMenu?.(channel.id);
-            socketContext.socket.emit("user:update-joined-channel");
+            socketContext.socket.emit("user:update-joined-channels");
             socketContext.socket.emit("user:update-channel-content");
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, sessionContext));
           });
       }
     }
@@ -57,7 +73,7 @@ export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
       </div>
       <ChannelPasswordDialog
         channelId={channelInfos.id}
-        open={open}
+        open={open.id === channelInfos.id ? open : { state: false, id: "" }}
         setOpen={setOpen}
       />
     </div>

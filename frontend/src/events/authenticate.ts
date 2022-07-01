@@ -18,7 +18,7 @@ export const authenticate = (
       .getLoggedInUser()
       .then((userSelf) => {
         sessionContext.login?.(userSelf);
-        socketContext.socket.emit("user:new", userSelf.login42);
+        socketContext.socket.emit("user:new");
       })
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));

@@ -10,6 +10,8 @@ import Image from "next/image";
 import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
 
 import userService from "../../services/user";
+import { errorHandler } from "../../errors/errorHandler";
+import { useErrorContext } from "../../context/ErrorContext";
 
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
@@ -31,6 +33,7 @@ export function ProfileSettingsDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
+  const errorContext = useErrorContext();
   const socketContext = useSocketContext();
   const sessionContext = useSessionContext();
   const [username, setUsername] = useState(user.username);
@@ -62,20 +65,31 @@ export function ProfileSettingsDialog({
     }
     if (error === false) {
       setOpen(false);
-      userService.updateUserUsername(user.login42, username).then(() => {
-        socketContext.socket.emit("user:update-username");
-      });
+      if (username !== user.username) {
+        userService
+          .updateUserUsername(user.login42, username)
+          .then(() => {
+            sessionContext.updateUserSelf?.(); //! Can be done only once
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, sessionContext));
+          });
+      }
       if (newImage !== undefined) {
         const formData = new FormData();
         formData.append("file", newImage);
-        userService.updateUserImage(user.login42, formData).then(() => {
-          setNewImage(undefined);
-          setPreview("");
-          socketContext.socket.emit("user:update-image");
-        });
+        userService
+          .updateUserImage(user.login42, formData)
+          .then(() => {
+            setNewImage(undefined);
+            setPreview("");
+            sessionContext.updateUserSelf?.(); //! Can be done only once
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, sessionContext));
+          });
       }
     }
-    sessionContext.updateUserSelf?.();
   };
 
   return (

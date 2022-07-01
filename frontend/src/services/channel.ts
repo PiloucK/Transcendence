@@ -10,14 +10,11 @@ axios.defaults.withCredentials = true;
 const createChannel = (login: string, channelInfos: ChannelCreation) => {
   const request = axios.post(`${baseUrl}/${login}/createChannel`, {
     name: channelInfos.name,
+    setPassword: channelInfos.setPassword,
     password: channelInfos.password,
     isPrivate: channelInfos.isPrivate,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 const updateChannel = (
@@ -29,24 +26,21 @@ const updateChannel = (
     `${baseUrl}/${login}/updateChannel/${channelId}`,
     {
       name: channelInfos.name,
+      setPassword: channelInfos.setPassword,
       password: channelInfos.password,
       isPrivate: channelInfos.isPrivate,
     }
   );
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
-const updateChannelImage = (login: string, channelId: string, file: Blob) => {
+const updateChannelImage = (
+  login: string,
+  channelId: string,
+  file: FormData
+) => {
   const request = axios.post(`${baseUrl}/${login}/image/${channelId}`, file);
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 const joinProtectedChannel = (
@@ -58,11 +52,7 @@ const joinProtectedChannel = (
     channelId,
     password,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 const joinChannel = (login: string, channelId: string) => {
@@ -86,22 +76,14 @@ const inviteToChannel = (
     channelId,
     userLogin42,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 const leaveChannel = (login: string, channelId: string) => {
   const request = axios.patch(`${baseUrl}/${login}/leaveChannel`, {
     channelId,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 const muteAChannelUser = (
@@ -115,11 +97,7 @@ const muteAChannelUser = (
     userLogin42,
     duration,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 const banAChannelUser = (
@@ -133,11 +111,7 @@ const banAChannelUser = (
     userLogin42,
     duration,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 const setAChannelAdmin = (
@@ -149,11 +123,7 @@ const setAChannelAdmin = (
     channelId,
     userLogin42,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 const unsetAChannelAdmin = (
@@ -165,11 +135,7 @@ const unsetAChannelAdmin = (
     channelId,
     userLogin42,
   });
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 const sendMSGToChannel = (
@@ -193,40 +159,24 @@ const sendMSGToChannel = (
 
 const getChannelById = (login: string, channelId: string) => {
   const request = axios.get(`${baseUrl}/${login}/channel/${channelId}`);
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 const getChannelInvitableFriends = (login: string, channelId: string) => {
   const request = axios.get(
     `${baseUrl}/${login}/channel/${channelId}/invitableFriends`
   );
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 const getPublicChannels = (login: string) => {
   const request = axios.get(`${baseUrl}/${login}/publicChannels`);
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 const getJoinedChannels = (login: string) => {
   const request = axios.get(`${baseUrl}/${login}/joinedChannels`);
-  return request
-    .then((response) => response.data)
-    .catch((e) => {
-      console.error(e);
-    });
+  return request.then((response) => response.data);
 };
 
 export default {

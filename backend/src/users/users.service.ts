@@ -108,6 +108,11 @@ export class UsersService {
     return user;
   }
 
+  async deleteAllUsers(): Promise<void> {
+    const users = await this.getAllUsers();
+    await this.usersRepository.remove(users);
+  }
+
   async updateUsername(
     reqUser: User,
     login42: string,

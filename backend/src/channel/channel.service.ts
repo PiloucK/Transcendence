@@ -278,14 +278,17 @@ export class ChannelService {
       (channelAdmin) => channelAdmin !== user.login42,
     );
     if (channel.owner === user.login42) {
-      if (channel.admins.length > 0) {
+      if (channel.users.length <= 0) {
+        this.channelRepository.delete(channel.id);
+        return channel;
+      } else if (channel.admins.length > 0) {
         const firstAdmin = await this.usersService.getUserByLogin42(
           channel.admins[0],
         );
         channel.owner = firstAdmin.login42;
       } else {
-        this.channelRepository.delete(channel.id);
-        return channel;
+        channel.owner = channel.users[0].login42;
+        channel.admins.push(channel.users[0].login42);
       }
     }
     await this.channelRepository.save(channel);
@@ -502,10 +505,23 @@ export class ChannelService {
     }
     this.resolveChannelRestrictions(channel);
 
+    if (
+      typeof user.blockedUsers !== undefined &&
+      user.blockedUsers?.length > 0
+    ) {
+      channel.messages = channel.messages.filter(
+        (message) =>
+          !user.blockedUsers
+            .map((user) => user.login42)
+            .includes(message.author),
+      );
+    }
     return channel;
   }
   async getChannel(login42: string, channelId: string): Promise<Channel> {
-    const user = await this.usersService.getUserByLogin42(login42);
+    const user = await this.usersService.getUserWithRelations(login42, [
+      'blockedUsers',
+    ]);
     return this.getChannelInDatabase(user, channelId);
   }
 

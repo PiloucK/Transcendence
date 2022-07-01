@@ -15,6 +15,7 @@ import { defaultSessionState } from "../constants/defaultSessionState";
 import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
 import { UserStatusLayout } from "../layouts/userStatusLayout";
 import { DefaultLayout } from "../layouts/defaultLayout";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function ProfilePage() {
   const { login } = useRouter().query;
@@ -43,6 +44,17 @@ export default function ProfilePage() {
   useEffect(() => {
     fetchDisplayedUser();
   }, [sessionContext]);
+
+  if (
+    sessionContext.userSelf.login42 === "Norminet" ||
+    displayedUser.login42 === "Norminet"
+  ) {
+    return (
+      <div className={styles.play}>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <>

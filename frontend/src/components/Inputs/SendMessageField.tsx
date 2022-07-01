@@ -3,11 +3,9 @@ import styles from "../../styles/Home.module.css";
 
 import FormControl from "@mui/material/FormControl";
 import InputAdornment from "@mui/material/InputAdornment";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import Input from "@mui/material/Input";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
-import Box from "@mui/material/Box";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
@@ -15,6 +13,10 @@ import { useSessionContext } from "../../context/SessionContext";
 
 import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -33,6 +35,7 @@ export function SendMessageField({
   setInput: (input: string) => void;
   channel: string;
 }) {
+  const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [error, setError] = React.useState(false);
@@ -42,7 +45,8 @@ export function SendMessageField({
     setInput(event.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (event) => {
+    event.preventDefault();
     if (input.length > 0) {
       if (channel.length === 36) {
         channelService
@@ -72,6 +76,9 @@ export function SendMessageField({
           .then(() => {
             socketContext.socket.emit("user:update-direct-messages");
             setInput("");
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, sessionContext));
           });
       }
     }
@@ -79,13 +86,8 @@ export function SendMessageField({
 
   return (
     <>
-      <Input
+      <FormControl
         onSubmit={handleSendMessage}
-        autoFocus={true}
-        autoComplete="off"
-        disableUnderline={true}
-        multiline={true}
-        maxRows={4}
         sx={{
           border: "5px solid #E5E5E5",
           top: "86%",
@@ -94,22 +96,25 @@ export function SendMessageField({
           borderRadius: "20px",
           backgroundColor: "#E5E5E5",
         }}
-        id="outlined-adornment-input"
-        value={input}
-        onChange={handleInputChange}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="send message"
-              edge="end"
-              onClick={handleSendMessage}
-            >
-              <SendIcon />
-            </IconButton>
-          </InputAdornment>
-        }
-        label="Text message"
-      />
+        component="form"
+      >
+        <Input
+          autoFocus={true}
+          autoComplete="off"
+          disableUnderline={true}
+          id="outlined-adornment-input"
+          value={input}
+          onChange={handleInputChange}
+          label="Text message"
+          endAdornment={
+            <InputAdornment position="end" type="submit">
+              <IconButton type="submit" aria-label="send message">
+                <SendIcon />
+              </IconButton>
+            </InputAdornment>
+          }
+        />
+      </FormControl>
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={error}
