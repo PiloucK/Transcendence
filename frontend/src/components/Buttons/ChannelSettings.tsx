@@ -45,6 +45,7 @@ function MenuButtons({
       .then(() => {
         socketContext.socket.emit("user:update-channel-content");
         socketContext.socket.emit("user:update-joined-channels");
+        socketContext.socket.emit("user:update-public-channels");
       })
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
