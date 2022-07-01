@@ -4,6 +4,8 @@ services:
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     container_name: frontend-transcendence
+    depends_on:
+      - backend
     env_file:
       - .env
     volumes: #remove when development is finished
@@ -16,6 +18,8 @@ services:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
       - "${WEBSOCKETS_PORT}:${WEBSOCKETS_PORT}"
     container_name: backend-transcendence
+    depends_on:
+      - database
     env_file:
       - .env
       - .env.private
