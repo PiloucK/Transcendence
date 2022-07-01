@@ -54,7 +54,7 @@ export default function Leaderboard() {
 
   useEffect(() => {
     userService
-      .getAll()
+      .getAllForLeaderboard()
       .then((users: IUserSlim[]) => {
         setUsers(users);
       })
@@ -64,7 +64,7 @@ export default function Leaderboard() {
 
     socketContext.socket.on("update-leaderboard", () => {
       userService
-        .getAll()
+        .getAllForLeaderboard()
         .then((users: IUserSlim[]) => {
           setUsers(users);
         })

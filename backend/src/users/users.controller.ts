@@ -29,8 +29,8 @@ export class UsersController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  getAllUsers(): Promise<User[]> {
-    return this.usersService.getAllUsers();
+  getAllSortedByElo(): Promise<User[]> {
+    return this.usersService.getAllSortedByElo();
   }
 
   @Get('/:login42')

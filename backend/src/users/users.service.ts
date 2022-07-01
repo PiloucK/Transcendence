@@ -55,8 +55,12 @@ export class UsersService {
     await this.usersRepository.save(user);
   }
 
-  async getAllUsers(): Promise<User[]> {
-    const users = await this.usersRepository.find();
+  async getAllSortedByElo(): Promise<User[]> {
+    const users = await this.usersRepository.find({
+      order: {
+        elo: 'DESC',
+      },
+    });
     return users;
   }
 
@@ -108,7 +112,7 @@ export class UsersService {
   }
 
   async deleteAllUsers(): Promise<void> {
-    const users = await this.getAllUsers();
+    const users = await this.getAllSortedByElo();
     await this.usersRepository.remove(users);
   }
 

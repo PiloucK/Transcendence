@@ -6,7 +6,7 @@ const baseUrl = `http://${publicRuntimeConfig.HOST}\
 /users`;
 axios.defaults.withCredentials = true;
 
-const getAll = () => {
+const getAllForLeaderboard = () => {
   return axios.get(baseUrl).then((response) => response.data);
 };
 
@@ -125,7 +125,7 @@ const unblockUser = (login: string, friendLogin42: string) => {
 };
 
 export default {
-  getAll,
+  getAllForLeaderboard,
   getOne,
   addOne,
   deleteAll,
