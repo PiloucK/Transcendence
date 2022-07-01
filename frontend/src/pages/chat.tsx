@@ -19,6 +19,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import { DefaultLayout } from "../layouts/defaultLayout";
 import { UserStatusLayout } from "../layouts/userStatusLayout";
+import { defaultSessionState } from "../constants/defaultSessionState";
 
 function ChatContent({
   menu,
@@ -52,7 +53,7 @@ export default function Chat() {
   const [channels, setChannels] = React.useState<Channel[]>([]);
 
   const fetchChannels = () => {
-    if (sessionContext.userSelf.login42 !== "Norminet") {
+    if (sessionContext.userSelf.login42 !== defaultSessionState.userSelf.login42) {
       channelService
         .getJoinedChannels(sessionContext.userSelf.login42)
         .then((currentChannels: Channel[]) => {

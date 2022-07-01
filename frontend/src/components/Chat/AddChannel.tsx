@@ -37,7 +37,7 @@ function EmptyPublicChannels() {
 }
 
 function PublicChannelsList({ channels }: { channels: Channel[] }) {
-  const [open, setOpen] = React.useState({state: false, id: ""});
+  const [open, setOpen] = React.useState({ state: false, id: "" });
 
   if (typeof channels === "undefined" || channels.length === 0) {
     return <EmptyPublicChannels />;
@@ -47,6 +47,7 @@ function PublicChannelsList({ channels }: { channels: Channel[] }) {
     <div className={styles.public_channels_list}>
       {channels.map((channel) => (
         <CardPublicChannel
+          key={channel.id}
           channelInfos={channel}
           open={open}
           setOpen={setOpen}

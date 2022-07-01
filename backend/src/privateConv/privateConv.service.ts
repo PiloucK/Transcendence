@@ -1,40 +1,94 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "src/users/user.entity";
-import { UsersService } from "src/users/users.service";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/users/user.entity';
+import { UsersService } from 'src/users/users.service';
+import { Repository } from 'typeorm';
 import {
   GetPrivateConvDto,
   GetPrivateConvsDto,
   SendChannelInvitationDto,
   SendPrivateMessageDto,
-} from "./dto/privateConv.dto";
-import { PrivateConv } from "./privateConv.entity";
-import { PrivateConvRepository } from "./privateConv.repository";
+} from './dto/privateConv.dto';
+import { PrivateConv } from './privateConv.entity';
 
 @Injectable()
 export class PrivateConvService {
   constructor(
-    @InjectRepository(PrivateConvRepository)
-    private readonly privateConvRepository: PrivateConvRepository,
-    private readonly usersService: UsersService
+    @InjectRepository(PrivateConv)
+    private readonly privateConvRepository: Repository<PrivateConv>,
+    private readonly usersService: UsersService,
   ) {}
+
+  async retrievePrivateConv(
+    senderLogin42: string,
+    receiverLogin42: string,
+  ): Promise<PrivateConv | null> {
+    let privateConv = await this.privateConvRepository.findOne({
+      relations: ['userOne', 'userTwo'],
+      where: {
+        userOne: {
+          login42: senderLogin42,
+        },
+        userTwo: {
+          login42: receiverLogin42,
+        },
+      },
+    });
+    if (privateConv !== null) {
+      return privateConv;
+    }
+    privateConv = await this.privateConvRepository.findOne({
+      relations: ['userOne', 'userTwo'],
+      where: {
+        userOne: {
+          login42: receiverLogin42,
+        },
+        userTwo: {
+          login42: senderLogin42,
+        },
+      },
+    });
+    return privateConv;
+  }
+
+  async retrievePrivateConvs(login42: string): Promise<PrivateConv[]> {
+    let privateConvs = await this.privateConvRepository.find({
+      relations: ['userOne', 'userTwo'],
+      where: {
+        userOne: {
+          login42: login42,
+        },
+      },
+    });
+    privateConvs = privateConvs.concat(
+      await this.privateConvRepository.find({
+        relations: ['userOne', 'userTwo'],
+        where: {
+          userTwo: {
+            login42: login42,
+          },
+        },
+      }),
+    );
+    return privateConvs;
+  }
 
   async createPrivateConv(
     senderLogin42: string,
-    receiverLogin42: string
+    receiverLogin42: string,
   ): Promise<PrivateConv> {
     const userOne: User = await this.usersService.getUserByLogin42(
-      senderLogin42
+      senderLogin42,
     );
     const userTwo: User = await this.usersService.getUserByLogin42(
-      receiverLogin42
+      receiverLogin42,
     );
 
-    let privateConv = await this.privateConvRepository.getPrivateConv(
+    let privateConv = await this.retrievePrivateConv(
       senderLogin42,
-      receiverLogin42
+      receiverLogin42,
     );
-    if (typeof privateConv !== "undefined") {
+    if (privateConv !== null) {
       return privateConv;
     }
 
@@ -51,17 +105,17 @@ export class PrivateConvService {
   }
 
   async sendPrivateMessage(
-    sendPrivateMessageDto: SendPrivateMessageDto
+    sendPrivateMessageDto: SendPrivateMessageDto,
   ): Promise<PrivateConv> {
-    let privateConv = await this.privateConvRepository.getPrivateConv(
+    let privateConv = await this.retrievePrivateConv(
       sendPrivateMessageDto.sender,
-      sendPrivateMessageDto.receiver
+      sendPrivateMessageDto.receiver,
     );
 
-    if (typeof privateConv === "undefined") {
+    if (privateConv === null) {
       privateConv = await this.createPrivateConv(
         sendPrivateMessageDto.sender,
-        sendPrivateMessageDto.receiver
+        sendPrivateMessageDto.receiver,
       );
     }
     privateConv.messages.push(sendPrivateMessageDto.message);
@@ -72,17 +126,17 @@ export class PrivateConvService {
   }
 
   async sendChannelInvite(
-    sendChannelInvitationDto: SendChannelInvitationDto
+    sendChannelInvitationDto: SendChannelInvitationDto,
   ): Promise<PrivateConv> {
-    let privateConv = await this.privateConvRepository.getPrivateConv(
+    let privateConv = await this.retrievePrivateConv(
       sendChannelInvitationDto.sender,
-      sendChannelInvitationDto.receiver
+      sendChannelInvitationDto.receiver,
     );
 
-    if (typeof privateConv === "undefined") {
+    if (privateConv === null) {
       privateConv = await this.createPrivateConv(
         sendChannelInvitationDto.sender,
-        sendChannelInvitationDto.receiver
+        sendChannelInvitationDto.receiver,
       );
     }
     privateConv.messages.push(sendChannelInvitationDto.invitation);
@@ -93,24 +147,24 @@ export class PrivateConvService {
   }
 
   async getPrivateConv(
-    getPrivateConvDto: GetPrivateConvDto
+    getPrivateConvDto: GetPrivateConvDto,
   ): Promise<PrivateConv> {
-    const privateConv = await this.privateConvRepository.getPrivateConv(
+    const privateConv = await this.retrievePrivateConv(
       getPrivateConvDto.login42,
-      getPrivateConvDto.fLogin42
+      getPrivateConvDto.fLogin42,
     );
 
-    if (typeof privateConv === "undefined") {
-      throw new Error("Private conversation not found");
+    if (privateConv === null) {
+      throw new Error('Private conversation not found');
     }
     return privateConv;
   }
 
   async getPrivateConvs(
-    getPrivateConvsDto: GetPrivateConvsDto
+    getPrivateConvsDto: GetPrivateConvsDto,
   ): Promise<PrivateConv[]> {
-    const privateConvs = await this.privateConvRepository.getPrivateConvs(
-      getPrivateConvsDto.login42
+    const privateConvs = await this.retrievePrivateConvs(
+      getPrivateConvsDto.login42,
     );
 
     return privateConvs;

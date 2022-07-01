@@ -27,7 +27,7 @@ export function CardUserDM({
 
   const createPrivateConv = () => {
     if (
-      sessionContext.userSelf.login42 !== "Norminet" &&
+      sessionContext.userSelf.login42 !== defaultSessionState.userSelf.login42 &&
       sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       privateConvService
