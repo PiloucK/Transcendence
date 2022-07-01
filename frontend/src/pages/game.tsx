@@ -35,11 +35,7 @@ const Pong = () => {
     direction: { x: 0, y: 0 },
   });
 
-  const ballDirection = useRef<ICoordinates>({ x: 0, y: 0 });
-  const [ballPosition, setBallPosition] = useState<ICoordinates>({
-    x: 50,
-    y: 50,
-  });
+
 
   useEffect(() => {
     console.log("USE EFFECT PONG");
@@ -75,32 +71,18 @@ const Pong = () => {
         console.log("NEW POINT", data);
       });
 
-      gameSocket.current.on(
-        "game:newBallInfo",
-        (newBallInfo: IBallInfo, player: string) => {
-          ballInfo.current = newBallInfo;
+    //   gameSocket.current.on(
+    //     "game:newBallInfo",
+    //     (newBallInfo: IBallInfo, player: string) => {
+    //       ballInfo.current = newBallInfo;
 
-			console.log(ballInfo.current);
+	// 		console.log(ballInfo.current);
 			
-          if (player === player2.current) {
-            ballInfo.current.direction.x *= -1;
-
-            // let playerPaddle = document
-            //   .getElementById("player-paddle")
-            //   ?.getBoundingClientRect() as DOMRect;
-
-            // let paddleBorderRatio =
-            //   (playerPaddle.right / window.innerWidth) * 100;
-
-            // const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
-
-            // setBallPosition((prevState) => ({
-            //   x: 100 - (paddleBorderRatio + ballRadiusWidthRatio),
-            //   y: prevState.y,
-            // }));
-          }
-        }
-      );
+    //       if (player === player2.current) {
+    //         ballInfo.current.direction.x *= -1;
+    //       }
+    //     }
+    //   );
 
       gameSocket.current.emit(
         "game:enter",
@@ -155,6 +137,7 @@ const Pong = () => {
           gameSocket={gameSocket.current}
           gameID={gameID.current}
           player1={player1.current}
+		  player2={player2.current}
         />
       )}
       <PlayerPaddle

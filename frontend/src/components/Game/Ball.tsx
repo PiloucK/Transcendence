@@ -11,18 +11,20 @@ const Ball = ({
   gameSocket,
   gameID,
   player1,
-
+	player2,
 }: {
   ballInfo: IBallInfo;
   gameSocket: Socket;
   gameID: string;
   player1: string;
+  player2: string;
 
 }) => {
   const firstRender = useRef(true);
-  const [ballPosition, setBallPosition] = useState<ICoordinates>(
-    ballInfo.position
-  );
+  const [ballPosition, setBallPosition] = useState<ICoordinates>({
+	x: 50,
+    y: ballInfo.position.y,
+	});
   let ballDirection = useRef<ICoordinates>(ballInfo.direction);
   let ballVelocity = INITIAL_VELOCITY;
 
@@ -73,12 +75,13 @@ const Ball = ({
 	//   ballDirection.current.x = Math.cos(angleRad);
 	//   ballDirection.current.y = Math.sin(angleRad);
 
-    //   setBallPosition((prevState) => ({
-    //     x: paddleBorderRatio + ballRadiusWidthRatio,
-    //     y: prevState.y,
-    //   }));
 
       gameSocket.emit("game:ballCountered", {position : ballPosition, direction : ballDirection.current}, angleRad, gameID, player1);
+
+      setBallPosition((prevState) => ({
+        x: paddleBorderRatio + ballRadiusWidthRatio,
+        y: prevState.y,
+      }));
 
     } else if (ballRect?.left <= 0) {
       gameSocket.emit("game:point-lost", gameID, player1);
@@ -102,9 +105,35 @@ const Ball = ({
   useEffect(() => {
     if (firstRender.current === true) {
       document.body.style.overflow = "hidden";
+
+      gameSocket.on(
+        "game:newBallInfo",
+        (ballInfo: IBallInfo, player: string) => {
+          ballDirection.current.x = ballInfo.direction.x;
+          ballDirection.current.y = ballInfo.direction.y;
+          console.log("player=", player, "player2= ", player2);
+          if (player === player2) {
+            ballDirection.current.x *= -1;
+			console.log('inside NEW BALL DIR');
+			
+            let playerPaddle = document
+              .getElementById("player-paddle")
+              ?.getBoundingClientRect() as DOMRect;
+
+            let paddleBorderRatio =
+              (playerPaddle.right / window.innerWidth) * 100;
+
+            const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
+
+            setBallPosition((prevState) => ({
+              x: 100 - (paddleBorderRatio + ballRadiusWidthRatio),
+              y: prevState.y,
+            }));
+          }
+        }
+      );
       firstRender.current = false;
     }
-
     requestRef.current = requestAnimationFrame(animate);
     return () => {
       cancelAnimationFrame(requestRef.current);
