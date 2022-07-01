@@ -15,7 +15,7 @@ export class User {
   @PrimaryColumn()
   login42!: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   username!: string;
   // https://stackoverflow.com/questions/25300821/difference-between-varchar-and-text-in-mysql
   // https://typeorm.io/#column-data-types

@@ -29,7 +29,6 @@ export class UsersRepository extends Repository<User> {
 //    if (!user) {
       const user = this.create({
         login42,
-        username: login42,
         photo42: photo42,
       });
 
