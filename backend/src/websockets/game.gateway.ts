@@ -14,6 +14,11 @@ interface ICoordinates {
   y: number;
 }
 
+interface IBallInfo {
+  position: ICoordinates;
+  direction: ICoordinates;
+}
+
 interface IGame {
   player1: string | undefined;
   player2: string | undefined;
@@ -38,7 +43,7 @@ function initBall() {
   }
 
   return {
-    positionY,
+    position: { x: 50, y: positionY },
     direction: { x: Math.cos(heading), y: Math.sin(heading) },
   };
 }
@@ -133,18 +138,12 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
       currentGame.gameStatus = 'RUNNING';
       console.log('sending game start', userSelf);
-
     }
   }
 
-
   @SubscribeMessage('game:new-point')
-  onGamePoint(
-    @MessageBody() gameID: string,
-  ) {
-		this.server
-	  	.to(gameID)
-		.emit('game:point-start', initBall());
+  onGamePoint(@MessageBody() gameID: string) {
+    this.server.to(gameID).emit('game:point-start', initBall());
   }
 
   @SubscribeMessage('game:ball')
@@ -163,17 +162,21 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('game:ballCountered')
   onGameBallCountered(
-    @MessageBody() data: string[],
+    @MessageBody() data : any[],
     @ConnectedSocket() client: Socket,
   ) {
-	const [angleRad, gameID, player] = data;
 
-	const directionX = Math.cos(parseFloat(angleRad));
-	const directionY = Math.sin(parseFloat(angleRad));
+    const [ballInfo, angleRad, gameID, player] = data;
+	
 
-    this.server
+    ballInfo.direction.x = Math.cos(angleRad);
+    ballInfo.direction.y = Math.sin(angleRad);
+
+	console.log(ballInfo);
+	
+	this.server
       .to(gameID)
-      .emit('game:newBallDirection', {x : directionX, y : directionY}, player);
+      .emit('game:newBallInfo', ballInfo, player);
   }
 
   @SubscribeMessage('game:point-lost')
@@ -186,6 +189,4 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       this.server.to(gameID).emit('game:point-start', initBall());
     }, 2000);
   }
-
-
 }

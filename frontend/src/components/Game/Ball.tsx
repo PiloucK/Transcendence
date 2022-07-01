@@ -2,35 +2,28 @@ import { useEffect, useState, useRef } from "react";
 import { ICoordinates } from "../../interfaces/ICoordinates";
 import styles from "./Ball.module.css";
 import { io, Socket } from "socket.io-client";
-import { IBallStartInfo } from "../../interfaces/IBallStartInfo";
+import { IBallInfo } from "../../interfaces/IBallInfo";
 
 const INITIAL_VELOCITY = 0.035;
 
 const Ball = ({
-  updateScore,
-  ballStartPos,
+  ballInfo,
   gameSocket,
   gameID,
   player1,
-  player2,
-  invert,
+
 }: {
-  updateScore: (winner: string) => void;
-  ballStartPos: IBallStartInfo;
+  ballInfo: IBallInfo;
   gameSocket: Socket;
   gameID: string;
   player1: string;
-  player2: string;
-  invert: number;
+
 }) => {
-  const [ballPosition, setBallPosition] = useState<ICoordinates>({
-    x: 50,
-    y: ballStartPos.positionY,
-  });
-
   const firstRender = useRef(true);
-
-  let ballDirection = useRef<ICoordinates>(ballStartPos.direction);
+  const [ballPosition, setBallPosition] = useState<ICoordinates>(
+    ballInfo.position
+  );
+  let ballDirection = useRef<ICoordinates>(ballInfo.direction);
   let ballVelocity = INITIAL_VELOCITY;
 
   const requestRef = useRef(0);
@@ -77,17 +70,18 @@ const Ball = ({
 
       let angleRad = (collidePoint * Math.PI) / 4;
 
-      gameSocket.emit("game:ballCountered", angleRad, gameID, player1);
+	//   ballDirection.current.x = Math.cos(angleRad);
+	//   ballDirection.current.y = Math.sin(angleRad);
 
-      setBallPosition((prevState) => ({
-        x: paddleBorderRatio + ballRadiusWidthRatio,
-        y: prevState.y,
-      }));
+    //   setBallPosition((prevState) => ({
+    //     x: paddleBorderRatio + ballRadiusWidthRatio,
+    //     y: prevState.y,
+    //   }));
+
+      gameSocket.emit("game:ballCountered", {position : ballPosition, direction : ballDirection.current}, angleRad, gameID, player1);
+
     } else if (ballRect?.left <= 0) {
-      updateScore("opponent");
-      //   resetBall();
-      //   ballDirection.current.x = Math.abs(ballDirection.current.x);
-      //   ballDirection.current.x *= -1;
+      gameSocket.emit("game:point-lost", gameID, player1);
     }
   };
 
@@ -108,38 +102,13 @@ const Ball = ({
   useEffect(() => {
     if (firstRender.current === true) {
       document.body.style.overflow = "hidden";
-
-      gameSocket.on(
-        "game:newBallDirection",
-        (newDirection: ICoordinates, player: string) => {
-          ballDirection.current.x = newDirection.x;
-          ballDirection.current.y = newDirection.y;
-          console.log("player=", player, "player2= ", player2);
-          if (player === player2) {
-            ballDirection.current.x *= -1;
-			console.log('inside NEW BALL DIR');
-			
-            let playerPaddle = document
-              .getElementById("player-paddle")
-              ?.getBoundingClientRect() as DOMRect;
-
-            let paddleBorderRatio =
-              (playerPaddle.right / window.innerWidth) * 100;
-
-            const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
-
-            setBallPosition((prevState) => ({
-              x: 100 - (paddleBorderRatio + ballRadiusWidthRatio),
-              y: prevState.y,
-            }));
-          }
-        }
-      );
       firstRender.current = false;
     }
 
     requestRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(requestRef.current);
+    return () => {
+      cancelAnimationFrame(requestRef.current);
+    };
   }, []); // Make sure the effect runs only once
 
   useEffect(() => {

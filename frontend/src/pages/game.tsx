@@ -12,7 +12,7 @@ import { io, Socket } from "socket.io-client";
 import getConfig from "next/config";
 import { Login42 } from "../interfaces/status.types";
 import { ICoordinates } from "../interfaces/ICoordinates";
-import { IBallStartInfo } from "../interfaces/IBallStartInfo";
+import { IBallInfo } from "../interfaces/IBallInfo";
 
 const { publicRuntimeConfig } = getConfig();
 const Pong = () => {
@@ -30,26 +30,16 @@ const Pong = () => {
 
   const secondMount = useRef(false);
   const [playGame, setPlayGame] = useState(false);
-  const ballStartPos = useRef<IBallStartInfo>({
-    positionY: 0,
+  const ballInfo = useRef<IBallInfo>({
+    position: { x: 50, y: 50 },
     direction: { x: 0, y: 0 },
   });
 
-  function updateScore(winner: string) {
-    if (winner === "player") setPlayerScore((prevState) => prevState + 1);
-    if (winner === "opponent") setOpponentScore((prevState) => prevState + 1);
-    setPlayGame(false);
-
-	// signaler un point perdu par socket
-  }
-
-  // if (gameSocket.current) {
-  //   gameSocket.current.onAny((event, ...args) => {
-  //     console.log(event, args);
-  //   });
-  // }
-
-  //console.log("gamesock", gameSocket.current);
+  const ballDirection = useRef<ICoordinates>({ x: 0, y: 0 });
+  const [ballPosition, setBallPosition] = useState<ICoordinates>({
+    x: 50,
+    y: 50,
+  });
 
   useEffect(() => {
     console.log("USE EFFECT PONG");
@@ -74,22 +64,42 @@ const Pong = () => {
             player2.current = p2;
             invert.current = 1;
           }
-		  gameSocket.current?.emit("game:new-point", gameID.current);
+          gameSocket.current?.emit("game:new-point", gameID.current);
         }
-		
       );
 
-      gameSocket.current.on("game:point-start", (data: IBallStartInfo) => {
-		data.direction.x *= invert.current;	
-		ballStartPos.current = data;
+      gameSocket.current.on("game:point-start", (data: IBallInfo) => {
+        data.direction.x *= invert.current;
+        ballInfo.current = data;
         setPlayGame(true);
         console.log("NEW POINT", data);
       });
 
-      console.log(
-        "queries: ",
-        Array.isArray(userLogin42) ? userLogin42[0] : userLogin42,
-        Array.isArray(opponentLogin42) ? opponentLogin42[0] : opponentLogin42
+      gameSocket.current.on(
+        "game:newBallInfo",
+        (newBallInfo: IBallInfo, player: string) => {
+          ballInfo.current = newBallInfo;
+
+			console.log(ballInfo.current);
+			
+          if (player === player2.current) {
+            ballInfo.current.direction.x *= -1;
+
+            // let playerPaddle = document
+            //   .getElementById("player-paddle")
+            //   ?.getBoundingClientRect() as DOMRect;
+
+            // let paddleBorderRatio =
+            //   (playerPaddle.right / window.innerWidth) * 100;
+
+            // const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
+
+            // setBallPosition((prevState) => ({
+            //   x: 100 - (paddleBorderRatio + ballRadiusWidthRatio),
+            //   y: prevState.y,
+            // }));
+          }
+        }
       );
 
       gameSocket.current.emit(
@@ -98,6 +108,15 @@ const Pong = () => {
         Array.isArray(opponentLogin42) ? opponentLogin42[0] : opponentLogin42,
         sessionContext.userSelf.login42
       );
+
+      gameSocket.current.on("game:point-lost", (login42: Login42) => {
+        if (login42 !== player1.current) {
+          setPlayerScore((prevState) => prevState + 1);
+        } else {
+          setOpponentScore((prevState) => prevState + 1);
+        }
+        setPlayGame(false);
+      });
     }
     return () => {
       // edit unmounting logic for spectating and multiple windows on game
@@ -130,16 +149,12 @@ const Pong = () => {
   return (
     <div className={styles.mainLayout_background}>
       <Score player={playerScore} opponent={opponentScore} />
-      {playGame === true
-	   && (
+      {playGame === true && (
         <Ball
-          updateScore={updateScore}
-          ballStartPos={ballStartPos.current}
+          ballInfo={ballInfo.current}
           gameSocket={gameSocket.current}
           gameID={gameID.current}
-		  player1={player1.current}
-		  player2={player2.current}
-		  invert={invert.current}
+          player1={player1.current}
         />
       )}
       <PlayerPaddle
