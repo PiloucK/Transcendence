@@ -56,7 +56,7 @@ const Ball = ({
     let paddleBorderRatio = (playerPaddle.right / window.innerWidth) * 100;
 
     const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
-    const ballRadiusHeightRatio = window.innerHeight / window.innerHeight;
+    const ballRadiusHeightRatio = 1;
 
     if (ballRect?.bottom > window.innerHeight) {
       ballDirection.current.y *= -1;
@@ -77,9 +77,6 @@ const Ball = ({
 
       let angleRad = (collidePoint * Math.PI) / 4;
 
-      //   ballDirection.current.x =  Math.cos(angleRad);
-      //   ballDirection.current.y = Math.sin(angleRad);
-
       gameSocket.emit("game:ballCountered", angleRad, gameID, player1);
 
       setBallPosition((prevState) => ({
@@ -91,10 +88,6 @@ const Ball = ({
       //   resetBall();
       //   ballDirection.current.x = Math.abs(ballDirection.current.x);
       //   ballDirection.current.x *= -1;
-    } else if (ballRect?.right >= window.innerWidth) {
-      updateScore("player");
-      //   resetBall();
-      //   ballDirection.current.x = Math.abs(ballDirection.current.x);
     }
   };
 
@@ -121,10 +114,26 @@ const Ball = ({
         (newDirection: ICoordinates, player: string) => {
           ballDirection.current.x = newDirection.x;
           ballDirection.current.y = newDirection.y;
-		  console.log("player=", player, "player2= ", player2);
-			if (player === player2)
-				ballDirection.current.x *= -1;
-		}
+          console.log("player=", player, "player2= ", player2);
+          if (player === player2) {
+            ballDirection.current.x *= -1;
+			console.log('inside NEW BALL DIR');
+			
+            let playerPaddle = document
+              .getElementById("player-paddle")
+              ?.getBoundingClientRect() as DOMRect;
+
+            let paddleBorderRatio =
+              (playerPaddle.right / window.innerWidth) * 100;
+
+            const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
+
+            setBallPosition((prevState) => ({
+              x: 100 - (paddleBorderRatio + ballRadiusWidthRatio),
+              y: prevState.y,
+            }));
+          }
+        }
       );
       firstRender.current = false;
     }

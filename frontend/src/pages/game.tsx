@@ -39,6 +39,8 @@ const Pong = () => {
     if (winner === "player") setPlayerScore((prevState) => prevState + 1);
     if (winner === "opponent") setOpponentScore((prevState) => prevState + 1);
     setPlayGame(false);
+
+	// signaler un point perdu par socket
   }
 
   // if (gameSocket.current) {

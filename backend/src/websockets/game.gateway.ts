@@ -162,17 +162,30 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('game:ballCountered')
-  onGameBallReset(
+  onGameBallCountered(
     @MessageBody() data: string[],
     @ConnectedSocket() client: Socket,
   ) {
 	const [angleRad, gameID, player] = data;
 
-	const directionX = Math.cos(parseInt(angleRad));
-	const directionY = Math.sin(parseInt(angleRad));
+	const directionX = Math.cos(parseFloat(angleRad));
+	const directionY = Math.sin(parseFloat(angleRad));
 
     this.server
       .to(gameID)
       .emit('game:newBallDirection', {x : directionX, y : directionY}, player);
   }
+
+  @SubscribeMessage('game:point-lost')
+  onGamePointLost(@MessageBody() data: string[]) {
+    const [gameID, player] = data;
+
+    this.server.to(gameID).emit('game:point-lost', player);
+
+    setTimeout(() => {
+      this.server.to(gameID).emit('game:point-start', initBall());
+    }, 2000);
+  }
+
+
 }
