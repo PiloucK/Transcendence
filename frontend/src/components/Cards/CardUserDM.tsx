@@ -12,6 +12,7 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { useSessionContext } from "../../context/SessionContext";
 import privateConvService from "../../services/privateConv";
 import { useSocketContext } from "../../context/SocketContext";
+import { defaultSessionState } from "../../constants/defaultSessionState";
 
 export function CardUserDM({
   userInfos,
@@ -62,7 +63,9 @@ export function CardUserDM({
           />
         </Avatar>
       </div>
-      <div className={styles.user_card_username}>{userInfos.username}</div>
+      <div className={styles.user_card_username}>
+        {userInfos.username ?? defaultSessionState.userSelf.username}
+      </div>
       <div className={styles.user_card_elo}>Elo: {userInfos.elo}</div>
     </div>
   );

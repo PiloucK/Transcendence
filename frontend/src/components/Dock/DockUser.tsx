@@ -36,20 +36,20 @@ function NavigationDock({
   const errorContext = useErrorContext();
   const socketContext = useSocketContext();
 
-  const [username, setUsername] = useState("");
+  const [login42, setLogin42] = useState("");
 
   const addUser: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
     userService
-      .addOne(username)
+      .addOne(login42)
       .then((user: IUserSelf) => {
         sessionContext.login?.(user);
         socketContext.socket.emit("user:new");
-        setUsername("");
+        setLogin42("");
 
         authService
-          .getToken(username)
+          .getToken(login42)
           .then((login42: string) => {
             console.log("new token for", login42, "stored in cookie");
             sessionContext.updateUserSelf?.();
@@ -75,11 +75,11 @@ function NavigationDock({
       });
   };
 
-  const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
+  const handleLogin42Change: ChangeEventHandler<HTMLInputElement> = (
     event
   ) => {
     if (event.target.value) {
-      setUsername(event.target.value);
+      setLogin42(event.target.value);
     }
   };
 
@@ -132,8 +132,8 @@ function NavigationDock({
       <div>
         <form onSubmit={addUser}>
           <TextField
-            value={username}
-            onChange={handleUsernameChange}
+            value={login42}
+            onChange={handleLogin42Change}
             label="Login"
           />
           <Button type="submit">add</Button>
