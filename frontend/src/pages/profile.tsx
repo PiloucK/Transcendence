@@ -46,8 +46,8 @@ export default function ProfilePage() {
   }, [sessionContext]);
 
   if (
-    sessionContext.userSelf.login42 === "Norminet" ||
-    displayedUser.login42 === "Norminet"
+    sessionContext.userSelf.login42 === defaultSessionState.userSelf.login42 ||
+    displayedUser.login42 === defaultSessionState.userSelf.login42
   ) {
     return (
       <div className={styles.play}>
