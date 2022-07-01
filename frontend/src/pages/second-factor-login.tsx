@@ -1,11 +1,12 @@
 import { Button, Dialog, TextField } from "@mui/material";
+import Router from "next/router";
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
-import { useErrorContext } from "../../context/ErrorContext";
-import { useSessionContext } from "../../context/SessionContext";
-import { errorHandler } from "../../errors/errorHandler";
-import twoFactorAuthService from "../../services/twoFactorAuth";
+import { useErrorContext } from "../context/ErrorContext";
+import { useSessionContext } from "../context/SessionContext";
+import { errorHandler } from "../errors/errorHandler";
+import twoFactorAuthService from "../services/twoFactorAuth";
 
-export const SecondFactorLogin = () => {
+export default function SecondFactorLoginPage() {
   const sessionContext = useSessionContext();
   const errorContext = useErrorContext();
   const [code, setCode] = useState("");
@@ -16,7 +17,7 @@ export const SecondFactorLogin = () => {
     twoFactorAuthService
       .authenticate(code)
       .then(() => {
-        sessionContext.setShowSecondFactorLogin?.(false);
+        Router.push("/");
       })
       .catch((error) => {
         errorContext.newError?.(errorHandler(error, sessionContext));
@@ -28,11 +29,12 @@ export const SecondFactorLogin = () => {
   };
 
   return (
-    <Dialog open={sessionContext.showSecondFactorLogin}>
+    <>
+      <h1>Enter second factor code</h1>
       <form onSubmit={sendValidationCode}>
         <TextField value={code} onChange={handleCodeChange} />
-        <Button type="submit">send validation code</Button>
+        <Button type="submit">send</Button>
       </form>
-    </Dialog>
+    </>
   );
-};
+}

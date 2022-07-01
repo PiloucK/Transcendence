@@ -4,7 +4,6 @@ import { IconButton, Tooltip } from "@mui/material";
 import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 import FTLogo from "../../public/42logo.png";
-import { SecondFactorLogin } from "../Alerts/SecondFactorLogin";
 import getConfig from "next/config";
 import userService from "../../services/user";
 import authService from "../../services/auth";
@@ -64,7 +63,6 @@ export function DockGuest() {
         </Link>
           <Button onClick={addUser}>create coucou</Button>
       </Dock>
-      <SecondFactorLogin />
     </>
   );
 }

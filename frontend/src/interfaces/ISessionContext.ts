@@ -9,6 +9,4 @@ export interface ISessionContext {
   setChatDM?: (dm: string) => void;
   login?: (userSelf: IUserSelf) => void;
   logout?: () => void;
-  showSecondFactorLogin: boolean;
-  setShowSecondFactorLogin?: (showSecondFactorLogin: boolean) => void;
 }
