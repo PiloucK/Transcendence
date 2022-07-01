@@ -11,7 +11,6 @@ import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
-import { randomInt } from 'crypto';
 
 type UserRelations =
   | 'friends'
@@ -104,7 +103,6 @@ export class UsersService {
       user = this.usersRepository.create({
         login42,
         photo42: photo42,
-        elo: randomInt(100),
       });
 
       await this.usersRepository.save(user);
