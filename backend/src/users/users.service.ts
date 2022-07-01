@@ -11,6 +11,7 @@ import { UpdateUsernameDto } from './dto/updateUser.dto';
 import { FriendLogin42Dto } from './dto/friendLogin42.dto';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
+import { randomInt } from 'crypto';
 
 type UserRelations =
   | 'friends'
@@ -55,8 +56,12 @@ export class UsersService {
     await this.usersRepository.save(user);
   }
 
-  async getAllUsers(): Promise<User[]> {
-    const users = await this.usersRepository.find();
+  async getAllSortedByElo(): Promise<User[]> {
+    const users = await this.usersRepository.find({
+      order: {
+        elo: 'DESC',
+      },
+    });
     return users;
   }
 
@@ -99,6 +104,7 @@ export class UsersService {
       user = this.usersRepository.create({
         login42,
         photo42: photo42,
+        elo: randomInt(100),
       });
 
       await this.usersRepository.save(user);
@@ -108,7 +114,7 @@ export class UsersService {
   }
 
   async deleteAllUsers(): Promise<void> {
-    const users = await this.getAllUsers();
+    const users = await this.getAllSortedByElo();
     await this.usersRepository.remove(users);
   }
 
