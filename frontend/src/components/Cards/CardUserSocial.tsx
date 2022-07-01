@@ -3,6 +3,7 @@ import { IUserSlim } from "../../interfaces/IUser";
 import Link from "next/link";
 import Avatar from "@mui/material/Avatar";
 import { ButtonUserStatus } from "../Buttons/ButtonUserStatus";
+import { defaultSessionState } from "../../constants/defaultSessionState";
 
 export function CardUserSocial({ userInfos }: { userInfos: IUserSlim }) {
   return (
@@ -23,7 +24,7 @@ export function CardUserSocial({ userInfos }: { userInfos: IUserSlim }) {
         </div>
       </Link>
       <div className={styles.social_friend_card_username}>
-        {userInfos.username}
+        {userInfos.username ?? defaultSessionState.userSelf.username}
       </div>
       <div className={styles.social_friend_card_elo}>Elo: {userInfos.elo}</div>
       <ButtonUserStatus displayedUser={userInfos} />

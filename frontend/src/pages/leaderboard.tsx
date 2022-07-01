@@ -13,11 +13,9 @@ import { useSessionContext } from "../context/SessionContext";
 
 import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
+import { defaultSessionState } from "../constants/defaultSessionState";
 
-function LeaderboardUserCard(props: {
-  user: IUserSlim;
-  index: number;
-}) {
+function LeaderboardUserCard(props: { user: IUserSlim; index: number }) {
   let userStyle = styles.leaderboard_user;
   if (props.index === 0) {
     userStyle = styles.leaderboard_firstuser;
@@ -28,7 +26,7 @@ function LeaderboardUserCard(props: {
       <div className={userStyle} key={props.index}>
         <div className={styles.leaderboard_user_rank}>{props.index + 1}</div>
         <div className={styles.leaderboard_user_name}>
-          {props.user.username}
+          {props.user.username ?? defaultSessionState.userSelf.username}
         </div>
         <div className={styles.leaderboard_user_score}>{props.user.elo}</div>
       </div>

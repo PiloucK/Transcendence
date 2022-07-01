@@ -23,6 +23,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useSocketContext } from "../../context/SocketContext";
 import { IUserSelf } from "../../interfaces/IUser";
 import { useSessionContext } from "../../context/SessionContext";
+import { AxiosError } from "axios";
+import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 
 export function ProfileSettingsDialog({
   user,
@@ -64,15 +66,26 @@ export function ProfileSettingsDialog({
       error = true;
     }
     if (error === false) {
-      setOpen(false);
       if (username !== user.username) {
         userService
           .updateUserUsername(user.login42, username)
           .then(() => {
             sessionContext.updateUserSelf?.(); //! Can be done only once
+            setOpen(false);
           })
-          .catch((error) => {
-            errorContext.newError?.(errorHandler(error, sessionContext));
+          .catch((caughtError: Error | AxiosError) => {
+            const parsedError = errorHandler(caughtError, sessionContext);
+            if (
+              parsedError.statusCode === HttpStatusCodes.CONFLICT &&
+              parsedError.message.startsWith(
+                "duplicate key value violates unique constraint"
+              )
+            ) {
+              setTextFieldError("Username already taken.");
+              error = true;
+            } else {
+              errorContext.newError?.(parsedError);
+            }
           });
       }
       if (newImage !== undefined) {
@@ -84,6 +97,7 @@ export function ProfileSettingsDialog({
             setNewImage(undefined);
             setPreview("");
             sessionContext.updateUserSelf?.(); //! Can be done only once
+            setOpen(false);
           })
           .catch((error) => {
             errorContext.newError?.(errorHandler(error, sessionContext));

@@ -113,7 +113,7 @@ function Messages({ pc }: { pc: PrivateConv }) {
     if (author === sessionContext.userSelf.login42) {
       return null;
     } else {
-      if (pc.userOne.username === author) {
+      if (pc.userOne.login42 === author) {
         return (
           <div className={styles.chat_avatar}>
             <Avatar

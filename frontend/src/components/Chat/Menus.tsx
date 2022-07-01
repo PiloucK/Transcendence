@@ -34,6 +34,7 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { useUserStatusContext } from "../../context/UserStatusContext";
 import { useSocketContext } from "../../context/SocketContext";
 import { IUserSelf, IUserSlim } from "../../interfaces/IUser";
+import { defaultSessionState } from "../../constants/defaultSessionState";
 
 function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUserSlim }) {
   return (
@@ -303,7 +304,7 @@ function UserList({ channel, state }: { channel: Channel; state: string }) {
                   sx={{ width: "20px", height: "20px" }}
                 />
               </Avatar>
-              {user.username}
+              {user.username ?? defaultSessionState.userSelf.username}
             </div>
           );
         } else if (user.login42 === selectedUser) {
@@ -336,7 +337,7 @@ function UserList({ channel, state }: { channel: Channel; state: string }) {
                   sx={{ width: "20px", height: "20px" }}
                 />
               </Avatar>
-              {user.username}
+              {user.username ?? defaultSessionState.userSelf.username}
             </div>
           );
         }

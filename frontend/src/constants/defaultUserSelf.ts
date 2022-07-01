@@ -2,7 +2,7 @@ import { IUserSelf } from "../interfaces/IUser";
 
 export const defaultUserSelf: IUserSelf = {
   login42: "Norminet",
-  username: "Wonderful Guest",
+  username: "(empty username)",
   elo: 0,
   photo42: "https://cdn.intra.42.fr/users/chdespon.jpg",
   image: "",
