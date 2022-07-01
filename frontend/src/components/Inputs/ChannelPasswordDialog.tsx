@@ -54,7 +54,8 @@ export function ChannelPasswordDialog({
         socketContext.socket.emit("user:update-channel-content");
       })
       .catch((error) => {
-        errorContext.newError?.(errorHandler(error, sessionContext));
+		setError(true);
+        // errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
   return (
