@@ -22,7 +22,7 @@ export class MatchController {
     @GetReqUser() reqUser: User,
   ) {
     const { opponentLogin42, selfScore, opponentScore } = createMatchDto;
-    this.matchService.create(
+    return this.matchService.create(
       reqUser,
       opponentLogin42,
       selfScore,
