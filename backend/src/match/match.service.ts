@@ -35,7 +35,7 @@ export class MatchService {
 
   async getForOneUser(userLogin42: string) {
     let matches = await this.matchRepository.find({
-      relations: ['userOne', 'userTwo'],
+      relations: ['user1', 'user2'],
       where: {
         user1: {
           login42: userLogin42,
@@ -44,7 +44,7 @@ export class MatchService {
     });
     matches = matches.concat(
       await this.matchRepository.find({
-        relations: ['userOne', 'userTwo'],
+        relations: ['user1', 'user2'],
         where: {
           user2: {
             login42: userLogin42,
