@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import styles from "../../styles/Home.module.css";
 
-import { TextField } from "../Inputs/TextField";
-import { PasswordField } from "../Inputs/PasswordField";
-import { inputPFState } from "../../interfaces/inputPasswordField";
-
-import Switch from "@mui/material/Switch";
-
 import { ButtonChannelInvite } from "../Buttons/ButtonChannelInvite";
 import { IUserSlim } from "../../interfaces/IUser";
 

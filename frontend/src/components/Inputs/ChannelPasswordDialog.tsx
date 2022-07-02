@@ -34,28 +34,26 @@ export function ChannelPasswordDialog({
   open: { state: boolean; id: string };
   setOpen: (open: { state: boolean; id: string }) => void;
 }) {
-  const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [input, setInput] = React.useState("");
-  const [error, setError] = React.useState(false);
+  const [textFieldError, setTextFieldError] = React.useState("");
 
   const handleClose = () => {
     setOpen({ state: false, id: "" });
   };
 
   const handleSubmit = () => {
-    setOpen({ state: false, id: "" });
     channelService
       .joinProtectedChannel(sessionContext.userSelf.login42, channelId, input)
       .then((channel: Channel) => {
+        setOpen({ state: false, id: "" });
         sessionContext.setChatMenu?.(channel.id);
         socketContext.socket.emit("user:update-joined-channels");
         socketContext.socket.emit("user:update-channel-content");
       })
       .catch((error) => {
-		setError(true);
-        // errorContext.newError?.(errorHandler(error, sessionContext));
+        setTextFieldError("Wrong password.");
       });
   };
   return (
@@ -85,6 +83,8 @@ export function ChannelPasswordDialog({
             variant="standard"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            helperText={textFieldError}
+            error={textFieldError !== ""}
           />
         </DialogContent>
         <DialogActions>
@@ -92,24 +92,6 @@ export function ChannelPasswordDialog({
           <Button onClick={handleSubmit}>Enter</Button>
         </DialogActions>
       </Dialog>
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        open={error}
-        autoHideDuration={6000}
-        onClose={() => {
-          setError(false);
-        }}
-      >
-        <Alert
-          onClose={() => {
-            setError(false);
-          }}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          Wrong password.
-        </Alert>
-      </Snackbar>
     </div>
   );
 }
