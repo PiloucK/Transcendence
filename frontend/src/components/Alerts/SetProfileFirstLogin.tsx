@@ -10,7 +10,7 @@ import { TextField } from "../Inputs/TextField";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
 
-export const SetUsernameDialog = () => {
+export const SetProfileFirstLogin = () => {
   const sessionContext = useSessionContext();
   const errorContext = useErrorContext();
   const [username, setUsername] = useState("");
@@ -83,7 +83,9 @@ export const SetUsernameDialog = () => {
     >
       <DialogTitle>Set your profile</DialogTitle>
       <form onSubmit={updateUsername}>
+        <br />
         <TextField
+          label="Set username"
           value={username}
           setValue={setUsername}
           error={textFieldError}
@@ -91,6 +93,7 @@ export const SetUsernameDialog = () => {
         <Button type="submit">ok</Button>
       </form>
       <label htmlFor="icon-button-file">
+        Click on the avatar to change it
         <Input
           accept="image/*"
           id="icon-button-file"

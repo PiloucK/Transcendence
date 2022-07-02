@@ -135,6 +135,7 @@ export function ProfileSettingsDialog({
             <div className={styles.chat_create_channel_form_input}>
               Username
               <TextField
+                label=""
                 value={username}
                 setValue={setUsername}
                 error={textFieldError}

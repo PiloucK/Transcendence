@@ -26,7 +26,7 @@ import { errorHandler } from "../../errors/errorHandler";
 
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
-import { SetUsernameDialog } from "../Alerts/SetUsername";
+import { SetProfileFirstLogin } from "../Alerts/SetProfileFirstLogin";
 
 function NavigationDock({
   setIsInNavigation,
@@ -142,7 +142,7 @@ function NavigationDock({
         <Button onClick={deleteAllUsers}>remove all users and logout</Button>
       </div>
 
-      <SetUsernameDialog />
+      <SetProfileFirstLogin />
     </>
   );
 }

@@ -209,6 +209,7 @@ function CreateChannelForm() {
         <div className={styles.chat_create_channel_form_input}>
           Channel Name
           <TextField
+            label=""
             value={channelName}
             setValue={setChannelName}
             error={textFieldError}

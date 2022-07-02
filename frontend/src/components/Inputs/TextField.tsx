@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css";
 import TextFieldMUI from "@mui/material/TextField";
 
 export function TextField(props: {
+  label: string;
   value: string;
   setValue: (password: string) => void;
   error: string;
@@ -15,6 +16,7 @@ export function TextField(props: {
 
   return (
     <TextFieldMUI
+      label={props.label}
       variant="filled"
       sx={{
         m: 1,
@@ -26,6 +28,7 @@ export function TextField(props: {
       helperText={props.error}
       onChange={handleValueChange}
       value={props.value}
+      autoFocus
     />
   );
 }
