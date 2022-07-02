@@ -7,14 +7,14 @@ export class Match {
   id!: string;
 
   @ManyToOne(() => User, (user) => user.matches)
-  userOne!: User;
+  user1!: User;
 
   @ManyToOne(() => User, (user) => user.matches)
-  userTwo!: User;
+  user2!: User;
 
   @Column()
-  userOnePoints!: number;
+  user1Points!: number;
 
   @Column()
-  userTwoPoints!: number;
+  user2Points!: number;
 }

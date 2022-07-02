@@ -66,7 +66,7 @@ export class User {
 
   @OneToMany(
     () => Match,
-    (match) => (match.userOne === this ? match.userOne : match.userTwo),
+    (match) => (match.user1 === this ? match.user1 : match.user2),
   )
   matches!: Match[];
 

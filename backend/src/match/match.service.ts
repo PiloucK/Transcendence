@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { Match } from './match.entity';
 
@@ -9,19 +10,22 @@ export class MatchService {
   constructor(
     @InjectRepository(Match)
     private readonly matchRepository: Repository<Match>,
+    private usersService: UsersService,
   ) {}
 
   async create(
-    userOne: User,
-    userTwo: User,
-    userOnePoints: number,
-    userTwoPoints: number,
+    user1: User,
+    user2Login42: string,
+    user1Points: number,
+    user2Points: number,
   ) {
+    const user2 = await this.usersService.getUserByLogin42(user2Login42);
+
     const match = this.matchRepository.create({
-      userOne,
-      userTwo,
-      userOnePoints,
-      userTwoPoints,
+      user1,
+      user2,
+      user1Points,
+      user2Points,
     });
 
     await this.matchRepository.insert(match);
@@ -33,7 +37,7 @@ export class MatchService {
     let matches = await this.matchRepository.find({
       relations: ['userOne', 'userTwo'],
       where: {
-        userOne: {
+        user1: {
           login42: userLogin42,
         },
       },
@@ -42,7 +46,7 @@ export class MatchService {
       await this.matchRepository.find({
         relations: ['userOne', 'userTwo'],
         where: {
-          userTwo: {
+          user2: {
             login42: userLogin42,
           },
         },
