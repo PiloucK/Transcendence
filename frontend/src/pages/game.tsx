@@ -14,7 +14,45 @@ import { Login42 } from "../interfaces/status.types";
 import { ICoordinates } from "../interfaces/ICoordinates";
 import { IBallInfo } from "../interfaces/IBallInfo";
 
+
 const { publicRuntimeConfig } = getConfig();
+
+
+import stylesBall from "../components/Game/Ball.module.css";
+const BallTest = ({
+	gameSocket,
+	gameID,
+  }: {
+	gameSocket: Socket;
+	gameID: string;
+  }) => {
+
+	const [ballInfo, setBallInfo] = useState<IBallInfo>({
+		position: { x: 50, y: 50 },
+		direction: { x: 0, y: 0 },
+	  });
+	  const ballElem = useRef<HTMLElement | null>(null);
+
+
+	  useEffect(() => {
+		if (ballElem.current === null) {
+		  ballElem.current = document.getElementById("ball");
+		  gameSocket.on("game:ball-update", (ballUpdate: IBallInfo) => {
+			setBallInfo(ballUpdate);
+			console.log(ballUpdate);
+			
+		  });
+		}
+	  }, []);
+
+  useEffect(() => {
+    ballElem.current?.style.setProperty("--x", ballInfo.position.x.toString());
+    ballElem.current?.style.setProperty("--y", ballInfo.position.y.toString());
+  });
+
+  return <div className={stylesBall.ball} id="ball"></div>;
+};
+
 const Pong = () => {
   const [playerScore, setPlayerScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
@@ -36,8 +74,6 @@ const Pong = () => {
   });
 
   useEffect(() => {
-    console.log("USE EFFECT PONG");
-
     if (gameSocket.current === undefined) {
       gameSocket.current = io(
         `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}/game`,
@@ -58,38 +94,38 @@ const Pong = () => {
             player2.current = p2;
             invert.current = 1;
           }
-          gameSocket.current?.emit("game:new-point", gameID.current);
+          gameSocket.current?.emit("game:new-point", gameID.current, sessionContext.userSelf.login42);
         }
       );
 
-      gameSocket.current.on("game:point-start", (data: IBallInfo) => {
-        data.direction.x *= invert.current;
-        setBallInfo(data); // utilisation d'un useState pour tester l'envoie des infos depuis game, sinon revenir sur un useRef
-        setPlayGame(true);
-        console.log("NEW POINT", data);
-      });
+      //   gameSocket.current.on("game:point-start", (data: IBallInfo) => {
+      //     data.direction.x *= invert.current;
+      //     setBallInfo(data); // utilisation d'un useState pour tester l'envoie des infos depuis game, sinon revenir sur un useRef
+      //     setPlayGame(true);
+      //     console.log("NEW POINT", data);
+      //   });
 
-    //   gameSocket.current.on(
-    //     "game:newBallInfo",
-    //     (newBallInfo: IBallInfo, player: string) => {
-    //       let playerPaddle = document
-    //         .getElementById("player-paddle")
-    //         ?.getBoundingClientRect() as DOMRect;
+      //   gameSocket.current.on(
+      //     "game:newBallInfo",
+      //     (newBallInfo: IBallInfo, player: string) => {
+      //       let playerPaddle = document
+      //         .getElementById("player-paddle")
+      //         ?.getBoundingClientRect() as DOMRect;
 
-    //       let paddleBorderRatio =
-    //         (playerPaddle.right / window.innerWidth) * 100;
+      //       let paddleBorderRatio =
+      //         (playerPaddle.right / window.innerWidth) * 100;
 
-    //       const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
-    //       if (player === player2.current) {
-    //         newBallInfo.direction.x *= -1;
+      //       const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
+      //       if (player === player2.current) {
+      //         newBallInfo.direction.x *= -1;
 
-    //         newBallInfo.position.x =
-    //           100 - (paddleBorderRatio + ballRadiusWidthRatio);
-    //       } else
-    //         newBallInfo.position.x = paddleBorderRatio + ballRadiusWidthRatio;
-    //       setBallInfo(newBallInfo);
-    //     }
-    //   );
+      //         newBallInfo.position.x =
+      //           100 - (paddleBorderRatio + ballRadiusWidthRatio);
+      //       } else
+      //         newBallInfo.position.x = paddleBorderRatio + ballRadiusWidthRatio;
+      //       setBallInfo(newBallInfo);
+      //     }
+      //   );
 
       gameSocket.current.emit(
         "game:enter",
@@ -124,6 +160,13 @@ const Pong = () => {
     };
   }, []);
 
+
+  useEffect(() => {
+	console.log(    gameSocket.current,
+		player1.current,
+		player2.current,);
+	
+  })
   if (
     gameSocket.current === undefined ||
     player1.current === "" ||
@@ -131,14 +174,14 @@ const Pong = () => {
   ) {
     return (
       <div className={styles.mainLayout_background}>
-        <Score player={playerScore} opponent={opponentScore} />
+        <Score player={42} opponent={opponentScore} />
       </div>
     );
   }
   return (
     <div className={styles.mainLayout_background}>
       <Score player={playerScore} opponent={opponentScore} />
-      {playGame === true && (
+      {/* {playGame === true && (
         <Ball
           ballInfo={ballInfo}
           gameSocket={gameSocket.current}
@@ -146,7 +189,8 @@ const Pong = () => {
           player1={player1.current}
           player2={player2.current}
         />
-      )}
+      )} */}
+      <BallTest gameSocket={gameSocket.current} gameID={gameID.current} />
       <PlayerPaddle
         gameSocket={gameSocket.current}
         gameID={gameID.current}

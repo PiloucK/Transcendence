@@ -143,7 +143,21 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('game:new-point')
   onGamePoint(@MessageBody() gameID: string) {
-    this.server.to(gameID).emit('game:point-start', initBall());
+	let ballInfo : IBallInfo = initBall();
+
+	const deltaTime = 1000 / 60;
+
+	const ballVelocity = 0.035
+	// setInterval(() => {
+
+	// 	ballInfo.position.x = ballInfo.position.x + ballInfo.direction.x * ballVelocity * deltaTime;
+	// 	ballInfo.position.y = ballInfo.position.y + ballInfo.direction.y * ballVelocity * deltaTime;
+	// 	this.server.to(gameID).emit('game:ball-update', ballInfo);
+	// 	console.log(ballInfo);
+		
+	//   }, deltaTime);
+
+    // this.server.to(gameID).emit('game:point-start', initBall());
   }
 
   @SubscribeMessage('game:ball')
