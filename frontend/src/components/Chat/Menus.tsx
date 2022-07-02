@@ -50,7 +50,7 @@ function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUserSlim }) {
           sx={{ width: "20px", height: "20px" }}
         />
       </Avatar>
-      {user.login42}
+      {user.username}
       <ButtonTxtViewProfile login={user.login42} />
       <ButtonTxtUserStatus login={user.login42} />
       <ButtonTxtBlockUser login={user.login42} />
@@ -102,7 +102,7 @@ function DMList({
                 sx={{ width: "20px", height: "20px" }}
               />
             </Avatar>
-            {user.login42}
+            {user.username}
           </div>
         );
       })}
@@ -199,7 +199,7 @@ function SelectedUserMenu({
               sx={{ width: "20px", height: "20px" }}
             />
           </Avatar>
-          {user.login42}
+          {user.username}
         </div>
         <ButtonTxtViewProfile login={user.login42} />
         <ButtonTxtUserStatus login={user.login42} />
@@ -209,7 +209,10 @@ function SelectedUserMenu({
         <ButtonTxtSetAsAdmin login={user.login42} channel={channel} />
       </div>
     );
-  } else if (channel?.admins?.includes(sessionContext.userSelf.login42)) {
+  } else if (
+    channel?.admins?.includes(sessionContext.userSelf.login42) &&
+    channel?.owner !== user.login42
+  ) {
     return (
       <div className={styles.selected_user}>
         <div
@@ -227,7 +230,7 @@ function SelectedUserMenu({
               sx={{ width: "20px", height: "20px" }}
             />
           </Avatar>
-          {user.login42}
+          {user.username}
         </div>
         <ButtonTxtViewProfile login={user.login42} />
         <ButtonTxtUserStatus login={user.login42} />
@@ -254,7 +257,7 @@ function SelectedUserMenu({
               sx={{ width: "20px", height: "20px" }}
             />
           </Avatar>
-          {user.login42}
+          {user.username}
         </div>
         <ButtonTxtViewProfile login={user.login42} />
         <ButtonTxtUserStatus login={user.login42} />

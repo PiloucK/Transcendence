@@ -228,6 +228,11 @@ export class ChannelService {
     }
     this.resolveChannelRestrictions(channel);
 
+    if (
+      channel.owner !== user.login42 &&
+      !channel.admins.includes(user.login42)
+    )
+      throw new Error('Only admins can invite friends');
     if (channel.invitations.includes(inviteToChannelDto.userLogin42)) {
       return channel;
     }
@@ -310,16 +315,14 @@ export class ChannelService {
     }
     this.resolveChannelRestrictions(channel);
 
-    if (!channel.admins.includes(user.login42)) {
+    if (
+      channel.owner !== user.login42 &&
+      !channel.admins.includes(user.login42)
+    ) {
       throw new Error('You are not an admin of this channel');
     }
-
-    if (
-      channel.muted?.find(
-        ({ login }) => login === muteAChannelUserDto.userLogin42,
-      )
-    ) {
-      return channel;
+    if (channel.owner === muteAChannelUserDto.userLogin42) {
+      throw new Error('You are not allowed to mute the owner');
     }
     channel.muted?.push({
       login: muteAChannelUserDto.userLogin42,
@@ -352,16 +355,14 @@ export class ChannelService {
     }
     this.resolveChannelRestrictions(channel);
 
-    if (!channel.admins.includes(user.login42)) {
+    if (
+      channel.owner !== user.login42 &&
+      !channel.admins.includes(user.login42)
+    ) {
       throw new Error('You are not an admin of this channel');
     }
-
-    if (
-      channel.banned?.find(
-        ({ login }) => login === banAChannelUserDto.userLogin42,
-      )
-    ) {
-      return channel;
+    if (channel.owner === banAChannelUserDto.userLogin42) {
+      throw new Error('You are not allowed to ban the owner');
     }
     channel.banned?.push({
       login: banAChannelUserDto.userLogin42,
