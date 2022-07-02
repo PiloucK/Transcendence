@@ -3,23 +3,57 @@ import React, { useState } from "react";
 import emptyHistory from "../../public/sword-cross.png";
 import styles from "../../styles/Home.module.css";
 import { CardMatchHistory } from "../Cards/CardMatchHistory";
+import matchService from "../../services/match";
+import { Match } from "../../interfaces/match";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
+import { defaultSessionState } from "../../constants/defaultSessionState";
 import { useSessionContext } from "../../context/SessionContext";
-import Avatar from "@mui/material/Avatar";
+import { useSocketContext } from "../../context/SocketContext";
 
 function GameList({ userLogin }: { userLogin: string }) {
-  const [history, setHistory] = React.useState([
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-  ]);
+  const [matchs, setmatchs] = React.useState<Match[]>([]);
   const sessionContext = useSessionContext();
+  const errorContext = useErrorContext();
+  const socketContext = useSocketContext();
 
-  if (history.length !== 0) {
+  const fetchMatch = () => {
+    if (
+      userLogin !== defaultSessionState.userSelf.login42
+    ) {
+      matchService
+        .getForOneUser(userLogin)
+        .then((matchs: Match[]) => {
+          setmatchs(matchs);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, sessionContext));
+        });
+    }
+  };
+
+  React.useEffect(fetchMatch, [userLogin]);
+
+  React.useEffect(() => {
+    socketContext.socket.on("update-leaderboard", fetchMatch);
+    return () => {
+      socketContext.socket.removeListener(
+        "update-leaderboard",
+        fetchMatch
+      );
+    };
+  }, []);
+
+  if (matchs.length !== 0) {
     return (
       <>
-        {history.map((game, index: number) => (
+        {matchs.map((match, index: number) => (
           <CardMatchHistory
             key={index}
-            index={game}
-            userInfos={sessionContext.userSelf}
+            match={match}
+            userLogin={userLogin}
           />
         ))}
       </>

@@ -79,7 +79,7 @@ export default function ProfilePage() {
           </>
         )}
       </div>
-      <UserGameHistory userLogin={sessionContext.userSelf.login42} />
+      <UserGameHistory userLogin={displayedUser.login42} />
       <AddMatchField />
     </>
   );
