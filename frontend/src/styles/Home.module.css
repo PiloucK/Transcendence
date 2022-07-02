@@ -1807,6 +1807,11 @@ and should display them in columns of three cards max */
   bottom: 0%;
   top: 0%;
   background-color: #00213d;
+  position: absolute;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .profile_history_title {
@@ -1837,9 +1842,14 @@ and should display them in columns of three cards max */
 }
 
 .profile_history_content {
+  overflow-y: auto;
+  overflow-x: hidden;
+
   position: absolute;
+  width: 100%;
+  height: 70%;
   left: 50%;
-  top: 50%;
+  top: 55%;
   transform: translate(-50%, -50%);
 
   /* Header 2 */
@@ -1858,6 +1868,148 @@ and should display them in columns of three cards max */
   /* White */
 
   color: #ffffff;
+}
+
+.profile_history_card,
+.profile_history_card_victory,
+.profile_history_card_defeat {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+
+  width: 603px;
+  height: 68px;
+
+  border-radius: 20px;
+
+  border-radius: 20px;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  /* identical to box height */
+
+  display: flex;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 1rem;
+  /* margin: 0px 10px; */
+  word-break: break-word;
+}
+
+.profile_history_card::-webkit-scrollbar,
+.profile_history_card_victory::-webkit-scrollbar,
+.profile_history_card_defeat::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.profile_history_card_victory {
+  background: #fca311;
+}
+
+.profile_history_card_defeat {
+  background: #c4c4c4;
+}
+
+.profile_history_card .result_text,
+.profile_history_card_victory .result_text,
+.profile_history_card_defeat .result_text {
+  /* Victory */
+
+  position: relative;
+  left: 17%;
+  top: 20.07%;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 37px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* Navy */
+
+  color: #1c2d53;
+}
+
+.profile_history_card .score_opponent,
+.profile_history_card_victory .score_opponent,
+.profile_history_card_defeat .score_opponent,
+.profile_history_card .score_player,
+.profile_history_card_victory .score_player,
+.profile_history_card_defeat .score_player {
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 60px;
+  line-height: 92px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  color: #ffffff;
+}
+
+.profile_history_card .score_opponent,
+.profile_history_card_victory .score_opponent,
+.profile_history_card_defeat .score_opponent {
+  position: relative;
+  left: 30%;
+  bottom: 15%;
+}
+
+.profile_history_card .score_player,
+.profile_history_card_victory .score_player,
+.profile_history_card_defeat .score_player {
+  position: relative;
+  left: 5%;
+  bottom: 15%;
+}
+
+.profile_history_card .opponent_name,
+.profile_history_card_victory .opponent_name,
+.profile_history_card_defeat .opponent_name {
+  position: relative;
+  left: 21%;
+  top: 25.36%;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 31px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.profile_history_card .opponent_avatar,
+.profile_history_card_victory .opponent_avatar,
+.profile_history_card_defeat .opponent_avatar {
+  position: relative;
+  left: 63%;
+  /* right: 47%; */
+  bottom: 22%;
 }
 
 .profile_user {
