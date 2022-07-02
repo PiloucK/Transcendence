@@ -20,8 +20,9 @@ const createMatch = (
   selfScore: number,
   opponentScore: number
 ) => {
-  const data = { opponentLogin42, selfScore, opponentScore };
-  return axios.get(baseUrl, { data }).then((response) => response.data);
+  return axios
+    .post(baseUrl, { opponentLogin42, selfScore, opponentScore })
+    .then((response) => response.data);
 };
 
 export default {
