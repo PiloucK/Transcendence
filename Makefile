@@ -13,10 +13,12 @@ start:
 stop:
 	$(COMPOSE) stop
 
-clean:
+prune:
 	$(COMPOSE) down -v
 	docker system prune --volumes --force --all
 	docker image prune --all --force
+
+clean: stop
 
 fclean: clean
 
