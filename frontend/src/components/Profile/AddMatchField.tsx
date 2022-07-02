@@ -13,5 +13,5 @@ export const AddMatchField = () => {
     });
   };
 
-  return <Button onClick={addMatch}>add match</Button>;
+  return <Button variant="outlined" onClick={addMatch}>add match</Button>;
 };
