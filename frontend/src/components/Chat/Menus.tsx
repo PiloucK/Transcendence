@@ -209,7 +209,10 @@ function SelectedUserMenu({
         <ButtonTxtSetAsAdmin login={user.login42} channel={channel} />
       </div>
     );
-  } else if (channel?.admins?.includes(sessionContext.userSelf.login42)) {
+  } else if (
+    channel?.admins?.includes(sessionContext.userSelf.login42) &&
+    channel?.owner !== user.login42
+  ) {
     return (
       <div className={styles.selected_user}>
         <div
