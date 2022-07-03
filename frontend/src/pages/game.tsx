@@ -37,17 +37,22 @@ const Pong = () => {
         { transports: ["websocket"] }
       );
 
-	  gameSocket.current.emit(
+      gameSocket.current.emit(
         "game:enter",
         Array.isArray(userLogin42) ? userLogin42[0] : userLogin42,
         Array.isArray(opponentLogin42) ? opponentLogin42[0] : opponentLogin42,
         sessionContext.userSelf.login42
       );
 
-
       gameSocket.current.on(
         "game:init",
-        (newGameID: string, p1: Login42, p2: Login42) => {
+        (
+          newGameID: string,
+          p1: Login42,
+          p2: Login42,
+          p1Score: number,
+          p2Score: number
+        ) => {
           gameID.current = newGameID;
 
           if (p2 === sessionContext.userSelf.login42) {
@@ -66,6 +71,9 @@ const Pong = () => {
           ) {
             gameSocket.current?.emit("game:new-point", gameID.current);
           }
+
+          setPlayerScore(p1Score);
+          setOpponentScore(p2Score);
           setGameReady(true);
         }
       );
@@ -76,7 +84,11 @@ const Pong = () => {
         } else {
           setOpponentScore((prevState) => prevState + 1);
         }
-        gameSocket.current?.emit("game:new-point", gameID.current);
+        if (playerScore === 5 || opponentScore === 5) {
+          return;
+        } else {
+          gameSocket.current?.emit("game:new-point", gameID.current);
+        }
       });
     }
     return () => {

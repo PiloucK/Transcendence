@@ -124,7 +124,9 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         'game:init',
         gameID,
         currentGame.player1,
-        currentGame.player2, //add current score for spectator
+        currentGame.player2,
+        currentGame.player1Score,
+        currentGame.player2Score,
       );
       return;
     }
@@ -136,7 +138,14 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     ) {
       this.server
         .to(gameID)
-        .emit('game:init', gameID, currentGame.player1, currentGame.player2);
+        .emit(
+          'game:init',
+          gameID,
+          currentGame.player1,
+          currentGame.player2,
+          0,
+          0,
+        );
 
       currentGame.gameStatus = 'READY';
       console.log('sending game start', userSelf);
@@ -215,6 +224,12 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       if (currentGame.intervalID) {
         clearInterval(currentGame?.intervalID);
         currentGame.intervalID = undefined;
+      }
+
+      if (player === currentGame.player1) {
+        currentGame.player2Score++;
+      } else {
+        currentGame.player1Score++;
       }
 
       this.server.to(gameID).emit('game:update-score', player);
