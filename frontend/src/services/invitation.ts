@@ -15,10 +15,10 @@ const getForOneUser = (userLogin42: string) => {
 };
 
 const sendInvitation = (
-  opponentLogin42: string,
+  invitedLogin42: string,
 ) => {
   return axios
-    .post(baseUrl, { opponentLogin42 })
+    .post(baseUrl, { invitedLogin42 })
     .then((response) => response.data);
 };
 

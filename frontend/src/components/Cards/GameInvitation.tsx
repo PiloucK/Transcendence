@@ -2,8 +2,15 @@ import styles from "../../styles/Home.module.css";
 import { IUserSelf, IUserSlim } from "../../interfaces/IUser";
 import Link from "next/link";
 import Avatar from "@mui/material/Avatar";
-import { Match } from "../../interfaces/match";
 import { useSessionContext } from "../../context/SessionContext";
+import { defaultSessionState } from "../../constants/defaultSessionState";
+import { errorHandler } from "../../errors/errorHandler";
+import { useErrorContext } from "../../context/ErrorContext";
+import { AxiosError } from "axios";
+import { useSocketContext } from "../../context/SocketContext";
+import { ReactElement, useEffect, useState } from "react";
+import invitationService from "../../services/invitation";
+import { Invitation } from "../../interfaces/invitation";
 
 function CardInviteInGame({ userInfo }: { userInfo: IUserSelf }) {
   const acceptInvitation = () => {};
@@ -52,13 +59,46 @@ function CardInviteInGame({ userInfo }: { userInfo: IUserSelf }) {
 
 export function GameInvitation() {
   const sessionContext = useSessionContext();
-  const invitations = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const errorContext = useErrorContext();
+  const socketContext = useSocketContext();
 
-  return (
-    <div className={styles.invite_card_box}>
-      {invitations.map((index) => (
-        <CardInviteInGame key={index} userInfo={sessionContext.userSelf} />
-      ))}
-    </div>
-  );
+  useEffect(() => {
+    const fetchInvitations = () => {
+      if (
+        sessionContext.userSelf.login42 !== defaultSessionState.userSelf.login42
+      )
+        invitationService
+          .getForOneUser(sessionContext.userSelf.login42)
+          .then((invitations) => {
+            setInvitations(invitations);
+          })
+          .catch((error: Error | AxiosError<unknown, any>) => {
+            errorContext.newError?.(errorHandler(error, sessionContext));
+          });
+    };
+    fetchInvitations();
+    socketContext.socket.on("fetch-invitations", fetchInvitations);
+    return () => {
+      socketContext.socket.removeListener(
+        "fetch-invitations",
+        fetchInvitations
+      );
+    };
+  }, [sessionContext, socketContext, errorContext]);
+
+  if (invitations && invitations.length !== 0) {
+    return (
+      <div className={styles.invite_card_box}>
+        {invitations.map((invitation) => (
+          <CardInviteInGame
+            key={invitation.id}
+            userInfo={invitation.inviter}
+          />
+        ))}
+      </div>
+    );
+  } else {
+    return null;
+  }
 }

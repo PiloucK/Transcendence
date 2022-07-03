@@ -7,8 +7,8 @@ export class Invitation {
   id!: string;
 
   @ManyToOne(() => User, (user) => user.invitations)
-  user1!: User;
+  inviter!: User;
 
   @ManyToOne(() => User, (user) => user.invitations)
-  user2!: User;
+  invited!: User;
 }

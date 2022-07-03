@@ -20,10 +20,10 @@ export class InvitationController {
     @Body() createInvitationDto: CreateInvitationDto,
     @GetReqUser() reqUser: User,
   ) {
-    const { opponentLogin42 } = createInvitationDto;
+    const { invitedLogin42 } = createInvitationDto;
     return this.invitationService.create(
       reqUser,
-      opponentLogin42,
+	  invitedLogin42,
     );
   }
 }

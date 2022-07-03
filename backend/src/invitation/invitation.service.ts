@@ -9,45 +9,45 @@ import { Invitation } from './invitation.entity';
 export class InvitationService {
   constructor(
     @InjectRepository(Invitation)
-    private readonly matchRepository: Repository<Invitation>,
+    private readonly invitationRepository: Repository<Invitation>,
     private usersService: UsersService,
   ) {}
 
   async create(
-    user1: User,
+    inviter: User,
     user2Login42: string,
   ) {
-    const user2 = await this.usersService.getUserByLogin42(user2Login42);
+    const invited = await this.usersService.getUserByLogin42(user2Login42);
 
-    const match = this.matchRepository.create({
-      user1,
-      user2,
+    const invitation = this.invitationRepository.create({
+      inviter,
+      invited,
     });
 
-    await this.matchRepository.insert(match);
+    await this.invitationRepository.insert(invitation);
 
-    return match;
+    return invitation;
   }
 
   async getForOneUser(userLogin42: string) {
-    let matches = await this.matchRepository.find({
-      relations: ['user1', 'user2'],
+    let invitations = await this.invitationRepository.find({
+      relations: ['inviter', 'invited'],
       where: {
-        user1: {
+        invited: {
           login42: userLogin42,
         },
       },
     });
-    matches = matches.concat(
-      await this.matchRepository.find({
-        relations: ['user1', 'user2'],
-        where: {
-          user2: {
-            login42: userLogin42,
-          },
-        },
-      }),
-    );
-    return matches;
+    // invitations = invitations.concat(
+    //   await this.invitationRepository.find({
+    //     relations: ['inviter', 'invited'],
+    //     where: {
+    //       invited: {
+    //         login42: userLogin42,
+    //       },
+    //     },
+    //   }),
+    // );
+    return invitations;
   }
 }
