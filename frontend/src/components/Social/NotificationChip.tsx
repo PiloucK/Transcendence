@@ -25,7 +25,7 @@ export const NotificationChip = ({
   );
 
   if (typeof requests === "undefined") {
-    return children;
+    return <>{children}</>;
   }
   return (
     <Badge badgeContent={requests.length} color="primary">

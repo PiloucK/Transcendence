@@ -37,7 +37,7 @@ export function EmptyNotificationcenter() {
   return (
     <div className={styles.social_empty_page}>
       <Image src={upToDate} />
-      You're up to date for now !
+      You&apos;re up to date for now !
     </div>
   );
 }

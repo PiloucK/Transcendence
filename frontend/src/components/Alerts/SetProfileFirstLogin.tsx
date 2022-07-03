@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogTitle } from "@mui/material";
 import { AxiosError } from "axios";
-import { FormEventHandler, useState } from "react";
+import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSessionContext } from "../../context/SessionContext";
@@ -19,9 +19,11 @@ export const SetProfileFirstLogin = () => {
   const [newImage, setNewImage] = useState<Blob>();
   const [preview, setPreview] = useState("");
 
-  const updateNewImage = (event) => {
-    setNewImage(event.target.files[0]);
-    setPreview(URL.createObjectURL(event.target.files[0]));
+  const updateNewImage: ChangeEventHandler<HTMLInputElement> = (event) => {
+    if (event.target.files) {
+      setNewImage(event.target.files[0]);
+      setPreview(URL.createObjectURL(event.target.files[0]));
+    }
   };
 
   const Input = styled("input")({

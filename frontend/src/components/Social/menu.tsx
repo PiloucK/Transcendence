@@ -6,11 +6,9 @@ import { NotificationChip } from "./NotificationChip";
 
 function NotificationsButton() {
   return (
-    <>
-      <NotificationChip>
-        <BellIcon />
-      </NotificationChip>
-    </>
+    <NotificationChip>
+      <BellIcon />
+    </NotificationChip>
   );
 }
 

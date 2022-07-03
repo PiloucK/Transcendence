@@ -28,7 +28,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { ButtonAcceptChannelInvite } from "../Buttons/ButtonAcceptChannelInvite";
 import { useSocketContext } from "../../context/SocketContext";
 
-function FriendList({ setMenu }: { setMenu: (menu: string) => void }) {
+function FriendList({
+  setMenu,
+}: {
+  setMenu: ((menu: string) => void) | undefined;
+}) {
   const sessionContext = useSessionContext();
 
   if (sessionContext.userSelf.friends.length === 0) {
@@ -44,7 +48,11 @@ function FriendList({ setMenu }: { setMenu: (menu: string) => void }) {
   );
 }
 
-function NewDirectMessage({ setMenu }: { setMenu: (menu: string) => void }) {
+function NewDirectMessage({
+  setMenu,
+}: {
+  setMenu: ((menu: string) => void) | undefined;
+}) {
   return (
     <div className={styles.chat_direct_message_content}>
       Select a friend to start a conversation
@@ -241,7 +249,7 @@ function DirectMessageContent({
   setMenu,
 }: {
   menu: string;
-  setMenu: (menu: string) => void;
+  setMenu: ((menu: string) => void) | undefined;
 }) {
   if (menu === "new_message") {
     return <NewDirectMessage setMenu={setMenu} />;

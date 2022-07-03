@@ -75,7 +75,6 @@ export function PasswordField(props: {
               </IconButton>
             </InputAdornment>
           }
-          label="Password"
         />
 				<FormHelperText>{props.error}</FormHelperText>
       </FormControl>
@@ -116,7 +115,6 @@ export function PasswordField(props: {
               </IconButton>
             </InputAdornment>
           }
-          label="Password"
         />
       </FormControl>
     );

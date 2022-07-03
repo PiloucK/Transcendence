@@ -1,5 +1,4 @@
 import axios, { AxiosError } from "axios";
-import Router from "next/router";
 import { defaultErrorData } from "../constants/defaultErrorData";
 import { HttpStatusCodes } from "../constants/httpStatusCodes";
 import { IErrorData } from "../interfaces/IErrorData";

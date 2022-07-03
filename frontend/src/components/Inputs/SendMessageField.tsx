@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEventHandler } from "react";
 import styles from "../../styles/Home.module.css";
 
 import FormControl from "@mui/material/FormControl";
@@ -45,7 +45,7 @@ export function SendMessageField({
     setInput(event.target.value);
   };
 
-  const handleSendMessage = (event) => {
+  const handleSendMessage: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     if (input.length > 0) {
       if (channel.length === 36) {
@@ -105,9 +105,8 @@ export function SendMessageField({
           id="outlined-adornment-input"
           value={input}
           onChange={handleInputChange}
-          label="Text message"
           endAdornment={
-            <InputAdornment position="end" type="submit">
+            <InputAdornment position="end">
               <IconButton type="submit" aria-label="send message">
                 <SendIcon />
               </IconButton>

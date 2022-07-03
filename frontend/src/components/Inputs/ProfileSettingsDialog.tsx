@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEventHandler, useState } from "react";
 import styles from "../../styles/Home.module.css";
 
 import { TextField } from "../Inputs/TextField";
@@ -45,9 +45,11 @@ export function ProfileSettingsDialog({
   const [newImage, setNewImage] = useState<Blob>();
   const [preview, setPreview] = useState("");
 
-  const updateNewImage = (event) => {
-    setNewImage(event.target.files[0]);
-    setPreview(URL.createObjectURL(event.target.files[0]));
+  const updateNewImage: ChangeEventHandler<HTMLInputElement> = (event) => {
+    if (event.target.files) {
+      setNewImage(event.target.files[0]);
+      setPreview(URL.createObjectURL(event.target.files[0]));
+    }
   };
 
   const Input = styled("input")({

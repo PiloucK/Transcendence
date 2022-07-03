@@ -19,7 +19,7 @@ export function CardUserDM({
   setMenu,
 }: {
   userInfos: IUserSlim;
-  setMenu: (menu: string) => void;
+  setMenu: ((menu: string) => void) | undefined;
 }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
@@ -27,13 +27,14 @@ export function CardUserDM({
 
   const createPrivateConv = () => {
     if (
-      sessionContext.userSelf.login42 !== defaultSessionState.userSelf.login42 &&
+      sessionContext.userSelf.login42 !==
+        defaultSessionState.userSelf.login42 &&
       sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       privateConvService
         .createPrivateConv(sessionContext.userSelf.login42, userInfos.login42)
         .then((privateConv: PrivateConv) => {
-          setMenu(
+          setMenu?.(
             privateConv.userOne.login42 + "|" + privateConv.userTwo.login42
           );
           socketContext.socket.emit("user:update-direct-messages");

@@ -65,7 +65,7 @@ function DMList({
 }: {
   openedDMs: PrivateConv[];
   menu: string;
-  setMenu: (menu: string) => void;
+  setMenu: ((menu: string) => void) | undefined;
 }) {
   const sessionContext = useSessionContext();
 
@@ -88,7 +88,7 @@ function DMList({
             key={key}
             className={styles.chat_direct_message_menu_new_selected}
             onClick={() => {
-              setMenu(key);
+              setMenu?.(key);
             }}
           >
             <Avatar
@@ -112,7 +112,7 @@ function DMList({
 
 export function DirectMessageMenu(props: {
   menu: string;
-  setMenu: (menu: string) => void;
+  setMenu: ((menu: string) => void) | undefined;
 }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
@@ -157,7 +157,7 @@ export function DirectMessageMenu(props: {
       <div
         className={getStyle("new_message")}
         onClick={() => {
-          props.setMenu("new_message");
+          props.setMenu?.("new_message");
         }}
       >
         <Image src={newMessageLogo} alt="new message" width={18} height={18} />

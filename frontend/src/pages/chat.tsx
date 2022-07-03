@@ -3,7 +3,7 @@ import React from "react";
 import { ChatMenu } from "../components/Chat/Menus";
 import styles from "../styles/Home.module.css";
 
-import { Channel } from "../interfaces/users";
+import { Channel } from "../interfaces/Chat.interfaces";
 import { DirectMessage } from "../components/Chat/DirectMessage";
 import { AddChannel } from "../components/Chat/AddChannel";
 import { ChannelPage } from "../components/Chat/Channel";
