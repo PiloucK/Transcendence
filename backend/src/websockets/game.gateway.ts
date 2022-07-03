@@ -24,7 +24,7 @@ interface IGame {
   player2: string | undefined;
   player1Score: number;
   player2Score: number;
-  gameStatus: 'WAITING' | 'READY' | 'STOP';
+  gameStatus: 'WAITING' | 'READY';
   ballInfo: IBallInfo;
   intervalID?: ReturnType<typeof setInterval>;
 } // EXPORTER INTERFACE DANS UN FICHIER
@@ -201,7 +201,6 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         currentGame.ballInfo.direction.x *= -1;
     }
 
-    this.server.to(gameID).emit('game:newBallInfo');
   }
 
   @SubscribeMessage('game:point-lost')
@@ -212,7 +211,6 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     if (currentGame?.intervalID) {
       clearInterval(currentGame?.intervalID);
       currentGame.intervalID = undefined;
-      console.log('setting interval to undefined');
     }
 
     this.server.to(gameID).emit('game:update-score', player);
