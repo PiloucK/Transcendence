@@ -8,6 +8,7 @@ import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { AxiosError } from "axios";
 import { useSocketContext } from "../../context/SocketContext";
+import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 
 export function ButtonUserStatus({
   displayedUser,
@@ -30,7 +31,16 @@ export function ButtonUserStatus({
 			socketContext.socket.emit("user:invitation-sent");
 		  })
 		  .catch((error: Error | AxiosError<unknown, any>) => {
-			errorContext.newError?.(errorHandler(error, sessionContext));
+			const parsedError = errorHandler(error, sessionContext);
+			if (
+				parsedError.statusCode === HttpStatusCodes.CONFLICT &&
+				parsedError.message.startsWith(
+				  "The user is already invited to play."
+				)
+			  ) {
+			} else {
+				errorContext.newError?.(parsedError);
+			  }
 		  });
 	  }
   }

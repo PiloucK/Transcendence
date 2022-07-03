@@ -1,4 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { 
+  ConflictException,
+  Injectable
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
@@ -19,12 +22,51 @@ export class InvitationService {
   ) {
     const invited = await this.usersService.getUserByLogin42(user2Login42);
 
+	const existingInvitation = await this.invitationRepository.findOne({
+		where: {
+			invited: {
+				login42: invited.login42
+			},
+			inviter: {
+				login42: inviter.login42
+			}
+		}
+	});
+    if (existingInvitation) {
+		throw new ConflictException('The user is already invited to play.');
+	}
+
     const invitation = this.invitationRepository.create({
       inviter,
       invited,
     });
 
     await this.invitationRepository.insert(invitation);
+
+    return invitation;
+  }
+
+  async delete(
+    invited: User,
+    inviterLogin42: string,
+  ) {
+    const inviter = await this.usersService.getUserByLogin42(inviterLogin42);
+
+	const invitation = await this.invitationRepository.findOne({
+		where: {
+			invited: {
+				login42: invited.login42
+			},
+			inviter: {
+				login42: inviter.login42
+			}
+		}
+	});
+    if (!invitation) {
+		throw new Error('Invitation not found');
+	}
+
+    await this.invitationRepository.delete(invitation.id);
 
     return invitation;
   }

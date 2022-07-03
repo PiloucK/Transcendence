@@ -13,9 +13,21 @@ import invitationService from "../../services/invitation";
 import { Invitation } from "../../interfaces/invitation";
 
 function CardInviteInGame({ userInfo }: { userInfo: IUserSelf }) {
+  const errorContext = useErrorContext();
+  const sessionContext = useSessionContext();
+  const socketContext = useSocketContext();
+
   const acceptInvitation = () => {};
 
-  const declineInvitation = () => {};
+  const declineInvitation = () => {
+	invitationService.declineInvitation(userInfo.login42)
+	.then(() => {
+		socketContext.socket.emit("user:invitation-sent");
+	  })
+	.catch((error: Error | AxiosError<unknown, any>) => {
+	  errorContext.newError?.(errorHandler(error, sessionContext));
+	});
+  };
 
   return (
     <div className={styles.invite_card}>

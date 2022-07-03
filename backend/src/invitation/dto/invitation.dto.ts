@@ -5,3 +5,9 @@ export class CreateInvitationDto {
   @IsString()
   invitedLogin42!: string;
 }
+
+export class DeclineInvitationDto {
+	@IsNotEmpty()
+	@IsString()
+	inviterLogin42!: string;
+}

@@ -14,15 +14,20 @@ const getForOneUser = (userLogin42: string) => {
     .then((response) => response.data);
 };
 
-const sendInvitation = (
-  invitedLogin42: string,
-) => {
+const sendInvitation = (invitedLogin42: string) => {
   return axios
     .post(baseUrl, { invitedLogin42 })
+    .then((response) => response.data);
+};
+
+const declineInvitation = (inviterLogin42: string) => {
+  return axios
+    .delete(`${baseUrl}/${inviterLogin42}`)
     .then((response) => response.data);
 };
 
 export default {
   getForOneUser,
   sendInvitation,
+  declineInvitation,
 };
