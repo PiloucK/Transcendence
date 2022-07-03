@@ -75,7 +75,7 @@ export class User {
     () => Invitation,
     (invitation) => (invitation.user1 === this ? invitation.user1 : invitation.user2),
   )
-  invitations!: Match[];
+  invitations!: Invitation[];
 
   @Column({ default: false })
   isTwoFactorAuthEnabled!: boolean;

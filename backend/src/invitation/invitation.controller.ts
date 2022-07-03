@@ -16,7 +16,7 @@ export class InvitationController {
   }
 
   @Post()
-  saveMatch(
+  saveInvitation(
     @Body() createInvitationDto: CreateInvitationDto,
     @GetReqUser() reqUser: User,
   ) {

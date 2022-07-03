@@ -62,6 +62,11 @@ export class WebsocketsGateway
     this.server.sockets.emit('update-leaderboard');
   }
 
+  @SubscribeMessage('user:invitation-sent')
+  onInvitationSent() {
+    this.server.sockets.emit('fetch-invitations');
+  }
+
   @SubscribeMessage('user:update-elo')
   onEloUpdate() {
     this.server.sockets.emit('update-leaderboard');
