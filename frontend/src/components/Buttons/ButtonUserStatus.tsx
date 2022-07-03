@@ -22,32 +22,36 @@ export function ButtonUserStatus({
   const socketContext = useSocketContext();
 
   const sendInvitation = () => {
-	if (
-		sessionContext.userSelf.login42 !== defaultSessionState.userSelf.login42
-	  ) {
-		invitationService
-		  .sendInvitation(displayedUser.login42)
-		  .then(() => {
-			socketContext.socket.emit("user:invitation-sent");
-		  })
-		  .catch((error: Error | AxiosError<unknown, any>) => {
-			const parsedError = errorHandler(error, sessionContext);
-			if (
-				parsedError.statusCode === HttpStatusCodes.CONFLICT &&
-				parsedError.message.startsWith(
-				  "The user is already invited to play."
-				)
-			  ) {
-			} else {
-				errorContext.newError?.(parsedError);
-			  }
-		  });
-	  }
-  }
+    if (
+      sessionContext.userSelf.login42 !== defaultSessionState.userSelf.login42
+    ) {
+      invitationService
+        .sendInvitation(displayedUser.login42)
+        .then(() => {
+          socketContext.socket.emit("user:invitation-sent");
+        })
+        .catch((error: Error | AxiosError<unknown, any>) => {
+          const parsedError = errorHandler(error, sessionContext);
+          if (
+            parsedError.statusCode === HttpStatusCodes.CONFLICT &&
+            parsedError.message.startsWith(
+              "The user is already invited to play."
+            )
+          ) {
+            alert("The user is already invited to play.");
+          } else {
+            errorContext.newError?.(parsedError);
+          }
+        });
+    }
+  };
 
   if (userStatus?.status === "ONLINE" || userStatus?.status === "IN_QUEUE") {
     return (
-      <div className={styles.social_friend_card_button} onClick={sendInvitation}>
+      <div
+        className={styles.social_friend_card_button}
+        onClick={sendInvitation}
+      >
         Defy
       </div>
     );
