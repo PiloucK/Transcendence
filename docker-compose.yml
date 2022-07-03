@@ -6,8 +6,6 @@ services:
     container_name: frontend-transcendence
     depends_on:
       - backend
-    env_file:
-      - .env
     restart: unless-stopped
 
   backend:

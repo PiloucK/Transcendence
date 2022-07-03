@@ -17,7 +17,6 @@ import { errorHandler } from "../../errors/errorHandler";
 const { publicRuntimeConfig } = getConfig();
 
 export function DockGuest() {
-  console.log("dockguest");
   const sessionContext = useSessionContext();
   const errorContext = useErrorContext();
   const socketContext = useSocketContext();
@@ -48,7 +47,7 @@ export function DockGuest() {
     <>
       <Dock>
         <Link
-          href={`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/auth`}
+          href={`http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth`}
         >
           <Tooltip title="Login with your 42 account">
             <IconButton className={styles.icons} aria-label="Authentication">

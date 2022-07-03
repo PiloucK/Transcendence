@@ -16,7 +16,10 @@ export const authenticate = (
   socketContext: ISocketContext,
   sessionContext: ISessionContext
 ) => {
-  if (Cookies.get(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME)) {
+  if (
+    process.env.NEXT_PUBLIC_ACCESSTOKEN_COOKIE_NAME &&
+    Cookies.get(process.env.NEXT_PUBLIC_ACCESSTOKEN_COOKIE_NAME)
+  ) {
     authService
       .getLoggedInUser()
       .then((userSelf) => {

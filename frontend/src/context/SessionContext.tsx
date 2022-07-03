@@ -32,9 +32,14 @@ export const SessionProvider = ({
     socketContext.socket.emit("user:logout", userSelf.login42);
     setUserSelf(defaultSessionState.userSelf);
     Router.push("/");
-    Cookies.remove(publicRuntimeConfig.ACCESSTOKEN_COOKIE_NAME, {
-      path: publicRuntimeConfig.ACCESSTOKEN_COOKIE_PATH,
-    });
+    if (
+      process.env.NEXT_PUBLIC_ACCESSTOKEN_COOKIE_NAME &&
+      process.env.NEXT_PUBLIC_ACCESSTOKEN_COOKIE_PATH
+    ) {
+      Cookies.remove(process.env.NEXT_PUBLIC_ACCESSTOKEN_COOKIE_NAME, {
+        path: process.env.NEXT_PUBLIC_ACCESSTOKEN_COOKIE_PATH,
+      });
+    }
   };
 
   const updateUserSelf = async () => {

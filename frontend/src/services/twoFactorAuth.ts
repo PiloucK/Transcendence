@@ -1,8 +1,8 @@
 import axios from "axios";
 import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
-const baseUrl = `http://${publicRuntimeConfig.HOST}\
-:${publicRuntimeConfig.BACKEND_PORT}\
+const baseUrl = `http://${process.env.NEXT_PUBLIC_HOST}\
+:${process.env.NEXT_PUBLIC_BACKEND_PORT}\
 /two-factor-auth`;
 
 axios.defaults.withCredentials = true;
