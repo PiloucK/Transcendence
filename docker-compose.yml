@@ -8,8 +8,6 @@ services:
       - backend
     env_file:
       - .env
-    volumes: #remove when development is finished
-      - ./frontend/src:/usr/src/app/frontend/src
     restart: unless-stopped
 
   backend:
@@ -23,8 +21,6 @@ services:
     env_file:
       - .env
       - .env.private
-    volumes: #remove when development is finished
-      - ./backend/src:/usr/src/app/backend/src
     restart: unless-stopped
 
   database:
