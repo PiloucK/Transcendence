@@ -187,20 +187,20 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('game:ballCountered')
-  onGameBallCountered(
-    @MessageBody() data: any[],
-    @ConnectedSocket() client: Socket,
-  ) {
+  onGameBallCountered(@MessageBody() data: any[]) {
     const [angleRad, gameID, player] = data;
     const currentGame = this.runningGames.get(gameID);
 
-    if (currentGame && currentGame.ballInfo) {
+    if (
+      currentGame &&
+      currentGame.ballInfo &&
+      (player === currentGame.player1 || player === currentGame.player2)
+    ) {
       currentGame.ballInfo.direction.x = Math.cos(angleRad);
       currentGame.ballInfo.direction.y = Math.sin(angleRad);
       if (player === currentGame.player2)
         currentGame.ballInfo.direction.x *= -1;
     }
-
   }
 
   @SubscribeMessage('game:point-lost')
@@ -208,11 +208,16 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     const [gameID, player] = data;
     const currentGame = this.runningGames.get(gameID);
 
-    if (currentGame?.intervalID) {
-      clearInterval(currentGame?.intervalID);
-      currentGame.intervalID = undefined;
-    }
+    if (
+      currentGame &&
+      (player === currentGame.player1 || player === currentGame.player2)
+    ) {
+      if (currentGame.intervalID) {
+        clearInterval(currentGame?.intervalID);
+        currentGame.intervalID = undefined;
+      }
 
-    this.server.to(gameID).emit('game:update-score', player);
+      this.server.to(gameID).emit('game:update-score', player);
+    }
   }
 }
