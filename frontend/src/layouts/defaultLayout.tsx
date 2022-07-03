@@ -7,6 +7,7 @@ import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
 import { authenticate } from "../events/authenticate";
 import { showOverlayOnEscape } from "../events/showOverlayOnEscape";
+import { GameInvitation } from "../components/Cards/GameInvitation";
 
 export const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
   const sessionContext = useSessionContext();
@@ -24,7 +25,7 @@ export const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
   // have to always show children and overlay if the is activated !! lags come from rerendering all components in the page
   return (
     <>
-      {showOverlay ? (
+      {/* {showOverlay ? (
         <>
           <div className={styles.mainLayout_left_background} />
           <div className={styles.mainLayout_right_background} />
@@ -33,9 +34,10 @@ export const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
           </Link>
           <DockSelector />
         </>
-      ) : (
-        children
-      )}
+      ) : ( */}
+		<GameInvitation />
+        {children}
+    {/*   )} */}
     </>
   );
 };

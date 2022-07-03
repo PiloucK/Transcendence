@@ -171,26 +171,26 @@
 	Background that will take the left side of the screen
 */
 .mainLayout_left_background {
+  z-index: -1;
   position: absolute;
   top: 0;
   left: 0;
   width: 50%;
   height: 100%;
   background-color: #00213d;
-  z-index: -1;
 }
 
 /* 
 	Background that will take the right side of the screen
 */
 .mainLayout_right_background {
+  z-index: -1;
   position: absolute;
   top: 0;
   left: 50%;
   width: 50%;
   height: 100%;
   background-color: #1985a1;
-  z-index: -1;
 }
 
 /* Set the background-color of the main page */
@@ -1140,6 +1140,7 @@ and should display them in columns of three cards max */
 }
 
 .channel_content {
+  z-index: -1;
   position: absolute;
   width: 83.5%;
   height: 100%;
@@ -1799,6 +1800,7 @@ and should display them in columns of three cards max */
 */
 
 .profile_history {
+  z-index: -1;
   position: absolute;
   width: 76.5%;
   height: 100%;
@@ -1807,7 +1809,6 @@ and should display them in columns of three cards max */
   bottom: 0%;
   top: 0%;
   background-color: #00213d;
-  position: absolute;
 
   display: flex;
   flex-direction: column;
@@ -2466,4 +2467,33 @@ and should display them in columns of three cards max */
   display: grid;
   justify-content: center;
   background: #163f5b;
+}
+
+.invite_card_box {
+  z-index: 50;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  position: absolute;
+
+  height: 70%;
+  top: 5%;
+  right: 2%;
+}
+
+.invite_card {
+  z-index: 51;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+
+  width: 338px;
+  height: 110px;
+
+  background: #163f5b;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+
+  margin: 5px;
 }

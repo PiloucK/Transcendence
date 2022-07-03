@@ -6,6 +6,7 @@ import { useSessionContext } from "../context/SessionContext";
 import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
 import { authenticate } from "../events/authenticate";
+import { GameInvitation } from "../components/Cards/GameInvitation";
 
 export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
   const sessionContext = useSessionContext();
@@ -18,6 +19,7 @@ export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
+      <GameInvitation />
       {children}
       <div className={styles.mainLayout_left_background} />
       <div className={styles.mainLayout_right_background} />
