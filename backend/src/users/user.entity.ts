@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { Channel } from 'src/channel/channel.entity';
+import { Invitation } from 'src/invitation/invitation.entity';
 import { Match } from 'src/match/match.entity';
 import { PrivateConv } from 'src/privateConv/privateConv.entity';
 import {
@@ -69,6 +70,12 @@ export class User {
     (match) => (match.user1 === this ? match.user1 : match.user2),
   )
   matches!: Match[];
+
+  @OneToMany(
+    () => Invitation,
+    (invitation) => (invitation.user1 === this ? invitation.user1 : invitation.user2),
+  )
+  invitations!: Match[];
 
   @Column({ default: false })
   isTwoFactorAuthEnabled!: boolean;
