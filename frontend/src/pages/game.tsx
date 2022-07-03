@@ -16,74 +16,6 @@ import { IBallInfo } from "../interfaces/IBallInfo";
 
 const { publicRuntimeConfig } = getConfig();
 
-import stylesBall from "../components/Game/Ball.module.css";
-const BallTest = ({
-  gameSocket,
-  gameID,
-}: {
-  gameSocket: Socket;
-  gameID: string;
-}) => {
-  const [ballInfo, setBallInfo] = useState<IBallInfo>({
-    position: { x: 50, y: 50 },
-    direction: { x: 0, y: 0 },
-  });
-  const ballElem = useRef<HTMLElement | null>(null);
-  const sessionContext = useSessionContext();
-
-  const paddleCollision = (paddle: DOMRect, ball: DOMRect) => {
-    return (
-      paddle.left <= ball.right &&
-      paddle.right >= ball.left &&
-      paddle.top <= ball.bottom &&
-      paddle.bottom >= ball.top
-    );
-  };
-
-  const handleCollision = () => {
-    const ballRect = document
-      .getElementById("ball")
-      ?.getBoundingClientRect() as DOMRect;
-    const playerPaddle = document
-      .getElementById("player-paddle")
-      ?.getBoundingClientRect() as DOMRect;
-
-	if (ballRect === undefined || playerPaddle === undefined)
-	  return ;
-
-    if (paddleCollision(playerPaddle, ballRect)) {
-      let collidePoint =
-        ballRect.y - (playerPaddle.y + playerPaddle.height / 2);
-      collidePoint /= playerPaddle.height / 2;
-
-      const angleRad = (collidePoint * Math.PI) / 4;
-
-      gameSocket.emit("game:ballCountered", angleRad, gameID, sessionContext.userSelf.login42);
-
-	}}
-
-  useEffect(() => {
-    if (ballElem.current === null) {
-      ballElem.current = document.getElementById("ball");
-      gameSocket.on("game:ball-update", (ballUpdate: IBallInfo, player2 : string) => {
-		if (player2 === sessionContext.userSelf.login42) {
-			ballUpdate.position.x = 100 - ballUpdate.position.x;
-			ballUpdate.direction.x *= -1;
-		}
-		setBallInfo(ballUpdate);
-		handleCollision();
-      });
-
-    }
-  }, []);
-
-  useEffect(() => {
-    ballElem.current?.style.setProperty("--x", ballInfo.position.x.toString());
-    ballElem.current?.style.setProperty("--y", ballInfo.position.y.toString());
-  });
-
-  return <div className={stylesBall.ball} id="ball"></div>;
-};
 
 const Pong = () => {
   const [playerScore, setPlayerScore] = useState(0);
@@ -133,35 +65,6 @@ const Pong = () => {
         }
       );
 
-      //   gameSocket.current.on("game:point-start", (data: IBallInfo) => {
-      //     data.direction.x *= invert.current;
-      //     setBallInfo(data); // utilisation d'un useState pour tester l'envoie des infos depuis game, sinon revenir sur un useRef
-      //     setPlayGame(true);
-      //     console.log("NEW POINT", data);
-      //   });
-
-      //   gameSocket.current.on(
-      //     "game:newBallInfo",
-      //     (newBallInfo: IBallInfo, player: string) => {
-      //       let playerPaddle = document
-      //         .getElementById("player-paddle")
-      //         ?.getBoundingClientRect() as DOMRect;
-
-      //       let paddleBorderRatio =
-      //         (playerPaddle.right / window.innerWidth) * 100;
-
-      //       const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
-      //       if (player === player2.current) {
-      //         newBallInfo.direction.x *= -1;
-
-      //         newBallInfo.position.x =
-      //           100 - (paddleBorderRatio + ballRadiusWidthRatio);
-      //       } else
-      //         newBallInfo.position.x = paddleBorderRatio + ballRadiusWidthRatio;
-      //       setBallInfo(newBallInfo);
-      //     }
-      //   );
-
       gameSocket.current.emit(
         "game:enter",
         Array.isArray(userLogin42) ? userLogin42[0] : userLogin42,
@@ -207,16 +110,7 @@ const Pong = () => {
   return (
     <div className={styles.mainLayout_background}>
       <Score player={playerScore} opponent={opponentScore} />
-      {/* {playGame === true && (
-        <Ball
-          ballInfo={ballInfo}
-          gameSocket={gameSocket.current}
-          gameID={gameID.current}
-          player1={player1.current}
-          player2={player2.current}
-        />
-      )} */}
-      <BallTest gameSocket={gameSocket.current} gameID={gameID.current} />
+      <Ball gameSocket={gameSocket.current} gameID={gameID.current} />
       <PlayerPaddle
         gameSocket={gameSocket.current}
         gameID={gameID.current}

@@ -25,8 +25,9 @@ interface IGame {
   player1Score: number;
   player2Score: number;
   gameStatus: 'WAITING' | 'READY' | 'STOP';
+  ballInfo: IBallInfo;
   intervalID?: ReturnType<typeof setInterval>;
-  ballInfo?: IBallInfo;
+  
 } // EXPORTER INTERFACE DANS UN FICHIER
 
 function randomNumberBetween(min: number, max: number) {
@@ -110,6 +111,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         player1Score: 0,
         player2Score: 0,
         gameStatus: 'WAITING',
+		ballInfo: {position : {x : 50, y: 50}, direction : {x : 50, y : 50}}
       };
       this.runningGames.set(gameID, currentGame);
     }
@@ -147,33 +149,31 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     const currentGame = this.runningGames.get(gameID);
 
     if (currentGame && currentGame.intervalID === undefined) {
-      let ballInfo: IBallInfo = initBall();
+      currentGame.ballInfo = initBall();
       const deltaTime = 1000 / 60;
       const ballVelocity = 0.02;
 
       currentGame.intervalID = setInterval(() => {
+        // move ball
+        currentGame.ballInfo.position.x =
+          currentGame.ballInfo.position.x + currentGame.ballInfo.direction.x * ballVelocity * deltaTime;
+        currentGame.ballInfo.position.y =
+          currentGame.ballInfo.position.y + currentGame.ballInfo.direction.y * ballVelocity * deltaTime;
 
-		// move ball
-        ballInfo.position.x =
-          ballInfo.position.x + ballInfo.direction.x * ballVelocity * deltaTime;
-        ballInfo.position.y =
-          ballInfo.position.y + ballInfo.direction.y * ballVelocity * deltaTime;
-        
-		// check top / btm collision
-		if (ballInfo.position.y + 1 >= 100) {
-		  	ballInfo.direction.y *= -1;
-			ballInfo.position.y = 99;
-		} else if (ballInfo.position.y + 1 <= 0){
-			ballInfo.direction.y *= -1;
-			ballInfo.position.y = 1;
-		}
+        // check top / btm collision
+        if (currentGame.ballInfo.position.y + 1 >= 100) {
+          currentGame.ballInfo.direction.y *= -1;
+          currentGame.ballInfo.position.y = 99;
+        } else if (currentGame.ballInfo.position.y - 1 <= 0) {
+          currentGame.ballInfo.direction.y *= -1;
+          currentGame.ballInfo.position.y = 1;
+        }
 
-		currentGame.ballInfo = ballInfo;
-		this.server.to(gameID).emit('game:ball-update', ballInfo, currentGame.player2);
-       
+        this.server
+          .to(gameID)
+          .emit('game:ball-update', currentGame.ballInfo, currentGame.player2);
       }, deltaTime);
     }
-    // this.server.to(gameID).emit('game:point-start', initBall());
   }
 
   @SubscribeMessage('game:stop-ball')
@@ -184,10 +184,6 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  @SubscribeMessage('game:ball')
-  onGameBall(@MessageBody() ball: string, @ConnectedSocket() client: Socket) {
-    console.log('ball details:', ball);
-  }
 
   @SubscribeMessage('game:paddleMove')
   onGamePaddleMove(@MessageBody() data: string[]) {
@@ -206,12 +202,12 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     const [angleRad, gameID, player] = data;
     const currentGame = this.runningGames.get(gameID);
 
-	if (currentGame && currentGame.ballInfo) {
-		currentGame.ballInfo.direction.x = Math.cos(angleRad);
-		currentGame.ballInfo.direction.y = Math.sin(angleRad);
-		if (player === currentGame.player2)
-			currentGame.ballInfo.direction.x *= -1;
-	}
+    if (currentGame && currentGame.ballInfo) {
+      currentGame.ballInfo.direction.x = Math.cos(angleRad);
+      currentGame.ballInfo.direction.y = Math.sin(angleRad);
+      if (player === currentGame.player2)
+        currentGame.ballInfo.direction.x *= -1;
+    }
 
     this.server.to(gameID).emit('game:newBallInfo');
   }
