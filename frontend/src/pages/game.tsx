@@ -11,11 +11,8 @@ import { useSessionContext } from "../context/SessionContext";
 import { io, Socket } from "socket.io-client";
 import getConfig from "next/config";
 import { Login42 } from "../interfaces/status.types";
-import { ICoordinates } from "../interfaces/ICoordinates";
-import { IBallInfo } from "../interfaces/IBallInfo";
 
 const { publicRuntimeConfig } = getConfig();
-
 
 const Pong = () => {
   const [playerScore, setPlayerScore] = useState(0);
@@ -55,13 +52,13 @@ const Pong = () => {
             invert.current = 1;
           }
           setPlayGame(true);
-		  
-		  if (p1 === sessionContext.userSelf.login42 || p2 === sessionContext.userSelf.login42) {
-			gameSocket.current?.emit(
-				"game:new-point",
-				gameID.current
-			);
-		  }
+
+          if (
+            p1 === sessionContext.userSelf.login42 ||
+            p2 === sessionContext.userSelf.login42
+          ) {
+            gameSocket.current?.emit("game:new-point", gameID.current);
+          }
         }
       );
 
@@ -72,13 +69,16 @@ const Pong = () => {
         sessionContext.userSelf.login42
       );
 
-      gameSocket.current.on("game:point-lost", (login42: Login42) => {
+      gameSocket.current.on("game:update-score", (login42: Login42) => {
         if (login42 !== player1.current) {
           setPlayerScore((prevState) => prevState + 1);
         } else {
           setOpponentScore((prevState) => prevState + 1);
         }
         setPlayGame(false);
+        gameSocket.current
+          ?.emit(gameID.current)
+          .emit("game:new-point", gameID.current);
       });
     }
     return () => {
@@ -95,7 +95,6 @@ const Pong = () => {
     };
   }, []);
 
-
   if (
     gameSocket.current === undefined ||
     player1.current === "" ||
@@ -103,7 +102,7 @@ const Pong = () => {
   ) {
     return (
       <div className={styles.mainLayout_background}>
-        <Score player={42} opponent={42} />
+        <Score player={playerScore} opponent={playerScore} />
       </div>
     );
   }

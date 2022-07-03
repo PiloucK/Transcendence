@@ -18,7 +18,7 @@ const Ball = ({
 	const ballElem = useRef<HTMLElement | null>(null);
 	const sessionContext = useSessionContext();
   
-	const paddleCollision = (paddle: DOMRect, ball: DOMRect) => {
+	const ballCountered = (paddle: DOMRect, ball: DOMRect) => {
 	  return (
 		paddle.left <= ball.right &&
 		paddle.right >= ball.left &&
@@ -26,21 +26,29 @@ const Ball = ({
 		paddle.bottom >= ball.top
 	  );
 	};
-  
-	const handleCollision = () => {
-	  const ballRect = document
+
+	const pointLost = (ballInfo : IBallInfo) => {
+		if (ballInfo.position.x - 1 <= 0) {
+			gameSocket.emit("game:point-lost", gameID, sessionContext.userSelf.login42)
+			return true;
+		}
+		return false;
+	}
+
+	const paddleCollision = () => {
+	  const ball = document
 		.getElementById("ball")
 		?.getBoundingClientRect() as DOMRect;
 	  const playerPaddle = document
 		.getElementById("player-paddle")
 		?.getBoundingClientRect() as DOMRect;
   
-	  if (ballRect === undefined || playerPaddle === undefined)
+	  if (ball === undefined || playerPaddle === undefined)
 		return ;
-  
-	  if (paddleCollision(playerPaddle, ballRect)) {
+
+	  if (ballCountered(playerPaddle, ball)) {
 		let collidePoint =
-		  ballRect.y - (playerPaddle.y + playerPaddle.height / 2);
+		  ball.y - (playerPaddle.y + playerPaddle.height / 2);
 		collidePoint /= playerPaddle.height / 2;
   
 		const angleRad = (collidePoint * Math.PI) / 4;
@@ -58,7 +66,8 @@ const Ball = ({
 			  ballUpdate.direction.x *= -1;
 		  }
 		  setBallInfo(ballUpdate);
-		  handleCollision();
+		  if (!pointLost(ballUpdate))
+		  	paddleCollision();
 		});
   
 	  }

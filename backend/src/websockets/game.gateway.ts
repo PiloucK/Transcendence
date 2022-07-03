@@ -27,7 +27,6 @@ interface IGame {
   gameStatus: 'WAITING' | 'READY' | 'STOP';
   ballInfo: IBallInfo;
   intervalID?: ReturnType<typeof setInterval>;
-  
 } // EXPORTER INTERFACE DANS UN FICHIER
 
 function randomNumberBetween(min: number, max: number) {
@@ -111,7 +110,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         player1Score: 0,
         player2Score: 0,
         gameStatus: 'WAITING',
-		ballInfo: {position : {x : 50, y: 50}, direction : {x : 50, y : 50}}
+        ballInfo: { position: { x: 50, y: 50 }, direction: { x: 50, y: 50 } },
       };
       this.runningGames.set(gameID, currentGame);
     }
@@ -151,14 +150,16 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     if (currentGame && currentGame.intervalID === undefined) {
       currentGame.ballInfo = initBall();
       const deltaTime = 1000 / 60;
-      const ballVelocity = 0.02;
+      const ballVelocity = 0.035;
 
       currentGame.intervalID = setInterval(() => {
         // move ball
         currentGame.ballInfo.position.x =
-          currentGame.ballInfo.position.x + currentGame.ballInfo.direction.x * ballVelocity * deltaTime;
+          currentGame.ballInfo.position.x +
+          currentGame.ballInfo.direction.x * ballVelocity * deltaTime;
         currentGame.ballInfo.position.y =
-          currentGame.ballInfo.position.y + currentGame.ballInfo.direction.y * ballVelocity * deltaTime;
+          currentGame.ballInfo.position.y +
+          currentGame.ballInfo.direction.y * ballVelocity * deltaTime;
 
         // check top / btm collision
         if (currentGame.ballInfo.position.y + 1 >= 100) {
@@ -175,15 +176,6 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       }, deltaTime);
     }
   }
-
-  @SubscribeMessage('game:stop-ball')
-  onStopBall(@MessageBody() gameID: string) {
-    const currentGame = this.runningGames.get(gameID);
-    if (currentGame?.intervalID) {
-      clearInterval(currentGame?.intervalID);
-    }
-  }
-
 
   @SubscribeMessage('game:paddleMove')
   onGamePaddleMove(@MessageBody() data: string[]) {
@@ -215,11 +207,14 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('game:point-lost')
   onGamePointLost(@MessageBody() data: string[]) {
     const [gameID, player] = data;
+    const currentGame = this.runningGames.get(gameID);
 
-    this.server.to(gameID).emit('game:point-lost', player);
+    if (currentGame?.intervalID) {
+      clearInterval(currentGame?.intervalID);
+      currentGame.intervalID = undefined;
+      console.log('setting interval to undefined');
+    }
 
-    setTimeout(() => {
-      this.server.to(gameID).emit('game:point-start', initBall());
-    }, 2000);
+    this.server.to(gameID).emit('game:update-score', player);
   }
 }
