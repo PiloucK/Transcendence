@@ -1,21 +1,25 @@
 import { Button, Fade, Grow, TextField } from "@mui/material";
 import axios from "axios";
-import { ChangeEventHandler, FormEventHandler, useState } from "react";
+import { ChangeEventHandler, Dispatch, FormEventHandler, SetStateAction, useState } from "react";
 
 import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSessionContext } from "../../context/SessionContext";
 import twoFactorAuthService from "../../services/twoFactorAuth";
-import styles from "./TwoFactorAuth.module.css"
+import styles from "./TwoFactorAuth.module.scss"
 
 export function QrCodeDisplay({
 	image,
 	qrCode,
-	checked
+	checked,
+	setQrcode,
+	setHasBeenActivated,
 }: {
 	image: string;
 	checked: boolean;
 	qrCode: any;
+	setQrcode: Dispatch<SetStateAction<boolean>>;
+	setHasBeenActivated: Dispatch<SetStateAction<boolean>>;
 }) {
 	const [code, setCode] = useState("");
 	const [enabled, setEnabled] = useState(false);
@@ -27,17 +31,6 @@ export function QrCodeDisplay({
 		setCode(event.target.value);
 	};
 
-	const checkIfEnabled = () => {
-		axios
-			.get("http://0.0.0.0:3001/two-factor-auth/enabled")
-			.then((response) => {
-				setEnabled(response.data);
-			})
-			.catch((error) => {
-				errorContext.newError?.(errorHandler(error, sessionContext));
-			});
-	};
-
 	const sendValidationCode: FormEventHandler<HTMLFormElement> = (event) => {
 		event.preventDefault();
 
@@ -45,7 +38,9 @@ export function QrCodeDisplay({
 			.turnOn(code)
 			.then(() => {
 				setCode("");
-				checkIfEnabled();
+				sessionContext.updateUserSelf?.();
+				setQrcode(false);
+				setHasBeenActivated(true);
 			})
 			.catch((error) => {
 				errorContext.newError?.(errorHandler(error, sessionContext));

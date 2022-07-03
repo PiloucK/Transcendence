@@ -25,3 +25,9 @@ $marginBetween: 5px;
 	margin: $marginBetween ($width / 8);
 	width: ($width - ($width / 4));
 }
+
+.textField {
+
+	margin: 5px 0 5px;
+	background-color: grey;
+}

@@ -101,13 +101,6 @@ export class TwoFactorAuthController {
     this.usersService.turnOffTwoFactorAuth(reqUser);
   }
 
-  // dev
-  @Get('enabled')
-  @UseGuards(JwtAuthGuard)
-  is2FAenabled(@GetReqUser() reqUser: User): boolean {
-    return reqUser.isTwoFactorAuthEnabled;
-  }
-
   @Get('set-up')
   @UseGuards(JwtAuthGuard)
   has2FaBeenAlreadySetUp(@GetReqUser() reqUser: User): boolean {
