@@ -45,7 +45,10 @@ const Ball = ({
       .getElementById("player-paddle")
       ?.getBoundingClientRect() as DOMRect;
 
-    let paddleBorderRatio = (playerPaddle.right / window.innerWidth) * 100;
+	if (ballRect === undefined || playerPaddle === undefined)
+		return ;
+
+    const paddleBorderRatio = (playerPaddle.right / window.innerWidth) * 100;
 
     const ballRadiusWidthRatio = window.innerHeight / window.innerWidth;
     const ballRadiusHeightRatio = 1;

@@ -17,6 +17,7 @@ const PlayerPaddle = ({
   const paddleElem = useRef<HTMLElement | null>(null);
   const sessionContext = useSessionContext();
 
+
   useEffect(() => {
     if (paddleElem.current === null) {
       paddleElem.current = document.getElementById("player-paddle");

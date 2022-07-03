@@ -14,36 +14,68 @@ import { Login42 } from "../interfaces/status.types";
 import { ICoordinates } from "../interfaces/ICoordinates";
 import { IBallInfo } from "../interfaces/IBallInfo";
 
-
 const { publicRuntimeConfig } = getConfig();
-
 
 import stylesBall from "../components/Game/Ball.module.css";
 const BallTest = ({
-	gameSocket,
-	gameID,
-  }: {
-	gameSocket: Socket;
-	gameID: string;
-  }) => {
+  gameSocket,
+  gameID,
+}: {
+  gameSocket: Socket;
+  gameID: string;
+}) => {
+  const [ballInfo, setBallInfo] = useState<IBallInfo>({
+    position: { x: 50, y: 50 },
+    direction: { x: 0, y: 0 },
+  });
+  const ballElem = useRef<HTMLElement | null>(null);
+  const sessionContext = useSessionContext();
 
-	const [ballInfo, setBallInfo] = useState<IBallInfo>({
-		position: { x: 50, y: 50 },
-		direction: { x: 0, y: 0 },
-	  });
-	  const ballElem = useRef<HTMLElement | null>(null);
+  const paddleCollision = (paddle: DOMRect, ball: DOMRect) => {
+    return (
+      paddle.left <= ball.right &&
+      paddle.right >= ball.left &&
+      paddle.top <= ball.bottom &&
+      paddle.bottom >= ball.top
+    );
+  };
 
+  const handleCollision = () => {
+    const ballRect = document
+      .getElementById("ball")
+      ?.getBoundingClientRect() as DOMRect;
+    const playerPaddle = document
+      .getElementById("player-paddle")
+      ?.getBoundingClientRect() as DOMRect;
 
-	  useEffect(() => {
-		if (ballElem.current === null) {
-		  ballElem.current = document.getElementById("ball");
-		  gameSocket.on("game:ball-update", (ballUpdate: IBallInfo) => {
-			setBallInfo(ballUpdate);
-			console.log(ballUpdate);
-			
-		  });
+	if (ballRect === undefined || playerPaddle === undefined)
+	  return ;
+
+    if (paddleCollision(playerPaddle, ballRect)) {
+      let collidePoint =
+        ballRect.y - (playerPaddle.y + playerPaddle.height / 2);
+      collidePoint /= playerPaddle.height / 2;
+
+      const angleRad = (collidePoint * Math.PI) / 4;
+
+      gameSocket.emit("game:ballCountered", angleRad, gameID, sessionContext.userSelf.login42);
+
+	}}
+
+  useEffect(() => {
+    if (ballElem.current === null) {
+      ballElem.current = document.getElementById("ball");
+      gameSocket.on("game:ball-update", (ballUpdate: IBallInfo, player2 : string) => {
+		if (player2 === sessionContext.userSelf.login42) {
+			ballUpdate.position.x = 100 - ballUpdate.position.x;
+			ballUpdate.direction.x *= -1;
 		}
-	  }, []);
+		setBallInfo(ballUpdate);
+		handleCollision();
+      });
+
+    }
+  }, []);
 
   useEffect(() => {
     ballElem.current?.style.setProperty("--x", ballInfo.position.x.toString());
@@ -68,10 +100,6 @@ const Pong = () => {
 
   const secondMount = useRef(false);
   const [playGame, setPlayGame] = useState(false);
-  const [ballInfo, setBallInfo] = useState<IBallInfo>({
-    position: { x: 50, y: 50 },
-    direction: { x: 0, y: 0 },
-  });
 
   useEffect(() => {
     if (gameSocket.current === undefined) {
@@ -94,7 +122,14 @@ const Pong = () => {
             player2.current = p2;
             invert.current = 1;
           }
-          gameSocket.current?.emit("game:new-point", gameID.current, sessionContext.userSelf.login42);
+          setPlayGame(true);
+		  
+		  if (p1 === sessionContext.userSelf.login42 || p2 === sessionContext.userSelf.login42) {
+			gameSocket.current?.emit(
+				"game:new-point",
+				gameID.current
+			);
+		  }
         }
       );
 
@@ -150,10 +185,7 @@ const Pong = () => {
       } else {
         console.log("unmounting game");
         if (gameSocket.current != undefined) {
-          gameSocket.current.emit(
-            "game:unmount",
-            sessionContext.userSelf.login42
-          );
+          gameSocket.current.emit("game:unmount", gameID.current);
           console.log("closing socket");
         }
       }
@@ -161,12 +193,6 @@ const Pong = () => {
   }, []);
 
 
-  useEffect(() => {
-	console.log(    gameSocket.current,
-		player1.current,
-		player2.current,);
-	
-  })
   if (
     gameSocket.current === undefined ||
     player1.current === "" ||
@@ -174,7 +200,7 @@ const Pong = () => {
   ) {
     return (
       <div className={styles.mainLayout_background}>
-        <Score player={42} opponent={opponentScore} />
+        <Score player={42} opponent={42} />
       </div>
     );
   }

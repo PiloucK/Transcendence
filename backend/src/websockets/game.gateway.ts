@@ -24,7 +24,9 @@ interface IGame {
   player2: string | undefined;
   player1Score: number;
   player2Score: number;
-  gameStatus: 'WAITING' | 'RUNNING' | 'RESET';
+  gameStatus: 'WAITING' | 'READY' | 'STOP';
+  intervalID?: ReturnType<typeof setInterval>;
+  ballInfo?: IBallInfo;
 } // EXPORTER INTERFACE DANS UN FICHIER
 
 function randomNumberBetween(min: number, max: number) {
@@ -65,17 +67,16 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('game:unmount')
   onGameUnmount(
-    @MessageBody() userSelf: string,
+    @MessageBody() gameID: string,
     @ConnectedSocket() client: Socket,
   ) {
-    this.runningGames.forEach((value, key) => {
-      if (value.player1 === userSelf || value.player2 === userSelf) {
-        this.runningGames.delete(key);
-        console.log(key, 'deleted');
-        return;
-      }
-    });
+    const currentGame = this.runningGames.get(gameID);
 
+    if (currentGame?.intervalID) {
+      clearInterval(currentGame?.intervalID);
+    }
+
+    this.runningGames.delete(gameID);
     client.disconnect();
     console.log('game:unmount');
   }
@@ -136,28 +137,51 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         .to(gameID)
         .emit('game:init', gameID, currentGame.player1, currentGame.player2);
 
-      currentGame.gameStatus = 'RUNNING';
+      currentGame.gameStatus = 'READY';
       console.log('sending game start', userSelf);
     }
   }
 
   @SubscribeMessage('game:new-point')
   onGamePoint(@MessageBody() gameID: string) {
-	let ballInfo : IBallInfo = initBall();
+    const currentGame = this.runningGames.get(gameID);
 
-	const deltaTime = 1000 / 60;
+    if (currentGame && currentGame.intervalID === undefined) {
+      let ballInfo: IBallInfo = initBall();
+      const deltaTime = 1000 / 60;
+      const ballVelocity = 0.02;
 
-	const ballVelocity = 0.035
-	// setInterval(() => {
+      currentGame.intervalID = setInterval(() => {
 
-	// 	ballInfo.position.x = ballInfo.position.x + ballInfo.direction.x * ballVelocity * deltaTime;
-	// 	ballInfo.position.y = ballInfo.position.y + ballInfo.direction.y * ballVelocity * deltaTime;
-	// 	this.server.to(gameID).emit('game:ball-update', ballInfo);
-	// 	console.log(ballInfo);
-		
-	//   }, deltaTime);
+		// move ball
+        ballInfo.position.x =
+          ballInfo.position.x + ballInfo.direction.x * ballVelocity * deltaTime;
+        ballInfo.position.y =
+          ballInfo.position.y + ballInfo.direction.y * ballVelocity * deltaTime;
+        
+		// check top / btm collision
+		if (ballInfo.position.y + 1 >= 100) {
+		  	ballInfo.direction.y *= -1;
+			ballInfo.position.y = 99;
+		} else if (ballInfo.position.y + 1 <= 0){
+			ballInfo.direction.y *= -1;
+			ballInfo.position.y = 1;
+		}
 
+		currentGame.ballInfo = ballInfo;
+		this.server.to(gameID).emit('game:ball-update', ballInfo, currentGame.player2);
+       
+      }, deltaTime);
+    }
     // this.server.to(gameID).emit('game:point-start', initBall());
+  }
+
+  @SubscribeMessage('game:stop-ball')
+  onStopBall(@MessageBody() gameID: string) {
+    const currentGame = this.runningGames.get(gameID);
+    if (currentGame?.intervalID) {
+      clearInterval(currentGame?.intervalID);
+    }
   }
 
   @SubscribeMessage('game:ball')
@@ -176,21 +200,20 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('game:ballCountered')
   onGameBallCountered(
-    @MessageBody() data : any[],
+    @MessageBody() data: any[],
     @ConnectedSocket() client: Socket,
   ) {
+    const [angleRad, gameID, player] = data;
+    const currentGame = this.runningGames.get(gameID);
 
-    const [ballInfo, angleRad, gameID, player] = data;
-	
+	if (currentGame && currentGame.ballInfo) {
+		currentGame.ballInfo.direction.x = Math.cos(angleRad);
+		currentGame.ballInfo.direction.y = Math.sin(angleRad);
+		if (player === currentGame.player2)
+			currentGame.ballInfo.direction.x *= -1;
+	}
 
-    ballInfo.direction.x = Math.cos(angleRad);
-    ballInfo.direction.y = Math.sin(angleRad);
-
-	console.log(ballInfo);
-	
-	this.server
-      .to(gameID)
-      .emit('game:newBallInfo', ballInfo, player);
+    this.server.to(gameID).emit('game:newBallInfo');
   }
 
   @SubscribeMessage('game:point-lost')
