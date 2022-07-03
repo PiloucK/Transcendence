@@ -11,5 +11,5 @@ COPY . .
 
 EXPOSE ${BACKEND_PORT}
 
-CMD [ "npm", "run", "start:dev"]
+CMD [ "npm", "run", "start"]
 # change for "npm run start" when development is finished?

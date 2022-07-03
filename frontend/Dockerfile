@@ -14,9 +14,11 @@ RUN     npm install
 # Copy the app's files
 COPY    . .
 
+RUN     npm run build
+
 # Set the server access on port 3000
 EXPOSE ${FRONTEND_PORT}
 
 # Set the command to run the app at start
-CMD     [ "npm", "run", "dev" ]
+CMD     [ "npm", "run", "start" ]
 # change for "npm run start" when development is finished?
