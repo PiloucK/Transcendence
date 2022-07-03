@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { Channel } from 'src/channel/channel.entity';
+import { Match } from 'src/match/match.entity';
 import { PrivateConv } from 'src/privateConv/privateConv.entity';
 import {
   Column,
@@ -62,6 +63,12 @@ export class User {
   // There is a many to many relation owned by the channel.
   @ManyToMany(() => Channel)
   users!: Channel[];
+
+  @OneToMany(
+    () => Match,
+    (match) => (match.user1 === this ? match.user1 : match.user2),
+  )
+  matches!: Match[];
 
   @Column({ default: false })
   isTwoFactorAuthEnabled!: boolean;
