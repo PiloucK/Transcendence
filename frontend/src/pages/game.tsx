@@ -28,7 +28,7 @@ const Pong = () => {
   const { userLogin42, opponentLogin42 } = useRouter().query;
 
   const secondMount = useRef(false);
-  const [playGame, setPlayGame] = useState(false);
+  const [gameReady, setGameReady] = useState(false);
 
   useEffect(() => {
     if (gameSocket.current === undefined) {
@@ -51,7 +51,6 @@ const Pong = () => {
             player2.current = p2;
             invert.current = 1;
           }
-          setPlayGame(true);
 
           if (
             p1 === sessionContext.userSelf.login42 ||
@@ -59,6 +58,7 @@ const Pong = () => {
           ) {
             gameSocket.current?.emit("game:new-point", gameID.current);
           }
+          setGameReady(true);
         }
       );
 
@@ -75,7 +75,6 @@ const Pong = () => {
         } else {
           setOpponentScore((prevState) => prevState + 1);
         }
-        setPlayGame(false);
         gameSocket.current
           ?.emit(gameID.current)
           .emit("game:new-point", gameID.current);
@@ -90,16 +89,13 @@ const Pong = () => {
         if (gameSocket.current != undefined) {
           gameSocket.current.emit("game:unmount", gameID.current);
           console.log("closing socket");
+          // IF SPECATOR LEAVES HE STOPS THE GAME
         }
       }
     };
   }, []);
 
-  if (
-    gameSocket.current === undefined ||
-    player1.current === "" ||
-    player2.current === ""
-  ) {
+  if (gameSocket.current === undefined || gameReady === false) {
     return (
       <div className={styles.mainLayout_background}>
         <Score player={playerScore} opponent={playerScore} />
