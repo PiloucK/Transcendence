@@ -244,6 +244,14 @@
   cursor: pointer;
 }
 
+.queue_circular_progress {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25%;
+}
+
 .main {
   min-height: 100vh;
   padding: 4rem 0;

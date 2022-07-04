@@ -7,6 +7,7 @@ import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
 import { authenticate } from "../events/authenticate";
 import { useUserStatusContext } from "../context/UserStatusContext";
+import { CircularProgress } from "@mui/material";
 
 export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
   const sessionContext = useSessionContext();
@@ -33,7 +34,9 @@ export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
       <div className={styles.mainLayout_left_background} />
       <div className={styles.mainLayout_right_background} />
       {userStatusContext.statuses.get(sessionContext.userSelf.login42)
-        ?.status !== "IN_QUEUE" && (
+        ?.status === "IN_QUEUE" ? (
+        <CircularProgress className={styles.queue_circular_progress}/>
+      ) : (
         <div className={styles.play} onClick={findMatch}>
           PLAY
         </div>
