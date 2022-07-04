@@ -72,7 +72,7 @@ export default function TwoFactorAuth() {
   };
 
   return (
-    <>
+     <>
       <Button onClick={generateQrCode}>generate qr code</Button>
       <img src={image} />
       <form onSubmit={sendValidationCode}>

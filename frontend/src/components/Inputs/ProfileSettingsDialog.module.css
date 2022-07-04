@@ -1,0 +1,77 @@
+.chat_create_channel_form_input {
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+  white-space: nowrap;
+  /* White */
+
+  color: #ffffff;
+  /* padding: 15px; */
+}
+
+.Dialog {
+}
+
+.channel_settings_update {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  width: 214px;
+  height: 70px;
+
+  /* Width and height for "Update" button */
+  /* width: 119px;
+  height: 50px; */
+  left: 50%;
+  /* transform: translate(-50%, 0); */
+  top: 85%;
+
+  /* Green */
+
+  background: #25bf75;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  /* font-size: 18px; */
+  line-height: 28px;
+  /* identical to box height */
+
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+
+  /* Inside auto layout */
+
+  /* flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px 10px; */
+  margin: 20px 0px 20px 0px;
+  cursor: pointer;
+}
+
+.globalSettings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+.image {
+  margin: 10px 0 10px;
+}

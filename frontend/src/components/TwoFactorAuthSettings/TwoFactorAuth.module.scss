@@ -1,0 +1,33 @@
+$width: 200px;
+$marginBetween: 5px;
+
+.qrCode {
+
+	margin: $marginBetween 0px $marginBetween;
+	width: $width;
+}
+
+.generateButton {
+
+	margin: $marginBetween 0px;
+	width: $width;
+}
+
+.formStyle {
+
+	display:flex;
+	flex-direction: column;
+	width: $width;
+}
+
+.validationButton {
+
+	margin: $marginBetween ($width / 8);
+	width: ($width - ($width / 4));
+}
+
+.textField {
+
+	margin: 5px 0 5px;
+	background-color: grey;
+}

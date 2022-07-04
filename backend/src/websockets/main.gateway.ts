@@ -124,6 +124,11 @@ export class MainGateway
     this.server.sockets.emit('update-leaderboard');
   }
 
+  @SubscribeMessage('user:update-image')
+  onImageUpdate() {
+    this.server.sockets.emit('update-leaderboard');
+  }
+
   @SubscribeMessage('user:update-relations')
   onRelationsUpdate() {
     this.server.sockets.emit('update-relations');
