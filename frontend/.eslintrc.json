@@ -1,0 +1,4 @@
+// generated with "npx create-next-app --typescript [project-name]"
+{
+  "extends": "next/core-web-vitals"
+}

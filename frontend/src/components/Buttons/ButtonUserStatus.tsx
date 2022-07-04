@@ -1,16 +1,32 @@
-import React from "react";
 import styles from "../../styles/Home.module.css";
-
-import { IUserPublicInfos } from "../../interfaces/users";
+import { IUserSlim } from "../../interfaces/IUser";
+import { useUserStatusContext } from "../../context/UserStatusContext";
 
 export function ButtonUserStatus({
-  userInfos,
+  displayedUser,
 }: {
-  userInfos: IUserPublicInfos;
+  displayedUser: IUserSlim;
 }) {
-  return (
-    <div className={styles.social_friend_card_button} onClick={() => {}}>
-      Defy
-    </div>
-  );
+  const userStatusContext = useUserStatusContext();
+  const userStatus = userStatusContext.statuses.get(displayedUser.login42);
+
+  if (userStatus?.status === "ONLINE" || userStatus?.status === "IN_QUEUE") {
+    return (
+      <div className={styles.social_friend_card_button} onClick={() => {}}>
+        Defy
+      </div>
+    );
+  } else if (userStatus?.status === "IN_GAME") {
+    return (
+      <div className={styles.social_friend_card_button} onClick={() => {}}>
+        Spectate
+      </div>
+    );
+  } else {
+    return (
+      <div className={styles.offline_button} onClick={() => {}}>
+        Offline
+      </div>
+    );
+  }
 }

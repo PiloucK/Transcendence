@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:18
 
 RUN mkdir -p usr/src/app/backend
 
@@ -9,7 +9,7 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3001
+EXPOSE ${BACKEND_PORT}
 
 CMD [ "npm", "run", "start:dev"]
 # change for "npm run start" when development is finished?

@@ -1,181 +1,94 @@
 import { ButtonLogout } from "../components/Buttons/ButtonLogout";
 import styles from "../styles/Home.module.css";
-import { useLoginContext } from "../context/LoginContext";
-
-import IconButton from "@mui/material/IconButton";
-import CreateIcon from "@mui/icons-material/Create";
-import CheckIcon from "@mui/icons-material/Check";
-import TextField from "@mui/material/TextField";
-
-import React from "react";
-import { FormEventHandler, ChangeEventHandler, useState } from "react";
-import userService from "../services/users";
-import { IUser } from "../interfaces/users";
-
-import io from "socket.io-client";
-
-import Avatar from "@mui/material/Avatar";
-import { DockGuest } from "../components/Dock/DockGuest";
-
-import { useRouter } from "next/router";
+import { useSessionContext } from "../context/SessionContext";
+import Router, { useRouter } from "next/router";
 import { UserGameHistory } from "../components/Profile/UserGameHistory";
-import PublicProfile from "../components/Profile/publicprofile";
+import { useErrorContext } from "../context/ErrorContext";
+import { errorHandler } from "../errors/errorHandler";
+import userService from "../services/user";
+import { AxiosError } from "axios";
+import { ProfileInteractions } from "../components/Profile/ProfileInteractions";
+import { UserStats } from "../components/Profile/UserStats";
+import { AccountDetails } from "../components/Profile/AccountDetails";
+import { ReactElement, useEffect, useState } from "react";
+import { defaultSessionState } from "../constants/defaultSessionState";
+import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
+import { UserStatusLayout } from "../layouts/userStatusLayout";
+import { DefaultLayout } from "../layouts/defaultLayout";
+import CircularProgress from "@mui/material/CircularProgress";
+import { AddMatchField } from "../components/Profile/AddMatchField";
 
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+export default function ProfilePage() {
+  const { login } = useRouter().query;
+  const sessionContext = useSessionContext();
+  const errorContext = useErrorContext();
+  const [displayedUser, setDisplayedUser] = useState(
+    defaultSessionState.userSelf
+  );
+  const [open, setOpen] = useState(false);
 
-function MyUserName({ userInfos }: { userInfos: IUser }) {
-  const loginContext = useLoginContext();
-  const [isInModification, setIsInModification] = useState(false);
-  const [tmpUsername, setTmpUsername] = useState(""); // tmpUsername -> usernameInput?
-
-  const changeUsername: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-    setIsInModification(false);
-
-    if (tmpUsername !== "") {
-      userService
-        .updateUserUsername(loginContext.userLogin, tmpUsername)
-        .then(() => {
-          setTmpUsername("");
-          socket.emit("user:update-username");
+  const fetchDisplayedUser = async () => {
+    if (
+      login !== undefined &&
+      login !== sessionContext.userSelf.login42 &&
+      sessionContext.userSelf.login42 !== defaultSessionState.userSelf.login42
+    ) {
+      const user = await userService
+        .getOne(Array.isArray(login) ? login[0] : login)
+        .catch((error: Error | AxiosError<unknown, any>) => {
+          errorContext.newError?.(errorHandler(error, sessionContext));
+          Router.push("/");
+          return <></>;
         });
+      setDisplayedUser(user);
+    } else {
+      setDisplayedUser(sessionContext.userSelf);
     }
   };
 
-  const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setTmpUsername(event.target.value);
-  };
+  useEffect(() => {
+    fetchDisplayedUser();
+  }, [sessionContext]);
 
-  if (loginContext.userLogin === null) return null;
-  if (isInModification === false) {
+  if (
+    sessionContext.userSelf.login42 === defaultSessionState.userSelf.login42 ||
+    displayedUser.login42 === defaultSessionState.userSelf.login42
+  ) {
     return (
-      <div className={styles.profile_user_account_details_username}>
-        {userInfos.username}
-        <IconButton
-          className={styles.icons}
-          aria-label="userName edit"
-          onClick={() => setIsInModification(true)}
-        >
-          <CreateIcon />
-        </IconButton>
-      </div>
-    );
-  } else {
-    return (
-      <div className={styles.profile_user_account_details_username}>
-        <form onSubmit={changeUsername}>
-          <TextField
-            value={tmpUsername}
-            onChange={handleUsernameChange}
-            label={userInfos.username}
-          />
-          <IconButton type="submit">
-            <CheckIcon />
-          </IconButton>
-        </form>
+      <div className={styles.play}>
+        <CircularProgress />
       </div>
     );
   }
-}
-
-function MyAvatar() {
-  return (
-    <div className={styles.profile_user_account_details_avatar}>
-      <Avatar
-        img="/public/profile_icon.png"
-        alt="avatar"
-        sx={{ width: 151, height: 151 }}
-      />
-    </div>
-  );
-}
-
-function MyAccountDetails({ userInfos }: { userInfos: IUser }) {
-  return (
-    <div className={styles.profile_user_account_details}>
-      <div className={styles.profile_user_account_details_title}>
-        Account details
-      </div>
-      <MyAvatar />
-      <MyUserName userInfos={userInfos} />
-    </div>
-  );
-}
-
-function UserStats({ userInfos }: { userInfos: IUser }) {
-  return (
-    <div className={styles.profile_user_stats}>
-      <div className={styles.profile_user_stats_header}>
-        <div className={styles.profile_user_stats_header_title}>Stats</div>
-      </div>
-      <div className={styles.profile_user_stats_elo}>Elo: {userInfos.elo}</div>
-      <div className={styles.profile_user_stats_games_summary}>
-        Games won: {userInfos.gamesWon}
-        <br />
-        Games lost: {userInfos.gamesLost}
-      </div>
-    </div>
-  );
-}
-
-function Profile({
-  state,
-}: {
-  state: { userInfos: IUser; setUserInfos: (userInfos: IUser) => void };
-}) {
-  const loginContext = useLoginContext();
-
-  React.useEffect(() => {
-    socket.on("update-leaderboard", () => {
-      userService.getOne(loginContext.userLogin).then((user: IUser) => {
-        state.setUserInfos(user);
-      });
-    });
-  }, []);
 
   return (
     <>
       <div className={styles.profile_user}>
-        <MyAccountDetails userInfos={state.userInfos} />
-        <UserStats userInfos={state.userInfos} />
-        <ButtonLogout />
+        <AccountDetails displayedUser={displayedUser} />
+        <UserStats displayedUser={displayedUser} />
+        {login !== undefined && login !== sessionContext.userSelf.login42 ? (
+          <ProfileInteractions displayedUser={displayedUser} />
+        ) : (
+          <>
+            <ButtonLogout />
+            <ProfileSettingsDialog
+              user={displayedUser}
+              open={open}
+              setOpen={setOpen}
+            />
+          </>
+        )}
       </div>
-      <UserGameHistory userLogin={loginContext.userLogin} />
+      <UserGameHistory userLogin={displayedUser.login42} />
+      <AddMatchField />
     </>
   );
 }
 
-export default function ProfilePage() {
-	const router = useRouter();
-  const { login } = router.query;
-
-	if (login !== undefined)
-		return <PublicProfile login={login} />;
-  const loginContext = useLoginContext();
-  const [userInfos, setUserInfos] = useState<IUser>({
-    id: "",
-    login42: "",
-    token42: "",
-    twoFa: false,
-    username: "",
-    elo: 0,
-    gamesWon: 0,
-    gamesLost: 0,
-  });
-
-  if (
-    loginContext.userLogin !== null &&
-    loginContext.userLogin !== userInfos.login42
-  ) {
-    userService.getOne(loginContext.userLogin).then((user: IUser) => {
-      setUserInfos(user);
-    });
-  }
-
-  if (loginContext.userLogin === null) return <DockGuest />;
+ProfilePage.getLayout = function getLayout(page: ReactElement) {
   return (
-    <Profile state={{ userInfos: userInfos, setUserInfos: setUserInfos }} />
+    <DefaultLayout>
+      <UserStatusLayout>{page}</UserStatusLayout>
+    </DefaultLayout>
   );
-}
+};

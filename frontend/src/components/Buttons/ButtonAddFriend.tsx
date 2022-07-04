@@ -1,31 +1,34 @@
-import React from "react";
 import styles from "../../styles/Home.module.css";
-
-import { IUserPublicInfos } from "../../interfaces/users";
-
-import userServices from "../../services/users";
-
-import { useLoginContext } from "../../context/LoginContext";
+import userService from "../../services/user";
+import { useSessionContext } from "../../context/SessionContext";
+import { errorHandler } from "../../errors/errorHandler";
+import { useErrorContext } from "../../context/ErrorContext";
+import { useSocketContext } from "../../context/SocketContext";
+import { IUserSlim } from "../../interfaces/IUser";
 
 export function ButtonAddFriend({
-  userInfos,
+  displayedUser,
 }: {
-  userInfos: IUserPublicInfos;
+  displayedUser: IUserSlim;
 }) {
-	const loginContext = useLoginContext();
+  const errorContext = useErrorContext();
+  const sessionContext = useSessionContext();
+  const socketContext = useSocketContext();
 
-  const sendFriendRequest = () => {
-		if (loginContext.userLogin !== null && loginContext.userLogin !== userInfos.login42) {
-			userServices.sendFriendRequest(loginContext.userLogin, userInfos.login42);
-		}
+  const sendFriendRequest = async () => {
+    await userService
+      .sendFriendRequest(sessionContext.userSelf.login42, displayedUser.login42)
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
+        return;
+      });
+
+    socketContext.socket.emit("user:update-relations");
   };
 
   return (
-    <div
-      className={styles.add_friend_button}
-      onClick={sendFriendRequest}
-    >
+    <button className={styles.add_friend_button} onClick={sendFriendRequest}>
       Add friend
-    </div>
+    </button>
   );
 }

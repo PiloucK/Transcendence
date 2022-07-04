@@ -4,8 +4,8 @@
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true, // required by TypeORM https://typeorm.io/#installation
+    "experimentalDecorators": true, // idem
     "allowSyntheticDefaultImports": true,
     "target": "es2017",
     "sourceMap": true,

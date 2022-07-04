@@ -158,6 +158,15 @@
   color: #ffffff;
 }
 
+.leaderboard_user_status_online {
+  margin-left: 1%;
+}
+
+.leaderboard_user_status_offline {
+  margin-left: 1%;
+  display: none;
+}
+
 /* 
 	Background that will take the left side of the screen
 */
@@ -326,6 +335,33 @@
 * Style about the social page and the inner components
 */
 
+.notification_chip {
+  position: absolute;
+  left: 96.14%;
+  bottom: 72.66%;
+
+  width: 17px;
+  height: 17px;
+
+  border-radius: 50%;
+
+  background: #fc605c;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 17px;
+  /* display: flex; */
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+}
+
 .social_title {
   position: absolute;
   width: 120px;
@@ -432,6 +468,125 @@ and should display them in columns of three cards max */
   justify-content: center;
   align-items: left;
   flex-flow: column wrap;
+}
+
+.user_card,
+.invite_user_card,
+.invite_user_card:hover,
+.user_card_dm,
+.user_card_dm:hover {
+  position: relative;
+  width: 309px;
+  height: 141px;
+
+  min-width: 309px;
+  min-height: 141px;
+
+  margin: 0.8rem;
+  text-align: left;
+
+  float: left;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+
+  background: #163f5b;
+  color: #ffffff;
+}
+
+.invite_user_card:hover {
+  cursor: pointer;
+}
+
+.invite_user_card_selected,
+.invite_user_card_selected:hover {
+  position: relative;
+  width: 309px;
+  height: 141px;
+
+  min-width: 309px;
+  min-height: 141px;
+
+  margin: 0.8rem;
+  text-align: left;
+
+  float: left;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+
+  background: #2b506a;
+  color: #ffffff;
+}
+
+.invite_user_card_selected:hover {
+  cursor: pointer;
+}
+
+.user_card_dm:hover {
+  cursor: pointer;
+}
+
+.user_card_username {
+  position: absolute;
+  left: 50.16%;
+  right: 6.8%;
+  top: 20.57%;
+  bottom: 43.26%;
+
+  /* Header 2 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.user_card_avatar {
+  position: absolute;
+  left: 10.03%;
+  right: 57.61%;
+  top: 14.18%;
+  bottom: 14.89%;
+  width: 100px;
+  height: 100px;
+}
+
+.user_card_elo {
+  position: absolute;
+  left: 50.16%;
+  right: 25.24%;
+  top: 56.74%;
+  bottom: 31.21%;
+
+  /* Body */
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
 }
 
 .social_friend_card {
@@ -573,6 +728,56 @@ and should display them in columns of three cards max */
   border: 2px solid #ffffff;
   color: #ffffff;
   cursor: pointer;
+}
+
+.offline_button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  left: 58.83%;
+  top: 50%;
+
+  transform: translate(0%, -50%);
+
+  width: 103px;
+  height: 42px;
+
+  /* Teal */
+
+  background: #163f5b;
+  /* White */
+
+  border: 2px solid #6c7280;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  /* Header 3 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* Dark grey */
+
+  color: #c4c4c4;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px 10px;
 }
 
 .social_friend_request_card_button {
@@ -737,13 +942,17 @@ and should display them in columns of three cards max */
   left: 0px;
   top: 0px;
 
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 2rem;
-  /* Teal */
 
   background: #163f5b;
+}
+
+.chat_menu::-webkit-scrollbar {
+  width: 0 !important;
 }
 
 .chat_menu_button {
@@ -763,8 +972,187 @@ and should display them in columns of three cards max */
   flex-direction: column;
   align-items: center;
 
+  border: 3px solid #1985a1;
   border-radius: 50%;
   background: #1985a1;
+}
+
+.channel_menu {
+  position: absolute;
+  width: 12.6%;
+  height: 100%;
+  left: 3.9%;
+  top: 0px;
+
+  overflow-y: auto;
+  /* Teal */
+
+  background: #163f5b;
+}
+
+.channel_menu .title {
+  position: absolute;
+  height: 55px;
+  left: 50%;
+  top: 23px;
+
+  transform: translate(-50%, 0%);
+  /* Header 2 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.channel_menu .tabs {
+  position: relative;
+  /* top: 7%; */
+
+  margin-top: 30%;
+  justify-content: space-evenly;
+
+  display: flex;
+}
+
+.channel_menu .users,
+.channel_menu .owner,
+.channel_menu .admins {
+  position: relative;
+  top: 10%;
+  /* transform: translate(-50%, 0%); */
+  /* Body */
+
+  margin: 0.3rem;
+  /* White */
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  column-gap: 10px;
+  justify-content: space-evenly;
+
+  display: flex;
+  align-items: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  text-align: center;
+
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.channel_menu .owner {
+  color: #a01515;
+}
+
+.channel_menu .admins {
+  color: #a01597;
+}
+
+.channel_menu .connected_user {
+  position: relative;
+  top: 10%;
+  /* transform: translate(-50%, 0%); */
+  /* Body */
+
+  margin: 0.3rem;
+  /* White */
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  column-gap: 10px;
+  justify-content: space-evenly;
+
+  display: flex;
+  align-items: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  text-align: center;
+
+  color: #fca311;
+}
+
+.channel_menu .selected_user {
+  position: relative;
+  width: 100%;
+  /* height: 131px; */
+  min-height: 131px;
+
+  margin: 0.3rem;
+  /* White */
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  column-gap: 10px;
+  justify-content: space-evenly;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* Dark grey */
+  background: #2b506a;
+  border-radius: 20px;
+  color: #ffffff;
+  cursor: default;
+}
+
+.channel_menu .selected_user .buttons {
+  width: 92px;
+  height: 19px;
+
+  /* Body */
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.channel_content {
+  position: absolute;
+  width: 83.5%;
+  height: 100%;
+  left: 16.5%;
+  top: 0px;
+
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Teal */
+
+  background: #00213d;
 }
 
 .chat_direct_message_menu {
@@ -782,6 +1170,10 @@ and should display them in columns of three cards max */
   /* Teal */
 
   background: #163f5b;
+}
+
+.chat_direct_message_menu::-webkit-scrollbar {
+  width: 0 !important;
 }
 
 .chat_direct_message_menu_title {
@@ -806,11 +1198,11 @@ and should display them in columns of three cards max */
   color: #ffffff;
 }
 
-.chat_direct_message_menu_new {
-  position: absolute;
-  left: 15%;
-  top: 8%;
-
+.chat_direct_message_menu_new,
+.chat_direct_message_menu_new_selected,
+.chat_direct_message_menu_dm_selected {
+  position: relative;
+  top: 5%;
   /* transform: translate(-50%, 0%); */
   /* Body */
 
@@ -824,7 +1216,7 @@ and should display them in columns of three cards max */
   /* identical to box height */
 
   column-gap: 10px;
-  justify-content: space-between;
+  justify-content: space-evenly;
 
   display: flex;
   align-items: center;
@@ -836,33 +1228,47 @@ and should display them in columns of three cards max */
   cursor: pointer;
 }
 
-.chat_direct_message_menu_new_selected {
-  position: absolute;
-  left: 15%;
-  top: 8%;
+.chat_direct_message_menu_dm_selected {
+  /* position: absolute; */
+  width: 242px;
+  height: 131px;
 
-  /* transform: translate(-50%, 0%); */
+  /* Teal selected (brighter) */
+  flex-direction: column;
+
+  background: #2b506a;
+  border-radius: 20px;
+  color: #ffffff;
+  cursor: default;
+}
+
+.chat_direct_message_menu_dm_selected .buttons {
+  /* position: absolute; */
+  width: 92px;
+  height: 19px;
+  /* left: 65px; */
+  /* top: 69px; */
+
   /* Body */
 
-  margin: 0.3rem;
-  /* White */
-  font-family: "Khand";
+  font-family: "Poppins";
   font-style: normal;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 28px;
-  /* identical to box height */
-
-  column-gap: 10px;
-  justify-content: space-between;
-
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
   display: flex;
   align-items: center;
-  font-feature-settings: "tnum" on, "lnum" on;
+  letter-spacing: -0.02em;
 
-  /* Dark grey */
+  /* White */
 
   color: #ffffff;
+  cursor: pointer;
+}
+
+.chat_direct_message_menu_new_selected {
+  color: #ffffff;
+  /* cursor: default; */
 }
 
 .chat_direct_message_content {
@@ -892,6 +1298,96 @@ and should display them in columns of three cards max */
   /* White */
 
   color: #ffffff;
+}
+
+.messages_area {
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  position: absolute;
+  width: 90%;
+  height: 80%;
+  left: 5%;
+  top: 5%;
+}
+
+.messages_area::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.message,
+.message_author,
+.message_system,
+.message_friend {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+
+  /* position: absolute; */
+
+  border-radius: 20px;
+
+  /* Body */
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  /* identical to box height */
+
+  display: flex;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 1rem;
+  /* margin: 0px 10px; */
+  word-break: break-word;
+}
+
+.message_author {
+  box-sizing: border-box;
+  float: left;
+  width: auto;
+  max-width: 80%;
+  position: relative;
+  clear: both;
+
+  background: #fca311;
+}
+
+.message_friend .chat_avatar {
+  position: absolute;
+  /* left: 70px; */
+  right: -50px;
+}
+
+.message_system {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 10px;
+}
+
+.message_friend {
+  box-sizing: border-box;
+  right: 50px;
+  float: right;
+  width: auto;
+  max-width: 80%;
+  position: relative;
+  clear: both;
+
+  background: #1985a1;
 }
 
 .chat_add_channel {
@@ -1119,6 +1615,185 @@ and should display them in columns of three cards max */
   cursor: pointer;
 }
 
+.public_channels_list {
+  position: absolute;
+  left: 5%;
+  top: 20%;
+  width: 90%;
+  max-height: 80%;
+  overflow-x: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  flex-flow: column wrap;
+}
+
+.channel_settings {
+}
+
+.channel_settings_switch {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  /* Make the text stand on one line */
+  white-space: nowrap;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  display: flex;
+  align-items: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.channel_accept_invitation_button,
+.channel_accept_invitation_button:hover {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  width: 119px;
+  height: 42px;
+
+  background: #25bf75;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.channel_accept_invitation_button:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    #25bf75;
+  cursor: pointer;
+}
+
+.channel_settings_update,
+.channel_settings_update:hover {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  width: 119px;
+  height: 42px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  top: 85%;
+
+  /* Green */
+
+  background: #25bf75;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+
+  /* Inside auto layout */
+
+  /* flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px 10px; */
+}
+
+.channel_settings_update:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    #25bf75;
+  cursor: pointer;
+}
+
+.channel_card {
+  position: relative;
+  /* left: 0%; */
+  /* top: 0%; */
+  width: 300px;
+  height: 300px;
+
+  min-width: 300px;
+  min-height: 300px;
+  margin: 1rem;
+  text-align: center;
+
+  float: left;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+
+  background: #163f5b;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+
+  cursor: pointer;
+}
+
+.channel_card .channel_image {
+  position: absolute;
+  top: 10%;
+}
+
+.channel_card .channel_name {
+  position: absolute;
+  /* left: 2.64%; */
+  /* right: 2.55%; */
+  top: 78.32%;
+  bottom: 4.7%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  /* Header 2 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
 /*
 * Style about the profile page and the inner components
 */
@@ -1132,6 +1807,11 @@ and should display them in columns of three cards max */
   bottom: 0%;
   top: 0%;
   background-color: #00213d;
+  position: absolute;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .profile_history_title {
@@ -1162,9 +1842,14 @@ and should display them in columns of three cards max */
 }
 
 .profile_history_content {
+  overflow-y: auto;
+  overflow-x: hidden;
+
   position: absolute;
+  width: 100%;
+  height: 70%;
   left: 50%;
-  top: 50%;
+  top: 55%;
   transform: translate(-50%, -50%);
 
   /* Header 2 */
@@ -1183,6 +1868,148 @@ and should display them in columns of three cards max */
   /* White */
 
   color: #ffffff;
+}
+
+.profile_history_card,
+.profile_history_card_victory,
+.profile_history_card_defeat {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+
+  width: 603px;
+  height: 68px;
+
+  border-radius: 20px;
+
+  border-radius: 20px;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  /* identical to box height */
+
+  display: flex;
+  letter-spacing: -0.02em;
+
+  /* White */
+
+  color: #ffffff;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 1rem;
+  /* margin: 0px 10px; */
+  word-break: break-word;
+}
+
+.profile_history_card::-webkit-scrollbar,
+.profile_history_card_victory::-webkit-scrollbar,
+.profile_history_card_defeat::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.profile_history_card_victory {
+  background: #fca311;
+}
+
+.profile_history_card_defeat {
+  background: #c4c4c4;
+}
+
+.profile_history_card .result_text,
+.profile_history_card_victory .result_text,
+.profile_history_card_defeat .result_text {
+  /* Victory */
+
+  position: relative;
+  left: 17%;
+  top: 20.07%;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 37px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* Navy */
+
+  color: #1c2d53;
+}
+
+.profile_history_card .score_opponent,
+.profile_history_card_victory .score_opponent,
+.profile_history_card_defeat .score_opponent,
+.profile_history_card .score_player,
+.profile_history_card_victory .score_player,
+.profile_history_card_defeat .score_player {
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 60px;
+  line-height: 92px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  color: #ffffff;
+}
+
+.profile_history_card .score_opponent,
+.profile_history_card_victory .score_opponent,
+.profile_history_card_defeat .score_opponent {
+  position: relative;
+  left: 30%;
+  bottom: 15%;
+}
+
+.profile_history_card .score_player,
+.profile_history_card_victory .score_player,
+.profile_history_card_defeat .score_player {
+  position: relative;
+  left: 5%;
+  bottom: 15%;
+}
+
+.profile_history_card .opponent_name,
+.profile_history_card_victory .opponent_name,
+.profile_history_card_defeat .opponent_name {
+  position: relative;
+  left: 21%;
+  top: 25.36%;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 31px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.profile_history_card .opponent_avatar,
+.profile_history_card_victory .opponent_avatar,
+.profile_history_card_defeat .opponent_avatar {
+  position: relative;
+  left: 63%;
+  /* right: 47%; */
+  bottom: 22%;
 }
 
 .profile_user {
@@ -1239,12 +2066,9 @@ and should display them in columns of three cards max */
 
 .profile_user_account_details_username {
   position: absolute;
-  left: 29.59%;
-  right: 31.07%;
   top: 65.43%;
-  /* bottom: 55.12%; */
-
-  /* Header 2 */
+  left: 50%;
+  transform: translate(-50%, 0%);
 
   font-family: "Khand";
   font-style: normal;
@@ -1262,25 +2086,6 @@ and should display them in columns of three cards max */
   /* White */
 
   color: #ffffff;
-}
-
-.profile_user_stats {
-  /* position: flex;
-  left: 50%;
-  right: 50%;
-  top: 46.65%;
-  bottom: 38.81%;
-
-	align-items: center; */
-}
-
-.profile_user_stats_header {
-  /* position: absolute;
-  left: 50%;
-  right: 50%;
-	transform: translate(-50%, 0%);
-  top: 46.65%; */
-  /* bottom: 49.43%; */
 }
 
 .profile_user_stats_header_title {
@@ -1361,7 +2166,7 @@ and should display them in columns of three cards max */
 
 .public_profile_buttons {
   position: absolute;
-  top: 80%;
+  top: 85%;
   left: 50%;
   transform: translate(-50%, -50%);
   /* bottom: 5.51%; */
@@ -1369,30 +2174,49 @@ and should display them in columns of three cards max */
   width: 100%;
   height: 30%;
 
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .public_profile_buttons .social_friend_card_button {
   position: absolute;
+  width: 119px;
+  height: 42px;
+
   left: 50%;
   transform: translate(-50%, 0%);
-  /* right: 20.71%; */
   top: 0%;
-  /* bottom: 90.21%; */
+
+  margin: 0px 0px;
+}
+
+.public_profile_buttons .offline_button {
+  position: absolute;
+  width: 119px;
+  height: 42px;
+
+  left: 50%;
+  transform: translate(-50%, 0%);
+  top: 0%;
+
+  margin: 0px 0px;
 }
 
 .add_friend_button,
-.add_friend_button:hover {
+.add_friend_button:hover,
+.send_dm_button,
+.send_dm_button:hover {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 10px;
 
   position: absolute;
+  width: 119px;
+  height: 42px;
+
   left: 50%;
   transform: translate(-50%, 0%);
   top: 25.93%;
@@ -1420,45 +2244,50 @@ and should display them in columns of three cards max */
   text-align: center;
   font-feature-settings: "tnum" on, "lnum" on;
 
+  /* Force to be on the same line */
+  white-space: nowrap;
+
   /* White */
 
   color: #e5e5e5;
-
-  /* Inside auto layout */
-
-  flex: none;
-  order: 0;
-  flex-grow: 0;
-  margin: 0px 10px;
 }
 
-.add_friend_button:hover {
+.add_friend_button:hover,
+.send_dm_button:hover {
   border: 2px solid #ffffff;
   color: #ffffff;
   cursor: pointer;
 }
 
+.send_dm_button {
+  top: -25%;
+}
+
+.send_dm_button:hover {
+  top: -25%;
+}
+
 .block_button,
 .block_button:hover {
   display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	/* padding: 10px; */
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  /* padding: 10px; */
 
-	position: absolute;
-	width: 119px;
-	height: 42px;
+  position: absolute;
+  width: 119px;
+  height: 42px;
 
-	left: 52.5%;
-	transform: translate(-50%, 0%);
-	top: 55%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  top: 55%;
 
-	/* Soft red */
+  /* Soft red */
 
-	background: #FC605C;
-	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-	border-radius: 15px;
+  background: #fc605c;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
 
   /* Header 3 */
 
@@ -1485,7 +2314,53 @@ and should display them in columns of three cards max */
   cursor: pointer;
 }
 
-.logout_button {
+.public_profile_buttons .social_friend_card_unblock_button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  width: 99px;
+  height: 22px;
+
+  left: 50%;
+  transform: translate(-50%, 0%);
+  top: 55%;
+
+  /* Soft red */
+
+  background: #fc605c;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  /* Header 3 */
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+}
+
+.public_profile_buttons .social_friend_card_unblock_button:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    #fc605c;
+  cursor: pointer;
+}
+
+.logout_button,
+.logout_button:hover {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -1493,10 +2368,9 @@ and should display them in columns of three cards max */
   padding: 10px;
 
   position: absolute;
-  left: 31.66%;
-  right: 33.14%;
+  left: 50%;
+  transform: translate(-50%, 0%);
   top: 82.93%;
-  bottom: 11.76%;
 
   /* Teal */
 
@@ -1508,6 +2382,22 @@ and should display them in columns of three cards max */
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
 
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  color: #ffffff;
+}
+
+.logout_button:hover {
+  border: 2px solid #e5e5e5;
+  color: #e5e5e5;
   cursor: pointer;
 }
 
@@ -1551,4 +2441,29 @@ and should display them in columns of three cards max */
     width: 100%;
     flex-direction: column;
   }
+}
+
+/* 
+* Snackbar: display line break
+*/
+
+.snackbarMsg {
+  white-space: pre;
+}
+
+/*
+* second-factor-login page style
+*/
+
+.second_factor_login {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  display: grid;
+  justify-content: center;
+  background: #163f5b;
 }

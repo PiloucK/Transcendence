@@ -1,16 +1,33 @@
-import React from "react";
 import styles from "../../styles/Home.module.css";
+import { IUserSlim } from "../../interfaces/IUser";
+import userService from "../../services/user";
+import { useSessionContext } from "../../context/SessionContext";
+import { errorHandler } from "../../errors/errorHandler";
+import { useErrorContext } from "../../context/ErrorContext";
+import { useSocketContext } from "../../context/SocketContext";
 
-import { IUserPublicInfos } from "../../interfaces/users";
+export function ButtonUnblock({ displayedUser }: { displayedUser: IUserSlim }) {
+  const errorContext = useErrorContext();
+  const socketContext = useSocketContext();
+  const sessionContext = useSessionContext();
 
-export function ButtonUnblock({
-  userInfos,
-}: {
-  userInfos: IUserPublicInfos;
-}) {
+  const unblockAUser = async () => {
+    await userService
+      .unblockUser(sessionContext.userSelf.login42, displayedUser.login42)
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
+        return;
+      });
+
+    socketContext.socket.emit("user:update-relations");
+  };
+
   return (
-    <div className={styles.social_friend_card_unblock_button} onClick={() => {}}>
+    <button
+      className={styles.social_friend_card_unblock_button}
+      onClick={unblockAUser}
+    >
       Unblock
-    </div>
+    </button>
   );
 }

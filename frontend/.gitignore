@@ -1,12 +1,2 @@
 # Next.js build dir
 .next/
-
-# compiled output
-/node_modules
-
-# macos garbage
-.DS_Store
-
-# vim utils
-*.swp
-*.vim

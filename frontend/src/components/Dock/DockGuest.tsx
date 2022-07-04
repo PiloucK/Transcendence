@@ -1,73 +1,68 @@
-import {
+import { Dock } from "./Dock";
+import Link from "next/link";
+import { IconButton, Tooltip } from "@mui/material";
+import Image from "next/image";
+import styles from "../../styles/Home.module.css";
+import FTLogo from "../../public/42logo.png";
+import getConfig from "next/config";
+import userService from "../../services/user";
+import authService from "../../services/auth";
+import {useSessionContext} from "../../context/SessionContext";
+import {useErrorContext} from "../../context/ErrorContext";
+import {useSocketContext} from "../../context/SocketContext";
+import {IUserSelf} from "../../interfaces/IUser";
+import { Button } from "@mui/material";
+import {errorHandler} from "../../errors/errorHandler";
+import React, {
+  EventHandler,
   FormEventHandler,
-  ChangeEventHandler,
-  ReactElement,
-  useEffect,
   useState,
 } from "react";
-import { Dock } from "./Dock";
-import { IUserCredentials, IUser } from "../../interfaces/users";
-import userService from "../../services/users";
 
-import { useLoginContext } from "../../context/LoginContext";
-
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-
-import io from "socket.io-client";
-
-const socket = io("http://0.0.0.0:3002", { transports: ["websocket"] });
+const { publicRuntimeConfig } = getConfig();
 
 export function DockGuest() {
-  const loginContext = useLoginContext();
+  console.log("dockguest");
+  const sessionContext = useSessionContext();
+  const errorContext = useErrorContext();
+  const socketContext = useSocketContext();
 
-  const [username, setUsername] = useState("");
+  const addUser = (event) => {
+    userService
+      .addOne('coucou')
+      .then((user: IUserSelf) => {
+        sessionContext.login?.(user);
+        socketContext.socket.emit("user:new");
 
-  const addUser: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-
-    const newUserCredentials: IUserCredentials = {
-      login42: username,
-    };
-
-    userService.addOne(newUserCredentials).then((user:IUser) => {
-      loginContext.login(user.login42, "");
-      socket.emit("user:new", username);
-      setUsername("");
-    });
-  };
-
-  const handleUsernameChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    if (event.target.value) {
-      setUsername(event.target.value);
-    }
+        authService
+          .getToken('coucou')
+          .then((login42: string) => {
+            console.log("new token for", login42, "stored in cookie");
+            sessionContext.updateUserSelf?.();
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, sessionContext));
+          });
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
+      });
   };
 
   return (
-    <Dock>
-      <form onSubmit={addUser}>
-        <TextField
-          value={username}
-          onChange={handleUsernameChange}
-          label="Login"
-        />
-        <Button type="submit">add</Button>
-      </form>
-    </Dock>
+    <>
+      <Dock>
+        <Link
+          href={`http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.BACKEND_PORT}/auth`}
+        >
+          <Tooltip title="Login with your 42 account">
+            <IconButton className={styles.icons} aria-label="Authentication">
+              <Image src={FTLogo} alt="42 logo" layout={"fill"} />
+            </IconButton>
+          </Tooltip>
+        </Link>
+          <Button onClick={addUser}>create coucou</Button>
+      </Dock>
+    </>
   );
 }
-
-// export default function DockGuest() {
-// 	return (
-// 	  <Dock>
-// 		<IconButton className={styles.icons} aria-label="Authentification">
-// 			<Image
-// 				src = {FTLogo}
-// 				layout = {'fill'}
-// 			/>
-// 		</IconButton>
-// 	  </Dock>
-// 	);
-//   }
