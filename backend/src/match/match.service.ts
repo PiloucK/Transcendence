@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { Match } from './match.entity';
@@ -31,6 +30,16 @@ export class MatchService {
       winnerLogin42,
     });
 
+    await this.usersService.updateGameStats(
+      user1,
+      user2.elo,
+      winnerLogin42 !== user2.login42,
+    );
+    await this.usersService.updateGameStats(
+      user2,
+      user1.elo,
+      winnerLogin42 !== user1.login42,
+    );
     await this.matchRepository.insert(match);
 
     return match;
