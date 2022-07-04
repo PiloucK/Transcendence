@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import styles from "../styles/Home.module.css";
-import Link from "next/link";
 import { DockSelector } from "../components/Dock/DockSelector";
 import { useSessionContext } from "../context/SessionContext";
 import { useErrorContext } from "../context/ErrorContext";
@@ -8,6 +7,7 @@ import { useSocketContext } from "../context/SocketContext";
 import { authenticate } from "../events/authenticate";
 import { GameInvitation } from "../components/Cards/GameInvitation";
 import { useUserStatusContext } from "../context/UserStatusContext";
+import { Queue } from "../components/Matchmaking/Queue";
 
 export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
   const sessionContext = useSessionContext();
@@ -35,7 +35,9 @@ export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
       <div className={styles.mainLayout_left_background} />
       <div className={styles.mainLayout_right_background} />
       {userStatusContext.statuses.get(sessionContext.userSelf.login42)
-        ?.status !== "IN_QUEUE" && (
+        ?.status === "IN_QUEUE" ? (
+        <Queue/>
+      ) : (
         <div className={styles.play} onClick={findMatch}>
           PLAY
         </div>
