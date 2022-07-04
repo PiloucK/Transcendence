@@ -67,7 +67,7 @@
 
 .leaderboard {
   position: relative;
-  top: 4rem;
+  /* top: 4rem; */
   width: 100%;
   height: 100%;
   display: flex;
@@ -174,13 +174,13 @@
   !!!!! OBSOLETE - see below 
 */
 .mainLayout_left_background {
+  z-index: -1;
   position: absolute;
   top: 0;
   left: 0;
   width: 50%;
   height: 100%;
   background-color: #00213d;
-  z-index: -1;
 }
 
 /* 
@@ -188,13 +188,13 @@
   !!!!! OBSOLETE - see below 
 */
 .mainLayout_right_background {
+  z-index: -1;
   position: absolute;
   top: 0;
   left: 50%;
   width: 50%;
   height: 100%;
   background-color: #1985a1;
-  z-index: -1;
 }
 
 .mainLayout_background {
@@ -1160,6 +1160,7 @@ and should display them in columns of three cards max */
 }
 
 .channel_content {
+  z-index: -1;
   position: absolute;
   width: 83.5%;
   height: 100%;
@@ -1819,6 +1820,7 @@ and should display them in columns of three cards max */
 */
 
 .profile_history {
+  z-index: -1;
   position: absolute;
   width: 76.5%;
   height: 100%;
@@ -1827,7 +1829,6 @@ and should display them in columns of three cards max */
   bottom: 0%;
   top: 0%;
   background-color: #00213d;
-  position: absolute;
 
   display: flex;
   flex-direction: column;
@@ -2486,4 +2487,147 @@ and should display them in columns of three cards max */
   display: grid;
   justify-content: center;
   background: #163f5b;
+}
+
+.invite_card_box {
+  z-index: 50;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  position: absolute;
+
+  height: 70%;
+  top: 5%;
+  right: 2%;
+}
+
+.invite_card {
+  z-index: 51;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 10px;
+
+  width: 338px;
+  height: 110px;
+
+  background: #163f5b;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+
+  margin: 5px;
+}
+
+.invite_card .avatar {
+  position: relative;
+  left: 20%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.invite_card .text {
+  position: relative;
+  left: 10%;
+  top: 10%;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  /* White */
+
+  color: #ffffff;
+
+  white-space: nowrap;
+}
+
+
+.invite_card .decline,
+.invite_card .decline:hover {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+  top: 60%;
+  right: 15%;
+  width: 90px;
+  height: 30px;
+
+  background: #fca311;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  color: #ffffff;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px 10px;
+}
+
+.invite_card .decline:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    #fc605c;
+  cursor: pointer;
+}
+
+.invite_card .confirm,
+.invite_card .confirm:hover {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+  top: 60%;
+  right: 15%;
+  width: 90px;
+  height: 30px;
+
+  background: #1985a1;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+
+  font-family: "Khand";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-feature-settings: "tnum" on, "lnum" on;
+
+  color: #ffffff;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 0px 10px;
+}
+
+.invite_card .confirm:hover {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+    #25bf75;
+  cursor: pointer;
 }

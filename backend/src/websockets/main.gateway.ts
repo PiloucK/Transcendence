@@ -68,6 +68,20 @@ export class MainGateway
     }
   }
 
+  @SubscribeMessage('user:accept-match')
+  onUserAcceptMatch(
+    @MessageBody() data: string[],
+    @ConnectedSocket() client: Socket,
+  ) {
+    const [invitedLogin, inviterLogin] = data;
+
+    if (this.statusService.isNotInGame(invitedLogin) === true
+      && this.statusService.isNotInGame(inviterLogin) === true) {
+      this.updateStatus(invitedLogin, 'IN_GAME', inviterLogin);
+      this.updateStatus(inviterLogin, 'IN_GAME', invitedLogin);
+    }
+  }
+
   @SubscribeMessage('user:login')
   onUserLogin(
     @MessageBody() userLogin42: string,
@@ -93,6 +107,11 @@ export class MainGateway
   @SubscribeMessage('user:new')
   onNewUser() {
     this.server.sockets.emit('update-leaderboard');
+  }
+
+  @SubscribeMessage('user:invitation-sent')
+  onInvitationSent() {
+    this.server.sockets.emit('fetch-invitations');
   }
 
   @SubscribeMessage('user:update-elo')
