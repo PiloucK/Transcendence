@@ -10,6 +10,7 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { AxiosError } from "axios";
 import { useSocketContext } from "../../context/SocketContext";
 import { HttpStatusCodes } from "../../constants/httpStatusCodes";
+import Router from "next/router";
 
 export function ButtonTxtUserStatus({ login }: { login: string }) {
   const userStatusContext = useUserStatusContext();
@@ -51,7 +52,18 @@ export function ButtonTxtUserStatus({ login }: { login: string }) {
     );
   } else if (userStatus?.status === "IN_GAME") {
     return (
-      <div className={styles.buttons} onClick={() => {}}>
+      <div
+        className={styles.buttons}
+        onClick={() => {
+          Router.push({
+            pathname: "/game",
+            query: {
+              userLogin42: login,
+              opponentLogin42: userStatus.opponentLogin42,
+            },
+          });
+        }}
+      >
         Spectate
       </div>
     );
