@@ -29,6 +29,8 @@ const Pong = () => {
 
   const secondMount = useRef(false);
   const [gameReady, setGameReady] = useState(false);
+  const [winnerLogin42, setWinnerLogin42] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     if (gameSocket.current === undefined) {
@@ -72,7 +74,7 @@ const Pong = () => {
             gameSocket.current?.emit("game:new-point", gameID.current);
           }
 
-          setPlayerScore(p1Score);
+          setPlayerScore(p1Score);undefined
           setOpponentScore(p2Score);
           setGameReady(true);
         }
@@ -84,13 +86,17 @@ const Pong = () => {
         } else {
           setOpponentScore((prevState) => prevState + 1);
         }
-        if (playerScore === 5 || opponentScore === 5) {
-          return;
-        } else {
-          gameSocket.current?.emit("game:new-point", gameID.current);
-        }
+      });
+
+      gameSocket.current.on("game:winner", (Login42: Login42) => {
+        setWinnerLogin42(Login42);
+
+        setTimeout(() => {
+          router.push('/');
+        }, 5000)
       });
     }
+
     return () => {
       // edit unmounting logic for spectating and multiple windows on game
       if (secondMount.current !== true) {
@@ -115,6 +121,12 @@ const Pong = () => {
   }
   return (
     <div className={styles.mainLayout_background}>
+      {
+        winnerLogin42 !== "" &&
+        <div className={styles.play}>
+          Well played {winnerLogin42}
+        </div>
+      }
       <Score player={playerScore} opponent={opponentScore} />
       <Ball gameSocket={gameSocket.current} gameID={gameID.current} />
       <PlayerPaddle

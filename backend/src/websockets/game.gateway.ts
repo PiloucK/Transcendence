@@ -233,6 +233,16 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       }
 
       this.server.to(gameID).emit('game:update-score', player);
+
+      // setInterval(() => {
+      if (currentGame.player1Score < 5 && currentGame.player2Score < 5) {
+        this.onGamePoint(gameID);
+      } else if (currentGame.player1Score >= 5) {
+        this.server.to(gameID).emit('game:winner', currentGame.player1);
+      } else {
+        this.server.to(gameID).emit('game:winner', currentGame.player2);
+      }
+      // }, 2000);
     }
   }
 }
