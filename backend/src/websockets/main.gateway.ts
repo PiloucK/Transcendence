@@ -12,9 +12,7 @@ import { StatusService } from 'src/status/status.service';
 import { EmittedLiveStatus } from 'src/status/status.type';
 
 @WebSocketGateway(3002, { transports: ['websocket'] })
-export class MainGateway
-  implements OnGatewayConnection, OnGatewayDisconnect
-{
+export class MainGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private readonly statusService: StatusService) {}
   @WebSocketServer()
   server!: Server;
@@ -53,10 +51,7 @@ export class MainGateway
   }
 
   @SubscribeMessage('user:find-match')
-  onUserFindMatch(
-    @MessageBody() userLogin42: string,
-    @ConnectedSocket() client: Socket,
-  ) {
+  onUserFindMatch(@MessageBody() userLogin42: string) {
     console.log('user:find-match', userLogin42);
 
     const opponentLogin42 = this.statusService.getOpponent(userLogin42);
@@ -80,12 +75,10 @@ export class MainGateway
   }
 
   @SubscribeMessage('user:leave-queue')
-  onLeaveQueue(
-    @MessageBody() userLogin42: string,
-  ) {
-      this.updateStatus(userLogin42, 'ONLINE');
-    }
-
+  onLeaveQueue(@MessageBody() userLogin42: string) {
+    this.statusService.leaveQueue(userLogin42);
+    this.updateStatus(userLogin42, 'ONLINE');
+  }
 
   @SubscribeMessage('user:logout')
   onUserLogout(

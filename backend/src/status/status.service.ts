@@ -30,8 +30,8 @@ export class StatusService {
         if (userStatusMetrics) {
           opponentStatusMetrics.status = 'IN_GAME';
           userStatusMetrics.status = 'IN_GAME';
-		  opponentStatusMetrics.opponentLogin42 = userLogin42;
-		  userStatusMetrics.opponentLogin42 = opponentLogin42;
+          opponentStatusMetrics.opponentLogin42 = userLogin42;
+          userStatusMetrics.opponentLogin42 = opponentLogin42;
           return opponentLogin42;
         } else {
           return undefined;
@@ -43,6 +43,13 @@ export class StatusService {
       userStatusMetrics.status = 'IN_QUEUE';
     }
     return undefined;
+  }
+
+  leaveQueue(userLogin42: Login42) {
+    const userStatusMetrics = this.statuses.get(userLogin42);
+    if (userStatusMetrics) {
+      userStatusMetrics.status = 'ONLINE';
+    }
   }
 
   add(socketId: SocketId, userLogin42: Login42): 'EMIT' | 'QUIET' {
