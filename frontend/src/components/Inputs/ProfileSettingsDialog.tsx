@@ -25,31 +25,31 @@ import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 import { Box } from "@mui/material";
 
 export function ProfileSettingsDialog({
-	user,
-	open,
-	setOpen,
+  user,
+  open,
+  setOpen,
 }: {
   user: IUserSelf;
-	open: boolean;
-	setOpen: (open: boolean) => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }) {
   const errorContext = useErrorContext();
-	const sessionContext = useSessionContext();
-	const [username, setUsername] = useState(user.username);
-  
-	const [textFieldError, setTextFieldError] = useState("");
-	
-	const [newImage, setNewImage] = useState<Blob>();
-	const [preview, setPreview] = useState("");
-  
-	const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('sm');
-	const [alreadySet, setAlreadySet] = useState(false);
-  
-	const handleClose = () => {
+  const sessionContext = useSessionContext();
+  const [username, setUsername] = useState(user.username);
+
+  const [textFieldError, setTextFieldError] = useState("");
+
+  const [newImage, setNewImage] = useState<Blob>();
+  const [preview, setPreview] = useState("");
+
+  const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
+  const [alreadySet, setAlreadySet] = useState(false);
+
+  const handleClose = () => {
     setAlreadySet(false);
-		setOpen(false);
-	};
-  
+    setOpen(false);
+  };
+
   const updateUser = () => {
     let error = false;
     setTextFieldError("");
@@ -98,45 +98,47 @@ export function ProfileSettingsDialog({
     }
   };
 
-	return (
-		<>
-			<IconButton size="large" onClick={() => setOpen(true)}>
-				<SettingsIcon
-					style={{
-						color: "#ffffff",
-					}}
-					fontSize="large"
-				/>
-			</IconButton>
-			<Dialog
-				PaperProps={{ style: { backgroundColor: "#163F5B" } }}
-				open={open}
-				onClose={handleClose}
-				maxWidth={maxWidth}>
-				<DialogTitle>
-					User settings
-				</DialogTitle>
-				<DialogContent>
-					<Box className={styles.globalSettings}>
-						<div className={styles.chat_create_channel_form_input}>
-							Username
-						</div>
-						<TextField
+  return (
+    <>
+      <IconButton size="large" onClick={() => setOpen(true)}>
+        <SettingsIcon
+          style={{
+            color: "#ffffff",
+          }}
+          fontSize="large"
+        />
+      </IconButton>
+      <Dialog
+        PaperProps={{ style: { backgroundColor: "#163F5B" } }}
+        open={open}
+        onClose={handleClose}
+        maxWidth={maxWidth}
+      >
+        <DialogTitle>User settings</DialogTitle>
+        <DialogContent>
+          <Box className={styles.globalSettings}>
+            <div className={styles.chat_create_channel_form_input}>
+              Username
+            </div>
+            <TextField
               label=""
-							value={username}
-							setValue={setUsername}
-							error={textFieldError}
-						/>
-						<SettingsAvatar	preview={preview}
-										setNewImage={setNewImage}
-										setPreview={setPreview}
-										user={user}/>
-						<DialogActions>
-							<ButtonUpdateProfileSettings updateChannel={updateUser} />
-						</DialogActions>
-						<TwoFactorAuth />
-					</Box>
-				</DialogContent>
-			</Dialog>
-	</>
-)}
+              value={username}
+              setValue={setUsername}
+              error={textFieldError}
+            />
+            <SettingsAvatar
+              preview={preview}
+              setNewImage={setNewImage}
+              setPreview={setPreview}
+              user={user}
+            />
+            <DialogActions>
+              <ButtonUpdateProfileSettings updateChannel={updateUser} />
+            </DialogActions>
+            <TwoFactorAuth />
+          </Box>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
