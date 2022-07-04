@@ -79,6 +79,14 @@ export class MainGateway
     }
   }
 
+  @SubscribeMessage('user:leave-queue')
+  onLeaveQueue(
+    @MessageBody() userLogin42: string,
+  ) {
+      this.updateStatus(userLogin42, 'ONLINE');
+    }
+
+
   @SubscribeMessage('user:logout')
   onUserLogout(
     @MessageBody() userLogin42: string,

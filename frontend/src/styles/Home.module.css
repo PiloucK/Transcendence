@@ -246,10 +246,20 @@
 
 .queue_circular_progress {
   position: absolute;
+  color: rgba(232, 236, 237, 0.9);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 25%;
+  width: 100%;
+}
+
+.queue_cancel_button {
+	position: absolute;
+	background: #FCA311;
+	top: 63%;
+	left: 50%;
+	border-radius: 15px;
+	transform: translate(-50%, -50%);
 }
 
 .main {

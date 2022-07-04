@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import styles from "../styles/Home.module.css";
-import Link from "next/link";
 import { DockSelector } from "../components/Dock/DockSelector";
 import { useSessionContext } from "../context/SessionContext";
 import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
 import { authenticate } from "../events/authenticate";
 import { useUserStatusContext } from "../context/UserStatusContext";
-import { CircularProgress } from "@mui/material";
+import { Queue } from "../components/Matchmaking/Queue";
 
 export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
   const sessionContext = useSessionContext();
@@ -35,7 +34,7 @@ export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
       <div className={styles.mainLayout_right_background} />
       {userStatusContext.statuses.get(sessionContext.userSelf.login42)
         ?.status === "IN_QUEUE" ? (
-        <CircularProgress className={styles.queue_circular_progress}/>
+        <Queue/>
       ) : (
         <div className={styles.play} onClick={findMatch}>
           PLAY
