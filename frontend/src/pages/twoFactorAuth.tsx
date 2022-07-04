@@ -21,7 +21,7 @@ export default function TwoFactorAuth() {
 
   const checkIfEnabled = () => {
     axios
-      .get("http://0.0.0.0:3001/two-factor-auth/enabled")
+      .get("http://10.19.242.109:3001/two-factor-auth/enabled")
       .then((response) => {
         setEnabled(response.data);
       })
