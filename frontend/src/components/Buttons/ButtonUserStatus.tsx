@@ -9,6 +9,7 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { AxiosError } from "axios";
 import { useSocketContext } from "../../context/SocketContext";
 import { HttpStatusCodes } from "../../constants/httpStatusCodes";
+import Router from "next/router";
 
 export function ButtonUserStatus({
   displayedUser,
@@ -57,7 +58,18 @@ export function ButtonUserStatus({
     );
   } else if (userStatus?.status === "IN_GAME") {
     return (
-      <div className={styles.social_friend_card_button} onClick={() => {}}>
+      <div
+        className={styles.social_friend_card_button}
+        onClick={() => {
+          Router.push({
+            pathname: "/game",
+            query: {
+              userLogin42: displayedUser.login42,
+              opponentLogin42: userStatus.opponentLogin42,
+            },
+          });
+        }}
+      >
         Spectate
       </div>
     );
