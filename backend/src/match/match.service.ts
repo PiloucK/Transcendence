@@ -14,11 +14,13 @@ export class MatchService {
   ) {}
 
   async create(
-    user1: User,
+    user1Login42: string,
     user2Login42: string,
     user1Points: number,
     user2Points: number,
+    winnerLogin42: string,
   ) {
+    const user1 = await this.usersService.getUserByLogin42(user1Login42);
     const user2 = await this.usersService.getUserByLogin42(user2Login42);
 
     const match = this.matchRepository.create({
@@ -26,6 +28,7 @@ export class MatchService {
       user2,
       user1Points,
       user2Points,
+      winnerLogin42,
     });
 
     await this.matchRepository.insert(match);

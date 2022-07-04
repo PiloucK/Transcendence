@@ -21,12 +21,14 @@ export class MatchController {
     @Body() createMatchDto: CreateMatchDto,
     @GetReqUser() reqUser: User,
   ) {
-    const { opponentLogin42, selfScore, opponentScore } = createMatchDto;
+    const { opponentLogin42, selfScore, opponentScore, winnerLogin42 } =
+      createMatchDto;
     return this.matchService.create(
-      reqUser,
+      reqUser.login42,
       opponentLogin42,
       selfScore,
       opponentScore,
+      winnerLogin42,
     );
   }
 }

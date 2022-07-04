@@ -17,4 +17,7 @@ export class Match {
 
   @Column()
   user2Points!: number;
+
+  @Column()
+  winnerLogin42!: string;
 }
