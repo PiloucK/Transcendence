@@ -5,6 +5,7 @@ export type EmittedLiveStatus = StoredLiveStatus | 'OFFLINE';
 export interface StatusMetrics {
   socketCount: number;
   status: StoredLiveStatus;
+  opponentLogin42?: Login42;
 }
 
 export type Login42 = string;

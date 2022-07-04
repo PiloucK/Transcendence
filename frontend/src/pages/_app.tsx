@@ -9,6 +9,7 @@ import { SocketProvider } from "../context/SocketContext";
 import { DefaultLayout } from "../layouts/defaultLayout";
 import { ErrorSnackbar } from "../components/Alerts/ErrorSnackbar";
 import { UserStatusProvider } from "../context/UserStatusContext";
+import {UserStatusLayout} from "../layouts/userStatusLayout";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -21,7 +22,11 @@ type AppPropsWithLayout = AppProps & {
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout =
-    Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
+    Component.getLayout ?? ((page) =>
+      <UserStatusLayout>
+        <DefaultLayout>{page}</DefaultLayout>
+      </UserStatusLayout>
+    );
 
   return (
     <>

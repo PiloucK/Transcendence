@@ -18,10 +18,11 @@ const getForOneUser = (userLogin42: string) => {
 const createMatch = (
   opponentLogin42: string,
   selfScore: number,
-  opponentScore: number
+  opponentScore: number,
+  winnerLogin42: string
 ) => {
   return axios
-    .post(baseUrl, { opponentLogin42, selfScore, opponentScore })
+    .post(baseUrl, { opponentLogin42, selfScore, opponentScore, winnerLogin42 })
     .then((response) => response.data);
 };
 
