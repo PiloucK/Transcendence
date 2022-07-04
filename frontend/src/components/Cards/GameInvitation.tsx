@@ -17,16 +17,24 @@ function CardInviteInGame({ userInfo }: { userInfo: IUserSelf }) {
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
-  const acceptInvitation = () => {};
-
   const declineInvitation = () => {
-	invitationService.declineInvitation(userInfo.login42)
-	.then(() => {
-		socketContext.socket.emit("user:invitation-sent");
-	  })
-	.catch((error: Error | AxiosError<unknown, any>) => {
-	  errorContext.newError?.(errorHandler(error, sessionContext));
-	});
+    invitationService
+      .deleteInvitation(userInfo.login42)
+      .then(() => {
+        socketContext.socket.emit("user:invitation-sent");
+      })
+      .catch((error: Error | AxiosError<unknown, any>) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
+      });
+  };
+
+  const acceptInvitation = () => {
+    declineInvitation();
+    socketContext.socket.emit(
+      "user:accept-match",
+      sessionContext.userSelf.login42,
+      userInfo.login42
+    );
   };
 
   return (
@@ -103,10 +111,7 @@ export function GameInvitation() {
     return (
       <div className={styles.invite_card_box}>
         {invitations.map((invitation) => (
-          <CardInviteInGame
-            key={invitation.id}
-            userInfo={invitation.inviter}
-          />
+          <CardInviteInGame key={invitation.id} userInfo={invitation.inviter} />
         ))}
       </div>
     );

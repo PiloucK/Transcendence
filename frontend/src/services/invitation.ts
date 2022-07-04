@@ -1,3 +1,4 @@
+
 import axios from "axios";
 
 import getConfig from "next/config";
@@ -20,7 +21,7 @@ const sendInvitation = (invitedLogin42: string) => {
     .then((response) => response.data);
 };
 
-const declineInvitation = (inviterLogin42: string) => {
+const deleteInvitation = (inviterLogin42: string) => {
   return axios
     .delete(`${baseUrl}/${inviterLogin42}`)
     .then((response) => response.data);
@@ -29,5 +30,5 @@ const declineInvitation = (inviterLogin42: string) => {
 export default {
   getForOneUser,
   sendInvitation,
-  declineInvitation,
+  deleteInvitation,
 };

@@ -16,7 +16,7 @@ export class InvitationController {
   }
 
   @Delete('/:inviterLogin42')
-  declineInvitation(
+  deleteInvitation(
 	@Param('inviterLogin42') inviterLogin42: string,
 	@GetReqUser() reqUser: User,
   ) {
