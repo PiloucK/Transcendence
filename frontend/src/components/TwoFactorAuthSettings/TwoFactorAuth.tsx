@@ -71,6 +71,7 @@ export function TwoFactorAuth({
         <></>
       }
       <ToggleSwitch
+        hasBeenActivated={hasBeenActivated}
         setQrcode={setQrcode}
         checked={checked}
         setChecked={setChecked}

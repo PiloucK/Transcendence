@@ -17,6 +17,10 @@ import { useSocketContext } from "../context/SocketContext";
 import channelService from "../services/channel";
 import CircularProgress from "@mui/material/CircularProgress";
 
+import { DefaultLayout } from "../layouts/defaultLayout";
+import { UserStatusLayout } from "../layouts/userStatusLayout";
+import { defaultSessionState } from "../constants/defaultSessionState";
+
 function ChatContent({
   menu,
   channels,
@@ -49,7 +53,7 @@ export default function Chat() {
   const [channels, setChannels] = React.useState<Channel[]>([]);
 
   const fetchChannels = () => {
-    if (sessionContext.userSelf.login42 !== "Norminet") {
+    if (sessionContext.userSelf.login42 !== defaultSessionState.userSelf.login42) {
       channelService
         .getJoinedChannels(sessionContext.userSelf.login42)
         .then((currentChannels: Channel[]) => {
@@ -92,3 +96,11 @@ export default function Chat() {
     );
   }
 }
+
+Chat.getLayout = function getLayout(page: React.ReactElement) {
+	return (
+	  <DefaultLayout>
+		<UserStatusLayout>{page}</UserStatusLayout>
+	  </DefaultLayout>
+	);
+  };

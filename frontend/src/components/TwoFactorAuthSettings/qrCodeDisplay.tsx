@@ -1,5 +1,5 @@
 import { Button, Fade, Grow, TextField } from "@mui/material";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { ChangeEventHandler, Dispatch, FormEventHandler, SetStateAction, useState } from "react";
 
 import { errorHandler } from "../../errors/errorHandler";
@@ -7,6 +7,7 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { useSessionContext } from "../../context/SessionContext";
 import twoFactorAuthService from "../../services/twoFactorAuth";
 import styles from "./TwoFactorAuth.module.scss"
+import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 
 export function QrCodeDisplay({
 	image,
@@ -22,7 +23,7 @@ export function QrCodeDisplay({
 	setHasBeenActivated: Dispatch<SetStateAction<boolean>>;
 }) {
 	const [code, setCode] = useState("");
-	const [enabled, setEnabled] = useState(false);
+	const [textFieldError, setTextFieldError] = useState("");
 
 	const errorContext = useErrorContext();
 	const sessionContext = useSessionContext();
@@ -34,17 +35,35 @@ export function QrCodeDisplay({
 	const sendValidationCode: FormEventHandler<HTMLFormElement> = (event) => {
 		event.preventDefault();
 
-		twoFactorAuthService
-			.turnOn(code)
-			.then(() => {
-				setCode("");
-				sessionContext.updateUserSelf?.();
-				setQrcode(false);
-				setHasBeenActivated(true);
-			})
-			.catch((error) => {
-				errorContext.newError?.(errorHandler(error, sessionContext));
-			});
+		let error = false;
+
+		setTextFieldError("");
+		if (code === "") {
+			setTextFieldError("Code can't be empty.");
+			error = true;
+		}
+
+		if (error === false) {
+			twoFactorAuthService
+				.turnOn(code)
+				.then(() => {
+					setCode("");
+					sessionContext.updateUserSelf?.();
+					setQrcode(false);
+					setHasBeenActivated(true);
+				})
+				.catch((caughtError: Error | AxiosError) => {
+					const parsedError = errorHandler(caughtError, sessionContext);
+					if (
+						parsedError.statusCode === HttpStatusCodes.UNAUTHORIZED &&
+						parsedError.message === "Wrong authentication code"
+					) {
+						setTextFieldError("Wrong code.");
+					} else {
+						errorContext.newError?.(parsedError);
+					}
+				});
+		}
 	};
 	return (
 		<>
@@ -61,6 +80,8 @@ export function QrCodeDisplay({
 						<form onSubmit={sendValidationCode}
 							className={styles.formStyle}>
 							<TextField
+								error={textFieldError !== ""}
+								helperText={textFieldError}
 								size="small"
 								label="Enter code here"
 								variant="filled"
@@ -71,7 +92,7 @@ export function QrCodeDisplay({
 								variant="contained"
 								size="small"
 								type="submit"
-								>send code</Button>
+							>send code</Button>
 						</form>
 					</Grow>
 				</>

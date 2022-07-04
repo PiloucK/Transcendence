@@ -1,5 +1,10 @@
 import Link from "next/link";
-import React from "react";
+import React, {
+  ChangeEventHandler,
+  FormEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -10,14 +15,75 @@ import CheckIcon from "@mui/icons-material/Check";
 
 import { Dock } from "./Dock";
 import styles from "../../styles/Home.module.css";
+import { useSessionContext } from "../../context/SessionContext";
 
-import { Tooltip } from "@mui/material";
+import userService from "../../services/user";
+import authService from "../../services/auth";
+import { IUserSelf } from "../../interfaces/IUser";
+import { Button, TextField, Tooltip } from "@mui/material";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
+import { useSocketContext } from "../../context/SocketContext";
+import { SetProfileFirstLogin } from "../Alerts/SetProfileFirstLogin";
 
 function NavigationDock({
   setIsInNavigation,
 }: {
   setIsInNavigation: (mode: boolean) => void;
 }) {
+  const sessionContext = useSessionContext();
+  const errorContext = useErrorContext();
+  const socketContext = useSocketContext();
+
+  const [login42, setLogin42] = useState("");
+
+  const addUser: FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+
+    userService
+      .addOne(login42)
+      .then((user: IUserSelf) => {
+        sessionContext.login?.(user);
+        socketContext.socket.emit("user:new");
+        setLogin42("");
+
+        authService
+          .getToken(login42)
+          .then((login42: string) => {
+            console.log("new token for", login42, "stored in cookie");
+            sessionContext.updateUserSelf?.();
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, sessionContext));
+          });
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
+      });
+  };
+
+  const deleteAllUsers = () => {
+    userService
+      .deleteAll()
+      .then(() => {
+        console.log("all users deleted");
+        sessionContext.logout?.();
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
+      });
+  };
+
+  const handleLogin42Change: ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    if (event.target.value) {
+      setLogin42(event.target.value);
+    }
+  };
+
   return (
     <>
       <Dock>
@@ -63,6 +129,20 @@ function NavigationDock({
           </IconButton>
         </Tooltip>
       </Dock>
+
+      <div>
+        <form onSubmit={addUser}>
+          <TextField
+            value={login42}
+            onChange={handleLogin42Change}
+            label="Login"
+          />
+          <Button type="submit">add</Button>
+        </form>
+        <Button onClick={deleteAllUsers}>remove all users and logout</Button>
+      </div>
+
+      <SetProfileFirstLogin />
     </>
   );
 }

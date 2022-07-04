@@ -9,6 +9,7 @@ import { ChannelModule } from './channel/channel.module';
 import { TwoFactorAuthModule } from './twoFactorAuth/twoFactorAuth.module';
 import { StatusModule } from './status/status.module';
 import { WebsocketsModule } from './websockets/websockets.module';
+import { MatchModule } from './match/match.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { WebsocketsModule } from './websockets/websockets.module';
     ChannelModule,
     StatusModule,
     WebsocketsModule,
+    MatchModule,
   ],
 })
 export class AppModule {}

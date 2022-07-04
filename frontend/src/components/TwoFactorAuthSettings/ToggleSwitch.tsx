@@ -11,10 +11,12 @@ export default function ToggleSwitch({
   checked,
   setChecked,
   setQrcode,
+  hasBeenActivated,
 }: {
   checked: boolean;
   setChecked: Dispatch<SetStateAction<boolean>>;
   setQrcode: Dispatch<SetStateAction<boolean>>;
+  hasBeenActivated: boolean;
 }) {
 
   const errorContext = useErrorContext();
@@ -32,7 +34,7 @@ export default function ToggleSwitch({
           errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
-    else {
+    else if (hasBeenActivated === true) {
       twoFactorAuthService
         .turnOn()
         .then(() => {

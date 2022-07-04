@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { Channel } from 'src/channel/channel.entity';
+import { Match } from 'src/match/match.entity';
 import { PrivateConv } from 'src/privateConv/privateConv.entity';
 import {
   Column,
@@ -15,7 +16,7 @@ export class User {
   @PrimaryColumn()
   login42!: string;
 
-  @Column()
+  @Column({ unique: true, nullable: true })
   username!: string;
   // https://stackoverflow.com/questions/25300821/difference-between-varchar-and-text-in-mysql
   // https://typeorm.io/#column-data-types
@@ -62,6 +63,12 @@ export class User {
   // There is a many to many relation owned by the channel.
   @ManyToMany(() => Channel)
   users!: Channel[];
+
+  @OneToMany(
+    () => Match,
+    (match) => (match.user1 === this ? match.user1 : match.user2),
+  )
+  matches!: Match[];
 
   @Column({ default: false })
   isTwoFactorAuthEnabled!: boolean;

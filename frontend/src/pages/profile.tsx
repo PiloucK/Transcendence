@@ -10,12 +10,11 @@ import { AxiosError } from "axios";
 import { ProfileInteractions } from "../components/Profile/ProfileInteractions";
 import { UserStats } from "../components/Profile/UserStats";
 import { AccountDetails } from "../components/Profile/AccountDetails";
-import { ReactElement, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { defaultSessionState } from "../constants/defaultSessionState";
 import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
-import { UserStatusLayout } from "../layouts/userStatusLayout";
-import { DefaultLayout } from "../layouts/defaultLayout";
 import CircularProgress from "@mui/material/CircularProgress";
+import { AddMatchField } from "../components/Profile/AddMatchField";
 
 export default function ProfilePage() {
   const { login } = useRouter().query;
@@ -27,9 +26,13 @@ export default function ProfilePage() {
   const [open, setOpen] = useState(false);
 
   const fetchDisplayedUser = async () => {
-    if (login !== undefined && login !== sessionContext.userSelf.login42) {
+    if (
+      login !== undefined &&
+      login !== sessionContext.userSelf.login42 &&
+      sessionContext.userSelf.login42 !== defaultSessionState.userSelf.login42
+    ) {
       const user = await userService
-        .getOne(login)
+        .getOne(Array.isArray(login) ? login[0] : login)
         .catch((error: Error | AxiosError<unknown, any>) => {
           errorContext.newError?.(errorHandler(error, sessionContext));
           Router.push("/");
@@ -46,8 +49,8 @@ export default function ProfilePage() {
   }, [sessionContext]);
 
   if (
-    sessionContext.userSelf.login42 === "Norminet" ||
-    displayedUser.login42 === "Norminet"
+    sessionContext.userSelf.login42 === defaultSessionState.userSelf.login42 ||
+    displayedUser.login42 === defaultSessionState.userSelf.login42
   ) {
     return (
       <div className={styles.play}>
@@ -74,15 +77,8 @@ export default function ProfilePage() {
           </>
         )}
       </div>
-      <UserGameHistory userLogin={sessionContext.userSelf.login42} />
+      <UserGameHistory userLogin={displayedUser.login42} />
+      <AddMatchField />
     </>
   );
 }
-
-ProfilePage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <DefaultLayout>
-      <UserStatusLayout>{page}</UserStatusLayout>
-    </DefaultLayout>
-  );
-};

@@ -16,16 +16,24 @@ import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
-export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
+export function CardPublicChannel({
+  channelInfos,
+  open,
+  setOpen,
+}: {
+  channelInfos: Channel;
+  open: { state: boolean; id: string };
+  setOpen: (open: { state: boolean; id: string }) => void;
+}) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [open, setOpen] = React.useState(false);
+  //   const [open, setOpen] = React.useState(false);
 
   const joinChannel = () => {
     if (sessionContext.userSelf.login42 !== null) {
       if (channelInfos.password !== "") {
-        setOpen(true);
+        setOpen({ state: true, id: channelInfos.id });
       } else {
         channelService
           .joinChannel(sessionContext.userSelf.login42, channelInfos.id)
@@ -65,7 +73,7 @@ export function CardPublicChannel({ channelInfos }: { channelInfos: Channel }) {
       </div>
       <ChannelPasswordDialog
         channelId={channelInfos.id}
-        open={open}
+        open={open.id === channelInfos.id ? open : { state: false, id: "" }}
         setOpen={setOpen}
       />
     </div>

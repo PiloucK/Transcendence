@@ -3,7 +3,7 @@ import styles from "./ProfileSettingsDialog.module.css";
 
 import { TextField } from "../Inputs/TextField";
 
-// import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
+import { ButtonUpdateProfileSettings } from "../Buttons/ButtonUpdateProfileSettings";
 
 import userService from "../../services/user";
 import { errorHandler } from "../../errors/errorHandler";
@@ -16,92 +16,87 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import { useSocketContext } from "../../context/SocketContext";
 import { IUserSelf } from "../../interfaces/IUser";
 import { useSessionContext } from "../../context/SessionContext";
 import { TwoFactorAuth } from "../TwoFactorAuthSettings/TwoFactorAuth";
-import { maxWidth, style } from "@mui/system";
-import { Box, Paper, Stack } from "@mui/material";
-import TextFieldMUI from "@mui/material/TextField";
-import { AvatarSettings, SettingsAvatar } from "./SettingsAvatarDialog";
+import { SettingsAvatar } from "./SettingsAvatarDialog";
+import { AxiosError } from "axios";
+import { HttpStatusCodes } from "../../constants/httpStatusCodes";
+import { Box } from "@mui/material";
 
 export function ProfileSettingsDialog({
 	user,
 	open,
 	setOpen,
 }: {
-	user: IUserSelf;
+  user: IUserSelf;
 	open: boolean;
 	setOpen: (open: boolean) => void;
 }) {
-	const errorContext = useErrorContext();
-	const socketContext = useSocketContext();
+  const errorContext = useErrorContext();
 	const sessionContext = useSessionContext();
 	const [username, setUsername] = useState(user.username);
-
+  
 	const [textFieldError, setTextFieldError] = useState("");
 	
 	const [newImage, setNewImage] = useState<Blob>();
 	const [preview, setPreview] = useState("");
-
+  
 	const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('sm');
 	const [alreadySet, setAlreadySet] = useState(false);
-
+  
 	const handleClose = () => {
-		setAlreadySet(false);
+    setAlreadySet(false);
 		setOpen(false);
 	};
-
-	const updateUser = () => {
-		let error = false;
-		setTextFieldError("");
-		if (username === "") {
-			setTextFieldError("Username cannot be empty.");
-			error = true;
-		}
-		if (error === false) {
-			setOpen(false);
-			if (username !== user.username) {
-				userService
-					.updateUserUsername(user.login42, username)
-					.then(() => {
-						sessionContext.updateUserSelf?.(); //! Can be done only once
-					})
-					.catch((error) => {
-						errorContext.newError?.(errorHandler(error, sessionContext));
-					});
-			}
-			if (newImage !== undefined) {
-				const formData = new FormData();
-				formData.append("file", newImage);
-				userService
-					.updateUserImage(user.login42, formData)
-					.then(() => {
-						setNewImage(undefined);
-						setPreview("");
-						sessionContext.updateUserSelf?.(); //! Can be done only once
-					})
-					.catch((error) => {
-						errorContext.newError?.(errorHandler(error, sessionContext));
-					});
-			}
-		}
-	};
-
-	function ButtonUpdateChannel({
-		updateChannel,
-	}: {
-		updateChannel: () => void;
-	}) {
-		return (
-			<div
-				className={styles.channel_settings_update}
-				onClick={updateChannel}
-			>
-				Update
-			</div>
-		);
-	}
+  
+  const updateUser = () => {
+    let error = false;
+    setTextFieldError("");
+    if (username === "") {
+      setTextFieldError("Username cannot be empty.");
+      error = true;
+    }
+    if (error === false) {
+      if (username !== user.username) {
+        userService
+          .updateUserUsername(user.login42, username)
+          .then(() => {
+            sessionContext.updateUserSelf?.(); //! Can be done only once
+            setOpen(false);
+          })
+          .catch((caughtError: Error | AxiosError) => {
+            const parsedError = errorHandler(caughtError, sessionContext);
+            if (
+              parsedError.statusCode === HttpStatusCodes.CONFLICT &&
+              parsedError.message.startsWith(
+                "duplicate key value violates unique constraint"
+              )
+            ) {
+              setTextFieldError("Username already taken.");
+              error = true;
+            } else {
+              errorContext.newError?.(parsedError);
+            }
+          });
+      }
+      if (newImage !== undefined) {
+        const formData = new FormData();
+        formData.append("file", newImage);
+        userService
+          .updateUserImage(user.login42, formData)
+          .then(() => {
+            setNewImage(undefined);
+            setPreview("");
+            sessionContext.updateUserSelf?.(); //! Can be done only once
+            setOpen(false);
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, sessionContext));
+          });
+      }
+    }
+  };
 
 	return (
 		<>
@@ -127,6 +122,7 @@ export function ProfileSettingsDialog({
 							Username
 						</div>
 						<TextField
+              label=""
 							value={username}
 							setValue={setUsername}
 							error={textFieldError}
@@ -135,10 +131,10 @@ export function ProfileSettingsDialog({
 										setNewImage={setNewImage}
 										setPreview={setPreview}
 										user={user}/>
-						<TwoFactorAuth />
 						<DialogActions>
-							<ButtonUpdateChannel updateChannel={updateUser} />
+							<ButtonUpdateProfileSettings updateChannel={updateUser} />
 						</DialogActions>
+						<TwoFactorAuth />
 					</Box>
 				</DialogContent>
 			</Dialog>

@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublic } from "../../interfaces/IUser";
+import { IUserSlim } from "../../interfaces/IUser";
 import { PrivateConv } from "../../interfaces/Chat.interfaces";
 
 import Avatar from "@mui/material/Avatar";
@@ -12,12 +12,13 @@ import { useErrorContext } from "../../context/ErrorContext";
 import { useSessionContext } from "../../context/SessionContext";
 import privateConvService from "../../services/privateConv";
 import { useSocketContext } from "../../context/SocketContext";
+import { defaultSessionState } from "../../constants/defaultSessionState";
 
 export function CardUserDM({
   userInfos,
   setMenu,
 }: {
-  userInfos: IUserPublic;
+  userInfos: IUserSlim;
   setMenu: (menu: string) => void;
 }) {
   const errorContext = useErrorContext();
@@ -26,7 +27,7 @@ export function CardUserDM({
 
   const createPrivateConv = () => {
     if (
-      sessionContext.userSelf.login42 !== null &&
+      sessionContext.userSelf.login42 !== defaultSessionState.userSelf.login42 &&
       sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       privateConvService
@@ -62,7 +63,9 @@ export function CardUserDM({
           />
         </Avatar>
       </div>
-      <div className={styles.user_card_username}>{userInfos.username}</div>
+      <div className={styles.user_card_username}>
+        {userInfos.username ?? defaultSessionState.userSelf.username}
+      </div>
       <div className={styles.user_card_elo}>Elo: {userInfos.elo}</div>
     </div>
   );

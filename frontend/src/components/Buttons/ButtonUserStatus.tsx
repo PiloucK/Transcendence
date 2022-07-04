@@ -1,6 +1,7 @@
 import styles from "../../styles/Home.module.css";
 import { IUserSlim } from "../../interfaces/IUser";
 import { useUserStatusContext } from "../../context/UserStatusContext";
+import Router from "next/router";
 
 export function ButtonUserStatus({
   displayedUser,
@@ -18,7 +19,18 @@ export function ButtonUserStatus({
     );
   } else if (userStatus?.status === "IN_GAME") {
     return (
-      <div className={styles.social_friend_card_button} onClick={() => {}}>
+      <div
+        className={styles.social_friend_card_button}
+        onClick={() => {
+          Router.push({
+            pathname: "/game",
+            query: {
+              userLogin42: displayedUser.login42,
+              opponentLogin42: userStatus.opponentLogin42,
+            },
+          });
+        }}
+      >
         Spectate
       </div>
     );
