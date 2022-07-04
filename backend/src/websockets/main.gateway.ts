@@ -12,7 +12,7 @@ import { StatusService } from 'src/status/status.service';
 import { EmittedLiveStatus } from 'src/status/status.type';
 
 @WebSocketGateway(3002, { transports: ['websocket'] })
-export class WebsocketsGateway
+export class MainGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(private readonly statusService: StatusService) {}
@@ -31,8 +31,55 @@ export class WebsocketsGateway
     }
   }
 
-  updateStatus(userLogin42: string, status: EmittedLiveStatus) {
-    this.server.emit('user:update-status', userLogin42, status);
+  updateStatus(
+    userLogin42: string,
+    status: EmittedLiveStatus,
+    opponentLogin42: string | undefined = undefined,
+  ) {
+    console.log(
+      'server user:update-status',
+      userLogin42,
+      status,
+      opponentLogin42,
+      this.statusService.getStatuses(),
+    );
+
+    this.server.emit(
+      'user:update-status',
+      userLogin42,
+      status,
+      opponentLogin42,
+    );
+  }
+
+  @SubscribeMessage('user:find-match')
+  onUserFindMatch(
+    @MessageBody() userLogin42: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    console.log('user:find-match', userLogin42);
+
+    const opponentLogin42 = this.statusService.getOpponent(userLogin42);
+    if (!opponentLogin42) {
+      this.updateStatus(userLogin42, 'IN_QUEUE');
+    } else {
+      this.updateStatus(userLogin42, 'IN_GAME', opponentLogin42);
+      this.updateStatus(opponentLogin42, 'IN_GAME', userLogin42);
+    }
+  }
+
+  @SubscribeMessage('user:accept-match')
+  onUserAcceptMatch(
+    @MessageBody() data: string[],
+    @ConnectedSocket() client: Socket,
+  ) {
+    const [invitedLogin, inviterLogin] = data;
+
+    if (this.statusService.isNotInGame(invitedLogin) === true
+      && this.statusService.isNotInGame(inviterLogin) === true) {
+      this.updateStatus(invitedLogin, 'IN_GAME', inviterLogin);
+      this.updateStatus(inviterLogin, 'IN_GAME', invitedLogin);
+    }
   }
 
   @SubscribeMessage('user:login')
@@ -60,6 +107,11 @@ export class WebsocketsGateway
   @SubscribeMessage('user:new')
   onNewUser() {
     this.server.sockets.emit('update-leaderboard');
+  }
+
+  @SubscribeMessage('user:invitation-sent')
+  onInvitationSent() {
+    this.server.sockets.emit('fetch-invitations');
   }
 
   @SubscribeMessage('user:update-elo')

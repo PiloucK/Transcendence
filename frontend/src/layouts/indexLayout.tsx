@@ -6,24 +6,40 @@ import { useSessionContext } from "../context/SessionContext";
 import { useErrorContext } from "../context/ErrorContext";
 import { useSocketContext } from "../context/SocketContext";
 import { authenticate } from "../events/authenticate";
+import { GameInvitation } from "../components/Cards/GameInvitation";
+import { useUserStatusContext } from "../context/UserStatusContext";
 
 export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
   const sessionContext = useSessionContext();
   const errorContext = useErrorContext();
   const socketContext = useSocketContext();
+  const userStatusContext = useUserStatusContext();
 
   useEffect(() => {
     authenticate(errorContext, socketContext, sessionContext);
   }, []);
 
+  const findMatch = () => {
+    console.log("find-match function button play");
+
+    socketContext.socket.emit(
+      "user:find-match",
+      sessionContext.userSelf.login42
+    );
+  };
+
   return (
     <>
+      <GameInvitation />
       {children}
       <div className={styles.mainLayout_left_background} />
       <div className={styles.mainLayout_right_background} />
-      <Link href="/game">
-        <div className={styles.play}>PLAY</div>
-      </Link>
+      {userStatusContext.statuses.get(sessionContext.userSelf.login42)
+        ?.status !== "IN_QUEUE" && (
+        <div className={styles.play} onClick={findMatch}>
+          PLAY
+        </div>
+      )}
       <DockSelector />
     </>
   );

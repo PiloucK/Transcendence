@@ -146,26 +146,48 @@ export class UsersService {
     return user;
   }
 
-  async updateUserElo(login42: string, elo: number): Promise<User> {
-    const user = await this.getUserByLogin42(login42);
-    user.elo = elo;
+  // return eloDiff
+  async updateGameStats(
+    user: User,
+    opponentElo: number,
+    won: boolean,
+  ): Promise<number> {
+    if (won) {
+      ++user.gamesWon;
+    } else {
+      ++user.gamesLost;
+    }
+
+    const expectedScore = 1 / (1 + 10 ** ((opponentElo - user.elo) / 400));
+    const scoreDelta = 32 * ((won ? 1 : 0) - expectedScore);
+
+    user.elo += Math.ceil(scoreDelta);
+
     await this.usersRepository.save(user);
-    return user;
+
+    return scoreDelta;
   }
 
-  async updateUserGamesWon(login42: string, gamesWon: number): Promise<User> {
-    const user = await this.getUserByLogin42(login42);
-    user.gamesWon = gamesWon;
-    await this.usersRepository.save(user);
-    return user;
-  }
+  // async updateUserElo(login42: string, elo: number): Promise<User> {
+  //   const user = await this.getUserByLogin42(login42);
+  //   user.elo = elo;
+  //   await this.usersRepository.save(user);
+  //   return user;
+  // }
 
-  async updateUserGamesLost(login42: string, gamesLost: number): Promise<User> {
-    const user = await this.getUserByLogin42(login42);
-    user.gamesLost = gamesLost;
-    await this.usersRepository.save(user);
-    return user;
-  }
+  // async updateUserGamesWon(login42: string, gamesWon: number): Promise<User> {
+  //   const user = await this.getUserByLogin42(login42);
+  //   user.gamesWon = gamesWon;
+  //   await this.usersRepository.save(user);
+  //   return user;
+  // }
+
+  // async updateUserGamesLost(login42: string, gamesLost: number): Promise<User> {
+  //   const user = await this.getUserByLogin42(login42);
+  //   user.gamesLost = gamesLost;
+  //   await this.usersRepository.save(user);
+  //   return user;
+  // }
 
   async getUserFriends(reqUser: User, login42: string): Promise<User[]> {
     this.restrictToReqUser(reqUser, login42);

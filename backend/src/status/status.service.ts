@@ -10,6 +10,46 @@ export class StatusService {
     return this.statuses;
   }
 
+  isNotInGame(login42: string): boolean {
+    const userStatusMetrics = this.statuses.get(login42);
+    return (userStatusMetrics?.status !== 'IN_GAME') ? true : false;
+  }
+
+  getOpponent(userLogin42: Login42) {
+    for (const [
+      opponentLogin42,
+      opponentStatusMetrics,
+    ] of this.statuses.entries()) {
+      console.log(
+        'getOpponent',
+        this.statuses,
+        opponentLogin42,
+        opponentStatusMetrics,
+      );
+
+      if (
+        opponentStatusMetrics.status === 'IN_QUEUE' &&
+        opponentLogin42 !== userLogin42
+      ) {
+        const userStatusMetrics = this.statuses.get(userLogin42);
+        if (userStatusMetrics) {
+          opponentStatusMetrics.status = 'IN_GAME';
+          userStatusMetrics.status = 'IN_GAME';
+		  opponentStatusMetrics.opponentLogin42 = userLogin42;
+		  userStatusMetrics.opponentLogin42 = opponentLogin42;
+          return opponentLogin42;
+        } else {
+          return undefined;
+        }
+      }
+    }
+    const userStatusMetrics = this.statuses.get(userLogin42);
+    if (userStatusMetrics) {
+      userStatusMetrics.status = 'IN_QUEUE';
+    }
+    return undefined;
+  }
+
   add(socketId: SocketId, userLogin42: Login42): 'EMIT' | 'QUIET' {
     if (this.sockets.has(socketId)) {
       return 'QUIET';

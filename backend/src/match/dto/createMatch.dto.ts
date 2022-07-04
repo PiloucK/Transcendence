@@ -12,4 +12,8 @@ export class CreateMatchDto {
   @IsNotEmpty()
   @IsNumber()
   opponentScore!: number;
+
+  @IsNotEmpty()
+  @IsString()
+  winnerLogin42!: string;
 }

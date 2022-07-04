@@ -15,7 +15,10 @@ export const AddMatchField = () => {
       .createMatch(
         "coucou",
         Math.floor(Math.random() * 6),
-        Math.floor(Math.random() * 6)
+        Math.floor(Math.random() * 6),
+        Math.floor(Math.random() * 2)
+          ? sessionContext.userSelf.login42
+          : "coucou"
       )
       .then(() => {
         socketContext.socket.emit("user:update-elo");

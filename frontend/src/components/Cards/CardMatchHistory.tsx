@@ -1,11 +1,11 @@
 import styles from "../../styles/Home.module.css";
-import { IUserSelf, IUserSlim } from "../../interfaces/IUser";
+import { IUserSlim } from "../../interfaces/IUser";
 import Link from "next/link";
 import Avatar from "@mui/material/Avatar";
 import { Match } from "../../interfaces/match";
 
-interface summary {
-  self: IUserSelf;
+interface Summary {
+  self: IUserSlim;
   points: number;
 }
 
@@ -16,17 +16,17 @@ export function CardMatchHistory({
   match: Match;
   userLogin: string;
 }) {
-  const player: summary =
+  const player: Summary =
     match.user1.login42 === userLogin
       ? { self: match.user1, points: match.user1Points }
       : { self: match.user2, points: match.user2Points };
-  const opponent: summary =
+  const opponent: Summary =
     match.user1.login42 === userLogin
       ? { self: match.user2, points: match.user2Points }
       : { self: match.user1, points: match.user1Points };
 
   const getStyle = () => {
-    if (player.points >= opponent.points)
+    if (player.self.login42 === match.winnerLogin42)
       return styles.profile_history_card_victory;
     else return styles.profile_history_card_defeat;
   };
@@ -34,7 +34,7 @@ export function CardMatchHistory({
   return (
     <div className={getStyle()}>
       <div className={styles.score_player}>{player.points}</div>
-      {player.points >= opponent.points ? (
+      {player.self.login42 === match.winnerLogin42 ? (
         <div className={styles.result_text}>Victory</div>
       ) : (
         <div className={styles.result_text}>Defeat</div>

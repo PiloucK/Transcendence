@@ -4,8 +4,8 @@ services:
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     container_name: frontend-transcendence
-    depends_on:
-      - backend
+    env_file:
+      - .env
     restart: unless-stopped
 
   backend:
@@ -14,8 +14,6 @@ services:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
       - "${WEBSOCKETS_PORT}:${WEBSOCKETS_PORT}"
     container_name: backend-transcendence
-    depends_on:
-      - database
     env_file:
       - .env
       - .env.private
