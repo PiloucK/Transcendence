@@ -31,6 +31,7 @@ const Pong = () => {
   const [gameReady, setGameReady] = useState(false);
   const [winnerLogin42, setWinnerLogin42] = useState("");
   const router = useRouter();
+  const isPointLost = useRef<boolean>(false);
 
   useEffect(() => {
     if (gameSocket.current === undefined) {
@@ -74,13 +75,15 @@ const Pong = () => {
             gameSocket.current?.emit("game:new-point", gameID.current);
           }
 
-          setPlayerScore(p1Score);undefined
+          setPlayerScore(p1Score);
+          undefined;
           setOpponentScore(p2Score);
           setGameReady(true);
         }
       );
 
       gameSocket.current.on("game:update-score", (login42: Login42) => {
+		isPointLost.current = false;
         if (login42 !== player1.current) {
           setPlayerScore((prevState) => prevState + 1);
         } else {
@@ -92,8 +95,8 @@ const Pong = () => {
         setWinnerLogin42(Login42);
 
         setTimeout(() => {
-          router.push('/');
-        }, 5000)
+          router.push("/");
+        }, 5000);
       });
     }
 
@@ -121,14 +124,15 @@ const Pong = () => {
   }
   return (
     <div className={styles.mainLayout_background}>
-      {
-        winnerLogin42 !== "" &&
-        <div className={styles.play}>
-          Well played {winnerLogin42}
-        </div>
-      }
+      {winnerLogin42 !== "" && (
+        <div className={styles.play}>Well played {winnerLogin42}</div>
+      )}
       <Score player={playerScore} opponent={opponentScore} />
-      <Ball gameSocket={gameSocket.current} gameID={gameID.current} />
+      <Ball
+        gameSocket={gameSocket.current}
+        gameID={gameID.current}
+        isPointLost={isPointLost}
+      />
       <PlayerPaddle
         gameSocket={gameSocket.current}
         gameID={gameID.current}
