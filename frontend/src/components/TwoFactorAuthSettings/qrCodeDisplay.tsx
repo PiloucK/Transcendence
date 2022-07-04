@@ -15,12 +15,14 @@ export function QrCodeDisplay({
 	checked,
 	setQrcode,
 	setHasBeenActivated,
+	setFirstQrCode,
 }: {
 	image: string;
 	checked: boolean;
 	qrCode: any;
 	setQrcode: Dispatch<SetStateAction<boolean>>;
 	setHasBeenActivated: Dispatch<SetStateAction<boolean>>;
+	setFirstQrCode: Dispatch<SetStateAction<boolean>>;
 }) {
 	const [code, setCode] = useState("");
 	const [textFieldError, setTextFieldError] = useState("");
@@ -51,6 +53,7 @@ export function QrCodeDisplay({
 					sessionContext.updateUserSelf?.();
 					setQrcode(false);
 					setHasBeenActivated(true);
+					setFirstQrCode(true);
 				})
 				.catch((caughtError: Error | AxiosError) => {
 					const parsedError = errorHandler(caughtError, sessionContext);
