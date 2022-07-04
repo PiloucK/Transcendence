@@ -8,6 +8,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { MatchService } from 'src/match/match.service';
 
 interface ICoordinates {
   x: number;
@@ -56,6 +57,8 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
   private server!: Server;
 
   private runningGames = new Map<string, IGame>();
+
+  constructor(private readonly matchService: MatchService) {}
 
   handleConnection(@ConnectedSocket() client: Socket) {
     console.log('game-connection', client.id);
@@ -219,7 +222,9 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
     if (
       currentGame &&
-      (player === currentGame.player1 || player === currentGame.player2)
+      (player === currentGame.player1 || player === currentGame.player2) &&
+      currentGame.player1 !== undefined &&
+      currentGame.player2 !== undefined
     ) {
       if (currentGame.intervalID) {
         clearInterval(currentGame?.intervalID);
@@ -239,8 +244,22 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         this.onGamePoint(gameID);
       } else if (currentGame.player1Score >= 5) {
         this.server.to(gameID).emit('game:winner', currentGame.player1);
+        this.matchService.create(
+          currentGame.player1,
+          currentGame.player2,
+          currentGame.player1Score,
+          currentGame.player2Score,
+          currentGame.player1,
+        );
       } else {
         this.server.to(gameID).emit('game:winner', currentGame.player2);
+        this.matchService.create(
+          currentGame.player1,
+          currentGame.player2,
+          currentGame.player1Score,
+          currentGame.player2Score,
+          currentGame.player2,
+        );
       }
       // }, 2000);
     }
