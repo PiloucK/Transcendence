@@ -30,8 +30,8 @@ export class StatusService {
         if (userStatusMetrics) {
           opponentStatusMetrics.status = 'IN_GAME';
           userStatusMetrics.status = 'IN_GAME';
-		  opponentStatusMetrics.opponentLogin42 = userLogin42;
-		  userStatusMetrics.opponentLogin42 = opponentLogin42;
+          opponentStatusMetrics.opponentLogin42 = userLogin42;
+          userStatusMetrics.opponentLogin42 = opponentLogin42;
           return opponentLogin42;
         } else {
           return undefined;
