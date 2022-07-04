@@ -8,6 +8,7 @@ import { authenticate } from "../events/authenticate";
 import { GameInvitation } from "../components/Cards/GameInvitation";
 import { useUserStatusContext } from "../context/UserStatusContext";
 import { Queue } from "../components/Matchmaking/Queue";
+import { defaultSessionState } from "../constants/defaultSessionState";
 
 export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
   const sessionContext = useSessionContext();
@@ -34,14 +35,15 @@ export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
       {children}
       <div className={styles.mainLayout_left_background} />
       <div className={styles.mainLayout_right_background} />
-      {userStatusContext.statuses.get(sessionContext.userSelf.login42)
-        ?.status === "IN_QUEUE" ? (
-        <Queue/>
-      ) : (
-        <div className={styles.play} onClick={findMatch}>
-          PLAY
-        </div>
-      )}
+      {sessionContext.userSelf !== defaultSessionState.userSelf &&
+        (userStatusContext.statuses.get(sessionContext.userSelf.login42)
+          ?.status === "IN_QUEUE" ? (
+          <Queue />
+        ) : (
+          <div className={styles.play} onClick={findMatch}>
+            PLAY
+          </div>
+        ))}
       <DockSelector />
     </>
   );
