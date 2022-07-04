@@ -30,17 +30,16 @@ export class MatchService {
       winnerLogin42,
     });
 
-    this.usersService.updateGameStats(
+    await this.usersService.updateGameStats(
       user1,
       user2.elo,
       winnerLogin42 !== user2.login42,
     );
-    this.usersService.updateGameStats(
+    await this.usersService.updateGameStats(
       user2,
       user1.elo,
       winnerLogin42 !== user1.login42,
     );
-
     await this.matchRepository.insert(match);
 
     return match;

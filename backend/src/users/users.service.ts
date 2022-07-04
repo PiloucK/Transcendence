@@ -158,15 +158,14 @@ export class UsersService {
       ++user.gamesLost;
     }
 
-    user.totalOpponentsEloCount += opponentElo;
-    const previousElo = user.elo;
-    user.elo =
-      (user.totalOpponentsEloCount + 400 * (user.gamesWon - user.gamesLost)) /
-      (user.gamesLost + user.gamesWon);
+    const expectedScore = 1 / (1 + 10 ** ((opponentElo - user.elo) / 400));
+    const scoreDelta = 32 * ((won ? 1 : 0) - expectedScore);
+
+    user.elo += scoreDelta;
 
     await this.usersRepository.save(user);
 
-    return user.elo - previousElo;
+    return scoreDelta;
   }
 
   // async updateUserElo(login42: string, elo: number): Promise<User> {

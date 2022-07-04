@@ -30,9 +30,9 @@ export class User {
   @Column({ default: 800 })
   elo!: number;
 
-  @Column({ default: 0 })
-  @Exclude()
-  totalOpponentsEloCount!: number;
+  // @Column({ default: 0 })
+  // @Exclude()
+  // totalOpponentsEloCount!: number;
 
   @Column({ default: 0 })
   gamesWon!: number;
