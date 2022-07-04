@@ -161,7 +161,7 @@ export class UsersService {
     const expectedScore = 1 / (1 + 10 ** ((opponentElo - user.elo) / 400));
     const scoreDelta = 32 * ((won ? 1 : 0) - expectedScore);
 
-    user.elo += scoreDelta;
+    user.elo += Math.ceil(scoreDelta);
 
     await this.usersRepository.save(user);
 
