@@ -15,6 +15,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
+import { useSocketContext } from "../../context/SocketContext";
 import { useSessionContext } from "../../context/SessionContext";
 import channelService from "../../services/channel";
 
@@ -25,12 +29,14 @@ export function ButtonTxtMuteUser({
   login: string;
   channel: Channel;
 }) {
+  const errorContext = useErrorContext();
+  const socketContext = useSocketContext();
   const sessionContext = useSessionContext();
   const [open, setOpen] = React.useState(false);
-  const [time, setTime] = React.useState<number | string>(300);
+  const [time, setTime] = React.useState<number>(300);
 
   const handleChange = (event: SelectChangeEvent<typeof time>) => {
-    setTime(Number(event.target.value) || "");
+    setTime(Number(event.target.value) || 0);
   };
 
   const handleClickOpen = () => {
@@ -40,19 +46,30 @@ export function ButtonTxtMuteUser({
   const handleUnmuteUser = () => {
     channelService
       .muteAChannelUser(sessionContext.userSelf.login42, channel.id, login, 0)
-      .then(() => {})
-      .catch((err) => {
-        console.log(err);
+      .then(() => {
+		// socketContext.socket.emit("user:update-joined-channels");
+		socketContext.socket.emit("user:update-channel-content");
+	})
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 
   const handleMuteUser = () => {
     setOpen(false);
     channelService
-      .muteAChannelUser(sessionContext.userSelf.login42, channel.id, login, time)
-      .then(() => {})
-      .catch((err) => {
-        console.log(err);
+      .muteAChannelUser(
+        sessionContext.userSelf.login42,
+        channel.id,
+        login,
+        time
+      )
+      .then(() => {
+          socketContext.socket.emit("user:update-channel-content");
+		//   socketContext.socket.emit("user:update-joined-channels");
+	  })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 

@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import styles from "../../styles/Home.module.css";
 
-import { TextField } from "../Inputs/TextField";
-import { PasswordField } from "../Inputs/PasswordField";
-import { inputPFState } from "../../interfaces/inputPasswordField";
-
-import Switch from "@mui/material/Switch";
-
 import { ButtonChannelInvite } from "../Buttons/ButtonChannelInvite";
 import { IUserSlim } from "../../interfaces/IUser";
 
@@ -23,6 +17,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { CardUserChannelInvite } from "../Cards/CardUserChannelInvite";
 
 import { EmptyInvitableFriendList } from "../Social/emptyPages";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 function FriendList({
@@ -66,34 +64,23 @@ export function ChannelInviteDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
+  const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [friends, setFriends] = useState<IUserSlim[]>([]);
-  const [selectedFriends, setSelectedFriends] = useState<IUserSlim[]>(
-    []
-  );
+  const [selectedFriends, setSelectedFriends] = useState<IUserSlim[]>([]);
 
   React.useEffect(() => {
-    channelService
-      .getChannelInvitableFriends(sessionContext.userSelf.login42, channel.id)
-      .then((friends: IUserSlim[]) => {
-        setFriends(friends);
-      });
-
-    socketContext.socket.on("update-channel-content", () => {
+    if (typeof channel !== "undefined") {
       channelService
         .getChannelInvitableFriends(sessionContext.userSelf.login42, channel.id)
         .then((friends: IUserSlim[]) => {
           setFriends(friends);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
-    });
-    socketContext.socket.on("update-relations", () => {
-      channelService
-        .getChannelInvitableFriends(sessionContext.userSelf.login42, channel.id)
-        .then((friends: IUserSlim[]) => {
-          setFriends(friends);
-        });
-    });
+    }
   }, []);
 
   const handleClose = () => {
@@ -101,15 +88,9 @@ export function ChannelInviteDialog({
   };
 
   const addSelectedFriend = (friend: IUserSlim) => {
-    if (
-      selectedFriends.find(
-        (f: IUserSlim) => f.login42 === friend.login42
-      )
-    ) {
+    if (selectedFriends.find((f: IUserSlim) => f.login42 === friend.login42)) {
       setSelectedFriends(
-        selectedFriends.filter(
-          (f: IUserSlim) => f.login42 !== friend.login42
-        )
+        selectedFriends.filter((f: IUserSlim) => f.login42 !== friend.login42)
       );
     } else {
       setSelectedFriends([...selectedFriends, friend]);
@@ -120,12 +101,17 @@ export function ChannelInviteDialog({
     setOpen(false);
     selectedFriends.forEach((friend: IUserSlim) => {
       channelService
-        .inviteToChannel(sessionContext.userSelf.login42, channel.id, friend.login42)
+        .inviteToChannel(
+          sessionContext.userSelf.login42,
+          channel.id,
+          friend.login42
+        )
         .then(() => {
+          socketContext.socket.emit("user:update-direct-messages");
           socketContext.socket.emit("user:update-channel-content");
         })
-        .catch((err: Error) => {
-          console.log(err);
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
   };

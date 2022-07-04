@@ -5,6 +5,7 @@ import { IUserPublic } from "../../interfaces/IUser";
 
 import Avatar from "@mui/material/Avatar";
 import profileIcon from "../../public/profile_icon.png";
+import { defaultSessionState } from "../../constants/defaultSessionState";
 
 export function CardUserChannelInvite({
   userInfos,
@@ -43,7 +44,9 @@ export function CardUserChannelInvite({
           />
         </Avatar>
       </div>
-      <div className={styles.user_card_username}>{userInfos.username}</div>
+      <div className={styles.user_card_username}>
+        {userInfos.username ?? defaultSessionState.userSelf.username}
+      </div>
       <div className={styles.user_card_elo}>Elo: {userInfos.elo}</div>
     </div>
   );

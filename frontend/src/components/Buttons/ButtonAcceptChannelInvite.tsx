@@ -31,7 +31,7 @@ export function ButtonAcceptChannelInvite({
       .joinChannel(sessionContext.userSelf.login42, channelId)
       .then((channel: Channel) => {
         sessionContext.setChatMenu?.(channel.id);
-        socketContext.socket.emit("user:update-joined-channel");
+        socketContext.socket.emit("user:update-joined-channels");
         socketContext.socket.emit("user:update-channel-content");
       })
       .catch((err) => {

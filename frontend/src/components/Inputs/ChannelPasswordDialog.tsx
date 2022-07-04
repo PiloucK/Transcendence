@@ -12,6 +12,10 @@ import channelService from "../../services/channel";
 import { Channel } from "../../interfaces/Chat.interfaces";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -27,34 +31,42 @@ export function ChannelPasswordDialog({
   setOpen,
 }: {
   channelId: string;
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  open: { state: boolean; id: string };
+  setOpen: (open: { state: boolean; id: string }) => void;
 }) {
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [input, setInput] = React.useState("");
-  const [error, setError] = React.useState(false);
+  const [textFieldError, setTextFieldError] = React.useState("");
 
   const handleClose = () => {
-    setOpen(false);
+    setOpen({ state: false, id: "" });
   };
 
   const handleSubmit = () => {
-    setOpen(false);
     channelService
       .joinProtectedChannel(sessionContext.userSelf.login42, channelId, input)
       .then((channel: Channel) => {
+        setOpen({ state: false, id: "" });
         sessionContext.setChatMenu?.(channel.id);
-        socketContext.socket.emit("user:update-joined-channel");
+        socketContext.socket.emit("user:update-joined-channels");
         socketContext.socket.emit("user:update-channel-content");
       })
-      .catch((err: Error) => {
-        setError(true);
+      .catch((error) => {
+        setTextFieldError("Wrong password.");
       });
   };
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog
+        PaperProps={{
+          style: {
+            backgroundColor: "#163F5B",
+          },
+        }}
+        open={open.state}
+        onClose={handleClose}
+      >
         <DialogTitle>Protected channel</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -71,6 +83,8 @@ export function ChannelPasswordDialog({
             variant="standard"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            helperText={textFieldError}
+            error={textFieldError !== ""}
           />
         </DialogContent>
         <DialogActions>
@@ -78,24 +92,6 @@ export function ChannelPasswordDialog({
           <Button onClick={handleSubmit}>Enter</Button>
         </DialogActions>
       </Dialog>
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        open={error}
-        autoHideDuration={6000}
-        onClose={() => {
-          setError(false);
-        }}
-      >
-        <Alert
-          onClose={() => {
-            setError(false);
-          }}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          Wrong password.
-        </Alert>
-      </Snackbar>
     </div>
   );
 }

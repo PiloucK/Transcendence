@@ -55,8 +55,12 @@ export class UsersService {
     await this.usersRepository.save(user);
   }
 
-  async getAllUsers(): Promise<User[]> {
-    const users = await this.usersRepository.find();
+  async getAllSortedByElo(): Promise<User[]> {
+    const users = await this.usersRepository.find({
+      order: {
+        elo: 'DESC',
+      },
+    });
     return users;
   }
 
@@ -98,7 +102,6 @@ export class UsersService {
     if (!user) {
       user = this.usersRepository.create({
         login42,
-        username: login42,
         photo42: photo42,
       });
 
@@ -109,7 +112,7 @@ export class UsersService {
   }
 
   async deleteAllUsers(): Promise<void> {
-    const users = await this.getAllUsers();
+    const users = await this.getAllSortedByElo();
     await this.usersRepository.remove(users);
   }
 
@@ -121,8 +124,9 @@ export class UsersService {
     this.restrictToReqUser(reqUser, login42);
 
     const { username } = updateUsernameDto;
-    reqUser.username = username;
-    await this.usersRepository.save(reqUser);
+    await this.usersRepository.update(login42, {
+      username,
+    });
     return reqUser;
   }
 

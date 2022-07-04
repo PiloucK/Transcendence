@@ -13,6 +13,8 @@ import { AccountDetails } from "../components/Profile/AccountDetails";
 import { useEffect, useState } from "react";
 import { defaultSessionState } from "../constants/defaultSessionState";
 import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
+import CircularProgress from "@mui/material/CircularProgress";
+import { AddMatchField } from "../components/Profile/AddMatchField";
 
 export default function ProfilePage() {
   const { login } = useRouter().query;
@@ -24,7 +26,11 @@ export default function ProfilePage() {
   const [open, setOpen] = useState(false);
 
   const fetchDisplayedUser = async () => {
-    if (login !== undefined && login !== sessionContext.userSelf.login42) {
+    if (
+      login !== undefined &&
+      login !== sessionContext.userSelf.login42 &&
+      sessionContext.userSelf.login42 !== defaultSessionState.userSelf.login42
+    ) {
       const user = await userService
         .getOne(Array.isArray(login) ? login[0] : login)
         .catch((error: Error | AxiosError<unknown, any>) => {
@@ -41,6 +47,17 @@ export default function ProfilePage() {
   useEffect(() => {
     fetchDisplayedUser();
   }, [sessionContext]);
+
+  if (
+    sessionContext.userSelf.login42 === defaultSessionState.userSelf.login42 ||
+    displayedUser.login42 === defaultSessionState.userSelf.login42
+  ) {
+    return (
+      <div className={styles.play}>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -60,7 +77,8 @@ export default function ProfilePage() {
           </>
         )}
       </div>
-      <UserGameHistory userLogin={sessionContext.userSelf.login42} />
+      <UserGameHistory userLogin={displayedUser.login42} />
+      <AddMatchField />
     </>
   );
 }

@@ -10,6 +10,8 @@ import Image from "next/image";
 import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
 
 import userService from "../../services/user";
+import { errorHandler } from "../../errors/errorHandler";
+import { useErrorContext } from "../../context/ErrorContext";
 
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
@@ -21,6 +23,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useSocketContext } from "../../context/SocketContext";
 import { IUserSelf } from "../../interfaces/IUser";
 import { useSessionContext } from "../../context/SessionContext";
+import { AxiosError } from "axios";
+import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 
 export function ProfileSettingsDialog({
   user,
@@ -31,6 +35,7 @@ export function ProfileSettingsDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
+  const errorContext = useErrorContext();
   const socketContext = useSocketContext();
   const sessionContext = useSessionContext();
   const [username, setUsername] = useState(user.username);
@@ -61,21 +66,44 @@ export function ProfileSettingsDialog({
       error = true;
     }
     if (error === false) {
-      setOpen(false);
-      userService.updateUserUsername(user.login42, username).then(() => {
-        socketContext.socket.emit("user:update-username");
-      });
+      if (username !== user.username) {
+        userService
+          .updateUserUsername(user.login42, username)
+          .then(() => {
+            sessionContext.updateUserSelf?.(); //! Can be done only once
+            setOpen(false);
+          })
+          .catch((caughtError: Error | AxiosError) => {
+            const parsedError = errorHandler(caughtError, sessionContext);
+            if (
+              parsedError.statusCode === HttpStatusCodes.CONFLICT &&
+              parsedError.message.startsWith(
+                "duplicate key value violates unique constraint"
+              )
+            ) {
+              setTextFieldError("Username already taken.");
+              error = true;
+            } else {
+              errorContext.newError?.(parsedError);
+            }
+          });
+      }
       if (newImage !== undefined) {
         const formData = new FormData();
         formData.append("file", newImage);
-        userService.updateUserImage(user.login42, formData).then(() => {
-          setNewImage(undefined);
-          setPreview("");
-          socketContext.socket.emit("user:update-image");
-        });
+        userService
+          .updateUserImage(user.login42, formData)
+          .then(() => {
+            setNewImage(undefined);
+            setPreview("");
+            sessionContext.updateUserSelf?.(); //! Can be done only once
+            setOpen(false);
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, sessionContext));
+          });
       }
     }
-    sessionContext.updateUserSelf?.();
   };
 
   return (
@@ -107,6 +135,7 @@ export function ProfileSettingsDialog({
             <div className={styles.chat_create_channel_form_input}>
               Username
               <TextField
+                label=""
                 value={username}
                 setValue={setUsername}
                 error={textFieldError}

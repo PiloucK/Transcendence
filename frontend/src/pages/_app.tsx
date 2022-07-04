@@ -1,6 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 
 import { SessionProvider } from "../context/SessionContext";
 import { ErrorProvider } from "../context/ErrorContext";
@@ -28,15 +29,38 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     );
 
   return (
-    <ErrorProvider>
-      <ErrorSnackbar />
-      <SocketProvider>
-        <SessionProvider>
-          <UserStatusProvider>
-            {getLayout(<Component {...pageProps} />)}
-          </UserStatusProvider>
-        </SessionProvider>
-      </SocketProvider>
-    </ErrorProvider>
+    <>
+      <Head>
+        <title>Transcendence</title>
+        <link rel="shortcut icon" href="/images/favicon.ico" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/images/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/images/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/images/favicon-16x16.png"
+        />
+      </Head>
+      <ErrorProvider>
+        <ErrorSnackbar />
+        <SocketProvider>
+          <SessionProvider>
+            <UserStatusProvider>
+              {getLayout(<Component {...pageProps} />)}
+            </UserStatusProvider>
+          </SessionProvider>
+        </SocketProvider>
+      </ErrorProvider>
+    </>
   );
 }

@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import Router from "next/router";
 import { defaultErrorData } from "../constants/defaultErrorData";
 import { HttpStatusCodes } from "../constants/httpStatusCodes";
 import { IErrorData } from "../interfaces/IErrorData";
@@ -6,7 +7,7 @@ import { ISessionContext } from "../interfaces/ISessionContext";
 
 export function errorHandler(
   error: Error | AxiosError,
-  sessionContext: ISessionContext,
+  sessionContext: ISessionContext
 ): IErrorData {
   let errorData: IErrorData = defaultErrorData;
 
@@ -14,12 +15,11 @@ export function errorHandler(
     if (error.response) {
       // Request made and server responded
       errorData = error.response.data as IErrorData;
-      if (errorData.statusCode === HttpStatusCodes.UNAUTHORIZED) {
-        if (!errorData.error) {
-          sessionContext.logout?.();
-        } else if (errorData.message === 'Not double-authenticated') {
-          sessionContext.setShowSecondFactorLogin?.(true);
-        }
+      if (
+        errorData.statusCode === HttpStatusCodes.UNAUTHORIZED &&
+        !errorData.error
+      ) {
+        sessionContext.logout?.();
       }
     } else if (error.request) {
       // Request made but no response received
