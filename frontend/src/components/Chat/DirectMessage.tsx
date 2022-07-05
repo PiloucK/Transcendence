@@ -6,14 +6,12 @@ import { DirectMessageMenu } from "./Menus";
 import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 import { useSessionContext } from "../../context/SessionContext";
-import { IUserPublic } from "../../interfaces/IUser";
 import {
   PrivateConv,
   Message,
   Invitation,
 } from "../../interfaces/Chat.interfaces";
 
-import userService from "../../services/user";
 import privateConvService from "../../services/privateConv";
 import { CardUserDM } from "../Cards/CardUserDM";
 
@@ -169,23 +167,11 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [blockedList, setBlockedList] = React.useState<IUserPublic[]>([]);
   const [input, setInput] = React.useState("");
   const [privateConv, setPrivateConv] = useState<PrivateConv>();
   const users = menu.split("|");
   const friend =
     users[0] === sessionContext.userSelf.login42 ? users[1] : users[0];
-
-  const fetchBlockedList = () => {
-    userService
-      .getUserBlockedUsers(sessionContext.userSelf.login42)
-      .then((blocked: IUserPublic[]) => {
-        setBlockedList(blocked);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, sessionContext));
-      });
-  };
 
   const fetchPrivateConv = () => {
     privateConvService
@@ -199,16 +185,13 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
   };
 
   React.useEffect(() => {
-    fetchBlockedList();
     fetchPrivateConv();
   }, [friend]);
 
   React.useEffect(() => {
-    socketContext.socket.on("update-relations", fetchBlockedList);
     socketContext.socket.on("update-direct-messages", fetchPrivateConv);
 
     return () => {
-      socketContext.socket.removeListener("update-relations", fetchBlockedList);
       socketContext.socket.removeListener(
         "update-direct-messages",
         fetchPrivateConv
@@ -216,7 +199,7 @@ function CurrentDirectMessage({ menu }: { menu: string }) {
     };
   }, []);
 
-  const blockedFriend = blockedList?.find(
+  const blockedFriend = sessionContext.userSelf.blockedUsers.find(
     (blocked) => blocked.login42 === friend
   );
   if (blockedFriend) {

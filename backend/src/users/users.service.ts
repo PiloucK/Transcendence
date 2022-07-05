@@ -16,7 +16,11 @@ type UserRelations =
   | 'friends'
   | 'friendRequestsSent'
   | 'friendRequestsReceived'
-  | 'blockedUsers';
+  | 'blockedUsers'
+  | 'privateConvs'
+  | 'channels'
+  | 'matches'
+  | 'invitations';
 
 @Injectable()
 export class UsersService {
@@ -168,56 +172,11 @@ export class UsersService {
     return scoreDelta;
   }
 
-  // async updateUserElo(login42: string, elo: number): Promise<User> {
-  //   const user = await this.getUserByLogin42(login42);
-  //   user.elo = elo;
-  //   await this.usersRepository.save(user);
-  //   return user;
-  // }
-
-  // async updateUserGamesWon(login42: string, gamesWon: number): Promise<User> {
-  //   const user = await this.getUserByLogin42(login42);
-  //   user.gamesWon = gamesWon;
-  //   await this.usersRepository.save(user);
-  //   return user;
-  // }
-
-  // async updateUserGamesLost(login42: string, gamesLost: number): Promise<User> {
-  //   const user = await this.getUserByLogin42(login42);
-  //   user.gamesLost = gamesLost;
-  //   await this.usersRepository.save(user);
-  //   return user;
-  // }
-
   async getUserFriends(reqUser: User, login42: string): Promise<User[]> {
     this.restrictToReqUser(reqUser, login42);
 
     const user = await this.getUserWithRelations(login42, ['friends']);
     return user.friends;
-  }
-
-  async getUserFriendRequestsSent(
-    reqUser: User,
-    login42: string,
-  ): Promise<User[]> {
-    this.restrictToReqUser(reqUser, login42);
-
-    const user = await this.getUserWithRelations(login42, [
-      'friendRequestsSent',
-    ]);
-    return user.friendRequestsSent;
-  }
-
-  async getUserFriendRequestsReceived(
-    reqUser: User,
-    login42: string,
-  ): Promise<User[]> {
-    this.restrictToReqUser(reqUser, login42);
-
-    const user = await this.getUserWithRelations(login42, [
-      'friendRequestsReceived',
-    ]);
-    return user.friendRequestsReceived;
   }
 
   async addUserToFriendRequestsSent(
@@ -426,13 +385,6 @@ export class UsersService {
     await this.removeUserFromFriends(friend, user);
 
     return user.friends;
-  }
-
-  async getUserBlockedUsers(reqUser: User, login42: string): Promise<User[]> {
-    this.restrictToReqUser(reqUser, login42);
-
-    const user = await this.getUserWithRelations(login42, ['blockedUsers']);
-    return user.blockedUsers;
   }
 
   async blockUser(

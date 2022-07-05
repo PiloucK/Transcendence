@@ -57,6 +57,16 @@ export class StatusService {
     }
   }
 
+  toOnline(userLogin42: Login42): void {
+    const currentUserMetrics = this.statuses.get(userLogin42);
+    if (currentUserMetrics) {
+      this.statuses.set(userLogin42, {
+        socketCount: currentUserMetrics.socketCount,
+        status: 'ONLINE',
+      });
+    }
+  }
+
   add(socketId: SocketId, userLogin42: Login42): 'EMIT' | 'QUIET' {
     if (this.sockets.has(socketId)) {
       return 'QUIET';
