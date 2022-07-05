@@ -84,9 +84,9 @@ const Pong = () => {
 
       gameSocket.current.on("game:update-score", (login42: Login42) => {
         isPointLost.current = false;
-        if (login42 !== player1.current) {
+        if (login42 === player2.current) {
           setPlayerScore((prevState) => prevState + 1);
-        } else {
+        } else if (login42 === player1.current) {
           setOpponentScore((prevState) => prevState + 1);
         }
       });
