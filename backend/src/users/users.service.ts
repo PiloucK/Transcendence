@@ -172,6 +172,13 @@ export class UsersService {
     return scoreDelta;
   }
 
+  async getUserFriends(reqUser: User, login42: string): Promise<User[]> {
+    this.restrictToReqUser(reqUser, login42);
+
+    const user = await this.getUserWithRelations(login42, ['friends']);
+    return user.friends;
+  }
+
   async addUserToFriendRequestsSent(
     user: User,
     userToAdd: User,
