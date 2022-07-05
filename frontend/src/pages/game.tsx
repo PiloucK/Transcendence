@@ -112,6 +112,7 @@ const Pong = () => {
             gameID.current,
             sessionContext.userSelf.login42
           );
+          gameSocket.current.removeAllListeners();
           console.log("closing socket");
           // IF SPECATOR LEAVES HE STOPS THE GAME
         }
