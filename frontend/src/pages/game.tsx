@@ -83,7 +83,7 @@ const Pong = () => {
       );
 
       gameSocket.current.on("game:update-score", (login42: Login42) => {
-		isPointLost.current = false;
+        isPointLost.current = false;
         if (login42 !== player1.current) {
           setPlayerScore((prevState) => prevState + 1);
         } else {
@@ -107,7 +107,11 @@ const Pong = () => {
       } else {
         console.log("unmounting game");
         if (gameSocket.current != undefined) {
-          gameSocket.current.emit("game:unmount", gameID.current);
+          gameSocket.current.emit(
+            "game:unmount",
+            gameID.current,
+            sessionContext.userSelf.login42
+          );
           console.log("closing socket");
           // IF SPECATOR LEAVES HE STOPS THE GAME
         }
