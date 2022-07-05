@@ -8,9 +8,7 @@ import Score  from "../components/Game/Training/Score";
 
 
 
-const Training = () => {
-  const computerLvl = 3; // peut aller de 1 a 3 EASY MEDIUM HARD
-  
+const Training = () => {  
   const [playerScore, setPlayerScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
 
@@ -28,7 +26,7 @@ const Training = () => {
         <Score player={playerScore} opponent={opponentScore}/>
         <Ball updateScore={updateScore}/>
         <PlayerPaddle/>
-        <ComputerPaddle computerLvl={computerLvl}/>
+        <ComputerPaddle/>
     </>
   );
 };

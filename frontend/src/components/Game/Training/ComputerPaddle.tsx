@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import styles from '../PaddleRight.module.css'
-import { ICoordinates } from "../../../interfaces/ICoordinates";
 
+const computerLvl = 5; // from 1 to 5
 
-const ComputerPaddle = ({computerLvl} : {computerLvl : number}) => {
+const ComputerPaddle = () => {
  
   const paddlePosition = useRef(50);
 
@@ -27,20 +27,19 @@ const ComputerPaddle = ({computerLvl} : {computerLvl : number}) => {
     const ballY = ballRect.y / window.innerHeight * 100;
   
       
-    if (ballRect.x >= window.innerWidth / 4 && prevBallX.current < ballX) {
+    if (ballRect.x >= window.innerWidth / (2 * computerLvl) && prevBallX.current < ballX) {
       const paddleElem = document.getElementById("opponent-paddle") as HTMLElement;
-      const ballY = ballRect.y / window.innerHeight * 100;
 
       // if the ball is out of range
-      if (paddlePosition.current - randomNumberBetween(5, 20 - computerLvl * 5) > ballY || paddlePosition.current + randomNumberBetween(5, 25 - computerLvl * 5) < ballY)
+      if (paddlePosition.current - randomNumberBetween(5, 25 - computerLvl * 4) > ballY || paddlePosition.current + randomNumberBetween(5, 25 - computerLvl * 4) < ballY)
         movePaddle.current = true;
 
       if (movePaddle.current) {
 
         if (paddlePosition.current < ballY)
-          paddlePosition.current++;
-        else if (paddlePosition.current > ballY)
-          paddlePosition.current--;
+        	paddlePosition.current +=  1 + computerLvl / 10;
+		else if (paddlePosition.current > ballY)
+			paddlePosition.current -=  1 + computerLvl / 10;	
         
         // if ball Y position is aligned with paddle Y
         if (Math.abs(ballY - paddlePosition.current) < 1)
