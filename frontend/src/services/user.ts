@@ -29,12 +29,6 @@ const updateUserUsername = (login: string, username: string) => {
     .then((response) => response.data);
 };
 
-const getUserFriends = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/friends`)
-    .then((response) => response.data);
-};
-
 const updateUserImage = (login: string, file: FormData) => {
   const request = axios.post(
     `${baseUrl}/${login}/image`,
@@ -48,18 +42,6 @@ const updateUserImage = (login: string, file: FormData) => {
     .catch((e) => {
       console.error(e);
     });
-};
-
-const getUserFriendRequestsSent = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/friendRequestsSent`)
-    .then((response) => response.data);
-};
-
-const getUserFriendRequestsReceived = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/friendRequestsReceived`)
-    .then((response) => response.data);
 };
 
 const sendFriendRequest = (login: string, friendLogin42: string) => {
@@ -102,12 +84,6 @@ const removeFriend = (login: string, friendLogin42: string) => {
     .then((response) => response.data);
 };
 
-const getUserBlockedUsers = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/blockedUsers`)
-    .then((response) => response.data);
-};
-
 const blockUser = (login: string, friendLogin42: string) => {
   return axios
     .patch(`${baseUrl}/${login}/blockUser`, {
@@ -129,9 +105,6 @@ export default {
   getOne,
   addOne,
   deleteAll,
-  getUserFriends,
-  getUserFriendRequestsSent,
-  getUserFriendRequestsReceived,
   sendFriendRequest,
   cancelFriendRequest,
   acceptFriendRequest,
@@ -139,7 +112,6 @@ export default {
   removeFriend,
   updateUserUsername,
   updateUserImage,
-  getUserBlockedUsers,
   blockUser,
   unblockUser,
 };

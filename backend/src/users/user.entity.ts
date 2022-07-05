@@ -67,7 +67,7 @@ export class User {
 
   // There is a many to many relation owned by the channel.
   @ManyToMany(() => Channel)
-  users!: Channel[];
+  channels!: Channel[];
 
   @OneToMany(
     () => Match,
@@ -77,7 +77,8 @@ export class User {
 
   @OneToMany(
     () => Invitation,
-    (invitation) => (invitation.inviter === this ? invitation.inviter : invitation.invited),
+    (invitation) =>
+      invitation.inviter === this ? invitation.inviter : invitation.invited,
   )
   invitations!: Invitation[];
 

@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "../../styles/Home.module.css";
 
-import { IUserPublic } from "../../interfaces/IUser";
+import { IUserPublic, IUserSlim } from "../../interfaces/IUser";
 import userService from "../../services/user";
 import { useSessionContext } from "../../context/SessionContext";
 import { errorHandler } from "../../errors/errorHandler";
@@ -13,29 +13,6 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
-  const [blockedList, setBlockedList] = React.useState<IUserPublic[]>([]);
-
-  React.useEffect(() => {
-    userService
-      .getUserBlockedUsers(sessionContext.userSelf.login42)
-      .then((blocked: IUserPublic[]) => {
-        setBlockedList(blocked);
-      })
-      .catch((error) => {
-        errorContext.newError?.(errorHandler(error, sessionContext));
-      });
-
-    socketContext.socket.on("update-relations", () => {
-      userService
-        .getUserBlockedUsers(sessionContext.userSelf.login42)
-        .then((blocked: IUserPublic[]) => {
-          setBlockedList(blocked);
-        })
-        .catch((error) => {
-          errorContext.newError?.(errorHandler(error, sessionContext));
-        });
-    });
-  }, []);
 
   const handleUnblockOnClick = () => {
     if (
@@ -73,7 +50,7 @@ export function ButtonTxtBlockUser({ login }: { login: string }) {
     }
   };
 
-  if (blockedList?.find((blocked: IUserPublic) => blocked.login42 === login)) {
+  if (sessionContext.userSelf.blockedUsers.find((blocked: IUserSlim) => blocked.login42 === login)) {
     return (
       <div className={styles.buttons} onClick={handleUnblockOnClick}>
         Unblock
