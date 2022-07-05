@@ -66,29 +66,29 @@
 }
 
 .leaderboard {
-  position: relative;
-  /* top: 4rem; */
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  position: absolute;
+  height: 60%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 1;
 }
 
 .leaderboard_firstuser {
   background-color: #186e8a;
-  border-radius: 45px;
-  width: 45%;
-  height: 6rem;
+  width: 600px;
+  height: 96px;
+  min-height: 96px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   color: #fff;
   z-index: 1;
-  margin: 1.2rem;
+  margin: 19px;
   box-shadow: -1px 6px 0px #fca311;
   border-radius: 45px;
 }
@@ -102,15 +102,16 @@
 .leaderboard_user {
   background-color: #186e8a;
   border-radius: 45px;
-  width: 45%;
-  height: 6rem;
+  width: 600px;
+  height: 96px;
+  min-height: 96px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   color: #fff;
   z-index: 1;
-  margin: 1.2rem;
+  margin: 19px;
 }
 
 .leaderboard_user:hover {
@@ -120,13 +121,13 @@
 }
 
 .leaderboard_user_name {
-  font-size: 2rem;
+  font-size: 32px;
   font-weight: bold;
 }
 
 .leaderboard_user_score {
   position: absolute;
-  left: 65%;
+  left: 480px;
 
   font-family: "Khand";
   font-style: normal;
@@ -143,7 +144,7 @@
 
 .leaderboard_user_rank {
   position: absolute;
-  left: 32%;
+  right: 480px;
 
   font-family: "Khand";
   font-style: normal;
@@ -166,7 +167,6 @@
   margin-left: 1%;
   display: none;
 }
-
 
 /* 
 	Background that will take the left side of the screen
@@ -254,12 +254,12 @@
 }
 
 .queue_cancel_button {
-	position: absolute;
-	background: #FCA311;
-	top: 63%;
-	left: 50%;
-	border-radius: 15px;
-	transform: translate(-50%, -50%);
+  position: absolute;
+  background: #fca311;
+  top: 63%;
+  left: 50%;
+  border-radius: 15px;
+  transform: translate(-50%, -50%);
 }
 
 .main {
@@ -2566,7 +2566,6 @@ and should display them in columns of three cards max */
 
   white-space: nowrap;
 }
-
 
 .invite_card .decline,
 .invite_card .decline:hover {

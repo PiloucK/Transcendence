@@ -9,6 +9,9 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { MatchService } from 'src/match/match.service';
+import { StatusService } from 'src/status/status.service';
+import { EmittedLiveStatus } from 'src/status/status.type';
+import { MainGateway } from './main.gateway';
 
 interface ICoordinates {
   x: number;
@@ -25,7 +28,7 @@ interface IGame {
   player2: string | undefined;
   player1Score: number;
   player2Score: number;
-  gameStatus: 'WAITING' | 'READY';
+  gameStatus: 'WAITING' | 'READY' | 'DONE';
   ballInfo: IBallInfo;
   intervalID?: ReturnType<typeof setInterval>;
 } // EXPORTER INTERFACE DANS UN FICHIER
@@ -58,7 +61,10 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
   private runningGames = new Map<string, IGame>();
 
-  constructor(private readonly matchService: MatchService) {}
+  constructor(
+    private readonly matchService: MatchService,
+    private readonly mainGateway: MainGateway,
+  ) {}
 
   handleConnection(@ConnectedSocket() client: Socket) {
     console.log('game-connection', client.id);
@@ -70,18 +76,52 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('game:unmount')
   onGameUnmount(
-    @MessageBody() gameID: string,
+    @MessageBody() data: string[],
     @ConnectedSocket() client: Socket,
   ) {
+    const [gameID, login42] = data;
+
     const currentGame = this.runningGames.get(gameID);
 
-    if (currentGame?.intervalID) {
-      clearInterval(currentGame?.intervalID);
-    }
+    if (currentGame) {
+      if (
+        currentGame.player1 === undefined ||
+        currentGame.player2 === undefined
+      )
+        return;
 
-    this.runningGames.delete(gameID);
-    client.disconnect();
-    console.log('game:unmount');
+      if (login42 !== currentGame.player1 && login42 !== currentGame.player2)
+        return;
+      if (currentGame.intervalID) {
+        clearInterval(currentGame.intervalID);
+      }
+      if (currentGame.gameStatus === 'DONE') {
+        if (currentGame.player1 && currentGame.player2) {
+          this.mainGateway.onGameMatchEnd([
+            currentGame.player1,
+            currentGame.player2,
+          ]);
+        }
+        this.runningGames.delete(gameID);
+      } else {
+        const winnerLogin42 =
+          login42 !== currentGame.player1
+            ? currentGame.player1
+            : currentGame.player2;
+        this.server.to(gameID).emit('game:winner', winnerLogin42);
+
+        this.matchService.create(
+          currentGame.player1,
+          currentGame.player2,
+          currentGame.player1Score,
+          currentGame.player2Score,
+          winnerLogin42,
+        );
+        currentGame.gameStatus = 'DONE';
+      }
+      client.disconnect();
+      console.log('game:unmount');
+    }
   }
 
   @SubscribeMessage('game:enter')
@@ -242,6 +282,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       // setInterval(() => {
       if (currentGame.player1Score < 5 && currentGame.player2Score < 5) {
         this.onGamePoint(gameID);
+        return;
       } else if (currentGame.player1Score >= 5) {
         this.server.to(gameID).emit('game:winner', currentGame.player1);
         this.matchService.create(
@@ -261,6 +302,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
           currentGame.player2,
         );
       }
+      currentGame.gameStatus = 'DONE';
       // }, 2000);
     }
   }

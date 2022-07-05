@@ -9,9 +9,11 @@ import userService from "../../services/user";
 import { TextField } from "../Inputs/TextField";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
+import { useSocketContext } from "../../context/SocketContext";
 
 export const SetProfileFirstLogin = () => {
   const sessionContext = useSessionContext();
+  const socketContext = useSocketContext();
   const errorContext = useErrorContext();
   const [username, setUsername] = useState("");
   const [textFieldError, setTextFieldError] = useState("");
@@ -37,6 +39,7 @@ export const SetProfileFirstLogin = () => {
       userService
         .updateUserUsername(sessionContext.userSelf.login42, username)
         .then(() => {
+          socketContext.socket.emit("user:new");
           if (newImage !== undefined) {
             const formData = new FormData();
             formData.append("file", newImage);
