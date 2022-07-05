@@ -64,6 +64,12 @@ export class MatchService {
         },
       }),
     );
+
+    matches.sort(
+      (match1, match2) =>
+        match2.createdDate.getTime() - match1.createdDate.getTime(),
+    );
+
     return matches;
   }
 }

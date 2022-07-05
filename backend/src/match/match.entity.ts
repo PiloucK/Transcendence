@@ -1,10 +1,19 @@
 import { User } from 'src/users/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Match {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
+
+  @CreateDateColumn()
+  createdDate!: Date;
 
   @ManyToOne(() => User, (user) => user.matches)
   user1!: User;
