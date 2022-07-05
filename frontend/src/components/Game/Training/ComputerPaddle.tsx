@@ -14,41 +14,43 @@ const ComputerPaddle = () => {
 
   let prevBallX = useRef(0);
 
-  function computerPlaying(delta : number) {
+  function computerPlaying(delta: number) {
     const ballRect = document
       .getElementById("ball")
       ?.getBoundingClientRect() as DOMRect;
     const ballX = (ballRect.x / window.innerHeight) * 100;
     const ballY = (ballRect.y / window.innerHeight) * 100;
 
-    if (ballRect.x > window.innerWidth / (2 * computerLvl) && prevBallX.current < ballX) {
+    if (
+      ballRect.x > window.innerWidth / (2 * computerLvl) &&
+      prevBallX.current < ballX
+    ) {
       const paddleElem = document.getElementById(
         "opponent-paddle"
       ) as HTMLElement;
 
-
       if (ballSync.current === false) {
         if (paddlePosition.current != ballY)
-          paddlePosition.current +=  speed * delta * (ballY - paddlePosition.current) / 5;
-		  
+          paddlePosition.current +=
+            (speed * delta * (ballY - paddlePosition.current)) / 5;
+
         if (Math.abs(ballY - paddlePosition.current) < 1) {
           ballSync.current = true;
         }
       } else if (ballSync.current === true) {
-		paddlePosition.current +=  speed * delta * (ballY - paddlePosition.current);
-
-	  }
+        paddlePosition.current +=
+          speed * delta * (ballY - paddlePosition.current);
+      }
 
       paddleElem.style.setProperty(
         "--position",
         paddlePosition.current.toString()
       );
+    } else if (prevBallX.current > ballX) {
+      ballSync.current = false;
     }
- else if ( prevBallX.current > ballX) {
-	ballSync.current = false;
-  }
     prevBallX.current = ballX;
-}
+  }
 
   const animate: FrameRequestCallback = (time: number) => {
     if (previousTimeRef.current != undefined) {
