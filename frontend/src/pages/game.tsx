@@ -9,10 +9,7 @@ import { InGameLayout } from "../layouts/inGameLayout";
 import { useRouter } from "next/router";
 import { useSessionContext } from "../context/SessionContext";
 import { io, Socket } from "socket.io-client";
-import getConfig from "next/config";
 import { Login42 } from "../interfaces/status.types";
-
-const { publicRuntimeConfig } = getConfig();
 
 const Pong = () => {
   const [playerScore, setPlayerScore] = useState(0);
@@ -35,7 +32,7 @@ const Pong = () => {
   useEffect(() => {
     if (gameSocket.current === undefined) {
       gameSocket.current = io(
-        `http://${publicRuntimeConfig.HOST}:${publicRuntimeConfig.WEBSOCKETS_PORT}/game`,
+        `http://${process.env.NEXT_PUBLIC__HOST}:${process.env.NEXT_PUBLIC__WEBSOCKETS_PORT}/game`,
         { transports: ["websocket"] }
       );
 
@@ -74,7 +71,8 @@ const Pong = () => {
             gameSocket.current?.emit("game:new-point", gameID.current);
           }
 
-          setPlayerScore(p1Score);undefined
+          setPlayerScore(p1Score);
+          undefined;
           setOpponentScore(p2Score);
           setGameReady(true);
         }
@@ -92,8 +90,8 @@ const Pong = () => {
         setWinnerLogin42(Login42);
 
         setTimeout(() => {
-          router.push('/');
-        }, 5000)
+          router.push("/");
+        }, 5000);
       });
     }
 
@@ -121,12 +119,9 @@ const Pong = () => {
   }
   return (
     <div className={styles.mainLayout_background}>
-      {
-        winnerLogin42 !== "" &&
-        <div className={styles.play}>
-          Well played {winnerLogin42}
-        </div>
-      }
+      {winnerLogin42 !== "" && (
+        <div className={styles.play}>Well played {winnerLogin42}</div>
+      )}
       <Score player={playerScore} opponent={opponentScore} />
       <Ball gameSocket={gameSocket.current} gameID={gameID.current} />
       <PlayerPaddle

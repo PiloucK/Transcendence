@@ -4,12 +4,9 @@ import { ISocketContext } from "../interfaces/ISocketContext";
 import { errorHandler } from "../errors/errorHandler";
 import authService from "../services/auth";
 import Cookies from "js-cookie";
-import getConfig from "next/config";
 import { AxiosError } from "axios";
 import { HttpStatusCodes } from "../constants/httpStatusCodes";
 import Router from "next/router";
-
-const { publicRuntimeConfig } = getConfig();
 
 export const authenticate = (
   errorContext: IErrorContext,
@@ -17,8 +14,8 @@ export const authenticate = (
   sessionContext: ISessionContext
 ) => {
   if (
-    process.env.NEXT_PUBLIC_ACCESSTOKEN_COOKIE_NAME &&
-    Cookies.get(process.env.NEXT_PUBLIC_ACCESSTOKEN_COOKIE_NAME)
+    process.env.NEXT_PUBLIC__ACCESSTOKEN_COOKIE_NAME &&
+    Cookies.get(process.env.NEXT_PUBLIC__ACCESSTOKEN_COOKIE_NAME)
   ) {
     authService
       .getLoggedInUser()

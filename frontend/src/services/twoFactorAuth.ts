@@ -1,8 +1,6 @@
 import axios from "axios";
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
-const baseUrl = `http://${process.env.NEXT_PUBLIC_HOST}\
-:${process.env.NEXT_PUBLIC_BACKEND_PORT}\
+const baseUrl = `http://${process.env.NEXT_PUBLIC__HOST}\
+:${process.env.NEXT_PUBLIC__BACKEND_PORT}\
 /two-factor-auth`;
 
 axios.defaults.withCredentials = true;
@@ -13,7 +11,7 @@ const generateQrCode = () => {
     .then((response) => response.data);
 };
 
-const turnOn = (authCode: string) => {
+const turnOn = (authCode?: string) => {
   return axios
     .post(`${baseUrl}/turn-on`, { authCode })
     .then((response) => response.data);
@@ -29,9 +27,16 @@ const authenticate = (authCode: string) => {
     .then((response) => response.data);
 };
 
+const has2FaBeenAlreadySetUp = () => {
+  return axios
+    .get(`${baseUrl}/set-up`)
+    .then((response) => response.data);
+};
+
 export default {
   generateQrCode,
   turnOn,
   turnOff,
   authenticate,
+  has2FaBeenAlreadySetUp,
 };

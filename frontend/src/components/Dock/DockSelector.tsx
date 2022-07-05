@@ -6,7 +6,7 @@ import { DockUser } from "./DockUser";
 export function DockSelector() {
   const sessionContext = useSessionContext();
 
-  if (sessionContext.userSelf != defaultSessionState.userSelf) {
+  if (sessionContext.userSelf !== defaultSessionState.userSelf) {
     return <DockUser />;
   } else {
     return <DockGuest />;

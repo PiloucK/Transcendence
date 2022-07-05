@@ -4,7 +4,6 @@ import { IconButton, Tooltip } from "@mui/material";
 import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 import FTLogo from "../../public/42logo.png";
-import getConfig from "next/config";
 import userService from "../../services/user";
 import authService from "../../services/auth";
 import { useSessionContext } from "../../context/SessionContext";
@@ -13,8 +12,6 @@ import { useSocketContext } from "../../context/SocketContext";
 import { IUserSelf } from "../../interfaces/IUser";
 import { Button } from "@mui/material";
 import { errorHandler } from "../../errors/errorHandler";
-
-const { publicRuntimeConfig } = getConfig();
 
 export function DockGuest() {
   const sessionContext = useSessionContext();
@@ -47,7 +44,7 @@ export function DockGuest() {
     <>
       <Dock>
         <Link
-          href={`http://${process.env.NEXT_PUBLIC_HOST}:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth`}
+          href={`http://${process.env.NEXT_PUBLIC__HOST}:${process.env.NEXT_PUBLIC__BACKEND_PORT}/auth`}
         >
           <Tooltip title="Login with your 42 account">
             <IconButton className={styles.icons} aria-label="Authentication">

@@ -8,9 +8,6 @@ import { defaultSessionState } from "../constants/defaultSessionState";
 import { IUserSelf } from "../interfaces/IUser";
 import authService from "../services/auth";
 
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
-
 const SessionContext = createContext<ISessionContext>(defaultSessionState);
 
 export const SessionProvider = ({
@@ -33,11 +30,11 @@ export const SessionProvider = ({
     setUserSelf(defaultSessionState.userSelf);
     Router.push("/");
     if (
-      process.env.NEXT_PUBLIC_ACCESSTOKEN_COOKIE_NAME &&
-      process.env.NEXT_PUBLIC_ACCESSTOKEN_COOKIE_PATH
+      process.env.NEXT_PUBLIC__ACCESSTOKEN_COOKIE_NAME &&
+      process.env.NEXT_PUBLIC__ACCESSTOKEN_COOKIE_PATH
     ) {
-      Cookies.remove(process.env.NEXT_PUBLIC_ACCESSTOKEN_COOKIE_NAME, {
-        path: process.env.NEXT_PUBLIC_ACCESSTOKEN_COOKIE_PATH,
+      Cookies.remove(process.env.NEXT_PUBLIC__ACCESSTOKEN_COOKIE_NAME, {
+        path: process.env.NEXT_PUBLIC__ACCESSTOKEN_COOKIE_PATH,
       });
     }
   };

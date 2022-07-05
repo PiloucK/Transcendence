@@ -1,8 +1,6 @@
 import axios from "axios";
-import getConfig from "next/config";
-const { publicRuntimeConfig } = getConfig();
-const baseUrl = `http://${process.env.NEXT_PUBLIC_HOST}\
-:${process.env.NEXT_PUBLIC_BACKEND_PORT}\
+const baseUrl = `http://${process.env.NEXT_PUBLIC__HOST}\
+:${process.env.NEXT_PUBLIC__BACKEND_PORT}\
 /user-status`;
 axios.defaults.withCredentials = true;
 
