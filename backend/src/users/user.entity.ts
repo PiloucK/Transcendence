@@ -77,7 +77,8 @@ export class User {
 
   @OneToMany(
     () => Invitation,
-    (invitation) => (invitation.inviter === this ? invitation.inviter : invitation.invited),
+    (invitation) =>
+      invitation.inviter === this ? invitation.inviter : invitation.invited,
   )
   invitations!: Invitation[];
 

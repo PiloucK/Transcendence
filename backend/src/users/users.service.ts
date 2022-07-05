@@ -16,7 +16,11 @@ type UserRelations =
   | 'friends'
   | 'friendRequestsSent'
   | 'friendRequestsReceived'
-  | 'blockedUsers';
+  | 'blockedUsers'
+  | 'privateConvs'
+  | 'channels'
+  | 'matches'
+  | 'invitations';
 
 @Injectable()
 export class UsersService {
