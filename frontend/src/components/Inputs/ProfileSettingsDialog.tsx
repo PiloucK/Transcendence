@@ -23,6 +23,7 @@ import { SettingsAvatar } from "./SettingsAvatarDialog";
 import { AxiosError } from "axios";
 import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 import { Box } from "@mui/material";
+import { useSocketContext } from "../../context/SocketContext";
 
 export function ProfileSettingsDialog({
   user,
@@ -35,6 +36,7 @@ export function ProfileSettingsDialog({
 }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
+  const socketContext = useSocketContext();
   const [username, setUsername] = useState(user.username);
 
   const [textFieldError, setTextFieldError] = useState("");
@@ -63,6 +65,7 @@ export function ProfileSettingsDialog({
           .updateUserUsername(user.login42, username)
           .then(() => {
             sessionContext.updateUserSelf?.(); //! Can be done only once
+            socketContext.socket.emit("user:update-username");
             setOpen(false);
           })
           .catch((caughtError: Error | AxiosError) => {

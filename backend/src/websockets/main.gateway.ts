@@ -63,6 +63,21 @@ export class MainGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
+
+  @SubscribeMessage('game:match-end')
+  onGameMatchEnd(@MessageBody() data: string[]) {
+    const [player1, player2] = data;
+
+	if (player1){
+		this.statusService.toOnline(player1);
+		this.updateStatus(player1, 'ONLINE');
+	}
+	if (player2){
+		this.statusService.toOnline(player2);
+		this.updateStatus(player2, 'ONLINE');
+	}
+  }
+
   @SubscribeMessage('user:accept-match')
   onUserAcceptMatch(
     @MessageBody() data: string[],
