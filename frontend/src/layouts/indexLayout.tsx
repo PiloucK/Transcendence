@@ -42,7 +42,7 @@ const PlayButton = () => {
 	}
 	return  (
 	  <Link href="/training-mode" className={styles.play}>
-		PLAY
+		<div className={styles.play}>PLAY</div>
 	  </Link>
 	);;
   };

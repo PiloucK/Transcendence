@@ -9,8 +9,6 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { MatchService } from 'src/match/match.service';
-import { StatusService } from 'src/status/status.service';
-import { EmittedLiveStatus } from 'src/status/status.type';
 import { MainGateway } from './main.gateway';
 
 interface ICoordinates {
@@ -30,6 +28,8 @@ interface IGame {
   player2Score: number;
   gameStatus: 'WAITING' | 'READY' | 'DONE';
   ballInfo: IBallInfo;
+  ballVelocity: number;
+  bounceCount: number;
   intervalID?: ReturnType<typeof setInterval>;
 } // EXPORTER INTERFACE DANS UN FICHIER
 
@@ -58,9 +58,6 @@ function initBall() {
 export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   private server!: Server;
-
-  private ballVelocity = 0.035;
-  private bounceCount = 0;
 
   private runningGames = new Map<string, IGame>();
 
@@ -146,6 +143,8 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         player2Score: 0,
         gameStatus: 'WAITING',
         ballInfo: { position: { x: 50, y: 50 }, direction: { x: 50, y: 50 } },
+		ballVelocity: 0.042,
+		bounceCount: 0,
       };
       this.runningGames.set(gameID, currentGame);
     }
@@ -200,10 +199,10 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         // move ball
         currentGame.ballInfo.position.x =
           currentGame.ballInfo.position.x +
-          currentGame.ballInfo.direction.x * this.ballVelocity * deltaTime;
+          currentGame.ballInfo.direction.x * currentGame.ballVelocity * deltaTime;
         currentGame.ballInfo.position.y =
           currentGame.ballInfo.position.y +
-          currentGame.ballInfo.direction.y * this.ballVelocity * deltaTime;
+          currentGame.ballInfo.direction.y * currentGame.ballVelocity * deltaTime;
 
         // check top / btm collision
         if (currentGame.ballInfo.position.y + 1 >= 100) {
@@ -245,8 +244,8 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       if (player === currentGame.player2) {
         currentGame.ballInfo.direction.x *= -1;
 	  }
-	  this.bounceCount += 1;
-      this.ballVelocity = this.ballVelocity + this.ballVelocity / (this.bounceCount + 10);
+	  currentGame.bounceCount += 1;
+      currentGame.ballVelocity = currentGame.ballVelocity + currentGame.ballVelocity / (currentGame.bounceCount + 10);
     }
   }
 
