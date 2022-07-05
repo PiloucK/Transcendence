@@ -9,6 +9,9 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { MatchService } from 'src/match/match.service';
+import { StatusService } from 'src/status/status.service';
+import { EmittedLiveStatus } from 'src/status/status.type';
+import { MainGateway } from './main.gateway';
 
 interface ICoordinates {
   x: number;
@@ -58,7 +61,8 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
   private runningGames = new Map<string, IGame>();
 
-  constructor(private readonly matchService: MatchService) {}
+  constructor(private readonly matchService: MatchService,
+			  private readonly mainGateway: MainGateway) {}
 
   handleConnection(@ConnectedSocket() client: Socket) {
     console.log('game-connection', client.id);
@@ -78,7 +82,11 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     if (currentGame?.intervalID) {
       clearInterval(currentGame?.intervalID);
     }
-
+	const playerLogin1 = currentGame?.player1;
+	const playerLogin2 = currentGame?.player2;
+	if (playerLogin1 && playerLogin2){
+		this.mainGateway.onGameMatchEnd([playerLogin1, playerLogin2]);
+	}
     this.runningGames.delete(gameID);
     client.disconnect();
     console.log('game:unmount');
