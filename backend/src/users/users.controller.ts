@@ -151,15 +151,6 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/:login42/blockedUsers')
-  getUserBlockedUsers(
-    @Param('login42') login42: string,
-    @GetReqUser() reqUser: User,
-  ): Promise<User[]> {
-    return this.usersService.getUserBlockedUsers(reqUser, login42);
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Patch('/:login42/blockUser')
   blockUser(
     @Param('login42') login42: string,

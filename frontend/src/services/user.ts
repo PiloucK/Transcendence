@@ -84,12 +84,6 @@ const removeFriend = (login: string, friendLogin42: string) => {
     .then((response) => response.data);
 };
 
-const getUserBlockedUsers = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/blockedUsers`)
-    .then((response) => response.data);
-};
-
 const blockUser = (login: string, friendLogin42: string) => {
   return axios
     .patch(`${baseUrl}/${login}/blockUser`, {
@@ -118,7 +112,6 @@ export default {
   removeFriend,
   updateUserUsername,
   updateUserImage,
-  getUserBlockedUsers,
   blockUser,
   unblockUser,
 };

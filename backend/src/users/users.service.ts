@@ -387,13 +387,6 @@ export class UsersService {
     return user.friends;
   }
 
-  async getUserBlockedUsers(reqUser: User, login42: string): Promise<User[]> {
-    this.restrictToReqUser(reqUser, login42);
-
-    const user = await this.getUserWithRelations(login42, ['blockedUsers']);
-    return user.blockedUsers;
-  }
-
   async blockUser(
     reqUser: User,
     login42: string,
