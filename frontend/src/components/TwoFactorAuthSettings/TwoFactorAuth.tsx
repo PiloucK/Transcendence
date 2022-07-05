@@ -9,11 +9,12 @@ import { useSessionContext } from "../../context/SessionContext";
 import { QrCodeDisplay } from "./qrCodeDisplay";
 import styles from "./TwoFactorAuth.module.scss";
 
-export function TwoFactorAuth({}: {}) {
+export function TwoFactorAuth({ }: {}) {
   const [checked, setChecked] = useState(false);
   const [image, setImage] = useState("");
   const [qrCode, setQrcode] = useState(false);
   const [hasBeenActivated, setHasBeenActivated] = useState(false);
+  const [firstQrCode, setFirstQrCode] = useState(true);
 
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
@@ -53,6 +54,7 @@ export function TwoFactorAuth({}: {}) {
               setQrcode={setQrcode}
               checked={checked}
               setHasBeenActivated={setHasBeenActivated}
+              setFirstQrCode={setFirstQrCode}
             />
           ) : (
             <>
@@ -61,13 +63,17 @@ export function TwoFactorAuth({}: {}) {
                 style={{ transformOrigin: "0 0 0" }}
                 {...(checked ? { timeout: 1000 } : {})}
               >
-                <Button
-                  variant="contained"
-                  className={styles.generateButton}
-                  onClick={generateQrCode}
-                >
-                  Generate Qrcode
-                </Button>
+                <div className={styles.generateButtonDiv}>
+                  Use this button to generate a new Qrcode
+                  (to setup a new device for example)
+                  <Button
+                    variant="contained"
+                    className={styles.generateButton}
+                    onClick={generateQrCode}
+                  >
+                    Generate Qrcode
+                  </Button>
+                </div>
               </Fade>
               {hasBeenActivated === true ? <>Activated ✅</> : <></>}
             </>
@@ -81,6 +87,9 @@ export function TwoFactorAuth({}: {}) {
         setQrcode={setQrcode}
         checked={checked}
         setChecked={setChecked}
+        generateQrCode={generateQrCode}
+        firstQrCode={firstQrCode}
+        setFirstQrCode={setFirstQrCode}
       />
     </>
   );
