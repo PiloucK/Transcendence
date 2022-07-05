@@ -44,11 +44,7 @@ export function ProfileSettingsDialog({
   const [newImage, setNewImage] = useState<Blob>();
   const [preview, setPreview] = useState("");
 
-  const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
-  const [alreadySet, setAlreadySet] = useState(false);
-
   const handleClose = () => {
-    setAlreadySet(false);
     setOpen(false);
   };
 
@@ -115,7 +111,6 @@ export function ProfileSettingsDialog({
         PaperProps={{ style: { backgroundColor: "#163F5B" } }}
         open={open}
         onClose={handleClose}
-        maxWidth={maxWidth}
       >
         <DialogTitle>User settings</DialogTitle>
         <DialogContent>

@@ -12,11 +12,17 @@ export default function ToggleSwitch({
   setChecked,
   setQrcode,
   hasBeenActivated,
+  generateQrCode,
+  firstQrCode,
+  setFirstQrCode,
 }: {
   checked: boolean;
   setChecked: Dispatch<SetStateAction<boolean>>;
   setQrcode: Dispatch<SetStateAction<boolean>>;
   hasBeenActivated: boolean;
+  generateQrCode: () => void;
+  firstQrCode: boolean;
+  setFirstQrCode: Dispatch<SetStateAction<boolean>>;
 }) {
 
   const errorContext = useErrorContext();
@@ -25,6 +31,7 @@ export default function ToggleSwitch({
   const onChange = () => {
 
     if (checked === true) {
+      setQrcode(false);
       twoFactorAuthService
         .turnOff()
         .then(() => {
@@ -44,7 +51,13 @@ export default function ToggleSwitch({
           errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
-    setQrcode(false);
+    else {
+      if (firstQrCode === true) {
+        setFirstQrCode(false);
+        generateQrCode();
+      }
+      setQrcode(true);
+    }
     setChecked(!checked);
   };
 
