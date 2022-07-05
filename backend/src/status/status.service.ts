@@ -12,7 +12,7 @@ export class StatusService {
 
   isNotInGame(login42: string): boolean {
     const userStatusMetrics = this.statuses.get(login42);
-    return (userStatusMetrics?.status !== 'IN_GAME') ? true : false;
+    return userStatusMetrics?.status !== 'IN_GAME' ? true : false;
   }
 
   getOpponent(userLogin42: Login42) {
