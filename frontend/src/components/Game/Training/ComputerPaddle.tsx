@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import styles from './PaddleRight.module.css'
-import { ICoordinates } from "../../interfaces/ICoordinates";
+import styles from '../PaddleRight.module.css'
+import { ICoordinates } from "../../../interfaces/ICoordinates";
 
 
 const ComputerPaddle = ({computerLvl} : {computerLvl : number}) => {

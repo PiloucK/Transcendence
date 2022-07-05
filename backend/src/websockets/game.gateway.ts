@@ -59,6 +59,9 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   private server!: Server;
 
+  private ballVelocity = 0.035;
+  private bounceCount = 0;
+
   private runningGames = new Map<string, IGame>();
 
   constructor(private readonly matchService: MatchService,
@@ -191,16 +194,16 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     if (currentGame && currentGame.intervalID === undefined) {
       currentGame.ballInfo = initBall();
       const deltaTime = 1000 / 60;
-      const ballVelocity = 0.035;
+    //   const ballVelocity = 0.035;
 
       currentGame.intervalID = setInterval(() => {
         // move ball
         currentGame.ballInfo.position.x =
           currentGame.ballInfo.position.x +
-          currentGame.ballInfo.direction.x * ballVelocity * deltaTime;
+          currentGame.ballInfo.direction.x * this.ballVelocity * deltaTime;
         currentGame.ballInfo.position.y =
           currentGame.ballInfo.position.y +
-          currentGame.ballInfo.direction.y * ballVelocity * deltaTime;
+          currentGame.ballInfo.direction.y * this.ballVelocity * deltaTime;
 
         // check top / btm collision
         if (currentGame.ballInfo.position.y + 1 >= 100) {
@@ -239,8 +242,11 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     ) {
       currentGame.ballInfo.direction.x = Math.cos(angleRad);
       currentGame.ballInfo.direction.y = Math.sin(angleRad);
-      if (player === currentGame.player2)
+      if (player === currentGame.player2) {
         currentGame.ballInfo.direction.x *= -1;
+	  }
+	  this.bounceCount += 1;
+      this.ballVelocity = this.ballVelocity + this.ballVelocity / (this.bounceCount + 10);
     }
   }
 

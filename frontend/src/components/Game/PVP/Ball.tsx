@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef, MutableRefObject } from "react";
 import styles from "./Ball.module.css";
 import { Socket } from "socket.io-client";
-import { IBallInfo } from "../../interfaces/IBallInfo";
-import { useSessionContext } from "../../context/SessionContext";
+import { IBallInfo } from "../../../interfaces/IBallInfo";
+import { useSessionContext } from "../../../context/SessionContext";
 
 const Ball = ({
   gameSocket,

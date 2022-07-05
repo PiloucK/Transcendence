@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import styles from "./PaddleRight.module.css";
+import styles from "../PaddleRight.module.css";
 import { Socket } from "socket.io-client";
-import { Login42 } from "../../interfaces/status.types";
+import { Login42 } from "../../../interfaces/status.types";
 
 const OpponentPaddle = ({
   gameSocket,

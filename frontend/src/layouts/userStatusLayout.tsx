@@ -57,7 +57,7 @@ export const UserStatusLayout = ({
                   userLogin42 === sessionContext.userSelf.login42
                 ) {
                   router.push({
-                    pathname: "/game",
+                    pathname: "/player-vs-player",
                     query: { userLogin42, opponentLogin42 },
                   });
                 }

@@ -1,10 +1,10 @@
 import styles from "../styles/Home.module.css";
 import { ReactElement, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import Ball from "../components/Game/Ball";
-import PlayerPaddle from "../components/Game/PlayerPaddle";
-import OpponentPaddle from "../components/Game/OpponentPaddle";
-import Score from "../components/Game/Score";
+import Ball from "../components/Game/PVP/Ball";
+import PlayerPaddle from "../components/Game/PVP/PlayerPaddle";
+import OpponentPaddle from "../components/Game/PVP/OpponentPaddle";
+import Score from "../components/Game/PVP/Score";
 import { InGameLayout } from "../layouts/inGameLayout";
 import { useRouter } from "next/router";
 import { useSessionContext } from "../context/SessionContext";
@@ -14,7 +14,7 @@ import { Login42 } from "../interfaces/status.types";
 
 const { publicRuntimeConfig } = getConfig();
 
-const Pong = () => {
+const PlayerVsPlayer = () => {
   const [playerScore, setPlayerScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
 
@@ -150,10 +150,10 @@ const Pong = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(Pong), {
+export default dynamic(() => Promise.resolve(PlayerVsPlayer), {
   ssr: false,
 });
 
-Pong.getLayout = function getLayout(page: ReactElement) {
+PlayerVsPlayer.getLayout = function getLayout(page: ReactElement) {
   return <InGameLayout>{page}</InGameLayout>;
 };
