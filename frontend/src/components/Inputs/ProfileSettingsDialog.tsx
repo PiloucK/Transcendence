@@ -23,6 +23,7 @@ import { SettingsAvatar } from "./SettingsAvatarDialog";
 import { AxiosError } from "axios";
 import { HttpStatusCodes } from "../../constants/httpStatusCodes";
 import { Box } from "@mui/material";
+import { useSocketContext } from "../../context/SocketContext";
 
 export function ProfileSettingsDialog({
   user,
@@ -35,6 +36,7 @@ export function ProfileSettingsDialog({
 }) {
   const errorContext = useErrorContext();
   const sessionContext = useSessionContext();
+  const socketContext = useSocketContext();
   const [username, setUsername] = useState(user.username);
 
   const [textFieldError, setTextFieldError] = useState("");
@@ -42,11 +44,7 @@ export function ProfileSettingsDialog({
   const [newImage, setNewImage] = useState<Blob>();
   const [preview, setPreview] = useState("");
 
-  const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
-  const [alreadySet, setAlreadySet] = useState(false);
-
   const handleClose = () => {
-    setAlreadySet(false);
     setOpen(false);
   };
 
@@ -63,6 +61,7 @@ export function ProfileSettingsDialog({
           .updateUserUsername(user.login42, username)
           .then(() => {
             sessionContext.updateUserSelf?.(); //! Can be done only once
+            socketContext.socket.emit("user:update-username");
             setOpen(false);
           })
           .catch((caughtError: Error | AxiosError) => {
@@ -112,7 +111,6 @@ export function ProfileSettingsDialog({
         PaperProps={{ style: { backgroundColor: "#163F5B" } }}
         open={open}
         onClose={handleClose}
-        maxWidth={maxWidth}
       >
         <DialogTitle>User settings</DialogTitle>
         <DialogContent>

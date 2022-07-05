@@ -61,8 +61,10 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
   private runningGames = new Map<string, IGame>();
 
-  constructor(private readonly matchService: MatchService,
-			  private readonly mainGateway: MainGateway) {}
+  constructor(
+    private readonly matchService: MatchService,
+    private readonly mainGateway: MainGateway,
+  ) {}
 
   handleConnection(@ConnectedSocket() client: Socket) {
     console.log('game-connection', client.id);
@@ -77,40 +79,49 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: string[],
     @ConnectedSocket() client: Socket,
   ) {
-	const [gameID, login42] = data;
+    const [gameID, login42] = data;
 
-	const currentGame = this.runningGames.get(gameID);
+    const currentGame = this.runningGames.get(gameID);
 
-	if (currentGame) {
-		if (currentGame.player1 === undefined || currentGame.player2 === undefined)
-			return ;
+    if (currentGame) {
+      if (
+        currentGame.player1 === undefined ||
+        currentGame.player2 === undefined
+      )
+        return;
 
-		if (login42 !== currentGame.player1 && login42 !== currentGame.player2)
-			return ;
-		if (currentGame.intervalID) {
-			clearInterval(currentGame.intervalID);
-		}
-		if (currentGame.gameStatus === 'DONE') {
-			if (currentGame.player1 && currentGame.player2){
-				this.mainGateway.onGameMatchEnd([currentGame.player1, currentGame.player2]);
-			}
-			this.runningGames.delete(gameID);
-		} else {
-			const winnerLogin42 = (login42 !== currentGame.player1) ? currentGame.player1 : currentGame.player2;
-			this.server.to(gameID).emit('game:winner', winnerLogin42);
+      if (login42 !== currentGame.player1 && login42 !== currentGame.player2)
+        return;
+      if (currentGame.intervalID) {
+        clearInterval(currentGame.intervalID);
+      }
+      if (currentGame.gameStatus === 'DONE') {
+        if (currentGame.player1 && currentGame.player2) {
+          this.mainGateway.onGameMatchEnd([
+            currentGame.player1,
+            currentGame.player2,
+          ]);
+        }
+        this.runningGames.delete(gameID);
+      } else {
+        const winnerLogin42 =
+          login42 !== currentGame.player1
+            ? currentGame.player1
+            : currentGame.player2;
+        this.server.to(gameID).emit('game:winner', winnerLogin42);
 
-			this.matchService.create(
-				currentGame.player1,
-				currentGame.player2,
-				currentGame.player1Score,
-				currentGame.player2Score,
-				winnerLogin42,
-			);
-			currentGame.gameStatus = 'DONE';
-		}
-		client.disconnect();
-		console.log('game:unmount');
-	}
+        this.matchService.create(
+          currentGame.player1,
+          currentGame.player2,
+          currentGame.player1Score,
+          currentGame.player2Score,
+          winnerLogin42,
+        );
+        currentGame.gameStatus = 'DONE';
+      }
+      client.disconnect();
+      console.log('game:unmount');
+    }
   }
 
   @SubscribeMessage('game:enter')
@@ -276,7 +287,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       // setInterval(() => {
       if (currentGame.player1Score < 5 && currentGame.player2Score < 5) {
         this.onGamePoint(gameID);
-		return ;
+        return;
       } else if (currentGame.player1Score >= 5) {
         this.server.to(gameID).emit('game:winner', currentGame.player1);
         this.matchService.create(
@@ -296,7 +307,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
           currentGame.player2,
         );
       }
-	  currentGame.gameStatus = 'DONE';
+      currentGame.gameStatus = 'DONE';
       // }, 2000);
     }
   }

@@ -84,9 +84,9 @@ const PlayerVsPlayer = () => {
 
       gameSocket.current.on("game:update-score", (login42: Login42) => {
         isPointLost.current = false;
-        if (login42 !== player1.current) {
+        if (login42 === player2.current) {
           setPlayerScore((prevState) => prevState + 1);
-        } else {
+        } else if (login42 === player1.current) {
           setOpponentScore((prevState) => prevState + 1);
         }
       });
@@ -112,6 +112,7 @@ const PlayerVsPlayer = () => {
             gameID.current,
             sessionContext.userSelf.login42
           );
+          gameSocket.current.removeAllListeners();
           console.log("closing socket");
           // IF SPECATOR LEAVES HE STOPS THE GAME
         }
