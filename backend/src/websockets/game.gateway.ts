@@ -9,7 +9,6 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { MatchService } from 'src/match/match.service';
-import { SocketId } from 'src/status/status.type';
 import { MainGateway } from './main.gateway';
 
 interface ICoordinates {
@@ -34,6 +33,8 @@ interface IGame {
   player2Score: number;
   gameStatus: 'WAITING' | 'READY' | 'DONE';
   ballInfo: IBallInfo;
+  ballVelocity: number;
+  bounceCount: number;
   intervalID?: ReturnType<typeof setInterval>;
 } // EXPORTER INTERFACE DANS UN FICHIER
 
@@ -170,6 +171,8 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         player2Score: 0,
         gameStatus: 'WAITING',
         ballInfo: { position: { x: 50, y: 50 }, direction: { x: 50, y: 50 } },
+		ballVelocity: 0.042,
+		bounceCount: 0,
       };
       this.runningGames.set(gameID, currentGame);
     }
@@ -218,16 +221,16 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     if (currentGame && currentGame.intervalID === undefined) {
       currentGame.ballInfo = initBall();
       const deltaTime = 1000 / 60;
-      const ballVelocity = 0.035;
+    //   const ballVelocity = 0.035;
 
       currentGame.intervalID = setInterval(() => {
         // move ball
         currentGame.ballInfo.position.x =
           currentGame.ballInfo.position.x +
-          currentGame.ballInfo.direction.x * ballVelocity * deltaTime;
+          currentGame.ballInfo.direction.x * currentGame.ballVelocity * deltaTime;
         currentGame.ballInfo.position.y =
           currentGame.ballInfo.position.y +
-          currentGame.ballInfo.direction.y * ballVelocity * deltaTime;
+          currentGame.ballInfo.direction.y * currentGame.ballVelocity * deltaTime;
 
         // check top / btm collision
         if (currentGame.ballInfo.position.y + 1 >= 100) {
@@ -266,8 +269,11 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     ) {
       currentGame.ballInfo.direction.x = Math.cos(angleRad);
       currentGame.ballInfo.direction.y = Math.sin(angleRad);
-      if (player === currentGame.player2)
+      if (player === currentGame.player2) {
         currentGame.ballInfo.direction.x *= -1;
+	  }
+	  currentGame.bounceCount += 1;
+      currentGame.ballVelocity = currentGame.ballVelocity + currentGame.ballVelocity / (currentGame.bounceCount + 10);
     }
   }
 

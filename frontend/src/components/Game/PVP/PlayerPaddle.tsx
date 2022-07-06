@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import styles from "./PaddleLeft.module.css";
+import styles from "../PaddleLeft.module.css";
 import { Socket } from "socket.io-client";
-import { useSessionContext } from "../../context/SessionContext";
-import { Login42 } from "../../interfaces/status.types";
+import { useSessionContext } from "../../../context/SessionContext";
+import { Login42 } from "../../../interfaces/status.types";
 
 const PlayerPaddle = ({
   gameSocket,
