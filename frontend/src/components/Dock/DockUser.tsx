@@ -13,8 +13,8 @@ import LeaderboardIcon from "@mui/icons-material/EmojiEvents";
 import Filter1Icon from "@mui/icons-material/Filter1";
 import Filter2Icon from "@mui/icons-material/Filter2";
 import Filter3Icon from "@mui/icons-material/Filter3";
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
 
 import { Dock } from "./Dock";
 import styles from "../../styles/Home.module.css";
@@ -79,9 +79,7 @@ function NavigationDock({
       });
   };
 
-  const handleLogin42Change: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
+  const handleLogin42Change: ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.target.value) {
       setLogin42(event.target.value);
     }
@@ -166,33 +164,39 @@ function GamemodeDock({
           <ArrowBackIosNewIcon />
         </IconButton>
       </Tooltip>
-      <Tooltip title="Dificulty: easy">
-        <IconButton
-          onClick={() => setIsInNavigation(true)}
-          className={styles.icons}
-          aria-label="Easy"
-        >
-          <Filter1Icon />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="Dificulty: medium">
-        <IconButton
-          onClick={() => setIsInNavigation(true)}
-          className={styles.icons}
-          aria-label="Medium"
-        >
-          <Filter2Icon />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="Dificulty: hard">
-        <IconButton
-          onClick={() => setIsInNavigation(true)}
-          className={styles.icons}
-          aria-label="Hard"
-        >
-          <Filter3Icon />
-        </IconButton>
-      </Tooltip>
+
+      <Link href="/training-mode?computerlvl=1">
+        <Tooltip title="Difficulty: easy">
+          <IconButton
+            className={styles.icons}
+            aria-label="Easy"
+          >
+            <Filter1Icon />
+          </IconButton>
+        </Tooltip>
+      </Link>
+
+      <Link href="/training-mode?computerlvl=2">
+        <Tooltip title="Difficulty: medium">
+          <IconButton
+            className={styles.icons}
+            aria-label="Medium"
+          >
+            <Filter2Icon />
+          </IconButton>
+        </Tooltip>
+      </Link>
+
+      <Link href="/training-mode?computerlvl=3">
+        <Tooltip title="Difficulty: hard">
+          <IconButton
+            className={styles.icons}
+            aria-label="Hard"
+          >
+            <Filter3Icon />
+          </IconButton>
+        </Tooltip>
+      </Link>
     </Dock>
   );
 }
