@@ -11,6 +11,10 @@ import { useSessionContext } from "../context/SessionContext";
 import { io, Socket } from "socket.io-client";
 import getConfig from "next/config";
 import { Login42 } from "../interfaces/status.types";
+import userService from "../services/user";
+import { useErrorContext } from "../context/ErrorContext";
+import { errorHandler } from "../errors/errorHandler";
+import { IUserSlim } from "../interfaces/IUser";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -25,11 +29,12 @@ const PlayerVsPlayer = () => {
   const invert = useRef(0);
 
   const sessionContext = useSessionContext();
+  const errorContext = useErrorContext();
   const { userLogin42, opponentLogin42 } = useRouter().query;
 
   const secondMount = useRef(false);
   const [gameReady, setGameReady] = useState(false);
-  const [winnerLogin42, setWinnerLogin42] = useState("");
+  const [winnerUsername, setWinnerUsername] = useState("");
   const router = useRouter();
   const isPointLost = useRef<boolean>(false);
 
@@ -91,12 +96,19 @@ const PlayerVsPlayer = () => {
         }
       });
 
-      gameSocket.current.on("game:winner", (Login42: Login42) => {
-        setWinnerLogin42(Login42);
+      gameSocket.current.on("game:winner", (login42: Login42) => {
+        userService
+          .getOne(login42)
+          .then((user: IUserSlim) => {
+            setWinnerUsername(user.username);
 
-        setTimeout(() => {
-          router.push("/");
-        }, 5000);
+            setTimeout(() => {
+              router.push("/");
+            }, 5000);
+          })
+          .catch((error) => {
+            errorContext.newError?.(errorHandler(error, sessionContext));
+          });
       });
     }
 
@@ -129,8 +141,8 @@ const PlayerVsPlayer = () => {
   }
   return (
     <div className={styles.mainLayout_background}>
-      {winnerLogin42 !== "" && (
-        <div className={styles.play}>Well played {winnerLogin42}</div>
+      {winnerUsername !== "" && (
+        <div className={styles.play}>Well played {winnerUsername}</div>
       )}
       <Score player={playerScore} opponent={opponentScore} />
       <Ball
