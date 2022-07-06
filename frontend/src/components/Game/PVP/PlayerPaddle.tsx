@@ -53,7 +53,7 @@ const PlayerPaddle = ({
     if (sessionContext.userSelf.login42 === player1) {
       gameSocket.emit(
         "game:paddleMove",
-        playerPosition.toString(),
+        playerPosition,
         gameID,
         sessionContext.userSelf.login42
       );

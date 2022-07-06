@@ -29,14 +29,12 @@ const PlayerVsPlayer = () => {
   const invert = useRef(0);
 
   const sessionContext = useSessionContext();
-  const errorContext = useErrorContext();
   const { userLogin42, opponentLogin42 } = useRouter().query;
 
   const secondMount = useRef(false);
   const [gameReady, setGameReady] = useState(false);
   const [winnerUsername, setWinnerUsername] = useState("");
   const router = useRouter();
-  const isPointLost = useRef<boolean>(false);
 
   useEffect(() => {
     if (gameSocket.current === undefined) {
@@ -88,27 +86,18 @@ const PlayerVsPlayer = () => {
       );
 
       gameSocket.current.on("game:update-score", (login42: Login42) => {
-        isPointLost.current = false;
         if (login42 === player2.current) {
           setPlayerScore((prevState) => prevState + 1);
         } else if (login42 === player1.current) {
           setOpponentScore((prevState) => prevState + 1);
         }
+        setTimeout(() => {
+          gameSocket.current?.emit("game:new-point", gameID.current);
+        }, 2000);
       });
 
       gameSocket.current.on("game:winner", (login42: Login42) => {
-        userService
-          .getOne(login42)
-          .then((user: IUserSlim) => {
-            setWinnerUsername(user.username);
-
-            setTimeout(() => {
-              router.push("/");
-            }, 5000);
-          })
-          .catch((error) => {
-            errorContext.newError?.(errorHandler(error, sessionContext));
-          });
+        router.push("/");
       });
     }
 
@@ -126,7 +115,6 @@ const PlayerVsPlayer = () => {
           );
           gameSocket.current.removeAllListeners();
           console.log("closing socket");
-          // IF SPECATOR LEAVES HE STOPS THE GAME
         }
       }
     };
@@ -145,11 +133,7 @@ const PlayerVsPlayer = () => {
         <div className={styles.play}>Well played {winnerUsername}</div>
       )}
       <Score player={playerScore} opponent={opponentScore} />
-      <Ball
-        gameSocket={gameSocket.current}
-        gameID={gameID.current}
-        isPointLost={isPointLost}
-      />
+      <Ball gameSocket={gameSocket.current} gameID={gameID.current} />
       <PlayerPaddle
         gameSocket={gameSocket.current}
         gameID={gameID.current}
