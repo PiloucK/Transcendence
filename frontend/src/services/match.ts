@@ -14,19 +14,6 @@ const getForOneUser = (userLogin42: string) => {
     .then((response) => response.data);
 };
 
-// dev
-const createMatch = (
-  opponentLogin42: string,
-  selfScore: number,
-  opponentScore: number,
-  winnerLogin42: string
-) => {
-  return axios
-    .post(baseUrl, { opponentLogin42, selfScore, opponentScore, winnerLogin42 })
-    .then((response) => response.data);
-};
-
 export default {
   getForOneUser,
-  createMatch,
 };

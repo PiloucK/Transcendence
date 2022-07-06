@@ -14,15 +14,6 @@ const getOne = (login: string) => {
   return axios.get(`${baseUrl}/${login}`).then((response) => response.data);
 };
 
-const addOne = (login42: string) => {
-  return axios.post(`${baseUrl}/${login42}`).then((response) => response.data);
-};
-
-// dev
-const deleteAll = () => {
-  return axios.delete(baseUrl).then((response) => response.data);
-};
-
 const updateUserUsername = (login: string, username: string) => {
   return axios
     .patch(`${baseUrl}/${login}/username`, { username })
@@ -30,13 +21,9 @@ const updateUserUsername = (login: string, username: string) => {
 };
 
 const updateUserImage = (login: string, file: FormData) => {
-  const request = axios.post(
-    `${baseUrl}/${login}/image`,
-    file,
-    {
-      headers: { "Content-Type": "multipart/form-data" },
-    }
-  );
+  const request = axios.post(`${baseUrl}/${login}/image`, file, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return request
     .then((response) => response.data)
     .catch((e) => {
@@ -103,15 +90,13 @@ const unblockUser = (login: string, friendLogin42: string) => {
 export default {
   getAllForLeaderboard,
   getOne,
-  addOne,
-  deleteAll,
+  updateUserUsername,
+  updateUserImage,
   sendFriendRequest,
   cancelFriendRequest,
   acceptFriendRequest,
   declineFriendRequest,
   removeFriend,
-  updateUserUsername,
-  updateUserImage,
   blockUser,
   unblockUser,
 };
