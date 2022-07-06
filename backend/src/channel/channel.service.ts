@@ -87,7 +87,9 @@ export class ChannelService {
     this.resolveChannelRestrictions(channel);
 
     channel.name = updateChannelDto.name;
-    channel.password = updateChannelDto.password;
+	if (updateChannelDto.setPassword === true) {
+		channel.password = updateChannelDto.password;
+	}
     channel.isPrivate = updateChannelDto.isPrivate;
 
     await this.channelRepository.save(channel);
