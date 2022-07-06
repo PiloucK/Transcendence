@@ -286,9 +286,12 @@ function UserList({ channel, state }: { channel: Channel; state: string }) {
     <>
       {channel?.users?.map((user) => {
         const status = userStatusContext.statuses.get(user.login42);
-        if (
-          (status && status.status !== state) ||
-          (!status && state !== "OFFLINE")
+        if (state === "ONLINE" && (!status || status.status === "OFFLINE")) {
+          return null;
+        } else if (
+          state === "OFFLINE" &&
+          status &&
+          status.status !== "OFFLINE"
         ) {
           return null;
         }

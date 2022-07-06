@@ -36,7 +36,11 @@ function SocialPage({ menu }: { menu: string }) {
       <FriendContent
         friends={sessionContext.userSelf.friends.filter((friend) => {
           const status = userStatusContext.statuses.get(friend.login42);
-          return status?.status === "ONLINE";
+          return (
+            status?.status === "ONLINE" ||
+            status?.status === "IN_GAME" ||
+            status?.status === "IN_QUEUE"
+          );
         })}
       />
     );
