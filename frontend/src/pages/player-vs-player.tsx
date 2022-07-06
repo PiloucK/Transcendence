@@ -106,7 +106,6 @@ const PlayerVsPlayer = () => {
       if (secondMount.current !== true) {
         secondMount.current = true;
       } else {
-        console.log("unmounting game");
         if (gameSocket.current != undefined) {
           gameSocket.current.emit(
             "game:unmount",
@@ -114,7 +113,6 @@ const PlayerVsPlayer = () => {
             sessionContext.userSelf.login42
           );
           gameSocket.current.removeAllListeners();
-          console.log("closing socket");
         }
       }
     };

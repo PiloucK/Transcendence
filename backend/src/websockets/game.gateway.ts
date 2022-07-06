@@ -76,11 +76,9 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
   ) {}
 
   handleConnection(@ConnectedSocket() client: Socket) {
-    console.log('game-connection', client.id);
   }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
-    console.log('game-disconnection', client.id);
     const userGameConnection = this.sockets.get(client.id);
     if (userGameConnection) {
       this.onGameUnmount(
@@ -138,7 +136,6 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         currentGame.gameStatus = 'DONE';
       }
       client.disconnect();
-      console.log('game:unmount');
     }
   }
 
@@ -162,7 +159,6 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
     client.join(gameID);
 
-    console.log(userSelf, 'has joined the game of', gameID);
 
     let currentGame = this.runningGames.get(gameID);
 
@@ -215,7 +211,6 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         );
 
       currentGame.gameStatus = 'READY';
-      console.log('sending game start', userSelf);
     }
   }
 

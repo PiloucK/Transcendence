@@ -20,9 +20,6 @@ export class AuthController {
   @UseGuards(FortyTwoAuthGuard) // pass through FortyTwoStrategy
   @Get()
   fortyTwoAuth(): void {
-    console.log(
-      'will never reach this (redirected to /auth/42/callback within FortyTwoAuthGuard)',
-    );
     return;
   }
 

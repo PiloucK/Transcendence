@@ -36,19 +36,12 @@ export const UserStatusLayout = ({
                 userStatus: EmittedLiveStatus,
                 opponentLogin42: Login42 | undefined
               ) => {
-                console.log(
-                  "event user:update-status",
-                  opponentLogin42,
-                  userLogin42,
-                  userStatus
-                );
-
                 userStatusContext.setStatuses?.(
                   new Map(
                     userStatusContext.statuses.set(userLogin42, {
                       socketCount: -1,
                       status: userStatus,
-					  opponentLogin42
+                      opponentLogin42,
                     })
                   )
                 );

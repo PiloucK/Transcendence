@@ -23,13 +23,6 @@ export class StatusService {
       opponentLogin42,
       opponentStatusMetrics,
     ] of this.statuses.entries()) {
-      console.log(
-        'getOpponent',
-        this.statuses,
-        opponentLogin42,
-        opponentStatusMetrics,
-      );
-
       if (
         opponentStatusMetrics.status === 'IN_QUEUE' &&
         opponentLogin42 !== userLogin42

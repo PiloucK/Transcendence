@@ -17,8 +17,6 @@ const PlayButton = () => {
   const userStatusContext = useUserStatusContext();
 
   const findMatch = () => {
-    console.log("find-match function button play");
-
     socketContext.socket.emit(
       "user:find-match",
       sessionContext.userSelf.login42
