@@ -48,7 +48,9 @@ const Training = () => {
       <>
         <div className={styles.mainLayout_left_background} />
         <div className={styles.mainLayout_right_background} />
-        <CircularProgress className={styles.queue_circular_progress} />
+        <div className={styles.queue_circular_progress}>
+          <CircularProgress color="inherit" size="150px" />
+        </div>
       </>
     );
   }
