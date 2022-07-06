@@ -62,7 +62,7 @@ export function ButtonUserStatus({
         className={styles.social_friend_card_button}
         onClick={() => {
           Router.push({
-            pathname: "/game",
+            pathname: "/player-vs-player",
             query: {
               userLogin42: displayedUser.login42,
               opponentLogin42: userStatus.opponentLogin42,

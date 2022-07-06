@@ -56,7 +56,7 @@ export function ButtonTxtUserStatus({ login }: { login: string }) {
         className={styles.buttons}
         onClick={() => {
           Router.push({
-            pathname: "/game",
+            pathname: "/player-vs-player",
             query: {
               userLogin42: login,
               opponentLogin42: userStatus.opponentLogin42,
