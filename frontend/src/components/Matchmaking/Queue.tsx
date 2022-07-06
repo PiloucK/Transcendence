@@ -4,16 +4,28 @@ import { useSessionContext } from "../../context/SessionContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 export const Queue = () => {
-	const sessionContext = useSessionContext();
-	const socketContext = useSocketContext();
+  const sessionContext = useSessionContext();
+  const socketContext = useSocketContext();
 
-	function leaveQueue() {
-		socketContext.socket.emit("user:leave-queue", sessionContext.userSelf.login42); 
-	}
+  function leaveQueue() {
+    socketContext.socket.emit(
+      "user:leave-queue",
+      sessionContext.userSelf.login42
+    );
+  }
 
-	return (
-	<>
-	<CircularProgress className={styles.queue_circular_progress}/>
-	<Button onClick={leaveQueue} variant="contained" className={styles.queue_cancel_button}>Cancel</Button>
-	</>)
-}
+  return (
+    <>
+      <div className={styles.queue_circular_progress}>
+        <CircularProgress color="inherit" size="150px" />
+      </div>
+      <Button
+        onClick={leaveQueue}
+        variant="contained"
+        className={styles.queue_cancel_button}
+      >
+        Cancel
+      </Button>
+    </>
+  );
+};
