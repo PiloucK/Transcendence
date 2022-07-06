@@ -5,7 +5,6 @@ import {
   Post,
   Param,
   Patch,
-  Delete,
   UseGuards,
   UseInterceptors,
   UploadedFile,
@@ -24,34 +23,21 @@ import { createReadStream } from 'fs';
 import { join } from 'path';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   getAllSortedByElo(): Promise<User[]> {
     return this.usersService.getAllSortedByElo();
   }
 
   @Get('/:login42')
-  @UseGuards(JwtAuthGuard)
   getUserByLogin42(@Param('login42') login42: string): Promise<User> {
     return this.usersService.getUserByLogin42(login42);
   }
 
-  @Post('/:login42')
-  createUser(@Param('login42') login42: string): Promise<User> {
-    return this.usersService.createUser(login42, '');
-  }
-
-  @Delete() // dev
-  @UseGuards(JwtAuthGuard)
-  deleteAllUsers(): Promise<void> {
-    return this.usersService.deleteAllUsers();
-  }
-
   @Patch('/:login42/username')
-  @UseGuards(JwtAuthGuard)
   updateUsername(
     @Param('login42') login42: string,
     @Body() updateUsernameDto: UpdateUsernameDto,
@@ -65,7 +51,6 @@ export class UsersController {
   }
 
   @Post('/:login42/image')
-  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   updateUserImage(
     @Param('login42') login42: string,
@@ -76,7 +61,6 @@ export class UsersController {
   }
 
   @Get('/image/:imageId')
-  @UseGuards(JwtAuthGuard)
   getUserImage(@Param('imageId') imageId: string): StreamableFile {
     const file = createReadStream(
       join(process.cwd(), `/src/uploads/${imageId}`),
@@ -84,7 +68,6 @@ export class UsersController {
     return new StreamableFile(file);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch('/:login42/sendFriendRequest')
   sendFriendRequest(
     @Param('login42') login42: string,
@@ -98,7 +81,6 @@ export class UsersController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch('/:login42/cancelFriendRequest')
   cancelFriendRequest(
     @Param('login42') login42: string,
@@ -112,7 +94,6 @@ export class UsersController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch('/:login42/acceptFriendRequest')
   acceptFriendRequest(
     @Param('login42') login42: string,
@@ -126,7 +107,6 @@ export class UsersController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch('/:login42/declineFriendRequest')
   declineFriendRequest(
     @Param('login42') login42: string,
@@ -140,7 +120,6 @@ export class UsersController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch('/:login42/removeFriend')
   removeFriend(
     @Param('login42') login42: string,
@@ -150,7 +129,6 @@ export class UsersController {
     return this.usersService.removeFriend(reqUser, login42, friendLogin42Dto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch('/:login42/blockUser')
   blockUser(
     @Param('login42') login42: string,
@@ -160,7 +138,6 @@ export class UsersController {
     return this.usersService.blockUser(reqUser, login42, friendLogin42Dto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch('/:login42/unblockUser')
   unblockUser(
     @Param('login42') login42: string,
