@@ -32,8 +32,8 @@ interface IGame {
   player2: string | undefined;
   player1Score: number;
   player2Score: number;
-  player1PadTop: number;
-  player2PadTop: number;
+  player1PadPos: number;
+  player2PadPos: number;
   gameStatus: 'WAITING' | 'READY' | 'DONE';
   ballInfo: IBallInfo;
   ballVelocity: number;
@@ -172,8 +172,8 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         player2: undefined,
         player1Score: 0,
         player2Score: 0,
-        player1PadTop: 50,
-        player2PadTop: 50,
+        player1PadPos: 50,
+        player2PadPos: 50,
         gameStatus: 'WAITING',
         ballInfo: { position: { x: 50, y: 50 }, direction: { x: 50, y: 50 } },
         ballVelocity: 0.042,
@@ -246,6 +246,16 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
           },
           direction: currentGame.ballInfo.direction,
         };
+        const currentPad: ICoordinates =
+          nextBallInfo.direction.x < 0
+            ? {
+                x: 1,
+                y: currentGame.player1PadPos,
+              }
+            : {
+                x: 99,
+                y: currentGame.player2PadPos,
+              };
 
         // move ball
         // currentGame.ballInfo.position.x =
@@ -270,28 +280,29 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
         // check left paddle intersection
         if (
-          (nextBallInfo.direction.x < 0 && nextBallInfo.position.x <= 3) ||
-          (nextBallInfo.direction.x > 0 && nextBallInfo.position.x >= 97)
+          (nextBallInfo.direction.x < 0 && nextBallInfo.position.x <= 10) ||
+          (nextBallInfo.direction.x > 0 && nextBallInfo.position.x >= 90)
         ) {
           const padVector = {
             downPoint: {
-              x: nextBallInfo.direction.x < 0 ? 1 : 99,
-              y:
-                (nextBallInfo.direction.x < 0
-                  ? currentGame.player1PadTop
-                  : currentGame.player2PadTop) + 10,
+              x: currentPad.x,
+              y: currentPad.y + 5,
             },
             upPoint: {
-              x: nextBallInfo.direction.x < 0 ? 1 : 99,
-              y:
-                nextBallInfo.direction.x < 0
-                  ? currentGame.player1PadTop
-                  : currentGame.player2PadTop,
+              x: currentPad.x,
+              y: currentPad.y - 5,
             },
           };
-          // console.log('ball: ------------ ', nextBallInfo.position.y, nextBallInfo.direction.x < 0 ? 1 : 99, 'pad: ------ ', nextBallInfo.direction.x < 0
-          // ? currentGame.player1PadTop
-          // : currentGame.player2PadTop);
+
+          console.log(
+            'ball: ------------ ',
+            nextBallInfo.position,
+            'pad: ------ ',
+            currentPad,
+            'pad vector: -------',
+            padVector,
+          );
+
           const substracts = {
             pad: {
               x: 0,
@@ -322,31 +333,22 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
               substracts.ball.x * substracts.ball.y);
 
           if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
-            console.log('toto____________________');
             console.log(
-              'ball: ------------ X:',
-              nextBallInfo.position.x,
-              'Y:',
-              nextBallInfo.position.y,
+              'toto||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',
             );
-            console.log(
-              'pad: ------ ',
-              nextBallInfo.direction.x < 0 ? 1 : 99,
-              nextBallInfo.direction.x < 0
-                ? currentGame.player1PadTop
-                : currentGame.player2PadTop,
-            );
+            console.log('ball: ------------ X:', nextBallInfo.position);
+            console.log('pad: ------ ', padVector);
             console.log('_________________________');
             nextBallInfo.position.x =
               padVector.downPoint.x + t * substracts.pad.x;
             nextBallInfo.position.y =
               padVector.downPoint.y + t * substracts.pad.y;
-
+            ``;
             let collidePoint =
               nextBallInfo.position.y -
               ((nextBallInfo.direction.x < 0
-                ? currentGame.player1PadTop
-                : currentGame.player2PadTop) +
+                ? currentGame.player1PadPos
+                : currentGame.player2PadPos) +
                 5);
             collidePoint /= 5;
 
@@ -377,9 +379,9 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     const currentGame = this.runningGames.get(gameID);
 
     if (currentGame && player === currentGame.player1) {
-      currentGame.player1PadTop = paddlePosition - 5;
+      currentGame.player1PadPos = paddlePosition;
     } else if (currentGame && player === currentGame.player2) {
-      currentGame.player2PadTop = paddlePosition - 5;
+      currentGame.player2PadPos = paddlePosition;
     }
 
     this.server

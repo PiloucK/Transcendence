@@ -29,14 +29,12 @@ const PlayerVsPlayer = () => {
   const invert = useRef(0);
 
   const sessionContext = useSessionContext();
-  const errorContext = useErrorContext();
   const { userLogin42, opponentLogin42 } = useRouter().query;
 
   const secondMount = useRef(false);
   const [gameReady, setGameReady] = useState(false);
   const [winnerUsername, setWinnerUsername] = useState("");
   const router = useRouter();
-  // const isPointLost = useRef<boolean>(false);
 
   useEffect(() => {
     if (gameSocket.current === undefined) {
@@ -88,7 +86,6 @@ const PlayerVsPlayer = () => {
       );
 
       gameSocket.current.on("game:update-score", (login42: Login42) => {
-        // isPointLost.current = false;
         if (login42 === player2.current) {
           setPlayerScore((prevState) => prevState + 1);
         } else if (login42 === player1.current) {
@@ -97,18 +94,7 @@ const PlayerVsPlayer = () => {
       });
 
       gameSocket.current.on("game:winner", (login42: Login42) => {
-        userService
-          .getOne(login42)
-          .then((user: IUserSlim) => {
-            setWinnerUsername(user.username);
-
-            setTimeout(() => {
               router.push("/");
-            }, 5000);
-          })
-          .catch((error) => {
-            errorContext.newError?.(errorHandler(error, sessionContext));
-          });
       });
     }
 
@@ -148,7 +134,6 @@ const PlayerVsPlayer = () => {
       <Ball
         gameSocket={gameSocket.current}
         gameID={gameID.current}
-        // isPointLost={isPointLost}
       />
       <PlayerPaddle
         gameSocket={gameSocket.current}
