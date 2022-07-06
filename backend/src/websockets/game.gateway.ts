@@ -9,8 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { MatchService } from 'src/match/match.service';
-import { StatusService } from 'src/status/status.service';
-import { EmittedLiveStatus } from 'src/status/status.type';
+import { SocketId } from 'src/status/status.type';
 import { MainGateway } from './main.gateway';
 
 interface ICoordinates {
@@ -21,6 +20,11 @@ interface ICoordinates {
 interface IBallInfo {
   position: ICoordinates;
   direction: ICoordinates;
+}
+
+interface IUserGameConnection {
+  login42: string;
+  gameId: string;
 }
 
 interface IGame {
@@ -60,6 +64,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
   private server!: Server;
 
   private runningGames = new Map<string, IGame>();
+  private sockets = new Map<SocketId, IUserGameConnection>();
 
   constructor(
     private readonly matchService: MatchService,
@@ -72,6 +77,13 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('game-disconnection', client.id);
+    const userGameConnection = this.sockets.get(client.id);
+    if (userGameConnection) {
+      this.onGameUnmount(
+        [userGameConnection.gameId, userGameConnection.login42],
+        client,
+      );
+    }
   }
 
   @SubscribeMessage('game:unmount')
@@ -82,6 +94,8 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     const [gameID, login42] = data;
 
     const currentGame = this.runningGames.get(gameID);
+
+    this.sockets.delete(client.id);
 
     if (currentGame) {
       if (
@@ -139,6 +153,8 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     const [player1, player2, userSelf] = data;
 
     const gameID = player1 + player2;
+
+    this.sockets.set(client.id, { login42: userSelf, gameId: gameID });
 
     client.join(gameID);
 
