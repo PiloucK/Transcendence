@@ -36,16 +36,6 @@ function GameList({ userLogin }: { userLogin: string }) {
 
   React.useEffect(fetchMatch, [userLogin]);
 
-  React.useEffect(() => {
-    socketContext.socket.on("update-leaderboard", fetchMatch);
-    return () => {
-      socketContext.socket.removeListener(
-        "update-leaderboard",
-        fetchMatch
-      );
-    };
-  }, []);
-
   if (matches.length !== 0) {
     return (
       <>
