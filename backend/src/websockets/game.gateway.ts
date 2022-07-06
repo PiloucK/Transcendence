@@ -9,6 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { MatchService } from 'src/match/match.service';
+import { SocketId } from 'src/status/status.type';
 import { MainGateway } from './main.gateway';
 
 interface ICoordinates {
@@ -221,6 +222,8 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     if (currentGame && currentGame.intervalID === undefined) {
       currentGame.ballInfo = initBall();
       const deltaTime = 1000 / 60;
+	  currentGame.ballVelocity = 0.042;
+	  currentGame.bounceCount = 0;
     //   const ballVelocity = 0.035;
 
       currentGame.intervalID = setInterval(() => {
