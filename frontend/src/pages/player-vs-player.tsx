@@ -11,6 +11,10 @@ import { useSessionContext } from "../context/SessionContext";
 import { io, Socket } from "socket.io-client";
 import getConfig from "next/config";
 import { Login42 } from "../interfaces/status.types";
+import userService from "../services/user";
+import { useErrorContext } from "../context/ErrorContext";
+import { errorHandler } from "../errors/errorHandler";
+import { IUserSlim } from "../interfaces/IUser";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -29,9 +33,8 @@ const PlayerVsPlayer = () => {
 
   const secondMount = useRef(false);
   const [gameReady, setGameReady] = useState(false);
-  const [winnerLogin42, setWinnerLogin42] = useState("");
+  const [winnerUsername, setWinnerUsername] = useState("");
   const router = useRouter();
-  const isPointLost = useRef<boolean>(false);
 
   useEffect(() => {
     if (gameSocket.current === undefined) {
@@ -83,20 +86,18 @@ const PlayerVsPlayer = () => {
       );
 
       gameSocket.current.on("game:update-score", (login42: Login42) => {
-        isPointLost.current = false;
         if (login42 === player2.current) {
           setPlayerScore((prevState) => prevState + 1);
         } else if (login42 === player1.current) {
           setOpponentScore((prevState) => prevState + 1);
         }
+        setTimeout(() => {
+          gameSocket.current?.emit("game:new-point", gameID.current);
+        }, 2000);
       });
 
-      gameSocket.current.on("game:winner", (Login42: Login42) => {
-        setWinnerLogin42(Login42);
-
-        setTimeout(() => {
-          router.push("/");
-        }, 5000);
+      gameSocket.current.on("game:winner", (login42: Login42) => {
+        router.push("/");
       });
     }
 
@@ -105,7 +106,6 @@ const PlayerVsPlayer = () => {
       if (secondMount.current !== true) {
         secondMount.current = true;
       } else {
-        console.log("unmounting game");
         if (gameSocket.current != undefined) {
           gameSocket.current.emit(
             "game:unmount",
@@ -113,8 +113,6 @@ const PlayerVsPlayer = () => {
             sessionContext.userSelf.login42
           );
           gameSocket.current.removeAllListeners();
-          console.log("closing socket");
-          // IF SPECATOR LEAVES HE STOPS THE GAME
         }
       }
     };
@@ -129,15 +127,11 @@ const PlayerVsPlayer = () => {
   }
   return (
     <div className={styles.mainLayout_background}>
-      {winnerLogin42 !== "" && (
-        <div className={styles.play}>Well played {winnerLogin42}</div>
+      {winnerUsername !== "" && (
+        <div className={styles.play}>Well played {winnerUsername}</div>
       )}
       <Score player={playerScore} opponent={opponentScore} />
-      <Ball
-        gameSocket={gameSocket.current}
-        gameID={gameID.current}
-        isPointLost={isPointLost}
-      />
+      <Ball gameSocket={gameSocket.current} gameID={gameID.current} />
       <PlayerPaddle
         gameSocket={gameSocket.current}
         gameID={gameID.current}

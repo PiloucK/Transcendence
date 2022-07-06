@@ -139,6 +139,9 @@ export const SetProfileFirstLogin = () => {
           </Avatar>
         </Avatar>
       </label>
+	  You can go back to the home page by pressing escape.
+	  <br/>
+	  ⚠️ Doing so in game will result in a defeat.
     </Dialog>
   );
 };

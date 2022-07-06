@@ -11,41 +11,38 @@ import { Queue } from "../components/Matchmaking/Queue";
 import { defaultSessionState } from "../constants/defaultSessionState";
 import Link from "next/link";
 
-
 const PlayButton = () => {
-	const socketContext = useSocketContext();
-	const sessionContext = useSessionContext();
-	const userStatusContext = useUserStatusContext();
-  
-	const findMatch = () => {
-	  console.log("find-match function button play");
-  
-	  socketContext.socket.emit(
-		"user:find-match",
-		sessionContext.userSelf.login42
-	  );
-	};
-  
-	if (sessionContext.userSelf !== defaultSessionState.userSelf) {
-	  if (
-		userStatusContext.statuses.get(sessionContext.userSelf.login42)
-		  ?.status === "IN_QUEUE"
-	  ) {
-		return <Queue />;
-	  } else {
-		return (
-		  <div className={styles.play} onClick={findMatch}>
-			PLAY
-		  </div>
-		);
-	  }
-	}
-	return  (
-	  <Link href="/training-mode" className={styles.play}>
-		<div className={styles.play}>PLAY</div>
-	  </Link>
-	);;
+  const socketContext = useSocketContext();
+  const sessionContext = useSessionContext();
+  const userStatusContext = useUserStatusContext();
+
+  const findMatch = () => {
+    socketContext.socket.emit(
+      "user:find-match",
+      sessionContext.userSelf.login42
+    );
   };
+
+  if (sessionContext.userSelf !== defaultSessionState.userSelf) {
+    if (
+      userStatusContext.statuses.get(sessionContext.userSelf.login42)
+        ?.status === "IN_QUEUE"
+    ) {
+      return <Queue />;
+    } else {
+      return (
+        <div className={styles.play} onClick={findMatch}>
+          PLAY
+        </div>
+      );
+    }
+  }
+  return (
+    <Link href="/training-mode?computerlvl=2" className={styles.play}>
+      <div className={styles.play}>PLAY</div>
+    </Link>
+  );
+};
 
 export const IndexLayout = ({ children }: { children: React.ReactNode }) => {
   const sessionContext = useSessionContext();

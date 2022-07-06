@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Res,
-  UseFilters,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { FortyTwoAuthGuard } from './guards/fortyTwoAuth.guard';
@@ -27,9 +20,6 @@ export class AuthController {
   @UseGuards(FortyTwoAuthGuard) // pass through FortyTwoStrategy
   @Get()
   fortyTwoAuth(): void {
-    console.log(
-      'will never reach this (redirected to /auth/42/callback within FortyTwoAuthGuard)',
-    );
     return;
   }
 
@@ -50,18 +40,6 @@ export class AuthController {
         'FRONTEND_PORT',
       )}`,
     );
-  }
-
-  // dev
-  @Get('getToken/:login42')
-  getTokenForUser(
-    @Param('login42') login42: string,
-    @Res() response: Response,
-  ): void {
-    const jwtToken = this.authService.issueJwtToken(login42);
-    const cookie = this.authService.getAccessTokenCookie(jwtToken);
-    response.setHeader('Set-Cookie', cookie);
-    response.send(login42); // "return login42;" doesn't work
   }
 
   @UseGuards(JwtAuthGuard)

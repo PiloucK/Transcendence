@@ -18,11 +18,9 @@ export class MainGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server!: Server;
 
   handleConnection(@ConnectedSocket() client: Socket) {
-    console.log('connection', client.id);
   }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
-    console.log('disconnection', client.id);
     const userLogin42 = this.statusService.remove(client.id);
     if (userLogin42) {
       this.updateStatus(userLogin42, 'OFFLINE');
@@ -34,14 +32,6 @@ export class MainGateway implements OnGatewayConnection, OnGatewayDisconnect {
     status: EmittedLiveStatus,
     opponentLogin42: string | undefined = undefined,
   ) {
-    console.log(
-      'server user:update-status',
-      userLogin42,
-      status,
-      opponentLogin42,
-      this.statusService.getStatuses(),
-    );
-
     this.server.emit(
       'user:update-status',
       userLogin42,
@@ -52,8 +42,6 @@ export class MainGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('user:find-match')
   onUserFindMatch(@MessageBody() userLogin42: string) {
-    console.log('user:find-match', userLogin42);
-
     const opponentLogin42 = this.statusService.getOpponent(userLogin42);
     if (!opponentLogin42) {
       this.updateStatus(userLogin42, 'IN_QUEUE');
@@ -98,7 +86,6 @@ export class MainGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() userLogin42: string,
     @ConnectedSocket() client: Socket,
   ) {
-    console.log('user:login', userLogin42, client.id);
     if (this.statusService.add(client.id, userLogin42) === 'EMIT') {
       this.updateStatus(userLogin42, 'ONLINE');
     }
@@ -115,7 +102,6 @@ export class MainGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() userLogin42: string,
     @ConnectedSocket() client: Socket,
   ) {
-    console.log('user:logout', userLogin42, client.id);
     if (this.statusService.remove(client.id) === 'EMIT') {
       this.updateStatus(userLogin42, 'OFFLINE');
     }
