@@ -1,0 +1,1104 @@
+Attaching to backend-transcendence, database-transcendence, frontend-transcendence
+database-transcendence  | 
+database-transcendence  | PostgreSQL Database directory appears to contain a database; Skipping initialization
+database-transcendence  | 
+database-transcendence  | 2022-07-06 21:15:43.850 UTC [1] LOG:  starting PostgreSQL 14.4 (Debian 14.4-1.pgdg110+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+database-transcendence  | 2022-07-06 21:15:43.850 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+database-transcendence  | 2022-07-06 21:15:43.850 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+frontend-transcendence  | 
+frontend-transcendence  | > dev
+frontend-transcendence  | > next dev
+frontend-transcendence  | 
+database-transcendence  | 2022-07-06 21:15:44.003 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+frontend-transcendence  | ready - started server on 0.0.0.0:3000, url: http://localhost:3000
+database-transcendence  | 2022-07-06 21:15:44.073 UTC [26] LOG:  database system was shut down at 2022-07-06 21:15:39 UTC
+database-transcendence  | 2022-07-06 21:15:44.107 UTC [1] LOG:  database system is ready to accept connections
+backend-transcendence   | 
+backend-transcendence   | > start:dev
+backend-transcendence   | > nest start --watch
+backend-transcendence   | 
+backend-transcendence   | c[[90m9:15:45 PM[0m] Starting compilation in watch mode...
+backend-transcendence   | 
+frontend-transcendence  | event - compiled client and server successfully in 2s (1176 modules)
+frontend-transcendence  | wait  - compiling / (client and server)...
+frontend-transcendence  | event - compiled client and server successfully in 1128 ms (1233 modules)
+backend-transcendence   | [[90m9:15:48 PM[0m] Found 0 errors. Watching for file changes.
+backend-transcendence   | 
+frontend-transcendence  | dockguest
+frontend-transcendence  | dockguest
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+frontend-transcendence  | wait  - compiling /_error (client and server)...
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +59ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPassportModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mStatusModule dependencies initialized[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +31ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +253ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +3ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrivateConvModule dependencies initialized[39m[38;5;3m +6ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mWebsocketsModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mUsersModule dependencies initialized[39m[38;5;3m +3ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMatchModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mInvitationModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTwoFactorAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mChannelModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:find-match" message[39m[38;5;3m +20ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "game:match-end" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:accept-match" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:login" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:leave-queue" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:logout" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:new" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:invitation-sent" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-elo" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-username" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-image" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-relations" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-direct-messages" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-public-channels" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-joined-channels" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-channel-content" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:unmount" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:enter" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:new-point" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:paddleMove" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:ballCountered" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mUsersController {/users}:[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, GET} route[39m[38;5;3m +3ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, DELETE} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/username, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/image, POST} route[39m[38;5;3m +7ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/image/:imageId, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/sendFriendRequest, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/cancelFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/acceptFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/declineFriendRequest, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/removeFriend, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/blockUser, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/unblockUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/auth}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/42/callback, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/getToken/:login42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/getLoggedInUser, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTwoFactorAuthController {/two-factor-auth}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/generate-qrcode, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/turn-on, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/authenticate, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/turn-off, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/set-up, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mPrivateConvController {/privateConv}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:senderLogin42/:receiverLogin42, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/sendPrivateMessage, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:login42/:fLogin42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:login42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mChannelController {/channel}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/createChannel, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/updateChannel/:channelId, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinProtectedChannel, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinChannel, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/inviteToChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/leaveChannel, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/muteAChannelUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/banAChannelUser, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/setAChannelAdmin, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/unsetAChannelAdmin, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/sendMSGToChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/channel/:channelId, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/image/:channelId, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/image/:channelId/:imageId, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/channel/:channelId/invitableFriends, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/publicChannels, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinedChannels, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mStatusController {/user-status}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user-status, GET} route[39m[38;5;3m +3ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mMatchController {/match}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/match/:userLogin42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/match, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mInvitationController {/invitation}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation/:userLogin42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation/:inviterLogin42, DELETE} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 31  - [39m07/06/2022, 9:15:50 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +5ms[39m
+frontend-transcendence  | event - compiled client and server successfully in 386 ms (1234 modules)
+frontend-transcendence  | warn  - Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/basic-features/fast-refresh#how-it-works
+backend-transcendence   | connection x7N5G-rbC84exSUtAAAB
+frontend-transcendence  | wait  - compiling /player-vs-player (client and server)...
+frontend-transcendence  | event - compiled client and server successfully in 307 ms (1266 modules)
+backend-transcendence   | connection CZiktvG0JNVnHHhNAAAD
+frontend-transcendence  | warn  - Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/basic-features/fast-refresh#how-it-works
+frontend-transcendence  | warn  - Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/basic-features/fast-refresh#how-it-works
+frontend-transcendence  | TypeError: Failed to fetch
+frontend-transcendence  |     at __webpack_require__.hmrM (http://10.11.10.5:3000/_next/static/chunks/webpack.js?ts=1657142049295:1186:20)
+backend-transcendence   | connection T5lfowvm04xmpbMAAAAF
+frontend-transcendence  | warn  - Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/basic-features/fast-refresh#how-it-works
+frontend-transcendence  | wait  - compiling /chat (client and server)...
+backend-transcendence   | connection Xl_sdruckwliXpnsAAAI
+backend-transcendence   | connection fq0e3_Fn3foSJXMVAAAJ
+frontend-transcendence  | event - compiled client and server successfully in 889 ms (1375 modules)
+frontend-transcendence  | dockguest
+backend-transcendence   | connection 0_DUe_JWwEmDxO6gAAAL
+backend-transcendence   | user:login coucou Xl_sdruckwliXpnsAAAI
+backend-transcendence   | server user:update-status coucou ONLINE undefined Map(1) { 'coucou' => { socketCount: 1, status: 'ONLINE' } }
+backend-transcendence   | user:login coucou Xl_sdruckwliXpnsAAAI
+backend-transcendence   | user:login mvidal-a fq0e3_Fn3foSJXMVAAAJ
+backend-transcendence   | server user:update-status mvidal-a ONLINE undefined Map(2) {
+backend-transcendence   |   'coucou' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | user:login mvidal-a fq0e3_Fn3foSJXMVAAAJ
+backend-transcendence   | connection WPhCCXJzVu6BpJ89AAAN
+backend-transcendence   | connection xFHpZBPZvA5-Gx9OAAAP
+backend-transcendence   | user:find-match coucou
+backend-transcendence   | getOpponent Map(2) {
+backend-transcendence   |   'coucou' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } coucou { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | getOpponent Map(2) {
+backend-transcendence   |   'coucou' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } mvidal-a { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | server user:update-status coucou IN_QUEUE undefined Map(2) {
+backend-transcendence   |   'coucou' => { socketCount: 1, status: 'IN_QUEUE' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | game-connection Fazsx0ztZBv6ZDw6AAAQ
+backend-transcendence   | Norminet has joined the game of 0
+backend-transcendence   | user:login coucou WPhCCXJzVu6BpJ89AAAN
+backend-transcendence   | user:login coucou WPhCCXJzVu6BpJ89AAAN
+backend-transcendence   | game-connection dLYN1xg2Q4xNajnjAAAS
+backend-transcendence   | game-connection C79WcbeYPVpUqEdsAAAU
+backend-transcendence   | connection _qMhTY2eIUmYrC3OAAAW
+backend-transcendence   | game-connection PqRXORyEDF4SJXwaAAAX
+frontend-transcendence  | warn  - Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/basic-features/fast-refresh#how-it-works
+backend-transcendence   | game-disconnection dLYN1xg2Q4xNajnjAAAS
+backend-transcendence   | disconnection _qMhTY2eIUmYrC3OAAAW
+backend-transcendence   | game-disconnection PqRXORyEDF4SJXwaAAAX
+backend-transcendence   | game-disconnection C79WcbeYPVpUqEdsAAAU
+backend-transcendence   | user:login ldutriez xFHpZBPZvA5-Gx9OAAAP
+backend-transcendence   | server user:update-status ldutriez ONLINE undefined Map(3) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_QUEUE' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | user:login ldutriez xFHpZBPZvA5-Gx9OAAAP
+backend-transcendence   | user:find-match mvidal-a
+backend-transcendence   | getOpponent Map(3) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_QUEUE' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } coucou { socketCount: 2, status: 'IN_QUEUE' }
+backend-transcendence   | server user:update-status mvidal-a IN_GAME coucou Map(3) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | server user:update-status coucou IN_GAME mvidal-a Map(3) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | game-connection x7uRJVI1mrLXHB9NAAAZ
+backend-transcendence   | game-connection hncyBn6Xqc6_F7WpAAAa
+backend-transcendence   | coucou has joined the game of coucoumvidal-a
+backend-transcendence   | mvidal-a has joined the game of coucoumvidal-a
+backend-transcendence   | sending game start mvidal-a
+backend-transcendence   | user:login coucou Xl_sdruckwliXpnsAAAI
+backend-transcendence   | user:login coucou Xl_sdruckwliXpnsAAAI
+backend-transcendence   | user:login mvidal-a fq0e3_Fn3foSJXMVAAAJ
+backend-transcendence   | user:login mvidal-a fq0e3_Fn3foSJXMVAAAJ
+backend-transcendence   | connection yQnNBaXcMOaW-BTQAAAb
+backend-transcendence   | game-connection IfhU0Zy90EYXurUAAAAc
+backend-transcendence   | user:login mvidal-a yQnNBaXcMOaW-BTQAAAb
+backend-transcendence   | user:login mvidal-a yQnNBaXcMOaW-BTQAAAb
+backend-transcendence   | Norminet has joined the game of 0
+backend-transcendence   | game-connection ByJykU03t0s4ubOyAAAe
+backend-transcendence   | connection 53jHn1ZoJBmUro9MAAAg
+backend-transcendence   | game-connection LIu1uLLqqybttZDOAAAh
+frontend-transcendence  | warn  - Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/basic-features/fast-refresh#how-it-works
+backend-transcendence   | game-disconnection ByJykU03t0s4ubOyAAAe
+backend-transcendence   | disconnection 53jHn1ZoJBmUro9MAAAg
+backend-transcendence   | game-disconnection LIu1uLLqqybttZDOAAAh
+backend-transcendence   | connection NZpe5RoeaiCFgH7LAAAj
+backend-transcendence   | game-connection iQgTWzwoyLlQXjesAAAk
+backend-transcendence   | user:login fdidelot NZpe5RoeaiCFgH7LAAAj
+backend-transcendence   | server user:update-status fdidelot ONLINE undefined Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | user:login fdidelot NZpe5RoeaiCFgH7LAAAj
+backend-transcendence   | Norminet has joined the game of 0
+backend-transcendence   | user:login fdidelot NZpe5RoeaiCFgH7LAAAj
+backend-transcendence   | user:login fdidelot NZpe5RoeaiCFgH7LAAAj
+backend-transcendence   | user:find-match fdidelot
+backend-transcendence   | getOpponent Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } coucou { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' }
+backend-transcendence   | getOpponent Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } mvidal-a { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' }
+backend-transcendence   | getOpponent Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } ldutriez { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | getOpponent Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } fdidelot { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | server user:update-status fdidelot IN_QUEUE undefined Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'IN_QUEUE' }
+backend-transcendence   | }
+backend-transcendence   | server user:update-status fdidelot ONLINE undefined Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | disconnection NZpe5RoeaiCFgH7LAAAj
+backend-transcendence   | server user:update-status fdidelot OFFLINE undefined Map(3) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | game-disconnection iQgTWzwoyLlQXjesAAAk
+frontend-transcendence  | dockguest
+backend-transcendence   | connection vLzUhWJY9qWBliozAAAm
+backend-transcendence   | user:login fdidelot vLzUhWJY9qWBliozAAAm
+backend-transcendence   | server user:update-status fdidelot ONLINE undefined Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | user:login fdidelot vLzUhWJY9qWBliozAAAm
+backend-transcendence   | user:find-match fdidelot
+backend-transcendence   | getOpponent Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } coucou { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' }
+backend-transcendence   | getOpponent Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } mvidal-a { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' }
+backend-transcendence   | getOpponent Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } ldutriez { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | getOpponent Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } fdidelot { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | server user:update-status fdidelot IN_QUEUE undefined Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'IN_QUEUE' }
+backend-transcendence   | }
+backend-transcendence   | server user:update-status fdidelot ONLINE undefined Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'mvidal-a' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | user:login fdidelot vLzUhWJY9qWBliozAAAm
+backend-transcendence   | user:login fdidelot vLzUhWJY9qWBliozAAAm
+backend-transcendence   | user:login fdidelot vLzUhWJY9qWBliozAAAm
+backend-transcendence   | user:login fdidelot vLzUhWJY9qWBliozAAAm
+frontend-transcendence  | wait  - compiling...
+backend-transcendence   | c[[90m9:17:34 PM[0m] File change detected. Starting incremental compilation...
+backend-transcendence   | 
+frontend-transcendence  | event - compiled client and server successfully in 987 ms (1349 modules)
+backend-transcendence   | game-connection db0lnV1cN2hlB0E-AAAo
+backend-transcendence   | coucou has joined the game of coucoumvidal-a
+backend-transcendence   | game-connection zbDOjnbFrFYYwxv_AAAq
+backend-transcendence   | mvidal-a has joined the game of coucoumvidal-a
+backend-transcendence   | game-disconnection x7uRJVI1mrLXHB9NAAAZ
+backend-transcendence   | game:unmount
+frontend-transcendence  | wait  - compiling /...
+backend-transcendence   | server user:update-status coucou ONLINE undefined Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'ONLINE' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | server user:update-status mvidal-a ONLINE undefined Map(4) {
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'ONLINE' },
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'ONLINE' },
+backend-transcendence   |   'ldutriez' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'fdidelot' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | game-disconnection hncyBn6Xqc6_F7WpAAAa
+backend-transcendence   | game:unmount
+backend-transcendence   | game-connection UxNAmAdKJkPLu3WWAAAs
+backend-transcendence   | coucou has joined the game of coucoumvidal-a
+backend-transcendence   | game-connection R7jTpoGKUljk2DydAAAu
+backend-transcendence   | mvidal-a has joined the game of coucoumvidal-a
+backend-transcendence   | sending game start mvidal-a
+backend-transcendence   | game-disconnection R7jTpoGKUljk2DydAAAu
+backend-transcendence   | game:unmount
+backend-transcendence   | [[90m9:17:35 PM[0m] Found 0 errors. Watching for file changes.
+backend-transcendence   | 
+frontend-transcendence  | event - compiled client and server successfully in 521 ms (1361 modules)
+backend-transcendence   | c[[90m9:17:35 PM[0m] File change detected. Starting incremental compilation...
+backend-transcendence   | 
+backend-transcendence   | [[90m9:17:36 PM[0m] Found 0 errors. Watching for file changes.
+backend-transcendence   | 
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +51ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPassportModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mStatusModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +36ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +169ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrivateConvModule dependencies initialized[39m[38;5;3m +5ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mWebsocketsModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mUsersModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMatchModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mInvitationModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTwoFactorAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mChannelModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:find-match" message[39m[38;5;3m +21ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "game:match-end" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:accept-match" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:login" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:leave-queue" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:logout" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:new" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:invitation-sent" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-elo" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-username" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-image" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-relations" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-direct-messages" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-public-channels" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-joined-channels" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-channel-content" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:unmount" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:enter" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:new-point" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:paddleMove" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:ballCountered" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:point-lost" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mUsersController {/users}:[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, GET} route[39m[38;5;3m +3ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, DELETE} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/username, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/image, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/image/:imageId, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/sendFriendRequest, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/cancelFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/acceptFriendRequest, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/declineFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/removeFriend, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/blockUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/unblockUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/auth}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/42/callback, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/getToken/:login42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/getLoggedInUser, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTwoFactorAuthController {/two-factor-auth}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/generate-qrcode, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/turn-on, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/authenticate, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/turn-off, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/set-up, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mPrivateConvController {/privateConv}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:senderLogin42/:receiverLogin42, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/sendPrivateMessage, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:login42/:fLogin42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:login42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mChannelController {/channel}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/createChannel, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/updateChannel/:channelId, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinProtectedChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinChannel, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/inviteToChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/leaveChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/muteAChannelUser, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/banAChannelUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/setAChannelAdmin, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/unsetAChannelAdmin, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/sendMSGToChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/channel/:channelId, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/image/:channelId, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/image/:channelId/:imageId, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/channel/:channelId/invitableFriends, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/publicChannels, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinedChannels, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mStatusController {/user-status}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user-status, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mMatchController {/match}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/match/:userLogin42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/match, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mInvitationController {/invitation}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation/:userLogin42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation/:inviterLogin42, DELETE} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 55  - [39m07/06/2022, 9:17:37 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +4ms[39m
+backend-transcendence   | connection QjoG5v9VyGaCUmGDAAAB
+backend-transcendence   | connection mNKrcfO_W2lBkBKJAAAE
+backend-transcendence   | game-connection qjR4gXePcQQ6LERxAAAF
+backend-transcendence   | connection ofTaVJhvdqB_xaOnAAAG
+backend-transcendence   | connection 9Hp5fiEEuZFSfzPoAAAI
+backend-transcendence   | game-connection G2ghEKVqViqIgEOKAAAK
+backend-transcendence   | connection 7eaxUJIKUGxJSw7BAAAM
+backend-transcendence   | game-connection sooLpg9IXMDE74VsAAAN
+backend-transcendence   | connection -l5np64Kyg8MX4PIAAAP
+backend-transcendence   | connection 1kIUmK2YzkzMmYgBAAAR
+backend-transcendence   | game-connection XUqGD44ez2XisVx5AAAT
+backend-transcendence   | connection lV9esj6ZH7gWBj7HAAAV
+backend-transcendence   | game-connection _Elyxtv1ConK8Dl5AAAY
+backend-transcendence   | connection UBU-rEY5clHo3h_1AAAZ
+backend-transcendence   | connection EDSZyTEZxB3WF3lVAAAb
+frontend-transcendence  | wait  - compiling...
+frontend-transcendence  | event - compiled successfully in 208 ms (1162 modules)
+backend-transcendence   | c[[90m9:18:00 PM[0m] File change detected. Starting incremental compilation...
+backend-transcendence   | 
+backend-transcendence   | [[90m9:18:01 PM[0m] Found 0 errors. Watching for file changes.
+backend-transcendence   | 
+backend-transcendence   | c[[90m9:18:01 PM[0m] File change detected. Starting incremental compilation...
+backend-transcendence   | 
+backend-transcendence   | [[90m9:18:01 PM[0m] Found 0 errors. Watching for file changes.
+backend-transcendence   | 
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:02 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:02 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +53ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:02 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:02 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:02 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPassportModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:02 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:02 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:02 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:02 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:02 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mStatusModule dependencies initialized[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:02 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +23ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +171ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrivateConvModule dependencies initialized[39m[38;5;3m +6ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mWebsocketsModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mUsersModule dependencies initialized[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMatchModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mInvitationModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTwoFactorAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mChannelModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:find-match" message[39m[38;5;3m +18ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "game:match-end" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:accept-match" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:login" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:leave-queue" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:logout" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:new" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:invitation-sent" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-elo" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-username" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-image" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-relations" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-direct-messages" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-public-channels" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-joined-channels" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-channel-content" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:unmount" message[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:enter" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:new-point" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:paddleMove" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:ballCountered" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:point-lost" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mUsersController {/users}:[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, GET} route[39m[38;5;3m +3ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, DELETE} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/username, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/image, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/image/:imageId, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/sendFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/cancelFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/acceptFriendRequest, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/declineFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/removeFriend, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/blockUser, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/unblockUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/auth}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/42/callback, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/getToken/:login42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/getLoggedInUser, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTwoFactorAuthController {/two-factor-auth}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/generate-qrcode, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/turn-on, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/authenticate, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/turn-off, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/set-up, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mPrivateConvController {/privateConv}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:senderLogin42/:receiverLogin42, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/sendPrivateMessage, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:login42/:fLogin42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:login42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mChannelController {/channel}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/createChannel, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/updateChannel/:channelId, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinProtectedChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinChannel, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/inviteToChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/leaveChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/muteAChannelUser, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/banAChannelUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/setAChannelAdmin, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/unsetAChannelAdmin, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/sendMSGToChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/channel/:channelId, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/image/:channelId, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/image/:channelId/:imageId, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/channel/:channelId/invitableFriends, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/publicChannels, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinedChannels, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mStatusController {/user-status}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user-status, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mMatchController {/match}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/match/:userLogin42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/match, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mInvitationController {/invitation}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation/:userLogin42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation/:inviterLogin42, DELETE} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 79  - [39m07/06/2022, 9:18:03 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +5ms[39m
+backend-transcendence   | connection uNBK2ANXKtZVy704AAAB
+backend-transcendence   | game-connection Yx3KSLfk-3H6js3NAAAD
+backend-transcendence   | connection kPvCENrIMwLMg9k1AAAG
+backend-transcendence   | game-connection pex2In2SfAAtC8fSAAAH
+backend-transcendence   | connection uj8aiD0sSqmR45hJAAAJ
+backend-transcendence   | connection jxBrLBuxn9AcCBtvAAAL
+backend-transcendence   | connection 0QORlPO08j1gyWspAAAN
+backend-transcendence   | connection diSPSmT8VFxE0RXVAAAP
+backend-transcendence   | game-connection X8AqhZJ9O3vzVMt5AAAQ
+backend-transcendence   | game-connection ZzXJB-Uy4ZTiH8uwAAAS
+backend-transcendence   | connection qQ5Uq8z_eb_cfM1mAAAU
+backend-transcendence   | connection FbrCyLxcPa8_3wmsAAAW
+backend-transcendence   | connection WLcxEu5zBIAkD4z-AAAY
+backend-transcendence   | game-connection ZWXjbkOzO1tWVX-9AAAZ
+backend-transcendence   | connection TMrOJDYT-sDBGfpBAAAb
+backend-transcendence   | c[[90m9:19:06 PM[0m] File change detected. Starting incremental compilation...
+backend-transcendence   | 
+backend-transcendence   | [[90m9:19:06 PM[0m] Found 0 errors. Watching for file changes.
+backend-transcendence   | 
+backend-transcendence   | c[[90m9:19:06 PM[0m] File change detected. Starting incremental compilation...
+backend-transcendence   | 
+backend-transcendence   | [[90m9:19:07 PM[0m] Found 0 errors. Watching for file changes.
+backend-transcendence   | 
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +59ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPassportModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mStatusModule dependencies initialized[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +24ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +189ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrivateConvModule dependencies initialized[39m[38;5;3m +6ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mWebsocketsModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mUsersModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMatchModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mInvitationModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTwoFactorAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mChannelModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:find-match" message[39m[38;5;3m +19ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "game:match-end" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:accept-match" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:login" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:leave-queue" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:logout" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:new" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:invitation-sent" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-elo" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-username" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-image" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-relations" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-direct-messages" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-public-channels" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-joined-channels" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-channel-content" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:unmount" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:enter" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:new-point" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:paddleMove" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:ballCountered" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:point-lost" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mUsersController {/users}:[39m[38;5;3m +3ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, GET} route[39m[38;5;3m +3ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, DELETE} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/username, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/image, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/image/:imageId, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/sendFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/cancelFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/acceptFriendRequest, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/declineFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/removeFriend, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/blockUser, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/unblockUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/auth}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/42/callback, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/getToken/:login42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/getLoggedInUser, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTwoFactorAuthController {/two-factor-auth}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/generate-qrcode, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/turn-on, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/authenticate, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/turn-off, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/set-up, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mPrivateConvController {/privateConv}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:senderLogin42/:receiverLogin42, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/sendPrivateMessage, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:login42/:fLogin42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:login42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mChannelController {/channel}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/createChannel, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/updateChannel/:channelId, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinProtectedChannel, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/inviteToChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/leaveChannel, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/muteAChannelUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/banAChannelUser, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/setAChannelAdmin, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/unsetAChannelAdmin, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/sendMSGToChannel, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/channel/:channelId, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/image/:channelId, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/image/:channelId/:imageId, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/channel/:channelId/invitableFriends, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/publicChannels, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinedChannels, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mStatusController {/user-status}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user-status, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mMatchController {/match}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/match/:userLogin42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/match, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mInvitationController {/invitation}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation/:userLogin42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation/:inviterLogin42, DELETE} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 103  - [39m07/06/2022, 9:19:08 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +5ms[39m
+backend-transcendence   | connection NLHS-BXfEwvCINSJAAAB
+backend-transcendence   | connection VthHv9BLZDwv8cF9AAAD
+backend-transcendence   | game-connection rk2WUoyVNiQbtyOdAAAF
+backend-transcendence   | connection tdR9LWg7YpZz-gMMAAAH
+backend-transcendence   | connection q1mzL2BjNSEwAnj_AAAJ
+backend-transcendence   | connection 62N6HavBFGEw4pCJAAAL
+backend-transcendence   | connection ST0Xvd-eveW3HkptAAAO
+backend-transcendence   | game-connection S4_yUT8QspnwmikeAAAP
+backend-transcendence   | connection RnMq0j5UdE-de8seAAAQ
+backend-transcendence   | game-connection N91COw7NwlmnQOfXAAAS
+backend-transcendence   | connection xCltp6eL5HYo-pVXAAAU
+backend-transcendence   | game-connection IxaGfpAEqvC7j1PpAAAV
+backend-transcendence   | game-connection 6jKkF3WNjdqxaBinAAAX
+backend-transcendence   | connection jBbuzAK1DTaeY6V0AAAZ
+backend-transcendence   | connection dMJqkyIyEYDshmrkAAAb
+backend-transcendence   | c[[90m9:20:09 PM[0m] File change detected. Starting incremental compilation...
+backend-transcendence   | 
+backend-transcendence   | [[90m9:20:10 PM[0m] Found 0 errors. Watching for file changes.
+backend-transcendence   | 
+backend-transcendence   | c[[90m9:20:10 PM[0m] File change detected. Starting incremental compilation...
+backend-transcendence   | 
+backend-transcendence   | [[90m9:20:10 PM[0m] Found 0 errors. Watching for file changes.
+backend-transcendence   | 
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:11 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +58ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPassportModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mStatusModule dependencies initialized[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +23ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +171ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrivateConvModule dependencies initialized[39m[38;5;3m +6ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mWebsocketsModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mUsersModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMatchModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mInvitationModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTwoFactorAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mChannelModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:find-match" message[39m[38;5;3m +18ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "game:match-end" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:accept-match" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:login" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:leave-queue" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:logout" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:new" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:invitation-sent" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-elo" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-username" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-image" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-relations" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-direct-messages" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-public-channels" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-joined-channels" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-channel-content" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:unmount" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:enter" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:new-point" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:paddleMove" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:ballCountered" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mUsersController {/users}:[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, GET} route[39m[38;5;3m +4ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, DELETE} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/username, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/image, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/image/:imageId, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/sendFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/cancelFriendRequest, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/acceptFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/declineFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/removeFriend, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/blockUser, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/unblockUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/auth}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/42/callback, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/getToken/:login42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/getLoggedInUser, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTwoFactorAuthController {/two-factor-auth}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/generate-qrcode, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/turn-on, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/authenticate, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/turn-off, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/set-up, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mPrivateConvController {/privateConv}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:senderLogin42/:receiverLogin42, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/sendPrivateMessage, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:login42/:fLogin42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:login42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mChannelController {/channel}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/createChannel, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/updateChannel/:channelId, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinProtectedChannel, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/inviteToChannel, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/leaveChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/muteAChannelUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/banAChannelUser, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/setAChannelAdmin, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/unsetAChannelAdmin, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/sendMSGToChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/channel/:channelId, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/image/:channelId, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/image/:channelId/:imageId, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/channel/:channelId/invitableFriends, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/publicChannels, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinedChannels, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mStatusController {/user-status}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user-status, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mMatchController {/match}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/match/:userLogin42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/match, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mInvitationController {/invitation}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation/:userLogin42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation/:inviterLogin42, DELETE} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 127  - [39m07/06/2022, 9:20:12 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +5ms[39m
+backend-transcendence   | connection QebwefiMH0JcXOG9AAAB
+backend-transcendence   | game-connection bfbtdFa-zT27YMp2AAAC
+backend-transcendence   | connection 3nJn5XqdLDKAi4JBAAAE
+backend-transcendence   | connection e98GcW7amRZTkjIvAAAG
+backend-transcendence   | game-connection 8rt68DjoqtspynR7AAAH
+backend-transcendence   | connection UGUUFyOtlN_gIPKEAAAJ
+backend-transcendence   | connection SQjQC8wDWmqVdzqDAAAL
+backend-transcendence   | connection w3IFD_u2p_OfyUZZAAAN
+backend-transcendence   | game-connection FaQgMpAttFIhLwBQAAAP
+backend-transcendence   | connection hkgPTK0Yo47iQdcdAAAR
+backend-transcendence   | game-connection kCw1wxR3hlue1N5gAAAT
+backend-transcendence   | connection AVCgngPDK2HnCY2IAAAV
+backend-transcendence   | connection qWW80NkZpdXOTPpwAAAY
+backend-transcendence   | connection d6VyPa3co2VtHLq1AAAZ
+backend-transcendence   | game-connection Qshb_5SN_iGDhbmYAAAb
+backend-transcendence   | c[[90m9:23:30 PM[0m] File change detected. Starting incremental compilation...
+backend-transcendence   | 
+backend-transcendence   | [[90m9:23:30 PM[0m] Found 0 errors. Watching for file changes.
+backend-transcendence   | 
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:31 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:31 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +57ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:31 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:31 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:31 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPassportModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:31 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMulterModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:31 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:31 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:31 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:31 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mStatusModule dependencies initialized[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:31 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +24ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +187ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrivateConvModule dependencies initialized[39m[38;5;3m +6ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mWebsocketsModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mUsersModule dependencies initialized[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMatchModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mInvitationModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTwoFactorAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mChannelModule dependencies initialized[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:find-match" message[39m[38;5;3m +18ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "game:match-end" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:accept-match" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:login" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:leave-queue" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:logout" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:new" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:invitation-sent" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-elo" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-username" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-image" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-relations" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-direct-messages" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-public-channels" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-joined-channels" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mMainGateway subscribed to the "user:update-channel-content" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:unmount" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:enter" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:new-point" message[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:paddleMove" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:ballCountered" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[WebSocketsController] [39m[32mGameNamespace subscribed to the "game:point-lost" message[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mUsersController {/users}:[39m[38;5;3m +2ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, GET} route[39m[38;5;3m +3ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users, DELETE} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/username, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/image, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/image/:imageId, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/sendFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/cancelFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/acceptFriendRequest, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/declineFriendRequest, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/removeFriend, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/blockUser, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/users/:login42/unblockUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/auth}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/42/callback, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/getToken/:login42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/auth/getLoggedInUser, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTwoFactorAuthController {/two-factor-auth}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/generate-qrcode, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/turn-on, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/authenticate, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/turn-off, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/two-factor-auth/set-up, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mPrivateConvController {/privateConv}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:senderLogin42/:receiverLogin42, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/sendPrivateMessage, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:login42/:fLogin42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/privateConv/:login42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mChannelController {/channel}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/createChannel, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/updateChannel/:channelId, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinProtectedChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinChannel, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/inviteToChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/leaveChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/muteAChannelUser, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/banAChannelUser, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/setAChannelAdmin, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/unsetAChannelAdmin, PATCH} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/sendMSGToChannel, PATCH} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/channel/:channelId, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/image/:channelId, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/image/:channelId/:imageId, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/channel/:channelId/invitableFriends, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/publicChannels, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/channel/:login42/joinedChannels, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mStatusController {/user-status}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/user-status, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mMatchController {/match}:[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/match/:userLogin42, GET} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/match, POST} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mInvitationController {/invitation}:[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation/:userLogin42, GET} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation/:inviterLogin42, DELETE} route[39m[38;5;3m +0ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/invitation, POST} route[39m[38;5;3m +1ms[39m
+backend-transcendence   | [32m[Nest] 141  - [39m07/06/2022, 9:23:32 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +4ms[39m
+backend-transcendence   | game-connection lrxJy30MLr-i3qSrAAAC
+backend-transcendence   | connection gCoLx_AbFcDWLL0EAAAD
+backend-transcendence   | game-connection oX5mFzp0mxEh3i7oAAAE
+backend-transcendence   | connection BG5wlrqC0It0Q_W5AAAH
+backend-transcendence   | game-connection A6EYTA3ZxQbFTIHAAAAI
+backend-transcendence   | connection 565Fmz1V7F2kIOJ8AAAK
+backend-transcendence   | connection o6qUwcqrxsSXeEDeAAAM
+backend-transcendence   | connection bPLSLmIJW6oTOasSAAAO
+backend-transcendence   | connection MYZo8u9e3-LMfbhJAAAQ
+backend-transcendence   | connection OPDoVQhuyf9Polu1AAAS
+backend-transcendence   | connection xod0Toh8lXc1AvQ8AAAU
+backend-transcendence   | game-connection NxPuHU6v8ZUciKaTAAAW
+backend-transcendence   | connection JYkCAzyYnRHW91WPAAAY
+backend-transcendence   | game-connection UEEP0_TIi-CAjSy7AAAZ
+backend-transcendence   | connection s0wcGhfaLxphAy-nAAAb
+backend-transcendence   | disconnection BG5wlrqC0It0Q_W5AAAH
+frontend-transcendence  | dockguest
+backend-transcendence   | connection QY9L8OyfcOlaoxhwAAAd
+backend-transcendence   | connection _Qeq1NayDzAqRltGAAAf
+backend-transcendence   | user:login mvidal-a _Qeq1NayDzAqRltGAAAf
+backend-transcendence   | server user:update-status mvidal-a ONLINE undefined Map(1) { 'mvidal-a' => { socketCount: 1, status: 'ONLINE' } }
+backend-transcendence   | user:login mvidal-a _Qeq1NayDzAqRltGAAAf
+backend-transcendence   | disconnection MYZo8u9e3-LMfbhJAAAQ
+backend-transcendence   | game-disconnection A6EYTA3ZxQbFTIHAAAAI
+frontend-transcendence  | dockguest
+backend-transcendence   | connection oOVvaVH00j5W2A6hAAAh
+backend-transcendence   | user:login coucou oOVvaVH00j5W2A6hAAAh
+backend-transcendence   | server user:update-status coucou ONLINE undefined Map(2) {
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'coucou' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | user:login coucou oOVvaVH00j5W2A6hAAAh
+backend-transcendence   | user:find-match coucou
+backend-transcendence   | getOpponent Map(2) {
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'coucou' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } mvidal-a { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | getOpponent Map(2) {
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'coucou' => { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | } coucou { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | server user:update-status coucou IN_QUEUE undefined Map(2) {
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'coucou' => { socketCount: 1, status: 'IN_QUEUE' }
+backend-transcendence   | }
+backend-transcendence   | user:find-match mvidal-a
+backend-transcendence   | getOpponent Map(2) {
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'coucou' => { socketCount: 1, status: 'IN_QUEUE' }
+backend-transcendence   | } mvidal-a { socketCount: 1, status: 'ONLINE' }
+backend-transcendence   | getOpponent Map(2) {
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'ONLINE' },
+backend-transcendence   |   'coucou' => { socketCount: 1, status: 'IN_QUEUE' }
+backend-transcendence   | } coucou { socketCount: 1, status: 'IN_QUEUE' }
+backend-transcendence   | server user:update-status mvidal-a IN_GAME coucou Map(2) {
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'coucou' => { socketCount: 1, status: 'IN_GAME', opponentLogin42: 'mvidal-a' }
+backend-transcendence   | }
+backend-transcendence   | server user:update-status coucou IN_GAME mvidal-a Map(2) {
+backend-transcendence   |   'mvidal-a' => { socketCount: 1, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'coucou' => { socketCount: 1, status: 'IN_GAME', opponentLogin42: 'mvidal-a' }
+backend-transcendence   | }
+frontend-transcendence  | wait  - compiling /player-vs-player...
+frontend-transcendence  | event - compiled client and server successfully in 434 ms (1311 modules)
+backend-transcendence   | game-connection LMPeyBDweHlQqVTFAAAj
+backend-transcendence   | coucou has joined the game of coucoumvidal-a
+backend-transcendence   | game-connection Tj8O5GWocbFx2FZjAAAk
+backend-transcendence   | coucou has joined the game of coucoumvidal-a
+backend-transcendence   | game-connection rTTxxBW06cEiHIf8AAAm
+backend-transcendence   | mvidal-a has joined the game of coucoumvidal-a
+backend-transcendence   | sending game start mvidal-a
+backend-transcendence   | game-connection kc-VeOSrjLHEHoKZAAAn
+backend-transcendence   | user:login coucou JYkCAzyYnRHW91WPAAAY
+backend-transcendence   | mvidal-a has joined the game of coucoumvidal-a
+backend-transcendence   | user:login mvidal-a gCoLx_AbFcDWLL0EAAAD
+backend-transcendence   | user:login mvidal-a gCoLx_AbFcDWLL0EAAAD
+backend-transcendence   | user:login coucou oOVvaVH00j5W2A6hAAAh
+backend-transcendence   | user:login coucou JYkCAzyYnRHW91WPAAAY
+backend-transcendence   | user:login coucou oOVvaVH00j5W2A6hAAAh
+backend-transcendence   | user:login mvidal-a _Qeq1NayDzAqRltGAAAf
+backend-transcendence   | user:login mvidal-a _Qeq1NayDzAqRltGAAAf
+backend-transcendence   | server user:update-status coucou ONLINE undefined Map(2) {
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'IN_GAME', opponentLogin42: 'coucou' },
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | server user:update-status mvidal-a ONLINE undefined Map(2) {
+backend-transcendence   |   'mvidal-a' => { socketCount: 2, status: 'ONLINE' },
+backend-transcendence   |   'coucou' => { socketCount: 2, status: 'ONLINE' }
+backend-transcendence   | }
+backend-transcendence   | game-disconnection LMPeyBDweHlQqVTFAAAj
+backend-transcendence   | game:unmount
+backend-transcendence   | user:login mvidal-a gCoLx_AbFcDWLL0EAAAD
+backend-transcendence   | user:login coucou JYkCAzyYnRHW91WPAAAY
+backend-transcendence   | user:login mvidal-a _Qeq1NayDzAqRltGAAAf
+backend-transcendence   | user:login mvidal-a _Qeq1NayDzAqRltGAAAf
+backend-transcendence   | user:login mvidal-a gCoLx_AbFcDWLL0EAAAD
+backend-transcendence   | user:login coucou oOVvaVH00j5W2A6hAAAh
+backend-transcendence   | user:login coucou oOVvaVH00j5W2A6hAAAh
+backend-transcendence   | user:login coucou JYkCAzyYnRHW91WPAAAY
+frontend-transcendence  | wait  - compiling /profile...
+frontend-transcendence  | event - compiled client and server successfully in 1063 ms (1351 modules)
+backend-transcendence   | user:login coucou oOVvaVH00j5W2A6hAAAh
+backend-transcendence   | user:login coucou oOVvaVH00j5W2A6hAAAh
+frontend-transcendence  | wait  - compiling...
+frontend-transcendence  | event - compiled successfully in 154 ms (1195 modules)

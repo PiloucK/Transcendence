@@ -91,10 +91,11 @@ const PlayerVsPlayer = () => {
         } else if (login42 === player1.current) {
           setOpponentScore((prevState) => prevState + 1);
         }
+          gameSocket.current?.emit("game:new-point", gameID.current);
       });
 
       gameSocket.current.on("game:winner", (login42: Login42) => {
-              router.push("/");
+        router.push("/");
       });
     }
 
@@ -131,10 +132,7 @@ const PlayerVsPlayer = () => {
         <div className={styles.play}>Well played {winnerUsername}</div>
       )}
       <Score player={playerScore} opponent={opponentScore} />
-      <Ball
-        gameSocket={gameSocket.current}
-        gameID={gameID.current}
-      />
+      <Ball gameSocket={gameSocket.current} gameID={gameID.current} />
       <PlayerPaddle
         gameSocket={gameSocket.current}
         gameID={gameID.current}
