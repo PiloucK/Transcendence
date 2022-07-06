@@ -20,12 +20,50 @@ const Ball = ({
   const ballElem = useRef<HTMLElement | null>(null);
   const sessionContext = useSessionContext();
 
-  const ballCountered = (paddle: DOMRect, ball: DOMRect) => {
-    return (
-      paddle.right >= ball.left &&
-      paddle.top <= ball.bottom &&
-      paddle.bottom >= ball.top
-    );
+  const ballCountered = (
+    paddle: DOMRect,
+    ball: DOMRect,
+    ballUpdate: IBallInfo
+  ) => {
+    const padVector = {
+      downPoint: { x: paddle.right, y: paddle.bottom },
+      upPoint: { x: paddle.right, y: paddle.top },
+    };
+    const ballVector = {
+      lastPos: { x: ball.left, y: ball.bottom + (ball.top - ball.bottom) / 2 },
+      nextPos: { x: ballUpdate.position.x, y: ballUpdate.position.y },
+    };
+    const substracts = {
+      pad: {
+        x: padVector.upPoint.x - padVector.downPoint.x,
+        y: padVector.upPoint.y - padVector.downPoint.y,
+      },
+      ball: {
+        x: ballVector.nextPos.x - ballVector.lastPos.x,
+        y: ballVector.nextPos.y - ballVector.lastPos.y,
+      },
+    };
+    const s =
+      (-substracts.pad.y * (padVector.downPoint.x - ballVector.lastPos.x) +
+        substracts.pad.x * (padVector.downPoint.y - ballVector.lastPos.y)) /
+      (-substracts.ball.x * substracts.pad.y +
+        substracts.pad.x * substracts.ball.y);
+    const t =
+      (-substracts.ball.x * (padVector.downPoint.y - ballVector.lastPos.y) -
+        substracts.ball.y * (padVector.downPoint.x - ballVector.lastPos.x)) /
+      (-substracts.ball.x * substracts.pad.y +
+        substracts.ball.x * substracts.ball.y);
+    if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
+      ballUpdate.position.x = padVector.downPoint.x + t * substracts.pad.x;
+      ballUpdate.position.y = padVector.downPoint.y + t * substracts.pad.y;
+      setBallInfo(ballUpdate);
+      return true;
+    }
+    setBallInfo(ballUpdate);
+    return false;
+    // paddle.right >= ball.left &&
+    // paddle.top <= ball.bottom &&
+    // paddle.bottom >= ball.top
   };
 
   const pointLost = (ballInfo: IBallInfo) => {
@@ -39,7 +77,7 @@ const Ball = ({
     }
   };
 
-  const paddleCollision = () => {
+  const paddleCollision = (ballUpdate: IBallInfo) => {
     const ball = document
       .getElementById("ball")
       ?.getBoundingClientRect() as DOMRect;
@@ -49,7 +87,7 @@ const Ball = ({
 
     if (ball === undefined || playerPaddle === undefined) return false;
 
-    if (ballCountered(playerPaddle, ball)) {
+    if (ballCountered(playerPaddle, ball, ballUpdate)) {
       let collidePoint = ball.y - (playerPaddle.y + playerPaddle.height / 2);
       collidePoint /= playerPaddle.height / 2;
 
@@ -61,9 +99,9 @@ const Ball = ({
         gameID,
         sessionContext.userSelf.login42
       );
-	  return true;
+      return true;
     }
-	return false;
+    return false;
   };
 
   useEffect(() => {
@@ -76,8 +114,7 @@ const Ball = ({
             ballUpdate.position.x = 100 - ballUpdate.position.x;
             ballUpdate.direction.x *= -1;
           }
-          setBallInfo(ballUpdate);
-          if (!paddleCollision()) pointLost(ballUpdate);
+          if (!paddleCollision(ballUpdate)) pointLost(ballUpdate);
         }
       );
     }
