@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { Channel } from 'src/channel/channel.entity';
+import { Invitation } from 'src/invitation/invitation.entity';
 import { Match } from 'src/match/match.entity';
 import { PrivateConv } from 'src/privateConv/privateConv.entity';
 import {
@@ -27,8 +28,12 @@ export class User {
   @Column({ nullable: true })
   image!: string;
 
-  @Column({ default: 0 })
+  @Column({ default: 800 })
   elo!: number;
+
+  // @Column({ default: 0 })
+  // @Exclude()
+  // totalOpponentsEloCount!: number;
 
   @Column({ default: 0 })
   gamesWon!: number;
@@ -62,13 +67,20 @@ export class User {
 
   // There is a many to many relation owned by the channel.
   @ManyToMany(() => Channel)
-  users!: Channel[];
+  channels!: Channel[];
 
   @OneToMany(
     () => Match,
     (match) => (match.user1 === this ? match.user1 : match.user2),
   )
   matches!: Match[];
+
+  @OneToMany(
+    () => Invitation,
+    (invitation) =>
+      invitation.inviter === this ? invitation.inviter : invitation.invited,
+  )
+  invitations!: Invitation[];
 
   @Column({ default: false })
   isTwoFactorAuthEnabled!: boolean;

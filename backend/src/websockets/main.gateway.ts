@@ -12,9 +12,7 @@ import { StatusService } from 'src/status/status.service';
 import { EmittedLiveStatus } from 'src/status/status.type';
 
 @WebSocketGateway(3002, { transports: ['websocket'] })
-export class WebsocketsGateway
-  implements OnGatewayConnection, OnGatewayDisconnect
-{
+export class MainGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private readonly statusService: StatusService) {}
   @WebSocketServer()
   server!: Server;
@@ -31,8 +29,68 @@ export class WebsocketsGateway
     }
   }
 
-  updateStatus(userLogin42: string, status: EmittedLiveStatus) {
-    this.server.emit('user:update-status', userLogin42, status);
+  updateStatus(
+    userLogin42: string,
+    status: EmittedLiveStatus,
+    opponentLogin42: string | undefined = undefined,
+  ) {
+    console.log(
+      'server user:update-status',
+      userLogin42,
+      status,
+      opponentLogin42,
+      this.statusService.getStatuses(),
+    );
+
+    this.server.emit(
+      'user:update-status',
+      userLogin42,
+      status,
+      opponentLogin42,
+    );
+  }
+
+  @SubscribeMessage('user:find-match')
+  onUserFindMatch(@MessageBody() userLogin42: string) {
+    console.log('user:find-match', userLogin42);
+
+    const opponentLogin42 = this.statusService.getOpponent(userLogin42);
+    if (!opponentLogin42) {
+      this.updateStatus(userLogin42, 'IN_QUEUE');
+    } else {
+      this.updateStatus(userLogin42, 'IN_GAME', opponentLogin42);
+      this.updateStatus(opponentLogin42, 'IN_GAME', userLogin42);
+    }
+  }
+
+  @SubscribeMessage('game:match-end')
+  onGameMatchEnd(@MessageBody() data: string[]) {
+    const [player1, player2] = data;
+
+    if (player1) {
+      this.statusService.toOnline(player1);
+      this.updateStatus(player1, 'ONLINE');
+    }
+    if (player2) {
+      this.statusService.toOnline(player2);
+      this.updateStatus(player2, 'ONLINE');
+    }
+  }
+
+  @SubscribeMessage('user:accept-match')
+  onUserAcceptMatch(
+    @MessageBody() data: string[],
+    @ConnectedSocket() client: Socket,
+  ) {
+    const [invitedLogin, inviterLogin] = data;
+
+    if (
+      this.statusService.isReadyToPlay(invitedLogin) === true &&
+      this.statusService.isReadyToPlay(inviterLogin) === true
+    ) {
+      this.updateStatus(invitedLogin, 'IN_GAME', inviterLogin);
+      this.updateStatus(inviterLogin, 'IN_GAME', invitedLogin);
+    }
   }
 
   @SubscribeMessage('user:login')
@@ -44,6 +102,12 @@ export class WebsocketsGateway
     if (this.statusService.add(client.id, userLogin42) === 'EMIT') {
       this.updateStatus(userLogin42, 'ONLINE');
     }
+  }
+
+  @SubscribeMessage('user:leave-queue')
+  onLeaveQueue(@MessageBody() userLogin42: string) {
+    this.statusService.leaveQueue(userLogin42);
+    this.updateStatus(userLogin42, 'ONLINE');
   }
 
   @SubscribeMessage('user:logout')
@@ -62,6 +126,11 @@ export class WebsocketsGateway
     this.server.sockets.emit('update-leaderboard');
   }
 
+  @SubscribeMessage('user:invitation-sent')
+  onInvitationSent() {
+    this.server.sockets.emit('fetch-invitations');
+  }
+
   @SubscribeMessage('user:update-elo')
   onEloUpdate() {
     this.server.sockets.emit('update-leaderboard');
@@ -69,6 +138,11 @@ export class WebsocketsGateway
 
   @SubscribeMessage('user:update-username')
   onUsernameUpdate() {
+    this.server.sockets.emit('update-leaderboard');
+  }
+
+  @SubscribeMessage('user:update-image')
+  onImageUpdate() {
     this.server.sockets.emit('update-leaderboard');
   }
 

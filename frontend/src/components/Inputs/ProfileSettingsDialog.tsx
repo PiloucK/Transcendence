@@ -1,30 +1,29 @@
 import React, { useState } from "react";
-import styles from "../../styles/Home.module.css";
+import styles from "./ProfileSettingsDialog.module.css";
 
 import { TextField } from "../Inputs/TextField";
 
-import Switch from "@mui/material/Switch";
-import Avatar from "@mui/material/Avatar";
-import Image from "next/image";
-
-import { ButtonUpdateChannel } from "../Buttons/ButtonUpdateChannel";
+import { ButtonUpdateProfileSettings } from "../Buttons/ButtonUpdateProfileSettings";
 
 import userService from "../../services/user";
 import { errorHandler } from "../../errors/errorHandler";
 import { useErrorContext } from "../../context/ErrorContext";
 
 import IconButton from "@mui/material/IconButton";
-import { styled } from "@mui/material/styles";
 import SettingsIcon from "@mui/icons-material/Settings";
-import Dialog from "@mui/material/Dialog";
+import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useSocketContext } from "../../context/SocketContext";
+
 import { IUserSelf } from "../../interfaces/IUser";
 import { useSessionContext } from "../../context/SessionContext";
+import { TwoFactorAuth } from "../TwoFactorAuthSettings/TwoFactorAuth";
+import { SettingsAvatar } from "./SettingsAvatarDialog";
 import { AxiosError } from "axios";
 import { HttpStatusCodes } from "../../constants/httpStatusCodes";
+import { Box } from "@mui/material";
+import { useSocketContext } from "../../context/SocketContext";
 
 export function ProfileSettingsDialog({
   user,
@@ -36,23 +35,14 @@ export function ProfileSettingsDialog({
   setOpen: (open: boolean) => void;
 }) {
   const errorContext = useErrorContext();
-  const socketContext = useSocketContext();
   const sessionContext = useSessionContext();
+  const socketContext = useSocketContext();
   const [username, setUsername] = useState(user.username);
 
   const [textFieldError, setTextFieldError] = useState("");
 
   const [newImage, setNewImage] = useState<Blob>();
   const [preview, setPreview] = useState("");
-
-  const updateNewImage = (event) => {
-    setNewImage(event.target.files[0]);
-    setPreview(URL.createObjectURL(event.target.files[0]));
-  };
-
-  const Input = styled("input")({
-    display: "none",
-  });
 
   const handleClose = () => {
     setOpen(false);
@@ -71,6 +61,7 @@ export function ProfileSettingsDialog({
           .updateUserUsername(user.login42, username)
           .then(() => {
             sessionContext.updateUserSelf?.(); //! Can be done only once
+            socketContext.socket.emit("user:update-username");
             setOpen(false);
           })
           .catch((caughtError: Error | AxiosError) => {
@@ -116,80 +107,36 @@ export function ProfileSettingsDialog({
           fontSize="large"
         />
       </IconButton>
-      <div className={styles.channel_settings}>
-        <Dialog
-          PaperProps={{
-            style: {
-              backgroundColor: "#163F5B",
-              width: "779px",
-              minWidth: "779px",
-              height: "657px",
-              minHeight: "657px",
-            },
-          }}
-          open={open}
-          onClose={handleClose}
-        >
-          <DialogTitle>User settings</DialogTitle>
-          <DialogContent>
+      <Dialog
+        PaperProps={{ style: { backgroundColor: "#163F5B" } }}
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle>User settings</DialogTitle>
+        <DialogContent>
+          <Box className={styles.globalSettings}>
             <div className={styles.chat_create_channel_form_input}>
               Username
-              <TextField
-                label=""
-                value={username}
-                setValue={setUsername}
-                error={textFieldError}
-              />
             </div>
-            <label htmlFor="icon-button-file">
-              <Input
-                accept="image/*"
-                id="icon-button-file"
-                type="file"
-                onChange={updateNewImage}
-              />
-              <Avatar
-                src={preview}
-                alt="avatar"
-                sx={{
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  width: 151,
-                  height: 151,
-                  cursor: "pointer",
-                }}
-              >
-                <Avatar
-                  src={user.image}
-                  alt="avatar"
-                  sx={{
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: 151,
-                    height: 151,
-                    cursor: "pointer",
-                  }}
-                >
-                  <Avatar
-                    src={user.photo42}
-                    alt="avatar"
-                    sx={{
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      width: 151,
-                      height: 151,
-                      cursor: "pointer",
-                    }}
-                  />
-                </Avatar>
-              </Avatar>
-            </label>
-          </DialogContent>
-          <DialogActions>
-            <ButtonUpdateChannel updateChannel={updateUser} />
-          </DialogActions>
-        </Dialog>
-      </div>
+            <TextField
+              label=""
+              value={username}
+              setValue={setUsername}
+              error={textFieldError}
+            />
+            <SettingsAvatar
+              preview={preview}
+              setNewImage={setNewImage}
+              setPreview={setPreview}
+              user={user}
+            />
+            <DialogActions>
+              <ButtonUpdateProfileSettings updateChannel={updateUser} />
+            </DialogActions>
+            <TwoFactorAuth />
+          </Box>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

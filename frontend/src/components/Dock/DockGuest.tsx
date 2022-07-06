@@ -7,17 +7,13 @@ import FTLogo from "../../public/42logo.png";
 import getConfig from "next/config";
 import userService from "../../services/user";
 import authService from "../../services/auth";
-import {useSessionContext} from "../../context/SessionContext";
-import {useErrorContext} from "../../context/ErrorContext";
-import {useSocketContext} from "../../context/SocketContext";
-import {IUserSelf} from "../../interfaces/IUser";
+import { useSessionContext } from "../../context/SessionContext";
+import { useErrorContext } from "../../context/ErrorContext";
+import { useSocketContext } from "../../context/SocketContext";
+import { IUserSelf } from "../../interfaces/IUser";
 import { Button } from "@mui/material";
-import {errorHandler} from "../../errors/errorHandler";
-import React, {
-  EventHandler,
-  FormEventHandler,
-  useState,
-} from "react";
+import { errorHandler } from "../../errors/errorHandler";
+import React, { useState } from "react";
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -29,13 +25,13 @@ export function DockGuest() {
 
   const addUser = (event) => {
     userService
-      .addOne('coucou')
+      .addOne("coucou")
       .then((user: IUserSelf) => {
         sessionContext.login?.(user);
         socketContext.socket.emit("user:new");
 
         authService
-          .getToken('coucou')
+          .getToken("coucou")
           .then((login42: string) => {
             console.log("new token for", login42, "stored in cookie");
             sessionContext.updateUserSelf?.();
@@ -61,7 +57,7 @@ export function DockGuest() {
             </IconButton>
           </Tooltip>
         </Link>
-          <Button onClick={addUser}>create coucou</Button>
+        <Button onClick={addUser}>create coucou</Button>
       </Dock>
     </>
   );

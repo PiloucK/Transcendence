@@ -10,11 +10,9 @@ import { AxiosError } from "axios";
 import { ProfileInteractions } from "../components/Profile/ProfileInteractions";
 import { UserStats } from "../components/Profile/UserStats";
 import { AccountDetails } from "../components/Profile/AccountDetails";
-import { ReactElement, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { defaultSessionState } from "../constants/defaultSessionState";
 import { ProfileSettingsDialog } from "../components/Inputs/ProfileSettingsDialog";
-import { UserStatusLayout } from "../layouts/userStatusLayout";
-import { DefaultLayout } from "../layouts/defaultLayout";
 import CircularProgress from "@mui/material/CircularProgress";
 import { AddMatchField } from "../components/Profile/AddMatchField";
 
@@ -84,11 +82,3 @@ export default function ProfilePage() {
     </>
   );
 }
-
-ProfilePage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <DefaultLayout>
-      <UserStatusLayout>{page}</UserStatusLayout>
-    </DefaultLayout>
-  );
-};

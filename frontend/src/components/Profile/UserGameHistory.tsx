@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import emptyHistory from "../../public/sword-cross.png";
 import styles from "../../styles/Home.module.css";
 import { CardMatchHistory } from "../Cards/CardMatchHistory";
@@ -14,7 +14,7 @@ import { useSessionContext } from "../../context/SessionContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 function GameList({ userLogin }: { userLogin: string }) {
-  const [matchs, setmatchs] = React.useState<Match[]>([]);
+  const [matches, setMatches] = React.useState<Match[]>([]);
   const sessionContext = useSessionContext();
   const errorContext = useErrorContext();
   const socketContext = useSocketContext();
@@ -25,8 +25,8 @@ function GameList({ userLogin }: { userLogin: string }) {
     ) {
       matchService
         .getForOneUser(userLogin)
-        .then((matchs: Match[]) => {
-          setmatchs(matchs);
+        .then((matches: Match[]) => {
+          setMatches(matches);
         })
         .catch((error) => {
           errorContext.newError?.(errorHandler(error, sessionContext));
@@ -36,20 +36,10 @@ function GameList({ userLogin }: { userLogin: string }) {
 
   React.useEffect(fetchMatch, [userLogin]);
 
-  React.useEffect(() => {
-    socketContext.socket.on("update-leaderboard", fetchMatch);
-    return () => {
-      socketContext.socket.removeListener(
-        "update-leaderboard",
-        fetchMatch
-      );
-    };
-  }, []);
-
-  if (matchs.length !== 0) {
+  if (matches.length !== 0) {
     return (
       <>
-        {matchs.map((match, index: number) => (
+        {matches.map((match, index: number) => (
           <CardMatchHistory
             key={index}
             match={match}

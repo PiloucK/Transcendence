@@ -1,4 +1,4 @@
-import styles from './Score.module.css'
+import styles from '../Score.module.css'
 
 const Score = ({player, opponent} : {player : number, opponent : number}) => {
     return (

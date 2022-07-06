@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { Match } from './match.entity';
@@ -14,11 +13,13 @@ export class MatchService {
   ) {}
 
   async create(
-    user1: User,
+    user1Login42: string,
     user2Login42: string,
     user1Points: number,
     user2Points: number,
+    winnerLogin42: string,
   ) {
+    const user1 = await this.usersService.getUserByLogin42(user1Login42);
     const user2 = await this.usersService.getUserByLogin42(user2Login42);
 
     const match = this.matchRepository.create({
@@ -26,8 +27,19 @@ export class MatchService {
       user2,
       user1Points,
       user2Points,
+      winnerLogin42,
     });
 
+    await this.usersService.updateGameStats(
+      user1,
+      user2.elo,
+      winnerLogin42 !== user2.login42,
+    );
+    await this.usersService.updateGameStats(
+      user2,
+      user1.elo,
+      winnerLogin42 !== user1.login42,
+    );
     await this.matchRepository.insert(match);
 
     return match;
@@ -52,6 +64,12 @@ export class MatchService {
         },
       }),
     );
+
+    matches.sort(
+      (match1, match2) =>
+        match2.createdDate.getTime() - match1.createdDate.getTime(),
+    );
+
     return matches;
   }
 }

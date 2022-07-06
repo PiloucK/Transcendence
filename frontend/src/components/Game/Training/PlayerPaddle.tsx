@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from './PaddleLeft.module.css'
+import styles from '../PaddleLeft.module.css'
 
 
 const PlayerPaddle = (  ) => {
@@ -9,6 +9,9 @@ const PlayerPaddle = (  ) => {
       document.addEventListener("mousemove", e => {
         setPlayerPosition((e.y / window.innerHeight) * 100)
       })
+	  return () => {
+		window.removeEventListener("mousemove", () => {});
+	  };
     }, []);
   
     useEffect(() => {
