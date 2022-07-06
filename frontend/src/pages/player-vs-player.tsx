@@ -91,7 +91,9 @@ const PlayerVsPlayer = () => {
         } else if (login42 === player1.current) {
           setOpponentScore((prevState) => prevState + 1);
         }
+        setTimeout(() => {
           gameSocket.current?.emit("game:new-point", gameID.current);
+        }, 2000);
       });
 
       gameSocket.current.on("game:winner", (login42: Login42) => {
@@ -113,7 +115,6 @@ const PlayerVsPlayer = () => {
           );
           gameSocket.current.removeAllListeners();
           console.log("closing socket");
-          // IF SPECATOR LEAVES HE STOPS THE GAME
         }
       }
     };

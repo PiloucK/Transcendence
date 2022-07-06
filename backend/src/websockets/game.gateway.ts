@@ -262,18 +262,6 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
                 y: currentGame.player2PadPos,
               };
 
-        // move ball
-        // currentGame.ballInfo.position.x =
-        //   currentGame.ballInfo.position.x +
-        //   currentGame.ballInfo.direction.x *
-        //     currentGame.ballVelocity *
-        //     deltaTime;
-        // currentGame.ballInfo.position.y =
-        //   currentGame.ballInfo.position.y +
-        //   currentGame.ballInfo.direction.y *
-        //     currentGame.ballVelocity *
-        //     deltaTime;
-
         // check top / btm collision
         if (nextBallInfo.position.y + 1 >= 100) {
           nextBallInfo.direction.y *= -1;
@@ -283,75 +271,10 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
           nextBallInfo.position.y = 1;
         }
 
-        // check left paddle intersection
-        // if (
-        //   (nextBallInfo.direction.x < 0 && nextBallInfo.position.x <= 10) ||
-        //   (nextBallInfo.direction.x > 0 && nextBallInfo.position.x >= 90)
-        // ) {
-        //   const padVector = {
-        //     downPoint: {
-        //       x: currentPad.x,
-        //       y: currentPad.y + 5,
-        //     },
-        //     upPoint: {
-        //       x: currentPad.x,
-        //       y: currentPad.y - 5,
-        //     },
-        //   };
-
-        //   const substracts = {
-        //     pad: {
-        //       x: 0,
-        //       y: 10,
-        //     },
-        //     ball: {
-        //       x: nextBallInfo.position.x - currentGame.ballInfo.position.x,
-        //       y: nextBallInfo.position.y - currentGame.ballInfo.position.y,
-        //     },
-        //   };
-
-        //   const s =
-        //     (-substracts.pad.y *
-        //       (padVector.downPoint.x - currentGame.ballInfo.position.x) +
-        //       substracts.pad.x *
-        //         (padVector.downPoint.y - currentGame.ballInfo.position.y)) /
-        //     (-substracts.ball.x * substracts.pad.y +
-        //       substracts.pad.x * substracts.ball.y);
-        //   const t =
-        //     (-substracts.ball.x *
-        //       (padVector.downPoint.y - currentGame.ballInfo.position.y) -
-        //       substracts.ball.y *
-        //         (padVector.downPoint.x - currentGame.ballInfo.position.x)) /
-        //     (-substracts.ball.x * substracts.pad.y +
-        //       substracts.ball.x * substracts.ball.y);
-
-        //   if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
-        //     nextBallInfo.position.x =
-        //       padVector.downPoint.x + t * substracts.pad.x;
-        //     nextBallInfo.position.y =
-        //       padVector.downPoint.y + t * substracts.pad.y;
-        //     let collidePoint = nextBallInfo.position.y - currentPad.y;
-        //     collidePoint /= 5;
-
-        //     const angleRad = (collidePoint * Math.PI) / 4;
-
-        //     nextBallInfo.direction.x = Math.cos(angleRad);
-        //     nextBallInfo.direction.y = Math.sin(angleRad);
-
-        //     if (nextBallInfo.position.x > 50) {
-        //       nextBallInfo.direction.x *= -1;
-        //     }
-
-        //     currentGame.bounceCount += 1;
-        //     currentGame.ballVelocity =
-        //       currentGame.ballVelocity +
-        //       currentGame.ballVelocity / (currentGame.bounceCount + 10);
-        //   }
-        // }
         if (
-          ((currentPad.x >= nextBallInfo.position.x &&
+          ((currentPad.x + 0.5 >= nextBallInfo.position.x &&
             nextBallInfo.direction.x < 0) ||
-            (currentPad.x <= nextBallInfo.position.x &&
+            (currentPad.x - 0.5 <= nextBallInfo.position.x &&
               nextBallInfo.direction.x > 0)) &&
           currentPad.y - 5 <= nextBallInfo.position.y &&
           currentPad.y + 5 >= nextBallInfo.position.y
@@ -372,8 +295,6 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
           currentGame.ballVelocity =
             currentGame.ballVelocity +
             currentGame.ballVelocity / (currentGame.bounceCount + 6);
-          // setBallInfo(ballUpdate);
-          //  return true;
         }
 
         if (nextBallInfo.position.x <= 0 && nextBallInfo.direction.x < 0) {
@@ -464,7 +385,6 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
 
       this.server.to(gameID).emit('game:update-score', player);
 
-      // setInterval(() => {
       if (currentGame.player1Score >= 5) {
         this.server.to(gameID).emit('game:winner', currentGame.player1);
         this.matchService.create(
@@ -485,7 +405,6 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         );
       }
       currentGame.gameStatus = 'DONE';
-      // }, 2000);
     }
   }
 }
