@@ -32,6 +32,8 @@ interface IGame {
   player2: string | undefined;
   player1Score: number;
   player2Score: number;
+  player1PadTop: number;
+  player2PadTop: number;
   gameStatus: 'WAITING' | 'READY' | 'DONE';
   ballInfo: IBallInfo;
   ballVelocity: number;
@@ -170,10 +172,12 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         player2: undefined,
         player1Score: 0,
         player2Score: 0,
+        player1PadTop: 50,
+        player2PadTop: 50,
         gameStatus: 'WAITING',
         ballInfo: { position: { x: 50, y: 50 }, direction: { x: 50, y: 50 } },
-		ballVelocity: 0.042,
-		bounceCount: 0,
+        ballVelocity: 0.042,
+        bounceCount: 0,
       };
       this.runningGames.set(gameID, currentGame);
     }
@@ -222,27 +226,143 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
     if (currentGame && currentGame.intervalID === undefined) {
       currentGame.ballInfo = initBall();
       const deltaTime = 1000 / 60;
-	  currentGame.ballVelocity = 0.042;
-	  currentGame.bounceCount = 0;
-    //   const ballVelocity = 0.035;
+      currentGame.ballVelocity = 0.042;
+      currentGame.bounceCount = 0;
 
       currentGame.intervalID = setInterval(() => {
+        // next pos calculation
+        const nextBallInfo: IBallInfo = {
+          position: {
+            x:
+              currentGame.ballInfo.position.x +
+              currentGame.ballInfo.direction.x *
+                currentGame.ballVelocity *
+                deltaTime,
+            y:
+              currentGame.ballInfo.position.y +
+              currentGame.ballInfo.direction.y *
+                currentGame.ballVelocity *
+                deltaTime,
+          },
+          direction: currentGame.ballInfo.direction,
+        };
+
         // move ball
-        currentGame.ballInfo.position.x =
-          currentGame.ballInfo.position.x +
-          currentGame.ballInfo.direction.x * currentGame.ballVelocity * deltaTime;
-        currentGame.ballInfo.position.y =
-          currentGame.ballInfo.position.y +
-          currentGame.ballInfo.direction.y * currentGame.ballVelocity * deltaTime;
+        // currentGame.ballInfo.position.x =
+        //   currentGame.ballInfo.position.x +
+        //   currentGame.ballInfo.direction.x *
+        //     currentGame.ballVelocity *
+        //     deltaTime;
+        // currentGame.ballInfo.position.y =
+        //   currentGame.ballInfo.position.y +
+        //   currentGame.ballInfo.direction.y *
+        //     currentGame.ballVelocity *
+        //     deltaTime;
 
         // check top / btm collision
-        if (currentGame.ballInfo.position.y + 1 >= 100) {
-          currentGame.ballInfo.direction.y *= -1;
-          currentGame.ballInfo.position.y = 99;
-        } else if (currentGame.ballInfo.position.y - 1 <= 0) {
-          currentGame.ballInfo.direction.y *= -1;
-          currentGame.ballInfo.position.y = 1;
+        if (nextBallInfo.position.y + 1 >= 100) {
+          nextBallInfo.direction.y *= -1;
+          nextBallInfo.position.y = 99;
+        } else if (nextBallInfo.position.y - 1 <= 0) {
+          nextBallInfo.direction.y *= -1;
+          nextBallInfo.position.y = 1;
         }
+
+        // check left paddle intersection
+        if (
+          (nextBallInfo.direction.x < 0 && nextBallInfo.position.x <= 3) ||
+          (nextBallInfo.direction.x > 0 && nextBallInfo.position.x >= 97)
+        ) {
+          const padVector = {
+            downPoint: {
+              x: nextBallInfo.direction.x < 0 ? 1 : 99,
+              y:
+                (nextBallInfo.direction.x < 0
+                  ? currentGame.player1PadTop
+                  : currentGame.player2PadTop) + 10,
+            },
+            upPoint: {
+              x: nextBallInfo.direction.x < 0 ? 1 : 99,
+              y:
+                nextBallInfo.direction.x < 0
+                  ? currentGame.player1PadTop
+                  : currentGame.player2PadTop,
+            },
+          };
+          // console.log('ball: ------------ ', nextBallInfo.position.y, nextBallInfo.direction.x < 0 ? 1 : 99, 'pad: ------ ', nextBallInfo.direction.x < 0
+          // ? currentGame.player1PadTop
+          // : currentGame.player2PadTop);
+          const substracts = {
+            pad: {
+              x: 0,
+              y: 10,
+            },
+            ball: {
+              x: nextBallInfo.position.x - currentGame.ballInfo.position.x,
+              y: nextBallInfo.position.y - currentGame.ballInfo.position.y,
+            },
+          };
+          // console.log('doute - ', substracts.pad.y);
+
+          // console.log('nextballinfo', nextBallInfo, 'padvector', padVector);
+
+          const s =
+            (-substracts.pad.y *
+              (padVector.downPoint.x - currentGame.ballInfo.position.x) +
+              substracts.pad.x *
+                (padVector.downPoint.y - currentGame.ballInfo.position.y)) /
+            (-substracts.ball.x * substracts.pad.y +
+              substracts.pad.x * substracts.ball.y);
+          const t =
+            (-substracts.ball.x *
+              (padVector.downPoint.y - currentGame.ballInfo.position.y) -
+              substracts.ball.y *
+                (padVector.downPoint.x - currentGame.ballInfo.position.x)) /
+            (-substracts.ball.x * substracts.pad.y +
+              substracts.ball.x * substracts.ball.y);
+
+          if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
+            console.log('toto____________________');
+            console.log(
+              'ball: ------------ X:',
+              nextBallInfo.position.x,
+              'Y:',
+              nextBallInfo.position.y,
+            );
+            console.log(
+              'pad: ------ ',
+              nextBallInfo.direction.x < 0 ? 1 : 99,
+              nextBallInfo.direction.x < 0
+                ? currentGame.player1PadTop
+                : currentGame.player2PadTop,
+            );
+            console.log('_________________________');
+            nextBallInfo.position.x =
+              padVector.downPoint.x + t * substracts.pad.x;
+            nextBallInfo.position.y =
+              padVector.downPoint.y + t * substracts.pad.y;
+
+            let collidePoint =
+              nextBallInfo.position.y -
+              ((nextBallInfo.direction.x < 0
+                ? currentGame.player1PadTop
+                : currentGame.player2PadTop) +
+                5);
+            collidePoint /= 5;
+
+            const angleRad = (collidePoint * Math.PI) / 4;
+
+            nextBallInfo.direction.x = Math.cos(angleRad);
+            nextBallInfo.direction.y = Math.sin(angleRad);
+
+            currentGame.bounceCount += 1;
+            currentGame.ballVelocity =
+              currentGame.ballVelocity +
+              currentGame.ballVelocity / (currentGame.bounceCount + 10);
+          }
+        }
+
+        currentGame.ballInfo = nextBallInfo;
 
         this.server
           .to(gameID)
@@ -252,8 +372,15 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('game:paddleMove')
-  onGamePaddleMove(@MessageBody() data: string[]) {
+  onGamePaddleMove(@MessageBody() data: any[]) {
     const [paddlePosition, gameID, player] = data;
+    const currentGame = this.runningGames.get(gameID);
+
+    if (currentGame && player === currentGame.player1) {
+      currentGame.player1PadTop = paddlePosition - 5;
+    } else if (currentGame && player === currentGame.player2) {
+      currentGame.player2PadTop = paddlePosition - 5;
+    }
 
     this.server
       .to(gameID)
@@ -274,9 +401,11 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
       currentGame.ballInfo.direction.y = Math.sin(angleRad);
       if (player === currentGame.player2) {
         currentGame.ballInfo.direction.x *= -1;
-	  }
-	  currentGame.bounceCount += 1;
-      currentGame.ballVelocity = currentGame.ballVelocity + currentGame.ballVelocity / (currentGame.bounceCount + 10);
+      }
+      currentGame.bounceCount += 1;
+      currentGame.ballVelocity =
+        currentGame.ballVelocity +
+        currentGame.ballVelocity / (currentGame.bounceCount + 10);
     }
   }
 
