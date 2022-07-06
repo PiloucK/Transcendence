@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "../../styles/Home.module.css";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { useSessionContext } from "../../context/SessionContext";
 import channelService from "../../services/channel";
 
-import { Channel } from "../../interfaces/users";
+import { Channel } from "../../interfaces/Chat.interfaces";
 
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
@@ -22,16 +22,16 @@ export function ButtonAcceptChannelInvite({
 }: {
   channelId: string;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [error, setError] = React.useState(false);
 
   const joinChannel = () => {
     channelService
-      .joinChannel(loginContext.userLogin, channelId)
+      .joinChannel(sessionContext.userSelf.login42, channelId)
       .then((channel: Channel) => {
-        loginContext.setChatMenu?.(channel.id);
-        socketContext.socket.emit("user:update-joined-channel");
+        sessionContext.setChatMenu?.(channel.id);
+        socketContext.socket.emit("user:update-joined-channels");
         socketContext.socket.emit("user:update-channel-content");
       })
       .catch((err) => {

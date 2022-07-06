@@ -1,17 +1,18 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos } from "../../interfaces/users";
+import { IUserPublic } from "../../interfaces/IUser";
 
 import Avatar from "@mui/material/Avatar";
 import profileIcon from "../../public/profile_icon.png";
+import { defaultSessionState } from "../../constants/defaultSessionState";
 
 export function CardUserChannelInvite({
   userInfos,
   setSelectedFriends,
 }: {
-  userInfos: IUserPublicInfos;
-  setSelectedFriends: (friends: IUserPublicInfos) => void;
+  userInfos: IUserPublic;
+  setSelectedFriends: (friends: IUserPublic) => void;
 }) {
   const [isSelected, setIsSelected] = React.useState(false);
 
@@ -43,7 +44,9 @@ export function CardUserChannelInvite({
           />
         </Avatar>
       </div>
-      <div className={styles.user_card_username}>{userInfos.username}</div>
+      <div className={styles.user_card_username}>
+        {userInfos.username ?? defaultSessionState.userSelf.username}
+      </div>
       <div className={styles.user_card_elo}>Elo: {userInfos.elo}</div>
     </div>
   );

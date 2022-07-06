@@ -4,10 +4,9 @@ const { publicRuntimeConfig } = getConfig();
 const baseUrl = `http://${publicRuntimeConfig.HOST}\
 :${publicRuntimeConfig.BACKEND_PORT}\
 /users`;
-import { IUserCredentials } from "../interfaces/users";
 axios.defaults.withCredentials = true;
 
-const getAll = () => {
+const getAllForLeaderboard = () => {
   return axios.get(baseUrl).then((response) => response.data);
 };
 
@@ -15,8 +14,8 @@ const getOne = (login: string) => {
   return axios.get(`${baseUrl}/${login}`).then((response) => response.data);
 };
 
-const addOne = (newUser: IUserCredentials) => {
-  return axios.post(baseUrl, newUser).then((response) => response.data);
+const addOne = (login42: string) => {
+  return axios.post(`${baseUrl}/${login42}`).then((response) => response.data);
 };
 
 // dev
@@ -27,12 +26,6 @@ const deleteAll = () => {
 const updateUserUsername = (login: string, username: string) => {
   return axios
     .patch(`${baseUrl}/${login}/username`, { username })
-    .then((response) => response.data);
-};
-
-const getUserFriends = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/friends`)
     .then((response) => response.data);
 };
 
@@ -49,18 +42,6 @@ const updateUserImage = (login: string, file: FormData) => {
     .catch((e) => {
       console.error(e);
     });
-};
-
-const getUserFriendRequestsSent = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/friendRequestsSent`)
-    .then((response) => response.data);
-};
-
-const getUserFriendRequestsReceived = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/friendRequestsReceived`)
-    .then((response) => response.data);
 };
 
 const sendFriendRequest = (login: string, friendLogin42: string) => {
@@ -103,12 +84,6 @@ const removeFriend = (login: string, friendLogin42: string) => {
     .then((response) => response.data);
 };
 
-const getUserBlockedUsers = (login: string) => {
-  return axios
-    .get(`${baseUrl}/${login}/blockedUsers`)
-    .then((response) => response.data);
-};
-
 const blockUser = (login: string, friendLogin42: string) => {
   return axios
     .patch(`${baseUrl}/${login}/blockUser`, {
@@ -126,13 +101,10 @@ const unblockUser = (login: string, friendLogin42: string) => {
 };
 
 export default {
-  getAll,
+  getAllForLeaderboard,
   getOne,
   addOne,
   deleteAll,
-  getUserFriends,
-  getUserFriendRequestsSent,
-  getUserFriendRequestsReceived,
   sendFriendRequest,
   cancelFriendRequest,
   acceptFriendRequest,
@@ -140,7 +112,6 @@ export default {
   removeFriend,
   updateUserUsername,
   updateUserImage,
-  getUserBlockedUsers,
   blockUser,
   unblockUser,
 };

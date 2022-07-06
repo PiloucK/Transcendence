@@ -1,10 +1,12 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { MatchModule } from 'src/match/match.module';
 import { StatusModule } from 'src/status/status.module';
-import { WebsocketsGateway } from './websockets.gateway';
+import { GameNamespace } from './game.gateway';
+import { MainGateway } from './main.gateway';
 
 @Module({
-  imports: [forwardRef(() => StatusModule)],
-  providers: [WebsocketsGateway],
-  exports: [WebsocketsGateway],
+  imports: [StatusModule, MatchModule],
+  providers: [MainGateway, GameNamespace],
+  exports: [MainGateway],
 })
 export class WebsocketsModule {}

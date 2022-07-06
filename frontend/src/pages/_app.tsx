@@ -1,13 +1,15 @@
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 
-import { LoginProvider } from "../context/LoginContext";
-import { MainLayout } from "../layouts/mainLayout";
+import { SessionProvider } from "../context/SessionContext";
 import { ErrorProvider } from "../context/ErrorContext";
-import { ErrorSnackbar } from "../components/Alerts/ErrorSnackbar";
-import { SecondFactorLogin } from "../components/Alerts/SecondFactorLogin";
 import { SocketProvider } from "../context/SocketContext";
+import { DefaultLayout } from "../layouts/defaultLayout";
+import { ErrorSnackbar } from "../components/Alerts/ErrorSnackbar";
+import { UserStatusProvider } from "../context/UserStatusContext";
+import {UserStatusLayout} from "../layouts/userStatusLayout";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -20,19 +22,45 @@ type AppPropsWithLayout = AppProps & {
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout =
-    Component.getLayout ?? ((page) => <MainLayout>{page}</MainLayout>);
+    Component.getLayout ?? ((page) =>
+      <UserStatusLayout>
+        <DefaultLayout>{page}</DefaultLayout>
+      </UserStatusLayout>
+    );
 
-  return getLayout(
-    <ErrorProvider>
-      <SocketProvider>
-        <LoginProvider>
-          <>
-            <ErrorSnackbar />
-            <SecondFactorLogin />
-            <Component {...pageProps} />
-          </>
-        </LoginProvider>
-      </SocketProvider>
-    </ErrorProvider>
+  return (
+    <>
+      <Head>
+        <title>Transcendence</title>
+        <link rel="shortcut icon" href="/images/favicon.ico" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/images/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/images/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/images/favicon-16x16.png"
+        />
+      </Head>
+      <ErrorProvider>
+        <ErrorSnackbar />
+        <SocketProvider>
+          <SessionProvider>
+            <UserStatusProvider>
+              {getLayout(<Component {...pageProps} />)}
+            </UserStatusProvider>
+          </SessionProvider>
+        </SocketProvider>
+      </ErrorProvider>
+    </>
   );
 }

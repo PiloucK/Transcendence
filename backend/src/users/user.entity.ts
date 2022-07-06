@@ -1,7 +1,8 @@
 import { Exclude } from 'class-transformer';
 import { Channel } from 'src/channel/channel.entity';
+import { Invitation } from 'src/invitation/invitation.entity';
+import { Match } from 'src/match/match.entity';
 import { PrivateConv } from 'src/privateConv/privateConv.entity';
-import { UserStatus } from 'src/status/status.entity';
 import {
   Column,
   Entity,
@@ -16,7 +17,7 @@ export class User {
   @PrimaryColumn()
   login42!: string;
 
-  @Column()
+  @Column({ unique: true, nullable: true })
   username!: string;
   // https://stackoverflow.com/questions/25300821/difference-between-varchar-and-text-in-mysql
   // https://typeorm.io/#column-data-types
@@ -27,17 +28,18 @@ export class User {
   @Column({ nullable: true })
   image!: string;
 
-  @Column({ default: 0 })
+  @Column({ default: 800 })
   elo!: number;
+
+  // @Column({ default: 0 })
+  // @Exclude()
+  // totalOpponentsEloCount!: number;
 
   @Column({ default: 0 })
   gamesWon!: number;
 
   @Column({ default: 0 })
   gamesLost!: number;
-
-  @Column({ default: false })
-  online!: boolean;
 
   @ManyToMany(() => User)
   @JoinTable()
@@ -65,10 +67,20 @@ export class User {
 
   // There is a many to many relation owned by the channel.
   @ManyToMany(() => Channel)
-  users!: Channel[];
+  channels!: Channel[];
 
-  @OneToMany(() => UserStatus, (status) => status.user)
-  status!: UserStatus[];
+  @OneToMany(
+    () => Match,
+    (match) => (match.user1 === this ? match.user1 : match.user2),
+  )
+  matches!: Match[];
+
+  @OneToMany(
+    () => Invitation,
+    (invitation) =>
+      invitation.inviter === this ? invitation.inviter : invitation.invited,
+  )
+  invitations!: Invitation[];
 
   @Column({ default: false })
   isTwoFactorAuthEnabled!: boolean;

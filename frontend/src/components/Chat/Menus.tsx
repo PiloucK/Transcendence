@@ -7,14 +7,9 @@ import channelImage from "../../public/channel_image.png";
 import directMessage from "../../public/direct_message.png";
 import addChannel from "../../public/add_channel.png";
 
-import { useLoginContext } from "../../context/LoginContext";
-import {
-  IUserPublicInfos,
-  IUserForLeaderboard,
-  PrivateConv,
-  Channel,
-  IUser,
-} from "../../interfaces/users";
+import { useSessionContext } from "../../context/SessionContext";
+
+import { PrivateConv, Channel } from "../../interfaces/Chat.interfaces";
 import channelService from "../../services/channel";
 import privateConvService from "../../services/privateConv";
 
@@ -31,11 +26,17 @@ import Avatar from "@mui/material/Avatar";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { useSocketContext } from "../../context/SocketContext";
 
-function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUser }) {
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
+import { useUserStatusContext } from "../../context/UserStatusContext";
+import { useSocketContext } from "../../context/SocketContext";
+import { IUserSelf, IUserSlim } from "../../interfaces/IUser";
+import { defaultSessionState } from "../../constants/defaultSessionState";
+
+function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUserSlim }) {
   return (
     <div key={keyV} className={styles.chat_direct_message_menu_dm_selected}>
       <Avatar
@@ -49,7 +50,7 @@ function SelectedDMMenu({ keyV, user }: { keyV: string; user: IUser }) {
           sx={{ width: "20px", height: "20px" }}
         />
       </Avatar>
-      {user.login42}
+      {user.username}
       <ButtonTxtViewProfile login={user.login42} />
       <ButtonTxtUserStatus login={user.login42} />
       <ButtonTxtBlockUser login={user.login42} />
@@ -66,61 +67,76 @@ function DMList({
   menu: string;
   setMenu: (menu: string) => void;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
-  return openedDMs?.map((dm) => {
-    const key = dm.userOne.login42 + "|" + dm.userTwo.login42;
-    const user =
-      dm.userOne.login42 === loginContext.userLogin ? dm.userTwo : dm.userOne;
+  return (
+    <>
+      {openedDMs?.map((dm) => {
+        const key = dm.userOne.login42 + "|" + dm.userTwo.login42;
+        const user =
+          dm.userOne.login42 === sessionContext.userSelf.login42
+            ? dm.userTwo
+            : dm.userOne;
 
-    if (key === menu) {
-      return <SelectedDMMenu key={"selectedDMMenu"} keyV={key} user={user} />;
-    }
-    return (
-      <div
-        key={key}
-        className={styles.chat_direct_message_menu_new_selected}
-        onClick={() => {
-          setMenu(key);
-        }}
-      >
-        <Avatar
-          className={styles.chat_avatar}
-          src={user.image}
-          sx={{ width: "20px", height: "20px" }}
-        >
-          <Avatar
-            className={styles.chat_avatar}
-            src={user.photo42}
-            sx={{ width: "20px", height: "20px" }}
-          />
-        </Avatar>
-        {user.login42}
-      </div>
-    );
-  });
+        if (key === menu) {
+          return (
+            <SelectedDMMenu key={"selectedDMMenu"} keyV={key} user={user} />
+          );
+        }
+        return (
+          <div
+            key={key}
+            className={styles.chat_direct_message_menu_new_selected}
+            onClick={() => {
+              setMenu(key);
+            }}
+          >
+            <Avatar
+              className={styles.chat_avatar}
+              src={user.image}
+              sx={{ width: "20px", height: "20px" }}
+            >
+              <Avatar
+                className={styles.chat_avatar}
+                src={user.photo42}
+                sx={{ width: "20px", height: "20px" }}
+              />
+            </Avatar>
+            {user.username}
+          </div>
+        );
+      })}
+    </>
+  );
 }
 
 export function DirectMessageMenu(props: {
   menu: string;
   setMenu: (menu: string) => void;
 }) {
-  const loginContext = useLoginContext();
+  const errorContext = useErrorContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [openedDMs, setOpenedDMs] = React.useState<PrivateConv[]>([]);
 
   React.useEffect(() => {
     privateConvService
-      .getPrivateConvs(loginContext.userLogin)
+      .getPrivateConvs(sessionContext.userSelf.login42)
       .then((currentDMs: PrivateConv[]) => {
         setOpenedDMs(currentDMs);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
 
     socketContext.socket.on("update-direct-messages", () => {
       privateConvService
-        .getPrivateConvs(loginContext.userLogin)
+        .getPrivateConvs(sessionContext.userSelf.login42)
         .then((currentDMs: PrivateConv[]) => {
           setOpenedDMs(currentDMs);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
   }, []);
@@ -158,14 +174,14 @@ function SelectedUserMenu({
   setSelectedUser,
   channel,
 }: {
-  user: IUserForLeaderboard;
+  user: IUserSlim;
   getUserStyle: (userLogin: string) => any;
   setSelectedUser: (userLogin: string) => void;
   channel: Channel;
 }) {
-  const loginContext = useLoginContext();
+  const sessionContext = useSessionContext();
 
-  if (loginContext.userLogin === channel?.owner) {
+  if (sessionContext.userSelf.login42 === channel?.owner) {
     return (
       <div className={styles.selected_user}>
         <div
@@ -183,7 +199,7 @@ function SelectedUserMenu({
               sx={{ width: "20px", height: "20px" }}
             />
           </Avatar>
-          {user.login42}
+          {user.username}
         </div>
         <ButtonTxtViewProfile login={user.login42} />
         <ButtonTxtUserStatus login={user.login42} />
@@ -193,7 +209,10 @@ function SelectedUserMenu({
         <ButtonTxtSetAsAdmin login={user.login42} channel={channel} />
       </div>
     );
-  } else if (channel?.admin?.includes(loginContext.userLogin)) {
+  } else if (
+    channel?.admins?.includes(sessionContext.userSelf.login42) &&
+    channel?.owner !== user.login42
+  ) {
     return (
       <div className={styles.selected_user}>
         <div
@@ -211,7 +230,7 @@ function SelectedUserMenu({
               sx={{ width: "20px", height: "20px" }}
             />
           </Avatar>
-          {user.login42}
+          {user.username}
         </div>
         <ButtonTxtViewProfile login={user.login42} />
         <ButtonTxtUserStatus login={user.login42} />
@@ -238,7 +257,7 @@ function SelectedUserMenu({
               sx={{ width: "20px", height: "20px" }}
             />
           </Avatar>
-          {user.login42}
+          {user.username}
         </div>
         <ButtonTxtViewProfile login={user.login42} />
         <ButtonTxtUserStatus login={user.login42} />
@@ -248,73 +267,89 @@ function SelectedUserMenu({
   }
 }
 
-function UserList({ channel }: { channel: Channel }) {
-  const loginContext = useLoginContext();
+function UserList({ channel, state }: { channel: Channel; state: string }) {
+  const sessionContext = useSessionContext();
+  const userStatusContext = useUserStatusContext();
   const [selectedUser, setSelectedUser] = useState<string>("");
 
   const getUserStyle = (userLogin: string) => {
     if (userLogin === channel?.owner) {
       return styles.owner;
-    } else if (channel?.admin?.includes(userLogin)) {
+    } else if (channel?.admins?.includes(userLogin)) {
       return styles.admins;
     } else {
       return styles.users;
     }
   };
 
-  return channel?.users?.map((user) => {
-    if (user.login42 === loginContext.userLogin) {
-      return (
-        <div key={user.login42} className={styles.connected_user}>
-          <Avatar
-            className={styles.chat_avatar}
-            src={user.image}
-            sx={{ width: "20px", height: "20px" }}
-          >
-            <Avatar
-              className={styles.chat_avatar}
-              src={user.photo42}
-              sx={{ width: "20px", height: "20px" }}
+  return (
+    <>
+      {channel?.users?.map((user) => {
+        const status = userStatusContext.statuses.get(user.login42);
+        if (state === "ONLINE" && (!status || status.status === "OFFLINE")) {
+          return null;
+        } else if (
+          state === "OFFLINE" &&
+          status &&
+          status.status !== "OFFLINE"
+        ) {
+          return null;
+        }
+
+        if (user.login42 === sessionContext.userSelf.login42) {
+          return (
+            <div key={user.login42} className={styles.connected_user}>
+              <Avatar
+                className={styles.chat_avatar}
+                src={user.image}
+                sx={{ width: "20px", height: "20px" }}
+              >
+                <Avatar
+                  className={styles.chat_avatar}
+                  src={user.photo42}
+                  sx={{ width: "20px", height: "20px" }}
+                />
+              </Avatar>
+              {user.username ?? defaultSessionState.userSelf.username}
+            </div>
+          );
+        } else if (user.login42 === selectedUser) {
+          return (
+            <SelectedUserMenu
+              key={user.login42}
+              user={user}
+              getUserStyle={getUserStyle}
+              setSelectedUser={setSelectedUser}
+              channel={channel}
             />
-          </Avatar>
-          {user.username}
-        </div>
-      );
-    } else if (user.login42 === selectedUser) {
-      return (
-        <SelectedUserMenu
-          key={user.login42}
-          user={user}
-          getUserStyle={getUserStyle}
-          setSelectedUser={setSelectedUser}
-          channel={channel}
-        />
-      );
-    } else {
-      return (
-        <div
-          key={user.login42}
-          className={getUserStyle(user.login42)}
-          onClick={() => {
-            setSelectedUser(user.login42);
-          }}
-        >
-          <Avatar
-            className={styles.chat_avatar}
-            src={user.image}
-            sx={{ width: "20px", height: "20px" }}
-          >
-            <Avatar
-              className={styles.chat_avatar}
-              src={user.photo42}
-              sx={{ width: "20px", height: "20px" }}
-            />
-          </Avatar>
-          {user.username}
-        </div>
-      );
-    }
-  });
+          );
+        } else {
+          return (
+            <div
+              key={user.login42}
+              className={getUserStyle(user.login42)}
+              onClick={() => {
+                setSelectedUser(user.login42);
+              }}
+            >
+              <Avatar
+                className={styles.chat_avatar}
+                src={user.image}
+                sx={{ width: "20px", height: "20px" }}
+              >
+                <Avatar
+                  className={styles.chat_avatar}
+                  src={user.photo42}
+                  sx={{ width: "20px", height: "20px" }}
+                />
+              </Avatar>
+              {user.username ?? defaultSessionState.userSelf.username}
+            </div>
+          );
+        }
+      })}
+    </>
+  );
 }
 
 interface TabPanelProps {
@@ -334,11 +369,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -372,10 +403,10 @@ export function ChannelMenu({ channel }: { channel: Channel }) {
         </Box>
       </div>
       <TabPanel value={value} index={0}>
-        <UserList channel={channel} />
+        <UserList channel={channel} state="ONLINE" />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <UserList channel={channel} />
+        <UserList channel={channel} state="OFFLINE" />
       </TabPanel>
     </div>
   );
@@ -417,68 +448,52 @@ export function AddChannelMenu(props: {
 
 function ChannelList({
   getStyle,
-  setMenu,
   channels,
 }: {
   getStyle: (key: string) => string;
-  setMenu: ((menu: string) => void) | undefined;
   channels: Channel[];
 }) {
-  if (channels.length === 0) return null;
-  return channels?.map((channel) => {
-    return (
-      <div
-        key={channel.id}
-        className={getStyle(channel.id)}
-        onClick={() => {
-          setMenu?.(channel.id);
-        }}
-      >
-        <Avatar
-          src={channel.image}
-          alt="channel image"
-          sx={{
-            width: 45,
-            height: 45,
-          }}
-        >
-          <Image
-            src={channelImage}
-            alt="channel image"
-            width="45"
-            height="45"
-          />
-        </Avatar>
-      </div>
-    );
-  });
+  const sessionContext = useSessionContext();
+
+  if (typeof channels === "undefined" || channels?.length === 0) return null;
+  return (
+    <>
+      {channels?.map((channel) => {
+        return (
+          <div
+            key={channel.id}
+            className={getStyle(channel.id)}
+            onClick={() => {
+              sessionContext.setChatMenu?.(channel.id);
+            }}
+          >
+            <Avatar
+              src={channel.image}
+              alt="channel image"
+              sx={{
+                width: 45,
+                height: 45,
+              }}
+            >
+              <Image
+                src={channelImage}
+                alt="channel image"
+                width="45"
+                height="45"
+              />
+            </Avatar>
+          </div>
+        );
+      })}
+    </>
+  );
 }
 
-export function ChatMenu(props: {
-  menu: string;
-  setMenu: ((menu: string) => void) | undefined;
-}) {
-  const [channels, setChannels] = useState<Channel[]>([]);
-  const loginContext = useLoginContext();
-  const socketContext = useSocketContext();
-
-  React.useEffect(() => {
-    channelService
-      .getJoinedChannels(loginContext.userLogin)
-      .then((currentChannels: Channel[]) => {
-        setChannels(currentChannels);
-      });
-    socketContext.socket.on("update-channels-list", () => {
-      channelService
-        .getJoinedChannels(loginContext.userLogin)
-        .then((currentChannels: Channel[]) => {
-          setChannels(currentChannels);
-        });
-    });
-  }, []);
+export function ChatMenu(props: { channels: Channel[] }) {
+  const sessionContext = useSessionContext();
 
   const getStyle = (key: string) => {
-    if (props.menu === key) {
+    if (sessionContext.chatMenu === key) {
       return styles.chat_menu_button_selected;
     } else {
       return styles.chat_menu_button;
@@ -489,7 +504,7 @@ export function ChatMenu(props: {
       <div
         className={getStyle("direct_message")}
         onClick={() => {
-          props.setMenu?.("direct_message");
+          sessionContext.setChatMenu?.("direct_message");
         }}
       >
         <Image
@@ -499,15 +514,11 @@ export function ChatMenu(props: {
           height={55}
         />
       </div>
-      <ChannelList
-        getStyle={getStyle}
-        setMenu={props.setMenu}
-        channels={channels}
-      />
+      <ChannelList getStyle={getStyle} channels={props.channels} />
       <div
         className={getStyle("add_channel")}
         onClick={() => {
-          props.setMenu?.("add_channel");
+          sessionContext.setChatMenu?.("add_channel");
         }}
       >
         <Image src={addChannel} alt="add channel" width={45} height={45} />

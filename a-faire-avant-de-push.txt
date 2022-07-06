@@ -1,9 +1,12 @@
+retirer le scroll dans le leaderboard
+REMETTRE le UseGuards dans users.controller!!
 retirer le champ d'ajout d'user dans le dock
 retirer la route createUser, le dto CreateUserDto et le call axios addUser
 retirer la route et le call axios getToken
 retirer la route et le call axios deleteAllUsers
+retirer la route et le call axios createMatch ? + le dto
 retirer l'export et l'import de AuthService dans auth.module et users.module,
   l'injection et le set du cookie token du createUser dans users.controller
 changer les CMD des 3 Dockerfile
 retirer les volumes dans docker-compose.yml
-retirer .env.private du gitignore a la racine du repo
+changer l'adresse ip dans HOST, NEXT_PUBLIC__HOST, FORTYTWO_APP_REDIRECT_URI et sur l'intra

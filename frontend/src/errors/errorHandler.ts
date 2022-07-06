@@ -1,26 +1,25 @@
 import axios, { AxiosError } from "axios";
+import Router from "next/router";
+import { defaultErrorData } from "../constants/defaultErrorData";
 import { HttpStatusCodes } from "../constants/httpStatusCodes";
-import { defaultErrorData, IErrorData } from "../interfaces/IErrorData";
+import { IErrorData } from "../interfaces/IErrorData";
+import { ISessionContext } from "../interfaces/ISessionContext";
 
 export function errorHandler(
   error: Error | AxiosError,
-  loginContext: any
+  sessionContext: ISessionContext
 ): IErrorData {
-  // TODO: loginContext define the type
   let errorData: IErrorData = defaultErrorData;
 
   if (axios.isAxiosError(error)) {
     if (error.response) {
       // Request made and server responded
       errorData = error.response.data as IErrorData;
-      if (errorData.statusCode === HttpStatusCodes.UNAUTHORIZED) {
-        if (!errorData.error) {
-          loginContext.logout?.();
-        } else if (errorData.message === 'Not double-authenticated') {
-          loginContext.setShowSecondFactorLogin?.(true);
-        }
-        // } else if (error.response.status === NOT_FOUND) {
-        // } else if (error.response.status === CONFLICT) {
+      if (
+        errorData.statusCode === HttpStatusCodes.UNAUTHORIZED &&
+        !errorData.error
+      ) {
+        sessionContext.logout?.();
       }
     } else if (error.request) {
       // Request made but no response received

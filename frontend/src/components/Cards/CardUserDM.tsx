@@ -1,31 +1,37 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos, PrivateConv } from "../../interfaces/users";
+import { IUserSlim } from "../../interfaces/IUser";
+import { PrivateConv } from "../../interfaces/Chat.interfaces";
 
 import Avatar from "@mui/material/Avatar";
-// import profileIcon from "../../public/profile_icon.png";
-import { useLoginContext } from "../../context/LoginContext";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
+import { useSessionContext } from "../../context/SessionContext";
 import privateConvService from "../../services/privateConv";
 import { useSocketContext } from "../../context/SocketContext";
+import { defaultSessionState } from "../../constants/defaultSessionState";
 
 export function CardUserDM({
   userInfos,
   setMenu,
 }: {
-  userInfos: IUserPublicInfos;
+  userInfos: IUserSlim;
   setMenu: (menu: string) => void;
 }) {
-  const loginContext = useLoginContext();
+  const errorContext = useErrorContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
 
   const createPrivateConv = () => {
     if (
-      loginContext.userLogin !== null &&
-      loginContext.userLogin !== userInfos.login42
+      sessionContext.userSelf.login42 !== defaultSessionState.userSelf.login42 &&
+      sessionContext.userSelf.login42 !== userInfos.login42
     ) {
       privateConvService
-        .createPrivateConv(loginContext.userLogin, userInfos.login42)
+        .createPrivateConv(sessionContext.userSelf.login42, userInfos.login42)
         .then((privateConv: PrivateConv) => {
           setMenu(
             privateConv.userOne.login42 + "|" + privateConv.userTwo.login42
@@ -33,7 +39,7 @@ export function CardUserDM({
           socketContext.socket.emit("user:update-direct-messages");
         })
         .catch((error) => {
-          console.log(error);
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
   };
@@ -57,7 +63,9 @@ export function CardUserDM({
           />
         </Avatar>
       </div>
-      <div className={styles.user_card_username}>{userInfos.username}</div>
+      <div className={styles.user_card_username}>
+        {userInfos.username ?? defaultSessionState.userSelf.username}
+      </div>
       <div className={styles.user_card_elo}>Elo: {userInfos.elo}</div>
     </div>
   );

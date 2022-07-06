@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../../styles/Home.module.css";
-import { IUserPublicInfos, Channel } from "../../interfaces/users";
+import { Channel } from "../../interfaces/Chat.interfaces";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -11,11 +11,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-import { useLoginContext } from "../../context/LoginContext";
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
+import { useSessionContext } from "../../context/SessionContext";
 import channelService from "../../services/channel";
 import { useSocketContext } from "../../context/SocketContext";
 
@@ -26,13 +28,14 @@ export function ButtonTxtBanUser({
   login: string;
   channel: Channel;
 }) {
-  const loginContext = useLoginContext();
+  const errorContext = useErrorContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [open, setOpen] = React.useState(false);
-  const [time, setTime] = React.useState<number | string>(300);
+  const [time, setTime] = React.useState<number>(300);
 
   const handleChange = (event: SelectChangeEvent<typeof time>) => {
-    setTime(Number(event.target.value) || "");
+    setTime(Number(event.target.value) || 0);
   };
 
   const handleClickOpen = () => {
@@ -42,14 +45,14 @@ export function ButtonTxtBanUser({
   const handleBanUser = () => {
     setOpen(false);
     channelService
-      .banAChannelUser(loginContext.userLogin, channel.id, login, time)
+      .banAChannelUser(sessionContext.userSelf.login42, channel.id, login, time)
       .then(() => {
         socketContext.socket.emit("user:update-public-channels");
-        socketContext.socket.emit("user:update-joined-channel");
+        socketContext.socket.emit("user:update-joined-channels");
         socketContext.socket.emit("user:update-channel-content");
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
   };
 

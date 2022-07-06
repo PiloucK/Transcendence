@@ -16,11 +16,15 @@ import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
 
 import { ButtonCreateChannel } from "../Buttons/ButtonCreateChannel";
-import { Channel, ChannelCreation } from "../../interfaces/users";
+import { Channel, ChannelCreation } from "../../interfaces/Chat.interfaces";
 import { CardPublicChannel } from "../Cards/CardPublicChannel";
 
 import channelService from "../../services/channel";
-import { useLoginContext } from "../../context/LoginContext";
+
+import { errorHandler } from "../../errors/errorHandler";
+
+import { useErrorContext } from "../../context/ErrorContext";
+import { useSessionContext } from "../../context/SessionContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 function EmptyPublicChannels() {
@@ -33,34 +37,50 @@ function EmptyPublicChannels() {
 }
 
 function PublicChannelsList({ channels }: { channels: Channel[] }) {
+  const [open, setOpen] = React.useState({ state: false, id: "" });
+
   if (typeof channels === "undefined" || channels.length === 0) {
     return <EmptyPublicChannels />;
   }
 
   return (
     <div className={styles.public_channels_list}>
-      {channels.map((channel) => CardPublicChannel({ channelInfos: channel }))}
+      {channels.map((channel) => (
+        <CardPublicChannel
+          key={channel.id}
+          channelInfos={channel}
+          open={open}
+          setOpen={setOpen}
+        />
+      ))}
     </div>
   );
 }
 
 function PublicChannels() {
-  const loginContext = useLoginContext();
+  const errorContext = useErrorContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [channels, setChannels] = useState<Channel[]>([]);
 
   React.useEffect(() => {
     channelService
-      .getPublicChannels(loginContext.userLogin)
+      .getPublicChannels(sessionContext.userSelf.login42)
       .then((channels: Channel[]) => {
         setChannels(channels);
+      })
+      .catch((error) => {
+        errorContext.newError?.(errorHandler(error, sessionContext));
       });
 
     socketContext.socket.on("update-public-channels", () => {
       channelService
-        .getPublicChannels(loginContext.userLogin)
-        .then((channels: ChannelCreation[]) => {
+        .getPublicChannels(sessionContext.userSelf.login42)
+        .then((channels: Channel[]) => {
           setChannels(channels);
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     });
   }, []);
@@ -69,7 +89,8 @@ function PublicChannels() {
 }
 
 function CreateChannelForm() {
-  const loginContext = useLoginContext();
+  const errorContext = useErrorContext();
+  const sessionContext = useSessionContext();
   const socketContext = useSocketContext();
   const [channelName, setChannelName] = useState("");
   const [channelPassword, setChannelPassword] = useState<inputPFState>({
@@ -118,6 +139,7 @@ function CreateChannelForm() {
   const createChannel = () => {
     const channel: ChannelCreation = {
       name: channelName,
+      setPassword: true,
       password: channelPassword.password,
       isPrivate: isPrivate,
     };
@@ -134,20 +156,31 @@ function CreateChannelForm() {
     }
     if (error === false) {
       channelService
-        .createChannel(loginContext.userLogin, channel)
+        .createChannel(sessionContext.userSelf.login42, channel)
         .then((res) => {
           socketContext.socket.emit("user:update-public-channels");
-          socketContext.socket.emit("user:update-joined-channel");
-          loginContext.setChatMenu?.(res.id);
+          socketContext.socket.emit("user:update-joined-channels");
+          sessionContext.setChatMenu?.(res.id);
           if (newImage !== undefined) {
             const formData = new FormData();
             formData.append("file", newImage);
             channelService
-              .updateChannelImage(loginContext.userLogin, res.id, formData)
+              .updateChannelImage(
+                sessionContext.userSelf.login42,
+                res.id,
+                formData
+              )
               .then((res) => {
                 socketContext.socket.emit("user:update-public-channels");
+                socketContext.socket.emit("user:update-joined-channels");
+              })
+              .catch((error) => {
+                errorContext.newError?.(errorHandler(error, sessionContext));
               });
           }
+        })
+        .catch((error) => {
+          errorContext.newError?.(errorHandler(error, sessionContext));
         });
     }
   };
@@ -155,27 +188,28 @@ function CreateChannelForm() {
   return (
     <>
       <div className={styles.chat_create_channel_image}>
-          <Avatar
-            src={preview}
+        <Avatar
+          src={preview}
+          alt="channel image"
+          sx={{
+            width: 250,
+            height: 250,
+          }}
+        >
+          <Image
+            src={channelImage}
             alt="channel image"
-            sx={{
-              width: 250,
-              height: 250,
-            }}
-          >
-            <Image
-              src={channelImage}
-              alt="channel image"
-              width="250"
-              height="250"
-            />
-          </Avatar>
+            width="250"
+            height="250"
+          />
+        </Avatar>
       </div>
       {buttonBrowse()}
       <div className={styles.chat_create_channel_form}>
         <div className={styles.chat_create_channel_form_input}>
           Channel Name
           <TextField
+            label=""
             value={channelName}
             setValue={setChannelName}
             error={textFieldError}
