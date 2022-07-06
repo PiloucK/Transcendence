@@ -1,20 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "../PaddleRight.module.css";
 
-const computerLvl = 1; // from 1 to 3 EASY MEDIUM HARD
-
-const ComputerPaddle = () => {
+const ComputerPaddle = ({ computerlvl }: { computerlvl: number }) => {
   const paddlePosition = useRef(50);
 
+
   const ballSync = useRef(false);
-  const speed = 0.01 * computerLvl;
+  const speed = 0.01 * computerlvl;
 
   const requestRef = useRef(0);
   const previousTimeRef = useRef(0);
 
-  let prevBallX = useRef(0);
+  let prevBallX = useRef(50);
 
   function computerPlaying(delta: number) {
+    const paddleElem = document.getElementById(
+      "opponent-paddle"
+    ) as HTMLElement;
     const ballRect = document
       .getElementById("ball")
       ?.getBoundingClientRect() as DOMRect;
@@ -22,13 +24,9 @@ const ComputerPaddle = () => {
     const ballY = (ballRect.y / window.innerHeight) * 100;
 
     if (
-      ballRect.x > window.innerWidth / (2 * computerLvl) &&
+      ballRect.x > window.innerWidth / (2 * computerlvl) &&
       prevBallX.current < ballX
     ) {
-      const paddleElem = document.getElementById(
-        "opponent-paddle"
-      ) as HTMLElement;
-
       if (ballSync.current === false) {
         if (paddlePosition.current != ballY)
           paddlePosition.current +=
@@ -41,15 +39,16 @@ const ComputerPaddle = () => {
         paddlePosition.current +=
           speed * delta * (ballY - paddlePosition.current);
       }
-
-      paddleElem.style.setProperty(
-        "--position",
-        paddlePosition.current.toString()
-      );
     } else if (prevBallX.current > ballX) {
       ballSync.current = false;
     }
     prevBallX.current = ballX;
+    
+    paddleElem?.style.setProperty(
+      "--position",
+      paddlePosition.current.toString()
+    );
+
   }
 
   const animate: FrameRequestCallback = (time: number) => {
