@@ -110,6 +110,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
         return;
       if (currentGame.intervalID) {
         clearInterval(currentGame.intervalID);
+		currentGame.intervalID = undefined;
       }
       if (currentGame.gameStatus === 'DONE') {
         if (currentGame.player1 && currentGame.player2) {
@@ -389,6 +390,7 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
           currentGame.player2Score,
           currentGame.player1,
         );
+      	currentGame.gameStatus = 'DONE';
       } else if (currentGame.player2Score >= 5) {
         this.server.to(gameID).emit('game:winner', currentGame.player2);
         this.matchService.create(
@@ -398,8 +400,8 @@ export class GameNamespace implements OnGatewayConnection, OnGatewayDisconnect {
           currentGame.player2Score,
           currentGame.player2,
         );
+		currentGame.gameStatus = 'DONE';
       }
-      currentGame.gameStatus = 'DONE';
     }
   }
 }
