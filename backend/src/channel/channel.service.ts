@@ -15,6 +15,7 @@ import {
   RestrictionDto,
   SendMessageDto,
 } from './dto/channel.dto';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class ChannelService {
@@ -49,6 +50,15 @@ export class ChannelService {
     createChannelDto: ChannelInfoDto,
   ): Promise<Channel> {
     const user = await this.usersService.getUserByLogin42(login42);
+
+    if (createChannelDto.password === '') {
+      createChannelDto.password = '';
+    } else {
+      createChannelDto.password = await bcrypt.hash(
+        createChannelDto.password,
+        10,
+      );
+    }
     return this.createChannelInDatabase(user, createChannelDto);
   }
 
@@ -87,9 +97,13 @@ export class ChannelService {
     this.resolveChannelRestrictions(channel);
 
     channel.name = updateChannelDto.name;
-	if (updateChannelDto.setPassword === true) {
-		channel.password = updateChannelDto.password;
-	}
+    if (updateChannelDto.setPassword === true) {
+      if (updateChannelDto.password === '') {
+        channel.password = '';
+      } else {
+        channel.password = await bcrypt.hash(updateChannelDto.password, 10);
+      }
+    }
     channel.isPrivate = updateChannelDto.isPrivate;
 
     await this.channelRepository.save(channel);
@@ -140,7 +154,6 @@ export class ChannelService {
       relations: ['users'],
       where: {
         id: joinProtectedChannelDto.channelId,
-        password: joinProtectedChannelDto.password,
       },
     });
 
@@ -156,6 +169,16 @@ export class ChannelService {
     }
     if (channel.users.find(({ login42 }) => login42 === user.login42)) {
       return channel;
+    }
+    if (channel.password) {
+      if (
+        !(await bcrypt.compare(
+          joinProtectedChannelDto.password,
+          channel.password,
+        ))
+      ) {
+        throw new ForbiddenException('Wrong password');
+      }
     }
     channel.users.push(user);
     channel.invitations = channel.invitations.filter(
